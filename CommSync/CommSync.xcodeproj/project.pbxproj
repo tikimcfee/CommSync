@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4595391D19E38F1F00744747 /* CSSessionManager.m */; };
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
 		459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */; };
@@ -28,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4595391C19E38F1F00744747 /* CSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionManager.h; path = "Session Management/CSSessionManager.h"; sourceTree = "<group>"; };
+		4595391D19E38F1F00744747 /* CSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionManager.m; path = "Session Management/CSSessionManager.m"; sourceTree = "<group>"; };
 		459D5F7319DB449900C91EFA /* CommSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		459D5F7719DB449900C91EFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		459D5F7819DB449900C91EFA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -62,6 +65,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4595391F19E38F2F00744747 /* Session Management */ = {
+			isa = PBXGroup;
+			children = (
+				4595391C19E38F1F00744747 /* CSSessionManager.h */,
+				4595391D19E38F1F00744747 /* CSSessionManager.m */,
+			);
+			name = "Session Management";
+			sourceTree = "<group>";
+		};
 		459D5F6A19DB449900C91EFA = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +97,7 @@
 			children = (
 				459D5F7A19DB449900C91EFA /* AppDelegate.h */,
 				459D5F7B19DB449900C91EFA /* AppDelegate.m */,
+				4595391F19E38F2F00744747 /* Session Management */,
 				459D5F8019DB449900C91EFA /* ViewController.h */,
 				459D5F8119DB449900C91EFA /* ViewController.m */,
 				459D5F8319DB449900C91EFA /* Main.storyboard */,
@@ -225,6 +238,7 @@
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				459D5F8219DB449900C91EFA /* ViewController.m in Sources */,
+				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,6 +432,7 @@
 				459D5F9B19DB449A00C91EFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		459D5F9C19DB449A00C91EFA /* Build configuration list for PBXNativeTarget "CommSyncTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +441,7 @@
 				459D5F9E19DB449A00C91EFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
