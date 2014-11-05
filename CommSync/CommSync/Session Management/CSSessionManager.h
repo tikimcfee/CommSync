@@ -24,6 +24,7 @@
 @property (strong, nonatomic) MCPeerID* myPeerID;
 @property (strong, nonatomic) NSString* userID;
 
+
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 
