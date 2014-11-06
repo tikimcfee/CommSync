@@ -60,8 +60,10 @@
     NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
     NSError* error;
     
-    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
-    for(MCSession* session in allSessions)
+//    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
+    NSSet* uniqueSessions = [NSSet setWithArray:[_userSessionsDisplayNamesToSessions allValues]];
+    
+    for(MCSession* session in uniqueSessions)
     {
         for(MCPeerID* peer in session.connectedPeers)
         {
@@ -145,7 +147,14 @@
 # pragma MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
+    BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedDescending;
 
+    if(!shouldInvite)
+    {
+        NSLog(@"Deferring connection from %@", peerID.displayName);
+        return;
+    }
+    
     if( [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName] )
     {
         NSLog(@"[%@] is already connected.", peerID.displayName);
@@ -232,17 +241,19 @@ didReceiveInvitationFromPeer:(MCPeerID *)peerID
     {
         NSError* error;
         NSString* pulseBack = PULSE_BACK_STRING;
-        if(! [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
-        {
-            [_userSessionsDisplayNamesToSessions setObject:session forKey:peerID.displayName];
-        }
+        
+//        if(! [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
+//        {
+//            [_userSessionsDisplayNamesToSessions setObject:session forKey:peerID.displayName];
+//        }
+        
         [session sendData:[pulseBack dataUsingEncoding:NSUTF8StringEncoding] toPeers:@[peerID]
                     withMode:MCSessionSendDataReliable
                        error:&error];
     }
     else if([stringFromData isEqualToString:MANUAL_DISCONNECT_STRING])
     {
-        [session disconnect];
+//        [session disconnect];
         [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
     }
 }

@@ -38,10 +38,11 @@
     
     NSArray* list = _globalTaskManager.currentTaskList;
     
-    for(CSTask* t in list)
-    {
+//    for(CSTask* t in list)
+//    {
 //        NSLog(@"%@", t.concatenatedID);
-    }
+//    }
+    
     NSLog(@"Task Count: %lu", (unsigned long)[list count]);
     
     return YES;

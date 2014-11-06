@@ -162,12 +162,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zVn-y1-QeP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1621" y="961"/>
+            <point key="canvasLocation" x="1731" y="937"/>
         </scene>
         <!--Settings-->
         <scene sceneID="ylK-2V-9EZ">
             <objects>
-                <viewController id="O8o-o0-fd4" sceneMemberID="viewController">
+                <viewController id="O8o-o0-fd4" customClass="CSSettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sLy-X5-KD7"/>
                         <viewControllerLayoutGuide type="bottom" id="JZP-Ib-qrL"/>
@@ -175,13 +175,28 @@
                     <view key="view" contentMode="scaleToFill" id="N74-pz-YHE">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyA-eZ-WSY">
+                                <rect key="frame" x="277" y="272" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="sendGlobalPulse:" destination="O8o-o0-fd4" eventType="touchUpInside" id="510-gq-cDc"/>
+                                    <action selector="sendPulseDataToAllSessions:" destination="O8o-o0-fd4" eventType="touchUpInside" id="EEi-MB-dz6"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" id="C8A-gG-iEi"/>
+                    <connections>
+                        <outlet property="sendPulse" destination="IyA-eZ-WSY" id="ZwJ-gY-PVg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hUO-ah-z60" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2313" y="961"/>
+            <point key="canvasLocation" x="2471" y="945"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ozt-Gh-t6I">
