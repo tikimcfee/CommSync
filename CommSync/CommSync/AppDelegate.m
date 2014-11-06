@@ -40,7 +40,7 @@
     
     for(CSTask* t in list)
     {
-//        NSLog(@"%@", t.concatenatedID);
+        NSLog(@"%@", t.concatenatedID);
     }
     NSLog(@"Task Count: %lu", (unsigned long)[list count]);
     
