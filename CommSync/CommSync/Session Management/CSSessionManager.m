@@ -60,8 +60,10 @@
     NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
     NSError* error;
     
-    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
-    for(MCSession* session in allSessions)
+//    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
+    NSSet* uniqueSessions = [NSSet setWithArray:[_userSessionsDisplayNamesToSessions allValues]];
+    
+    for(MCSession* session in uniqueSessions)
     {
         for(MCPeerID* peer in session.connectedPeers)
         {

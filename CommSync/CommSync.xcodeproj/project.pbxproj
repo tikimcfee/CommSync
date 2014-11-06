@@ -18,6 +18,7 @@
 		459D5F9619DB449A00C91EFA /* CommSyncTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F9519DB449A00C91EFA /* CommSyncTests.m */; };
 		45B934CA1A0B0671003C2E30 /* CSTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B934C81A0B0671003C2E30 /* CSTask.m */; };
 		45B934CB1A0B0671003C2E30 /* CSTaskListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B934C91A0B0671003C2E30 /* CSTaskListManager.m */; };
+		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		7444522C1A0ACEA800C87723 /* CSTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522B1A0ACEA800C87723 /* CSTaskViewController.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,8 @@
 		45B934C71A0B0671003C2E30 /* CSTaskListManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskListManager.h; path = Tasks/CSTaskListManager.h; sourceTree = "<group>"; };
 		45B934C81A0B0671003C2E30 /* CSTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTask.m; path = Tasks/CSTask.m; sourceTree = "<group>"; };
 		45B934C91A0B0671003C2E30 /* CSTaskListManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListManager.m; path = Tasks/CSTaskListManager.m; sourceTree = "<group>"; };
+		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
+		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		7444522A1A0ACEA800C87723 /* CSTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskViewController.h; path = ViewControllers/CSTaskViewController.h; sourceTree = "<group>"; };
 		7444522B1A0ACEA800C87723 /* CSTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskViewController.m; path = ViewControllers/CSTaskViewController.m; sourceTree = "<group>"; };
 		7444522D1A0ACEDB00C87723 /* CSUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSUserViewController.h; path = ViewControllers/CSUserViewController.h; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				7444522B1A0ACEA800C87723 /* CSTaskViewController.m */,
 				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
+				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -274,6 +279,7 @@
 				45B934CB1A0B0671003C2E30 /* CSTaskListManager.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
 				7444522C1A0ACEA800C87723 /* CSTaskViewController.m in Sources */,
+				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
 				459D5F8219DB449900C91EFA /* ViewController.m in Sources */,
