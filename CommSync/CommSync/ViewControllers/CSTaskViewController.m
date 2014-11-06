@@ -23,15 +23,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     tableData = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
     
     NSLog(@"Loaded task view!");
     
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
-    NSInteger connectionCount = [_sessionManager.userSessionsDisplayNamesToSessions count];
+    NSInteger connectionCount = [_sessionManager.userSessionsDisplayNamesToSessions count] - 1; // subtract 1 to account for yourself
+    NSLog(@"%@", _sessionManager.userSessionsDisplayNamesToSessions);
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
 }
 

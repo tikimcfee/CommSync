@@ -20,6 +20,7 @@
 		45B934CB1A0B0671003C2E30 /* CSTaskListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B934C91A0B0671003C2E30 /* CSTaskListManager.m */; };
 		7444522C1A0ACEA800C87723 /* CSTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522B1A0ACEA800C87723 /* CSTaskViewController.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
+		93031E061A0C1E2A00C3F919 /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93031E051A0C1E2A00C3F919 /* CSTaskCreationViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		7444522B1A0ACEA800C87723 /* CSTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskViewController.m; path = ViewControllers/CSTaskViewController.m; sourceTree = "<group>"; };
 		7444522D1A0ACEDB00C87723 /* CSUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSUserViewController.h; path = ViewControllers/CSUserViewController.h; sourceTree = "<group>"; };
 		7444522E1A0ACEDB00C87723 /* CSUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSUserViewController.m; path = ViewControllers/CSUserViewController.m; sourceTree = "<group>"; };
+		93031E041A0C1E2A00C3F919 /* CSTaskCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskCreationViewController.h; path = ViewControllers/CSTaskCreationViewController.h; sourceTree = "<group>"; };
+		93031E051A0C1E2A00C3F919 /* CSTaskCreationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskCreationViewController.m; path = ViewControllers/CSTaskCreationViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +86,8 @@
 				4595391C19E38F1F00744747 /* CSSessionManager.h */,
 				4595391D19E38F1F00744747 /* CSSessionManager.m */,
 				45B934C61A0B0671003C2E30 /* CSTask.h */,
-				45B934C71A0B0671003C2E30 /* CSTaskListManager.h */,
 				45B934C81A0B0671003C2E30 /* CSTask.m */,
+				45B934C71A0B0671003C2E30 /* CSTaskListManager.h */,
 				45B934C91A0B0671003C2E30 /* CSTaskListManager.m */,
 			);
 			name = "Session Management";
@@ -159,6 +162,8 @@
 				7444522B1A0ACEA800C87723 /* CSTaskViewController.m */,
 				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+				93031E041A0C1E2A00C3F919 /* CSTaskCreationViewController.h */,
+				93031E051A0C1E2A00C3F919 /* CSTaskCreationViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -265,6 +270,7 @@
 			files = (
 				45B934CB1A0B0671003C2E30 /* CSTaskListManager.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
+				93031E061A0C1E2A00C3F919 /* CSTaskCreationViewController.m in Sources */,
 				7444522C1A0ACEA800C87723 /* CSTaskViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
