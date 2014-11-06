@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "CSSessionManager.h"
+#import "CSTaskListManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -21,6 +22,9 @@
 # pragma Application-wide sessions manager
 @property (strong, nonatomic) CSSessionManager* globalSessionManager;
 @property (strong, nonatomic) NSString* userDisplayName;
+
+# pragma Application-wide task manager
+@property (strong, nonatomic) CSTaskListManager* globalTaskManager;
 
 
 - (void)saveContext;

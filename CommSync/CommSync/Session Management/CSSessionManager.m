@@ -28,6 +28,10 @@
     
     _userSessionsDisplayNamesToSessions = [[NSMutableDictionary alloc] init];
     
+    _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
+    [_userSessionsDisplayNamesToSessions setObject:_currentSession forKey:_userID];
+    
+    
     return self;
 }
 
@@ -150,7 +154,18 @@
     
     NSTimeInterval linkDeadTime = 15;
     
-    [browser invitePeer:peerID toSession:[self createNewSessionToNewPeer:peerID] withContext:nil timeout:linkDeadTime];
+    MCSession* session;
+    if([_currentSession.connectedPeers count] == 8)
+    {
+        session = [self createNewSessionToNewPeer:peerID];
+        _currentSession = session;
+    }
+    else
+    {
+        session = _currentSession;
+    }
+    
+    [browser invitePeer:peerID toSession:session withContext:nil timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
 }
@@ -160,15 +175,8 @@
     NSLog(@"Lost connection to PeerID:[%@]", peerID.displayName);
     if([_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
     {
-//        NSLog(@"--- Rebuilding services...");
-//        MCSession* killSession = (MCSession*)[_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName];
-//        [killSession disconnect];
-//        [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
-//        killSession = nil;
-//        
-//        [self resetPeerID];
-//        [self resetBrowserService];
-//        [self resetAdvertiserService];
+        [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
+        [self resetBrowserService];
     }
 }
 
@@ -193,9 +201,14 @@ didReceiveInvitationFromPeer:(MCPeerID *)peerID
         invitationHandler(NO, session);
         return;
     }
+    else if ([session.connectedPeers count] == 8)
+    {
+        session = [self createNewSessionToNewPeer:peerID];
+        _currentSession = session;
+    }
     
     NSLog(@"...Auto accepting...");
-    invitationHandler(YES, [self createNewSessionToNewPeer:_myPeerID]);
+    invitationHandler(YES, _currentSession);
 }
 
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didNotStartAdvertisingPeer:(NSError *)error
@@ -252,22 +265,17 @@ didReceiveInvitationFromPeer:(MCPeerID *)peerID
             break;
     }
     
-    NSLog(@"vvvvvvvvvvvvvvvvvvvvv");
-    NSLog(@"Session peers: %@", session.connectedPeers);
+    NSLog(@"\t\t-- --");
+    NSLog(@"\t\tSession peers: \n%@", session.connectedPeers);
     
-    NSLog(@"Peer: [%@] --> New State: [%@]", peerID.displayName, stateString);
-    NSLog(@"^^^^^^^^^^^^^^^^^^^^^");
+    NSLog(@"\t\tPeer: [%@] --> New State: [%@]", peerID.displayName, stateString);
+    NSLog(@"\t\t-- --");
     
-    if(state == 0)
+    if(state == 0 && [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
     {
-        if([_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
-        {
-            MCSession* my = [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName];
-            [my disconnect];
-            [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
-        }
-        
-        [session disconnect]; 
+        [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
+        [self resetAdvertiserService];
+        [self resetBrowserService];
     }
 }
 

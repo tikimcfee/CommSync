@@ -19,7 +19,7 @@
                                         MCSessionDelegate>
 
 // MCMultiPeer objects
-@property (strong, nonatomic) MCSession* mySession;
+@property (strong, nonatomic) MCSession* currentSession;
 @property (strong, nonatomic) NSMutableDictionary* userSessionsDisplayNamesToSessions;
 @property (strong, nonatomic) MCPeerID* myPeerID;
 @property (strong, nonatomic) NSString* userID;

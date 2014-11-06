@@ -34,13 +34,14 @@
 @implementation ViewController
 
 - (void)viewDidLoad {
+
     [super viewDidLoad];
     
     
     // Create the user's sessions
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     _sessionManager = d.globalSessionManager;
-    
+
 }
 
 # pragma Heartbeat Handler
