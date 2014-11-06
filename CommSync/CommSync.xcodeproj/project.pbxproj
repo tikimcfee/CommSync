@@ -107,6 +107,7 @@
 			children = (
 				459D5F7A19DB449900C91EFA /* AppDelegate.h */,
 				459D5F7B19DB449900C91EFA /* AppDelegate.m */,
+				744452291A0ACE2700C87723 /* ViewControllers */,
 				4595391F19E38F2F00744747 /* Session Management */,
 				459D5F8019DB449900C91EFA /* ViewController.h */,
 				459D5F8119DB449900C91EFA /* ViewController.m */,
@@ -143,6 +144,17 @@
 				459D5F9419DB449A00C91EFA /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		744452291A0ACE2700C87723 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7444522A1A0ACEA800C87723 /* CSTaskViewController.h */,
+				7444522B1A0ACEA800C87723 /* CSTaskViewController.m */,
+				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
+				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,7 +259,9 @@
 			files = (
 				45B934CB1A0B0671003C2E30 /* CSTaskListManager.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
+				7444522C1A0ACEA800C87723 /* CSTaskViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
+				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
 				459D5F8219DB449900C91EFA /* ViewController.m in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				45B934CA1A0B0671003C2E30 /* CSTask.m in Sources */,
