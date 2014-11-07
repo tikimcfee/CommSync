@@ -13,5 +13,7 @@
 @interface CSSettingsViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *sendPulse;
+@property (strong, nonatomic) IBOutlet UIButton *tearDown;
+@property (strong, nonatomic) IBOutlet UIButton *rebuild;
 
 @end

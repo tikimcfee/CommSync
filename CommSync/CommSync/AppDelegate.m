@@ -20,7 +20,7 @@
     
     // init the application's session manager
 //    NSString* randomID = [NSString stringWithFormat:@"%d", arc4random() % 1000000];
-    NSString* name = [[UIDevice alloc] name];
+    NSString* name = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
     NSLog(@"[[[[[ Initializing Application with name -- {%@} ]]]]]", name);
     _userDisplayName = name;
     

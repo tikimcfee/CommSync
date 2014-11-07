@@ -31,6 +31,9 @@
 - (CSSessionManager*) initWithID:(NSString*)userID;
 - (void)tearDownConnectivityFramework;
 - (void)sendPulseToPeers;
+- (void)resetBrowserService;
+- (void)resetAdvertiserService;
+- (void)resetPeerID;
 
 
 @end
