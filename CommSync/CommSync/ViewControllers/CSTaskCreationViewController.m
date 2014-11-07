@@ -8,6 +8,7 @@
 
 #import "CSTaskCreationViewController.h"
 #import "CSTask.h"
+#import "AppDelegate.h"
 
 @interface CSTaskCreationViewController()
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
@@ -30,9 +31,17 @@
 }
 - (IBAction)closeViewAndSave:(id)sender {
     
-    CSTask *task = [[CSTask alloc] initWithUUID:@"UUID" andDeviceID:@"deviceID"];
+    NSString* U = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
+    NSString* D = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97];
     
+    CSTask *task = [[CSTask alloc] initWithUUID:U andDeviceID:D];
+    task.taskTitle = self.titleTextField.text;
+    task.taskDescription = self.descriptionTextField.text;
     
+    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [d.globalTaskManager insertTaskIntoList:task];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL) prefersStatusBarHidden

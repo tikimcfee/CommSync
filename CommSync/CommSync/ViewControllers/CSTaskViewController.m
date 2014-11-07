@@ -16,23 +16,36 @@
 }
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
+@property (strong, nonatomic) CSTaskListManager* taskManager;
 
 @end
 
 @implementation CSTaskViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     tableData = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
     
-    NSLog(@"Loaded task view!");
+    // get global managers
+    AppDelegate *app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    self.sessionManager = app.globalSessionManager;
+    self.taskManager = app.globalTaskManager;
     
-    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    self.sessionManager = d.globalSessionManager;
+    // get connection count
     NSInteger connectionCount = [_sessionManager.userSessionsDisplayNamesToSessions count] - 1; // subtract 1 to account for yourself
+    
     NSLog(@"%@", _sessionManager.userSessionsDisplayNamesToSessions);
+    
+    
+    // set connection count
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,7 +65,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
+    
+    CSTask *task = [_taskManager.currentTaskList objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = task.taskTitle != nil ? task.taskTitle : task.concatenatedID;
+    
     return cell;
 }
 
@@ -60,7 +77,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return [tableData count];
+    return [_taskManager.currentTaskList count];
 }
 
 

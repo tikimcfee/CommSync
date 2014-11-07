@@ -179,6 +179,8 @@
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 				93031E041A0C1E2A00C3F919 /* CSTaskCreationViewController.h */,
 				93031E051A0C1E2A00C3F919 /* CSTaskCreationViewController.m */,
+				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
+				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
