@@ -9,6 +9,10 @@
 #import "CSTaskViewController.h"
 #import "AppDelegate.h"
 
+#define kUserNotConnectedNotification @"Not Connected"
+#define kUserConnectedNotification @"Connected"
+#define kUserConnectingNotification @"Is Connecting"
+
 @interface CSTaskViewController ()
 {
     NSArray *tableData;
@@ -21,6 +25,9 @@
 @end
 
 @implementation CSTaskViewController
+
+
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     
@@ -41,6 +48,11 @@
     
     // set connection count
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(incrementConnectedCount:)
+                                                 name:kUserConnectedNotification
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -51,6 +63,20 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kUserConnectedNotification
+                                                  object:nil];
+}
+
+- (void)incrementConnectedCount:(NSNotification *)notification
+{
+    int count = [_userConnectionCount.title intValue];
+    count = count + 1;
+    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
 }
 
 #pragma mark - UITableViewDataSource Delegates

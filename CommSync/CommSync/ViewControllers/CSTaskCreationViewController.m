@@ -41,6 +41,10 @@
     AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [d.globalTaskManager insertTaskIntoList:task];
     
+    // send data to all peers
+    
+    
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

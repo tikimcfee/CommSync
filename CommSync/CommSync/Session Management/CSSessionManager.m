@@ -8,6 +8,11 @@
 
 #import "CSSessionManager.h"
 
+#define kUserNotConnectedNotification @"Not Connected"
+#define kUserConnectedNotification @"Connected"
+#define kUserConnectingNotification @"Is Connecting"
+
+
 @implementation CSSessionManager
 
 - (CSSessionManager*) initWithID:(NSString*)userID
@@ -75,7 +80,7 @@
     }
 }
 
-# pragma Session Helpers
+# pragma mark - Session Helpers
 - (MCSession*)createNewSessionToNewPeer:(MCPeerID*)peerID
 {
     MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
@@ -144,7 +149,7 @@
     [_serviceAdvertiser startAdvertisingPeer];
 }
 
-# pragma MCBrowser Delegate
+# pragma mark - MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
     BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedDescending;
@@ -194,7 +199,7 @@
     NSLog(@"Start browsing failed :: %@", error);
 }
 
-# pragma MCAdvertiser Delegate
+# pragma mark - MCAdvertiser Delegate
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser
 didReceiveInvitationFromPeer:(MCPeerID *)peerID
        withContext:(NSData *)context
@@ -226,7 +231,7 @@ didReceiveInvitationFromPeer:(MCPeerID *)peerID
 }
 
 
-# pragma MCSession Delegate
+# pragma mark - MCSession Delegate
 - (void)session:(MCSession *)session didReceiveCertificate:(NSArray *)certificate fromPeer:(MCPeerID *)peerID certificateHandler:(void (^)(BOOL accept))certificateHandler
 {
     certificateHandler(YES);
@@ -263,14 +268,14 @@ didReceiveInvitationFromPeer:(MCPeerID *)peerID
 {
     NSString* stateString;
     switch (state) {
-        case 0:
-            stateString = @"Not connected";
+        case MCSessionStateNotConnected:
+            stateString = kUserNotConnectedNotification;
             break;
-        case 1:
-            stateString = @"Connecting";
+        case MCSessionStateConnecting:
+            stateString = kUserConnectingNotification;
             break;
-        case 2:
-            stateString = @"Connected";
+        case MCSessionStateConnected:
+            stateString = kUserConnectedNotification;
             break;
         default:
             break;
@@ -281,13 +286,8 @@ didReceiveInvitationFromPeer:(MCPeerID *)peerID
     
     NSLog(@"\t\tPeer: [%@] --> New State: [%@]", peerID.displayName, stateString);
     NSLog(@"\t\t-- --");
-    
-    if(state == 0 && [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
-    {
-        [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
-        [self resetAdvertiserService];
-        [self resetBrowserService];
-    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:stateString object:self];
 }
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
