@@ -187,6 +187,9 @@
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     NSLog(@"Lost connection to PeerID:[%@]", peerID.displayName);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"lostPeer" object:self];
+    
     if([_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
     {
         [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
@@ -200,11 +203,9 @@
 }
 
 # pragma mark - MCAdvertiser Delegate
-- (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser
-didReceiveInvitationFromPeer:(MCPeerID *)peerID
+- (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID
        withContext:(NSData *)context
- invitationHandler:(void (^)(BOOL accept,
-                             MCSession *session))invitationHandler
+ invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler
 {
     NSLog(@"PeerID:[%@] sent an invitation.", peerID.displayName);
     MCSession* session = [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName];

@@ -53,6 +53,11 @@
                                              selector:@selector(incrementConnectedCount:)
                                                  name:kUserConnectedNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(decrementConnectedCount:)
+                                                 name:@"lostPeer"
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,13 +75,34 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kUserConnectedNotification
                                                   object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"lostPeer"
+                                                  object:self];
 }
 
 - (void)incrementConnectedCount:(NSNotification *)notification
 {
     int count = [_userConnectionCount.title intValue];
     count = count + 1;
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
+    
+    __weak CSTaskViewController *weakSelf = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
+    });
+}
+
+- (void)decrementConnectedCount:(NSNotification *)notification
+{
+    int count = [_userConnectionCount.title intValue];
+    count = (count == 0) ? 0 : count - 1;
+    
+    __weak CSTaskViewController *weakSelf = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
+    });
 }
 
 #pragma mark - UITableViewDataSource Delegates
