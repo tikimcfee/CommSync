@@ -10,12 +10,12 @@
         <!--Chats-->
         <scene sceneID="63Q-t0-nVJ">
             <objects>
-                <viewController id="Wwj-Np-afA" sceneMemberID="viewController">
+                <viewController id="Wwj-Np-afA" customClass="MessageViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6g4-Pp-QiP"/>
                         <viewControllerLayoutGuide type="bottom" id="Mby-PV-nI7"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="khh-bf-MBg">
+                    <view key="view" contentMode="scaleToFill" id="khh-bf-MBg" customClass="MessageTableViewCell">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zVn-y1-QeP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1731" y="937"/>
+            <point key="canvasLocation" x="1769" y="937"/>
         </scene>
         <!--Settings-->
         <scene sceneID="ylK-2V-9EZ">
@@ -77,7 +77,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hUO-ah-z60" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2471" y="945"/>
+            <point key="canvasLocation" x="2545" y="891"/>
+        </scene>
+        <!--Message View Controller-->
+        <scene sceneID="YNU-23-h95">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T8S-eZ-97S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="VdV-z8-S1w" customClass="MessageViewController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="akh-Jg-iIb"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="3192" y="354"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ozt-Gh-t6I">
@@ -98,7 +108,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x0u-1H-e9U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="871" y="442"/>
+            <point key="canvasLocation" x="853" y="435"/>
         </scene>
         <!--Tasks-->
         <scene sceneID="9nJ-GG-Wi7">
@@ -367,7 +377,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nR9-Tf-sQ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2471" y="137"/>
+            <point key="canvasLocation" x="2545" y="115"/>
         </scene>
         <!--Users-->
         <scene sceneID="wtP-1v-klN">

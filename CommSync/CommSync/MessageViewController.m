@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 AppsByDLI. All rights reserved.
 //
 
-#import "ViewController.h"
 #import "CSSessionManager.h"
 #import "AppDelegate.h"
+#import "MessageViewController.h"
 
-@interface ViewController ()
+@interface MessageViewController()
 
 // browsing
 @property (strong, nonatomic) IBOutlet UIButton *startBrowsingButton;
@@ -29,9 +29,14 @@
 // session manager
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 
+//messaging
+@property (nonatomic, strong) NSArray *users;
+@property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, strong) NSArray *searchResult;
+
 @end
 
-@implementation ViewController
+@implementation MessageViewController
 
 - (void)viewDidLoad {
 
@@ -41,7 +46,14 @@
     // Create the user's sessions
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     _sessionManager = d.globalSessionManager;
+    
+}
 
+-(id)init
+{
+    //tab style view
+    self = [super initWithTableViewStyle:UITableViewStylePlain];
+    return self;
 }
 
 # pragma Heartbeat Handler

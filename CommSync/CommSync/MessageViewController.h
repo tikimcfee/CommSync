@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 AppsByDLI. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SLKTextViewController.h"
 
-@interface ViewController : UIViewController
+@interface MessageViewController : SLKTextViewController
 
 
 @end
