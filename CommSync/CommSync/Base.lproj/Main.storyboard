@@ -82,10 +82,10 @@
         <!--Message View Controller-->
         <scene sceneID="YNU-23-h95">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T8S-eZ-97S" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="VdV-z8-S1w" customClass="MessageViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="akh-Jg-iIb"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T8S-eZ-97S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3192" y="354"/>
         </scene>
