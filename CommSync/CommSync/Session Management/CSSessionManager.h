@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import "CSTask.h"
 
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
 #define PULSE_STRING @"|~PULSE~|"
@@ -29,12 +30,10 @@
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 
-- (CSSessionManager*) initWithID:(NSString*)userID;
-//- (void)tearDownConnectivityFramework;
-- (void)sendPulseToPeers;
 
-//- (void)resetBrowserService;
-//- (void)resetAdvertiserService;
+- (CSSessionManager*) initWithID:(NSString*)userID;
+- (void)sendPulseToPeers;
+- (void) sendDataPacketToPeers:(NSData*)dataPacket;
 
 
 @end

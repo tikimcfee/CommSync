@@ -12,6 +12,7 @@
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
 #define kUserConnectingNotification @"Is Connecting"
+#define kNewTaskNotification @"Connected"
 
 @interface CSTaskViewController ()
 {
@@ -55,6 +56,11 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveNewTask:)
+                                                 name:kNewTaskNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(decrementConnectedCount:)
                                                  name:@"lostPeer"
                                                object:nil];
@@ -74,6 +80,10 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kUserConnectedNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kNewTaskNotification
                                                   object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
@@ -130,6 +140,12 @@
  numberOfRowsInSection:(NSInteger)section
 {
     return [_taskManager.currentTaskList count];
+}
+
+#pragma mark - Task creation data source
+- (void)didReceiveNewTask:(NSNotification*)notification
+{
+    [self.tableView reloadData];
 }
 
 

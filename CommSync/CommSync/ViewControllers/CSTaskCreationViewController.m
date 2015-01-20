@@ -50,6 +50,7 @@
     
     AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [d.globalTaskManager insertTaskIntoList:task];
+    [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:task]];
     
     // send data to all peers
     

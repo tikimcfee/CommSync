@@ -7,6 +7,7 @@
 //
 
 #import "CSSessionManager.h"
+#import "AppDelegate.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -70,68 +71,32 @@
     }
 }
 
+- (void) sendDataPacketToPeers:(NSData*)dataPacket
+{
+    NSError* error;
+    
+//    for(MCPeerID* peer in _currentSession.connectedPeers)
+//    {
+//        [_currentSession sendData:dataPacket
+//                          toPeers:@[peer]
+//                         withMode:MCSessionSendDataReliable
+//                            error:&error];
+//    }
+    
+    [_currentSession sendData:dataPacket
+                      toPeers:_currentSession.connectedPeers
+                     withMode:MCSessionSendDataReliable
+                        error:&error];
+}
+
 # pragma mark - Session Helpers
 - (MCSession*)addPeerToSession:(MCPeerID*)peerID
 {
     MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
     newSession.delegate = self;
-//    [_userSessionsDisplayNamesToSessions setObject:newSession forKey:peerID.displayName];
     
     return newSession;
 }
-
-
-
-//- (void)tearDownConnectivityFramework
-//{
-//    _serviceBrowser.delegate = nil;
-//    [_serviceBrowser stopBrowsingForPeers];
-//    _serviceBrowser = nil;
-//    
-//    _serviceAdvertiser.delegate = nil;
-//    [_serviceAdvertiser stopAdvertisingPeer];
-//    _serviceAdvertiser = nil;
-//
-//    NSString* disconnect = MANUAL_DISCONNECT_STRING;
-//    NSData* killData = [disconnect dataUsingEncoding:NSUTF8StringEncoding];
-//    NSError* error;
-//    
-//    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
-//    for(MCSession* session in allSessions)
-//    {
-//        for(MCPeerID* peer in session.connectedPeers)
-//        {
-//            [session sendData:killData toPeers:@[peer]
-//                             withMode:MCSessionSendDataReliable
-//                                error:&error];
-//        }
-//    }
-//    
-//}
-
-//- (void)resetBrowserService
-//{
-//    [_serviceBrowser stopBrowsingForPeers];
-//    _serviceBrowser = nil;
-//    
-//    _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
-//    _serviceBrowser.delegate = self;
-//    
-//    [_serviceBrowser startBrowsingForPeers];
-//}
-//
-//- (void)resetAdvertiserService
-//{
-//    [_serviceAdvertiser stopAdvertisingPeer];
-//    _serviceAdvertiser = nil;
-//    
-//    _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
-//                                                           discoveryInfo:nil
-//                                                             serviceType:COMMSYNC_SERVICE_ID];
-//    _serviceAdvertiser.delegate = self;
-//    
-//    [_serviceAdvertiser startAdvertisingPeer];
-//}
 
 # pragma mark - MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
@@ -154,17 +119,6 @@
     }
     
     NSTimeInterval linkDeadTime = 15;
-    
-//    MCSession* session;
-//    if([_currentSession.connectedPeers count] == 8)
-//    {
-//        session = [self createNewSessionToNewPeer:peerID];
-//        _currentSession = session;
-//    }
-//    else
-//    {
-//        session = _currentSession;
-//    }
     
     MCSession* inviteSession = _currentSession;
     [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
@@ -230,6 +184,19 @@
         [session sendData:[pulseBack dataUsingEncoding:NSUTF8StringEncoding] toPeers:@[peerID]
                     withMode:MCSessionSendDataReliable
                        error:&error];
+    }
+    else
+    {
+        
+        id task = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if([task isKindOfClass:[CSTask class]])
+        {
+            AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            [d.globalTaskManager insertTaskIntoList:task];
+        }
+//        CSTask* newTaskFromData = [[CSTask alloc]
+//                                   initWithCoder:[NSKeyedUnarchiver
+//                                                  unarchiveObjectWithData:data]]
     }
 }
 

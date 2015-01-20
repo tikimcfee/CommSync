@@ -8,6 +8,8 @@
 
 #import "CSTaskListManager.h"
 
+#define kNewTaskNotification @"Connected"
+
 @interface CSTaskListManager()
 
 @property (nonatomic, assign) BOOL listIsDirty;
@@ -38,6 +40,8 @@
     {
         _rootTask = newTask;
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNewTaskNotification object:self];
     
     _listIsDirty = YES;
     return;

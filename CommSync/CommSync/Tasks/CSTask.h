@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface CSTask : NSObject
+@interface CSTask : NSObject <NSCoding>
 
 // Storage data structure
 @property (strong, nonatomic) CSTask* leftChild;
