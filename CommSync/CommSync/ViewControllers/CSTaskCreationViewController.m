@@ -31,8 +31,18 @@
 }
 - (IBAction)closeViewAndSave:(id)sender {
     
-    NSString* U = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
-    NSString* D = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97];
+    NSString* U = [NSString stringWithFormat:@"%c%c%c%c%c",
+                   arc4random_uniform(25)+65,
+                   arc4random_uniform(25)+65,
+                   arc4random_uniform(25)+65,
+                   arc4random_uniform(25)+65,
+                   arc4random_uniform(25)+65];
+    NSString* D = [NSString stringWithFormat:@"%c%c%c%c%c",
+                   arc4random_uniform(25)+97,
+                   arc4random_uniform(25)+97,
+                   arc4random_uniform(25)+97,
+                   arc4random_uniform(25)+97,
+                   arc4random_uniform(25)+97];
     
     CSTask *task = [[CSTask alloc] initWithUUID:U andDeviceID:D];
     task.taskTitle = self.titleTextField.text;

@@ -41,9 +41,9 @@
     self.taskManager = app.globalTaskManager;
     
     // get connection count
-    NSInteger connectionCount = [_sessionManager.userSessionsDisplayNamesToSessions count] - 1; // subtract 1 to account for yourself
+    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count]; // subtract 1 to account for yourself
     
-    NSLog(@"%@", _sessionManager.userSessionsDisplayNamesToSessions);
+    NSLog(@"%@", _sessionManager.currentSession.connectedPeers);
     
     
     // set connection count

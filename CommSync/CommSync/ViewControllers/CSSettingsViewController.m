@@ -41,10 +41,9 @@
 }
 
 - (IBAction)tearDown:(id)sender {
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    CSSessionManager* sessionManager = d.globalSessionManager;
-    
-    [sessionManager tearDownConnectivityFramework];
+//    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//    CSSessionManager* sessionManager = d.globalSessionManager;
+
 }
 
 - (IBAction)rebuild:(id)sender {
@@ -52,15 +51,10 @@
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     CSSessionManager* sessionManager = d.globalSessionManager;
     
-    [sessionManager resetAdvertiserService];
-    [sessionManager resetBrowserService];
-    [sessionManager resetPeerID];
-    
     MCSession* s =[[MCSession alloc] initWithPeer:sessionManager.myPeerID];
     s.delegate = sessionManager;
     sessionManager.currentSession = s;
     
-    [sessionManager.userSessionsDisplayNamesToSessions setObject:s forKey:sessionManager.myPeerID.displayName];
 }
 
 

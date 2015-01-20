@@ -22,11 +22,8 @@
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
 		93031E061A0C1E2A00C3F919 /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93031E051A0C1E2A00C3F919 /* CSTaskCreationViewController.m */; };
 		95FAAA7D1A1B1EA900740311 /* SlackTextViewController.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAA5F1A1B1EA900740311 /* SlackTextViewController.podspec */; };
-		95FAAA7E1A1B1EA900740311 /* License.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAA611A1B1EA900740311 /* License.markdown */; };
 		95FAAA7F1A1B1EA900740311 /* LoremIpsum.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAA641A1B1EA900740311 /* LoremIpsum.m */; };
-		95FAAA801A1B1EA900740311 /* Readme.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAA651A1B1EA900740311 /* Readme.markdown */; };
 		95FAAA811A1B1EA900740311 /* Manifest.lock in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAA661A1B1EA900740311 /* Manifest.lock */; };
-		95FAAA821A1B1EA900740311 /* Pods-acknowledgements.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAA6C1A1B1EA900740311 /* Pods-acknowledgements.markdown */; };
 		95FAAA831A1B1EA900740311 /* Pods-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAA6D1A1B1EA900740311 /* Pods-acknowledgements.plist */; };
 		95FAAA841A1B1EA900740311 /* Pods-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAA6E1A1B1EA900740311 /* Pods-dummy.m */; };
 		95FAAA851A1B1EA900740311 /* Pods-resources.sh in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAA701A1B1EA900740311 /* Pods-resources.sh */; };
@@ -46,7 +43,6 @@
 		95FAAAB01A1B1EC100740311 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAAA61A1B1EC100740311 /* SLKTextView.m */; };
 		95FAAAB11A1B1EC100740311 /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAAA81A1B1EC100740311 /* SLKTextViewController.m */; };
 		95FAAAB21A1B1EC100740311 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAAAA1A1B1EC100740311 /* SLKTypingIndicatorView.m */; };
-		95FAAAB51A1B1FC800740311 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FAAAB41A1B1FC800740311 /* MessageTableViewCell.m */; };
 		95FAAAB91A1B2DEE00740311 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAAB71A1B2DEE00740311 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -168,9 +164,6 @@
 		95FAAAA81A1B1EC100740311 /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
 		95FAAAA91A1B1EC100740311 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
 		95FAAAAA1A1B1EC100740311 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
-		95FAAAB31A1B1FBE00740311 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageViewController.h; path = "../../../Messenger/Messenger-Shared/MessageViewController.h"; sourceTree = "<group>"; };
-		95FAAAB41A1B1FC800740311 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageTableViewCell.m; path = "../../../Messenger/Messenger-Shared/MessageTableViewCell.m"; sourceTree = "<group>"; };
-		95FAAAB61A1B222B00740311 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageTableViewCell.h; path = "../../../Messenger/Messenger-Shared/MessageTableViewCell.h"; sourceTree = "<group>"; };
 		95FAAAB81A1B2DEE00740311 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,9 +223,6 @@
 				459D5F8019DB449900C91EFA /* MessageViewController.h */,
 				459D5F8119DB449900C91EFA /* MessageViewController.m */,
 				459D5F7B19DB449900C91EFA /* AppDelegate.m */,
-				95FAAAB41A1B1FC800740311 /* MessageTableViewCell.m */,
-				95FAAAB61A1B222B00740311 /* MessageTableViewCell.h */,
-				95FAAAB31A1B1FBE00740311 /* MessageViewController.h */,
 				744452291A0ACE2700C87723 /* ViewControllers */,
 				7409982D1A0C178000229AFC /* Task Management */,
 				4595391F19E38F2F00744747 /* Session Management */,
@@ -681,21 +671,17 @@
 				95FAAA7F1A1B1EA900740311 /* LoremIpsum.m in Sources */,
 				95FAAAAF1A1B1EC100740311 /* SLKTextInputbar.m in Sources */,
 				95FAAAB01A1B1EC100740311 /* SLKTextView.m in Sources */,
-				95FAAA821A1B1EA900740311 /* Pods-acknowledgements.markdown in Sources */,
-				95FAAA7E1A1B1EA900740311 /* License.markdown in Sources */,
 				45B934CB1A0B0671003C2E30 /* CSTaskListManager.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
 				93031E061A0C1E2A00C3F919 /* CSTaskCreationViewController.m in Sources */,
 				95FAAAB21A1B1EC100740311 /* SLKTypingIndicatorView.m in Sources */,
 				95FAAAAC1A1B1EC100740311 /* UITextView+SLKAdditions.m in Sources */,
 				95FAAA841A1B1EA900740311 /* Pods-dummy.m in Sources */,
-				95FAAAB51A1B1FC800740311 /* MessageTableViewCell.m in Sources */,
 				7444522C1A0ACEA800C87723 /* CSTaskViewController.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
 				95FAAAAB1A1B1EC100740311 /* UIScrollView+SLKAdditions.m in Sources */,
 				95FAAAAE1A1B1EC100740311 /* SLKInputAccessoryView.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
-				95FAAA801A1B1EA900740311 /* Readme.markdown in Sources */,
 				95FAAA8B1A1B1EA900740311 /* Pods-SlackTextViewController-dummy.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
 				459D5F8219DB449900C91EFA /* MessageViewController.m in Sources */,

@@ -18,7 +18,6 @@
 - (CSSessionManager*) initWithID:(NSString*)userID
 {
     _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
-    _userID = userID;
     
     _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
     _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
@@ -31,11 +30,8 @@
     [_serviceBrowser startBrowsingForPeers];
     [_serviceAdvertiser startAdvertisingPeer];
     
-    _userSessionsDisplayNamesToSessions = [[NSMutableDictionary alloc] init];
-    
     _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
-    [_userSessionsDisplayNamesToSessions setObject:_currentSession forKey:_userID];
-    
+    _currentSession.delegate = self;
     
     return self;
 }
@@ -65,89 +61,77 @@
     NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
     NSError* error;
     
-//    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
-    NSSet* uniqueSessions = [NSSet setWithArray:[_userSessionsDisplayNamesToSessions allValues]];
-    
-    for(MCSession* session in uniqueSessions)
+    for(MCPeerID* peer in _currentSession.connectedPeers)
     {
-        for(MCPeerID* peer in session.connectedPeers)
-        {
-            NSLog(@"Sending a pulse to :: [%@]", peer.displayName);
-            [session sendData:newPulse toPeers:@[peer]
-                        withMode:MCSessionSendDataReliable
-                           error:&error];
-        }
+        [_currentSession sendData:newPulse
+                          toPeers:@[peer]
+                         withMode:MCSessionSendDataReliable
+                            error:&error];
     }
 }
 
 # pragma mark - Session Helpers
-- (MCSession*)createNewSessionToNewPeer:(MCPeerID*)peerID
+- (MCSession*)addPeerToSession:(MCPeerID*)peerID
 {
     MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
     newSession.delegate = self;
-    [_userSessionsDisplayNamesToSessions setObject:newSession forKey:peerID.displayName];
+//    [_userSessionsDisplayNamesToSessions setObject:newSession forKey:peerID.displayName];
     
     return newSession;
 }
 
 
 
-- (void)tearDownConnectivityFramework
-{
-    _serviceBrowser.delegate = nil;
-    [_serviceBrowser stopBrowsingForPeers];
-    _serviceBrowser = nil;
-    
-    _serviceAdvertiser.delegate = nil;
-    [_serviceAdvertiser stopAdvertisingPeer];
-    _serviceAdvertiser = nil;
+//- (void)tearDownConnectivityFramework
+//{
+//    _serviceBrowser.delegate = nil;
+//    [_serviceBrowser stopBrowsingForPeers];
+//    _serviceBrowser = nil;
+//    
+//    _serviceAdvertiser.delegate = nil;
+//    [_serviceAdvertiser stopAdvertisingPeer];
+//    _serviceAdvertiser = nil;
+//
+//    NSString* disconnect = MANUAL_DISCONNECT_STRING;
+//    NSData* killData = [disconnect dataUsingEncoding:NSUTF8StringEncoding];
+//    NSError* error;
+//    
+//    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
+//    for(MCSession* session in allSessions)
+//    {
+//        for(MCPeerID* peer in session.connectedPeers)
+//        {
+//            [session sendData:killData toPeers:@[peer]
+//                             withMode:MCSessionSendDataReliable
+//                                error:&error];
+//        }
+//    }
+//    
+//}
 
-    NSString* disconnect = MANUAL_DISCONNECT_STRING;
-    NSData* killData = [disconnect dataUsingEncoding:NSUTF8StringEncoding];
-    NSError* error;
-    
-    NSArray* allSessions = [_userSessionsDisplayNamesToSessions allValues];
-    for(MCSession* session in allSessions)
-    {
-        for(MCPeerID* peer in session.connectedPeers)
-        {
-            [session sendData:killData toPeers:@[peer]
-                             withMode:MCSessionSendDataReliable
-                                error:&error];
-        }
-    }
-    
-}
-
-- (void)resetPeerID
-{
-    _myPeerID = nil;
-    _myPeerID = [[MCPeerID alloc] initWithDisplayName:_userID];
-}
-
-- (void)resetBrowserService
-{
-    [_serviceBrowser stopBrowsingForPeers];
-    _serviceBrowser = nil;
-    
-    _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
-    _serviceBrowser.delegate = self;
-    
-    [_serviceBrowser startBrowsingForPeers];
-}
-
-- (void)resetAdvertiserService
-{
-    [_serviceAdvertiser stopAdvertisingPeer];
-    _serviceAdvertiser = nil;
-    
-    _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
-                                                           discoveryInfo:nil
-                                                             serviceType:COMMSYNC_SERVICE_ID];
-    _serviceAdvertiser.delegate = self;
-    
-    [_serviceAdvertiser startAdvertisingPeer];
-}
+//- (void)resetBrowserService
+//{
+//    [_serviceBrowser stopBrowsingForPeers];
+//    _serviceBrowser = nil;
+//    
+//    _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
+//    _serviceBrowser.delegate = self;
+//    
+//    [_serviceBrowser startBrowsingForPeers];
+//}
+//
+//- (void)resetAdvertiserService
+//{
+//    [_serviceAdvertiser stopAdvertisingPeer];
+//    _serviceAdvertiser = nil;
+//    
+//    _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
+//                                                           discoveryInfo:nil
+//                                                             serviceType:COMMSYNC_SERVICE_ID];
+//    _serviceAdvertiser.delegate = self;
+//    
+//    [_serviceAdvertiser startAdvertisingPeer];
+//}
 
 # pragma mark - MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
@@ -160,26 +144,30 @@
         return;
     }
     
-    if( [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName] )
+    for(MCPeerID* peer in _currentSession.connectedPeers)
     {
-        NSLog(@"[%@] is already connected.", peerID.displayName);
-        return;
+        if([peerID isEqual:peer])
+        {
+            NSLog(@"[%@] is already connected.", peerID.displayName);
+            return;
+        }
     }
     
     NSTimeInterval linkDeadTime = 15;
     
-    MCSession* session;
-    if([_currentSession.connectedPeers count] == 8)
-    {
-        session = [self createNewSessionToNewPeer:peerID];
-        _currentSession = session;
-    }
-    else
-    {
-        session = _currentSession;
-    }
+//    MCSession* session;
+//    if([_currentSession.connectedPeers count] == 8)
+//    {
+//        session = [self createNewSessionToNewPeer:peerID];
+//        _currentSession = session;
+//    }
+//    else
+//    {
+//        session = _currentSession;
+//    }
     
-    [browser invitePeer:peerID toSession:session withContext:nil timeout:linkDeadTime];
+    MCSession* inviteSession = _currentSession;
+    [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
 }
@@ -189,12 +177,6 @@
     NSLog(@"Lost connection to PeerID:[%@]", peerID.displayName);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"lostPeer" object:self];
-    
-    if([_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
-    {
-        [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
-        [self resetBrowserService];
-    }
 }
 
 - (void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
@@ -208,18 +190,15 @@
  invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler
 {
     NSLog(@"PeerID:[%@] sent an invitation.", peerID.displayName);
-    MCSession* session = [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName];
     
-    if(session)
+    for(MCPeerID* peer in _currentSession.connectedPeers)
     {
-        NSLog(@"Peer already in session; sending NO.");
-        invitationHandler(NO, session);
-        return;
-    }
-    else if ([session.connectedPeers count] == 8)
-    {
-        session = [self createNewSessionToNewPeer:peerID];
-        _currentSession = session;
+        if([peer isEqual:peerID])
+        {
+            NSLog(@"Peer already in session; sending NO.");
+            invitationHandler(NO, _currentSession);
+            return;
+        }
     }
     
     NSLog(@"...Auto accepting...");
@@ -248,19 +227,9 @@
         NSError* error;
         NSString* pulseBack = PULSE_BACK_STRING;
         
-//        if(! [_userSessionsDisplayNamesToSessions objectForKey:peerID.displayName])
-//        {
-//            [_userSessionsDisplayNamesToSessions setObject:session forKey:peerID.displayName];
-//        }
-        
         [session sendData:[pulseBack dataUsingEncoding:NSUTF8StringEncoding] toPeers:@[peerID]
                     withMode:MCSessionSendDataReliable
                        error:&error];
-    }
-    else if([stringFromData isEqualToString:MANUAL_DISCONNECT_STRING])
-    {
-//        [session disconnect];
-        [_userSessionsDisplayNamesToSessions removeObjectForKey:peerID.displayName];
     }
 }
 

@@ -30,14 +30,17 @@
 
 - (void) insertTaskIntoList:(CSTask*)newTask
 {
-    if(_rootTask == nil)
+    if(_rootTask != nil)
+    {
+        [self insertTaskIntoList:newTask atNode:_rootTask];
+    }
+    else
     {
         _rootTask = newTask;
-        return;
     }
     
-    [self insertTaskIntoList:newTask atNode:_rootTask];
     _listIsDirty = YES;
+    return;
 }
 
 - (void) insertTaskIntoList:(CSTask*)newTask atNode:(CSTask*)node

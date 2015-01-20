@@ -29,7 +29,7 @@
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
-    NSInteger connectionCount = [_sessionManager.userSessionsDisplayNamesToSessions count];
+    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
 }
 
@@ -58,7 +58,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return [_sessionManager.userSessionsDisplayNamesToSessions count];
+    return [_sessionManager.currentSession.connectedPeers count];
 }
 
 

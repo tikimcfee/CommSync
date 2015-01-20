@@ -20,20 +20,21 @@
 
 // MCMultiPeer objects
 @property (strong, nonatomic) MCSession* currentSession;
-@property (strong, nonatomic) NSMutableDictionary* userSessionsDisplayNamesToSessions;
-@property (strong, nonatomic) MCPeerID* myPeerID;
-@property (strong, nonatomic) NSString* userID;
 
+//@property (strong, nonatomic) NSMutableDictionary* userSessionsServiceIDSToSessions;
+
+@property (strong, nonatomic) MCPeerID* myPeerID;
+//@property (strong, nonatomic) NSString* userID;
 
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 
 - (CSSessionManager*) initWithID:(NSString*)userID;
-- (void)tearDownConnectivityFramework;
+//- (void)tearDownConnectivityFramework;
 - (void)sendPulseToPeers;
-- (void)resetBrowserService;
-- (void)resetAdvertiserService;
-- (void)resetPeerID;
+
+//- (void)resetBrowserService;
+//- (void)resetAdvertiserService;
 
 
 @end
