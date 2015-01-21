@@ -115,9 +115,15 @@
     });
 }
 
+#pragma mark - UITableView Delegates
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+    
+}
+
 #pragma mark - UITableViewDataSource Delegates
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
@@ -127,17 +133,14 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    
     CSTask *task = [_taskManager.currentTaskList objectAtIndex:indexPath.row];
-    
     cell.textLabel.text = task.taskTitle != nil ? task.taskTitle : task.concatenatedID;
     
     return cell;
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView
- numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_taskManager.currentTaskList count];
 }
