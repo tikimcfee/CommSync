@@ -12,7 +12,7 @@
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
 #define kUserConnectingNotification @"Is Connecting"
-#define kNewTaskNotification @"Connected"
+#define kNewTaskNotification @"kNewTaskNotification"
 
 @interface CSTaskViewController ()
 {

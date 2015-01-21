@@ -8,7 +8,7 @@
 
 #import "CSTaskListManager.h"
 
-#define kNewTaskNotification @"Connected"
+#define kNewTaskNotification @"kNewTaskNotification"
 
 @interface CSTaskListManager()
 
@@ -41,10 +41,8 @@
         _rootTask = newTask;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNewTaskNotification object:self];
-    });
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNewTaskNotification
+                                                        object:self];
     _listIsDirty = YES;
     return;
 }
@@ -86,6 +84,10 @@
 - (void) resetCurrentTaskList
 {
     _currentTaskList = [[NSMutableArray alloc] initWithCapacity:[_currentTaskList count]];
+    
+    if(_rootTask == nil)
+        return;
+    
     [self convertCurrentTreeIntoListAtNodeDescending:_rootTask];
 }
 
