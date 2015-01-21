@@ -142,10 +142,12 @@
     return [_taskManager.currentTaskList count];
 }
 
-#pragma mark - Task creation data source
+#pragma mark - Task creation view refresh
 - (void)didReceiveNewTask:(NSNotification*)notification
 {
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 

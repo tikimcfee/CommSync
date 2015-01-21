@@ -41,7 +41,9 @@
         _rootTask = newTask;
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNewTaskNotification object:self];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNewTaskNotification object:self];
+    });
     
     _listIsDirty = YES;
     return;

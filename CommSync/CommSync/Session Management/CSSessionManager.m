@@ -13,6 +13,12 @@
 #define kUserConnectedNotification @"Connected"
 #define kUserConnectingNotification @"Is Connecting"
 
+@interface CSSessionManager()
+
+@property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
+
+@end
+
 
 @implementation CSSessionManager
 
@@ -33,6 +39,8 @@
     
     _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
     _currentSession.delegate = self;
+    
+    self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
     
     return self;
 }
@@ -106,6 +114,9 @@
     if(!shouldInvite)
     {
         NSLog(@"Deferring connection from %@", peerID.displayName);
+        // on deferall, we must send the current task list to the new peer we connect to,
+        // should the connection be successful; at the moment, just add to them to a dict
+        [self.deferredConnectionsDisplayNamesToPeerIDs setObject:peerID forKey:peerID.displayName];
         return;
     }
     
@@ -121,7 +132,13 @@
     NSTimeInterval linkDeadTime = 15;
     
     MCSession* inviteSession = _currentSession;
-    [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
+    
+    // Task list as discovery info
+        AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+        NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
+        NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
+    //
+    [browser invitePeer:peerID toSession:inviteSession withContext:contextData timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
 }
@@ -156,6 +173,24 @@
     }
     
     NSLog(@"...Auto accepting...");
+    
+    // add tasks to list...
+    
+    id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
+    if([potentialList isKindOfClass:[NSMutableArray class]])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            NSMutableArray* arr = (NSMutableArray*)potentialList;
+            for(CSTask* task in arr)
+            {
+                [d.globalTaskManager insertTaskIntoList:task];
+            }
+        });
+    }
+    
+    //
+    
     invitationHandler(YES, _currentSession);
 }
 
@@ -194,6 +229,17 @@
             AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
             [d.globalTaskManager insertTaskIntoList:task];
         }
+        else if([task isKindOfClass:[NSMutableArray class]])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+                NSMutableArray* arr = (NSMutableArray*)task;
+                for(CSTask* task in arr)
+                {
+                    [d.globalTaskManager insertTaskIntoList:task];
+                }
+            });
+        }
 //        CSTask* newTaskFromData = [[CSTask alloc]
 //                                   initWithCoder:[NSKeyedUnarchiver
 //                                                  unarchiveObjectWithData:data]]
@@ -212,6 +258,16 @@
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
+            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+            {
+                AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+                NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
+                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
+                
+                [self sendDataPacketToPeers:contextData];
+                
+                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+            }
             stateString = kUserConnectedNotification;
             break;
         default:
