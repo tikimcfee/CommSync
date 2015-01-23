@@ -37,9 +37,6 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 
 @property (assign, nonatomic) CSTaskPriority taskPriority;
 
-//@property (strong, nonatomic)
-
-
 
 - (CSTask*) initWithUUID:(NSString*)UUID andDeviceID:(NSString*)deviceID;
 

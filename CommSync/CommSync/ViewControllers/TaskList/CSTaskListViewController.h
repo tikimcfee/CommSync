@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CSTaskViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface CSTaskListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

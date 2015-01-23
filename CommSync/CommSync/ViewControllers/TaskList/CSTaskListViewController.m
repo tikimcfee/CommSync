@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 AppsByDLI. All rights reserved.
 //
 
-#import "CSTaskViewController.h"
+#import "CSTaskListViewController.h"
+#import "CSTaskDetailViewController.h"
+#import "CSTaskTableViewCell.h"
 #import "AppDelegate.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
@@ -14,7 +16,7 @@
 #define kUserConnectingNotification @"Is Connecting"
 #define kNewTaskNotification @"kNewTaskNotification"
 
-@interface CSTaskViewController ()
+@interface CSTaskListViewController ()
 {
     NSArray *tableData;
 
@@ -25,7 +27,7 @@
 
 @end
 
-@implementation CSTaskViewController
+@implementation CSTaskListViewController
 
 
 #pragma mark - View Lifecycle
@@ -96,7 +98,7 @@
     int count = [_userConnectionCount.title intValue];
     count = count + 1;
     
-    __weak CSTaskViewController *weakSelf = self;
+    __weak CSTaskListViewController *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
@@ -108,7 +110,7 @@
     int count = [_userConnectionCount.title intValue];
     count = (count == 0) ? 0 : count - 1;
     
-    __weak CSTaskViewController *weakSelf = self;
+    __weak CSTaskListViewController *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
@@ -118,23 +120,26 @@
 #pragma mark - UITableView Delegates
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+    CSTaskTableViewCell *selectedCell = (CSTaskTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    CSTask *task = [[CSTask alloc] init];
+    task = selectedCell.sourceTask;
     
+    [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 }
 
 #pragma mark - UITableViewDataSource Delegates
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *simpleTableIdentifier = @"SimpleTableItem";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    static NSString *simpleTableIdentifier = @"CSTaskTableItem";
+    CSTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        cell = [[CSTaskTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:simpleTableIdentifier];
     }
     
     CSTask *task = [_taskManager.currentTaskList objectAtIndex:indexPath.row];
-    cell.textLabel.text = task.taskTitle != nil ? task.taskTitle : task.concatenatedID;
+    [cell configureWithSourceTask:task];
     
     return cell;
 }
@@ -154,14 +159,21 @@
 }
 
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"showTaskDetail"])
+    {
+        CSTaskDetailViewController *vc = [segue destinationViewController];
+        if ([sender isKindOfClass:[CSTask class]])
+        {
+            [vc setSourceTask:sender];
+        }
+    }
 }
-*/
+
 
 @end
