@@ -50,7 +50,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
+    MCPeerID *peer = [_sessionManager.currentSession.connectedPeers objectAtIndex:indexPath.row];
+    cell.textLabel.text = peer.displayName;
     return cell;
 }
 

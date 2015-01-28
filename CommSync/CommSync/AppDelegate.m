@@ -22,7 +22,8 @@
 //    NSString* randomID = [NSString stringWithFormat:@"%d", arc4random() % 1000000];
     NSString* name = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
     NSLog(@"[[[[[ Initializing Application with name -- {%@} ]]]]]", name);
-    _userDisplayName = name;
+//    _userDisplayName = name;
+    _userDisplayName = [[UIDevice currentDevice] name];
     
     _globalSessionManager = [[CSSessionManager alloc] initWithID:_userDisplayName];
     
