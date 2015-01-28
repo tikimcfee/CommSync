@@ -8,6 +8,7 @@
 
 #import "CSSessionManager.h"
 #import "AppDelegate.h"
+#import <Realm/Realm.h>
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -16,6 +17,7 @@
 @interface CSSessionManager()
 
 @property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
+@property (nonatomic, strong) RLMRealm* realm;
 
 @end
 
@@ -41,6 +43,9 @@
     _currentSession.delegate = self;
     
     self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
+    
+    _realm = [RLMRealm defaultRealm];
+    _realm.autorefresh = YES;
     
     return self;
 }
@@ -134,11 +139,13 @@
     MCSession* inviteSession = _currentSession;
     
     // Task list as discovery info
-//        AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-//        NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
-    RLMResults
-        NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
-    //
+    RLMResults* allTasks = [CSTaskRealmModel allObjects];
+    NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
+    for(CSTaskRealmModel* t in allTasks)
+        [taskDataStore addObject:t];
+    
+    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+
     [browser invitePeer:peerID toSession:inviteSession withContext:contextData timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
@@ -182,16 +189,16 @@
     if([potentialList isKindOfClass:[NSMutableArray class]])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            [_realm beginWriteTransaction];
             NSMutableArray* arr = (NSMutableArray*)potentialList;
             for(CSTaskRealmModel* task in arr)
             {
-                [d.globalTaskManager insertTaskIntoList:task];
+                [_realm addObject:task];
             }
+            [_realm commitWriteTransaction];
         });
     }
     
-    //
     
     invitationHandler(YES, _currentSession);
 }
