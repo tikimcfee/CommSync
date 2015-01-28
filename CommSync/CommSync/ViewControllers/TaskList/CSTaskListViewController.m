@@ -17,13 +17,12 @@
 #define kNewTaskNotification @"kNewTaskNotification"
 
 @interface CSTaskListViewController ()
-{
-    NSArray *tableData;
 
-}
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 @property (strong, nonatomic) CSTaskListManager* taskManager;
+
+@property (strong, nonatomic) RLMRealm* realm;
 
 @end
 
@@ -36,8 +35,6 @@
     
     [super viewDidLoad];
     
-    tableData = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
-    
     // get global managers
     AppDelegate *app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = app.globalSessionManager;
@@ -48,6 +45,10 @@
     
     NSLog(@"%@", _sessionManager.currentSession.connectedPeers);
     
+    
+    // Realms
+    _realm = [RLMRealm defaultRealm];
+    _realm.autorefresh = YES;
     
     // set connection count
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
@@ -120,9 +121,7 @@
 #pragma mark - UITableView Delegates
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CSTaskTableViewCell *selectedCell = (CSTaskTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    CSTask *task = [[CSTask alloc] init];
-    task = selectedCell.sourceTask;
+    CSTaskRealmModel *task = [[CSTaskRealmModel allObjects]objectAtIndex:indexPath.row];
     
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 }
@@ -138,7 +137,10 @@
                                           reuseIdentifier:simpleTableIdentifier];
     }
     
-    CSTask *task = [_taskManager.currentTaskList objectAtIndex:indexPath.row];
+//    CSTaskRealmModel *task = [_taskManager.currentTaskList objectAtIndex:indexPath.row];
+    RLMResults* results = [CSTaskRealmModel allObjects];
+    CSTaskRealmModel* task = [results objectAtIndex:indexPath.row];
+    
     [cell configureWithSourceTask:task];
     
     return cell;
@@ -147,7 +149,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_taskManager.currentTaskList count];
+    return [CSTaskRealmModel allObjects].count;
 }
 
 #pragma mark - Task creation view refresh
@@ -168,7 +170,7 @@
     if ([[segue identifier] isEqualToString:@"showTaskDetail"])
     {
         CSTaskDetailViewController *vc = [segue destinationViewController];
-        if ([sender isKindOfClass:[CSTask class]])
+        if ([sender isKindOfClass:[CSTaskRealmModel class]])
         {
             [vc setSourceTask:sender];
         }

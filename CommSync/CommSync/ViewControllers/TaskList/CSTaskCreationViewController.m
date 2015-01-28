@@ -7,8 +7,10 @@
 //
 
 #import "CSTaskCreationViewController.h"
-#import "CSTask.h"
+#import "CSTaskRealmModel.h"
 #import "AppDelegate.h"
+
+#import <Realm/Realm.h>
 
 @interface CSTaskCreationViewController()
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
@@ -17,7 +19,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *mediumPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *highPriorityButton;
 
-@property (strong, nonatomic) CSTask *pendingTask;
+@property (weak, nonatomic) RLMRealm* realm;
+@property (strong, nonatomic) CSTaskRealmModel *pendingTask;
 @end
 
 
@@ -40,8 +43,11 @@
                    arc4random_uniform(25)+97,
                    arc4random_uniform(25)+97];
     
-    self.pendingTask = [[CSTask alloc] initWithUUID:U andDeviceID:D];
+    _realm = [RLMRealm defaultRealm];
     
+    self.pendingTask = [[CSTaskRealmModel alloc] init];
+    _pendingTask.UUID = U;
+    _pendingTask.deviceID = D;
 }
 
 
@@ -79,9 +85,13 @@
     self.pendingTask.taskTitle = self.titleTextField.text;
     self.pendingTask.taskDescription = self.descriptionTextField.text;
     
-    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    [d.globalTaskManager insertTaskIntoList:self.pendingTask];
-    [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
+    [_realm beginWriteTransaction];
+    [_realm addObject:self.pendingTask];
+    [_realm commitWriteTransaction];
+    
+//    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//    [d.globalTaskManager insertTaskIntoList:self.pendingTask];
+//    [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
     
     // send data to all peers
     

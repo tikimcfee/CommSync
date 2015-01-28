@@ -7,16 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CSTask.h"
+#import "CSTaskRealmModel.h"
 
 @interface CSTaskListManager : NSObject
 
-@property (strong, nonatomic) CSTask* rootTask;
-@property (strong, nonatomic) CSTask* currentTask;
 @property (strong, nonatomic) NSMutableArray* currentTaskList;
 
 
-- (void) insertTaskIntoList:(CSTask*)newTask;
+- (void) insertTaskIntoList:(CSTaskRealmModel*)newTask;
 
 
 @end

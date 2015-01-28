@@ -134,8 +134,9 @@
     MCSession* inviteSession = _currentSession;
     
     // Task list as discovery info
-        AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-        NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
+//        AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//        NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
+    RLMResults
         NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
     //
     [browser invitePeer:peerID toSession:inviteSession withContext:contextData timeout:linkDeadTime];
@@ -177,12 +178,13 @@
     // add tasks to list...
     
     id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
+    
     if([potentialList isKindOfClass:[NSMutableArray class]])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
             NSMutableArray* arr = (NSMutableArray*)potentialList;
-            for(CSTask* task in arr)
+            for(CSTaskRealmModel* task in arr)
             {
                 [d.globalTaskManager insertTaskIntoList:task];
             }
@@ -224,7 +226,7 @@
     {
         
         id task = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        if([task isKindOfClass:[CSTask class]])
+        if([task isKindOfClass:[CSTaskRealmModel class]])
         {
             AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
             [d.globalTaskManager insertTaskIntoList:task];
@@ -234,7 +236,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
                 NSMutableArray* arr = (NSMutableArray*)task;
-                for(CSTask* task in arr)
+                for(CSTaskRealmModel* task in arr)
                 {
                     [d.globalTaskManager insertTaskIntoList:task];
                 }

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <Realm/Realm.h>
 
 @interface AppDelegate ()
 
@@ -16,34 +17,17 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     
     // init the application's session manager
-//    NSString* randomID = [NSString stringWithFormat:@"%d", arc4random() % 1000000];
     NSString* name = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
     NSLog(@"[[[[[ Initializing Application with name -- {%@} ]]]]]", name);
+    
+    
+    // Multipeer initialization
     _userDisplayName = name;
-    
     _globalSessionManager = [[CSSessionManager alloc] initWithID:_userDisplayName];
-    
     _globalTaskManager = [[CSTaskListManager alloc] init];
-    
-    for(int i = 0; i < 0; i++)
-    {
-        NSString* U = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
-        NSString* D = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97, arc4random_uniform(25)+97];
-        CSTask* task = [[CSTask alloc] initWithUUID:U andDeviceID:D];
-        [_globalTaskManager insertTaskIntoList:task];
-    }
-    
-    NSArray* list = _globalTaskManager.currentTaskList;
-    
-//    for(CSTask* t in list)
-//    {
-//        NSLog(@"%@", t.concatenatedID);
-//    }
-    
-    NSLog(@"Task Count: %lu", (unsigned long)[list count]);
+
     
     return YES;
 }
