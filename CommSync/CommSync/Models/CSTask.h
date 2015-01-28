@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <Realm/Realm.h>
 
-@interface CSTask : NSObject <NSCoding>
+@interface CSTask : RLMObject <NSCoding>
 
 // Storage data structure
 @property (strong, nonatomic) CSTask* leftChild;
