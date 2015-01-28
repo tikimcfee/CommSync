@@ -89,13 +89,8 @@
     [_realm addObject:self.pendingTask];
     [_realm commitWriteTransaction];
     
-//    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-//    [d.globalTaskManager insertTaskIntoList:self.pendingTask];
-//    [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
-    
-    // send data to all peers
-    
-    
+    AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

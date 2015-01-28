@@ -20,9 +20,13 @@
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
+
+// TO BE REMOVED
 @property (strong, nonatomic) CSTaskListManager* taskManager;
 
+// Realm data persistence and UI ties
 @property (strong, nonatomic) RLMRealm* realm;
+@property (strong, nonatomic) RLMNotificationToken* updateUIToken;
 
 @end
 
@@ -32,6 +36,16 @@
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
+    
+    
+    __weak typeof(self) weakSelf = self;
+    void (^realmNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
+    };
+    
+    _updateUIToken = [[RLMRealm defaultRealm] addNotificationBlock:realmNotificationBlock];
     
     [super viewDidLoad];
     
@@ -92,6 +106,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:@"lostPeer"
                                                   object:self];
+
+    [[RLMRealm defaultRealm] removeNotification:_updateUIToken];
 }
 
 - (void)incrementConnectedCount:(NSNotification *)notification

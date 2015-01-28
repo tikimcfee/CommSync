@@ -88,14 +88,6 @@
 {
     NSError* error;
     
-//    for(MCPeerID* peer in _currentSession.connectedPeers)
-//    {
-//        [_currentSession sendData:dataPacket
-//                          toPeers:@[peer]
-//                         withMode:MCSessionSendDataReliable
-//                            error:&error];
-//    }
-    
     [_currentSession sendData:dataPacket
                       toPeers:_currentSession.connectedPeers
                      withMode:MCSessionSendDataReliable
@@ -188,15 +180,7 @@
     
     if([potentialList isKindOfClass:[NSMutableArray class]])
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_realm beginWriteTransaction];
-            NSMutableArray* arr = (NSMutableArray*)potentialList;
-            for(CSTaskRealmModel* task in arr)
-            {
-                [_realm addObject:task];
-            }
-            [_realm commitWriteTransaction];
-        });
+        [self batchUpdateRealmWithTasks:potentialList];
     }
     
     
@@ -235,19 +219,11 @@
         id task = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         if([task isKindOfClass:[CSTaskRealmModel class]])
         {
-            AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-            [d.globalTaskManager insertTaskIntoList:task];
+            [self batchUpdateRealmWithTasks:@[task]];
         }
         else if([task isKindOfClass:[NSMutableArray class]])
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-                NSMutableArray* arr = (NSMutableArray*)task;
-                for(CSTaskRealmModel* task in arr)
-                {
-                    [d.globalTaskManager insertTaskIntoList:task];
-                }
-            });
+            [self batchUpdateRealmWithTasks:task];
         }
 //        CSTask* newTaskFromData = [[CSTask alloc]
 //                                   initWithCoder:[NSKeyedUnarchiver
@@ -255,6 +231,17 @@
     }
 }
 
+- (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_realm beginWriteTransaction];
+        for(CSTaskRealmModel* task in tasks)
+        {
+            [_realm addObject:task];
+        }
+        [_realm commitWriteTransaction];
+    });
+}
 
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
@@ -269,8 +256,14 @@
         case MCSessionStateConnected:
             if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
             {
-                AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-                NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
+//                AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//                NSMutableArray* taskList = [d.globalTaskManager currentTaskList];
+                
+                RLMResults* allTasks = [CSTaskRealmModel allObjects];
+                NSMutableArray* taskList = [NSMutableArray arrayWithCapacity:allTasks.count];
+                for(CSTaskRealmModel* t in taskList)
+                    [taskList addObject:t];
+                
                 NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
                 
                 [self sendDataPacketToPeers:contextData];
