@@ -48,6 +48,7 @@
     self.pendingTask = [[CSTaskRealmModel alloc] init];
     _pendingTask.UUID = U;
     _pendingTask.deviceID = D;
+    _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
 }
 
 

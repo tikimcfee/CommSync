@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 
 @property NSString* UUID;
 @property NSString* deviceID;
-//@property NSString* concatenatedID;
+@property NSString* concatenatedID;
 
 // Task information
 @property NSString* taskTitle;

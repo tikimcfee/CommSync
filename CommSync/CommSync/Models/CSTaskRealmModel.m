@@ -15,7 +15,7 @@
     if (self = [super init]) {
         self.UUID = [aDecoder decodeObjectForKey:@"UUID"];
         self.deviceID = [aDecoder decodeObjectForKey:@"deviceID"];
-//        self.concatenatedID = [aDecoder decodeObjectForKey:@"concatenatedID"];
+        self.concatenatedID = [aDecoder decodeObjectForKey:@"concatenatedID"];
         
         self.taskTitle = [aDecoder decodeObjectForKey:@"taskTitle"];
         self.taskDescription = [aDecoder decodeObjectForKey:@"taskDescripion"];
@@ -31,7 +31,7 @@
 {
     [aCoder encodeObject:self.UUID forKey:@"UUID"];
     [aCoder encodeObject:self.deviceID forKey:@"deviceID"];
-//    [aCoder encodeObject:self.concatenatedID forKey:@"concatenatedID"];
+    [aCoder encodeObject:self.concatenatedID forKey:@"concatenatedID"];
     
     [aCoder encodeObject:self.taskTitle forKey:@"taskTitle"];
     [aCoder encodeObject:self.taskDescription forKey:@"taskDescripion"];
