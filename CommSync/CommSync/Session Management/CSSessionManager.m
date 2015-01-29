@@ -102,7 +102,7 @@
 {
     BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedDescending;
 
-    if(!shouldInvite && !_isResponsibleForSendingInvites)
+    if(!shouldInvite || !_isResponsibleForSendingInvites)
     {
         NSLog(@"Deferring connection from %@", peerID.displayName);
         // on deferall, we must send the current task list to the new peer we connect to,
@@ -142,8 +142,9 @@
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     NSLog(@"Lost connection to PeerID:[%@]", peerID.displayName);
-    
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"lostPeer" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PEER_CHANGED_STATE" object:self];
 }
 
 - (void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
@@ -291,6 +292,7 @@
     NSLog(@"\t\t-- --");
 
     [[NSNotificationCenter defaultCenter] postNotificationName:stateString object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PEER_CHANGED_STATE" object:self];
 }
 
 - (void)setInvitationSwitch {
