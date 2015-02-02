@@ -18,6 +18,16 @@
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
+		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
+		74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D11A7FDE4300ECBADB /* Connection.m */; };
+		74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D41A7FDE4300ECBADB /* JKConnection.m */; };
+		74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */; };
+		74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D91A7FDE4300ECBADB /* JKPeer.m */; };
+		74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */; };
+		74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */; };
+		74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */; };
+		74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */; };
+		74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E51A7FDE4300ECBADB /* Server.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
@@ -44,6 +54,30 @@
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		7444522D1A0ACEDB00C87723 /* CSUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSUserViewController.h; path = ViewControllers/CSUserViewController.h; sourceTree = "<group>"; };
 		7444522E1A0ACEDB00C87723 /* CSUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSUserViewController.m; path = ViewControllers/CSUserViewController.m; sourceTree = "<group>"; };
+		74DB14CD1A7FDDE500ECBADB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		74DB14D01A7FDE4300ECBADB /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
+		74DB14D11A7FDE4300ECBADB /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
+		74DB14D21A7FDE4300ECBADB /* ConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionDelegate.h; sourceTree = "<group>"; };
+		74DB14D31A7FDE4300ECBADB /* JKConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKConnection.h; sourceTree = "<group>"; };
+		74DB14D41A7FDE4300ECBADB /* JKConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKConnection.m; sourceTree = "<group>"; };
+		74DB14D51A7FDE4300ECBADB /* JKConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKConnectionDelegate.h; sourceTree = "<group>"; };
+		74DB14D61A7FDE4300ECBADB /* JKLocalConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKLocalConnection.h; sourceTree = "<group>"; };
+		74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKLocalConnection.m; sourceTree = "<group>"; };
+		74DB14D81A7FDE4300ECBADB /* JKPeer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeer.h; sourceTree = "<group>"; };
+		74DB14D91A7FDE4300ECBADB /* JKPeer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeer.m; sourceTree = "<group>"; };
+		74DB14DA1A7FDE4300ECBADB /* JKPeerConnectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivity.h; sourceTree = "<group>"; };
+		74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeerConnectivity.m; sourceTree = "<group>"; };
+		74DB14DC1A7FDE4300ECBADB /* JKPeerConnectivityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivityDelegate.h; sourceTree = "<group>"; };
+		74DB14DD1A7FDE4300ECBADB /* JKPeerConnectivitySetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivitySetup.h; sourceTree = "<group>"; };
+		74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeerConnectivitySetup.m; sourceTree = "<group>"; };
+		74DB14DF1A7FDE4300ECBADB /* JKRemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRemoteConnection.h; sourceTree = "<group>"; };
+		74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRemoteConnection.m; sourceTree = "<group>"; };
+		74DB14E11A7FDE4300ECBADB /* PeerBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerBrowser.h; sourceTree = "<group>"; };
+		74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerBrowser.m; sourceTree = "<group>"; };
+		74DB14E31A7FDE4300ECBADB /* PeerDiscoveryDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerDiscoveryDelegate.h; sourceTree = "<group>"; };
+		74DB14E41A7FDE4300ECBADB /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		74DB14E51A7FDE4300ECBADB /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		74DB14E61A7FDE4300ECBADB /* ServerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerDelegate.h; sourceTree = "<group>"; };
 		933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskTableViewCell.h; path = ViewControllers/TaskList/CSTaskTableViewCell.h; sourceTree = "<group>"; };
 		933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskTableViewCell.m; path = ViewControllers/TaskList/CSTaskTableViewCell.m; sourceTree = "<group>"; };
 		933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskCreationViewController.h; path = ViewControllers/TaskList/CSTaskCreationViewController.h; sourceTree = "<group>"; };
@@ -60,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */,
 				454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */,
 				454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */,
 			);
@@ -71,6 +106,7 @@
 		454D92061A7857AA000B74A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */,
 				454D92071A7857CD000B74A8 /* Realm.framework */,
 			);
 			name = Frameworks;
@@ -88,6 +124,7 @@
 		459D5F6A19DB449900C91EFA = {
 			isa = PBXGroup;
 			children = (
+				74DB14CD1A7FDDE500ECBADB /* UIKit.framework */,
 				454D92091A78581F000B74A8 /* libc++.dylib */,
 				459D5F7519DB449900C91EFA /* CommSync */,
 				459D5F7419DB449900C91EFA /* Products */,
@@ -147,6 +184,37 @@
 				95FAAAB71A1B2DEE00740311 /* Main.storyboard */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */ = {
+			isa = PBXGroup;
+			children = (
+				74DB14D01A7FDE4300ECBADB /* Connection.h */,
+				74DB14D11A7FDE4300ECBADB /* Connection.m */,
+				74DB14D21A7FDE4300ECBADB /* ConnectionDelegate.h */,
+				74DB14D31A7FDE4300ECBADB /* JKConnection.h */,
+				74DB14D41A7FDE4300ECBADB /* JKConnection.m */,
+				74DB14D51A7FDE4300ECBADB /* JKConnectionDelegate.h */,
+				74DB14D61A7FDE4300ECBADB /* JKLocalConnection.h */,
+				74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */,
+				74DB14D81A7FDE4300ECBADB /* JKPeer.h */,
+				74DB14D91A7FDE4300ECBADB /* JKPeer.m */,
+				74DB14DA1A7FDE4300ECBADB /* JKPeerConnectivity.h */,
+				74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */,
+				74DB14DC1A7FDE4300ECBADB /* JKPeerConnectivityDelegate.h */,
+				74DB14DD1A7FDE4300ECBADB /* JKPeerConnectivitySetup.h */,
+				74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */,
+				74DB14DF1A7FDE4300ECBADB /* JKRemoteConnection.h */,
+				74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */,
+				74DB14E11A7FDE4300ECBADB /* PeerBrowser.h */,
+				74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */,
+				74DB14E31A7FDE4300ECBADB /* PeerDiscoveryDelegate.h */,
+				74DB14E41A7FDE4300ECBADB /* Server.h */,
+				74DB14E51A7FDE4300ECBADB /* Server.m */,
+				74DB14E61A7FDE4300ECBADB /* ServerDelegate.h */,
+			);
+			name = JKConnectivityBETA;
+			path = ThirdParty/JKConnectivityBETA;
 			sourceTree = "<group>";
 		};
 		933AA1331A71DA7200DCC10A /* Models */ = {
@@ -244,16 +312,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
+				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
+				74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
+				74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */,
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
+				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
+				74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
 				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
+				74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
+				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
+				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
+				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
