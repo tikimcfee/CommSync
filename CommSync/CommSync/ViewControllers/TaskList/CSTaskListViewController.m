@@ -21,9 +21,6 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 
-// TO BE REMOVED
-@property (strong, nonatomic) CSTaskListManager* taskManager;
-
 // Realm data persistence and UI ties
 @property (strong, nonatomic) RLMRealm* realm;
 @property (strong, nonatomic) RLMNotificationToken* updateUIToken;
@@ -52,7 +49,6 @@
     // get global managers
     AppDelegate *app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = app.globalSessionManager;
-    self.taskManager = app.globalTaskManager;
     
     // get connection count
     NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count]; // subtract 1 to account for yourself

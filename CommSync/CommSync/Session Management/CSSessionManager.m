@@ -9,6 +9,7 @@
 #import "CSSessionManager.h"
 #import "AppDelegate.h"
 #import <Realm/Realm.h>
+#import "CSTaskRealmModel.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"

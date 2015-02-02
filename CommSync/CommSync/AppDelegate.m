@@ -25,7 +25,6 @@
     // Multipeer initialization
     _userDisplayName = [[UIDevice currentDevice] name];
     _globalSessionManager = [[CSSessionManager alloc] initWithID:_userDisplayName];
-    _globalTaskManager = [[CSTaskListManager alloc] init];
 
     
     return YES;
