@@ -1,27 +1,14 @@
 //
-//  CSTask.m
+//  CSTaskRealmModel.m
 //  CommSync
 //
-//  Created by Ivan Lugo on 11/5/14.
-//  Copyright (c) 2014 AppsByDLI. All rights reserved.
+//  Created by Ivan Lugo on 1/27/15.
+//  Copyright (c) 2015 AppsByDLI. All rights reserved.
 //
 
-#import "CSTask.h"
+#import "CSTaskRealmModel.h"
 
-@implementation CSTask
-
-- (CSTask*) initWithUUID:(NSString*)UUID andDeviceID:(NSString*)deviceID
-{
-    self = [super init];
-    if(self)
-    {
-        _UUID = UUID;
-        _deviceID = deviceID;
-        _concatenatedID = [NSString stringWithFormat:@"%@%@", UUID, deviceID];
-    }
-    
-    return self;
-}
+@implementation CSTaskRealmModel
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -29,7 +16,7 @@
         self.UUID = [aDecoder decodeObjectForKey:@"UUID"];
         self.deviceID = [aDecoder decodeObjectForKey:@"deviceID"];
         self.concatenatedID = [aDecoder decodeObjectForKey:@"concatenatedID"];
-
+        
         self.taskTitle = [aDecoder decodeObjectForKey:@"taskTitle"];
         self.taskDescription = [aDecoder decodeObjectForKey:@"taskDescripion"];
         self.taskPriority = [aDecoder decodeIntForKey:@"taskPriority"];
