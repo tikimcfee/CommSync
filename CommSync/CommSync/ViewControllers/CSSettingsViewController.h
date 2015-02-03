@@ -10,17 +10,10 @@
 #import "AppDelegate.h"
 #import "CSSessionManager.h"
 
-@interface CSSettingsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface CSSettingsViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *sendPulse;
 @property (strong, nonatomic) IBOutlet UIButton *tearDown;
 @property (strong, nonatomic) IBOutlet UIButton *rebuild;
-
-@property(copy, nonatomic) NSArray *settingsList;
-@property(copy, nonatomic) NSArray *activeList;
-@property(copy, nonatomic) NSArray *namesList;
-
-@property (weak, nonatomic) IBOutlet UITableView *myView;
-@property (nonatomic) Boolean namePage;
 
 @end
