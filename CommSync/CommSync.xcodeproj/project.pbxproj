@@ -34,6 +34,7 @@
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
 		933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */; };
+		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 		95FAAAB91A1B2DEE00740311 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAAB71A1B2DEE00740311 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +94,8 @@
 		933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskDetailViewController.m; path = ViewControllers/TaskList/CSTaskDetailViewController.m; sourceTree = "<group>"; };
 		933AA13F1A71DCF100DCC10A /* CSTaskListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskListViewController.h; path = ViewControllers/TaskList/CSTaskListViewController.h; sourceTree = "<group>"; };
 		933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListViewController.m; path = ViewControllers/TaskList/CSTaskListViewController.m; sourceTree = "<group>"; };
+		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
+		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
 		95FAAAB81A1B2DEE00740311 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -258,6 +261,8 @@
 			children = (
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
 				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
+				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
+				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -365,6 +370,7 @@
 				74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
+				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
 				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */,

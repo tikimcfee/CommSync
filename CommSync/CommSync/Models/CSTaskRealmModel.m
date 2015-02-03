@@ -20,6 +20,8 @@
         self.taskTitle = [aDecoder decodeObjectForKey:@"taskTitle"];
         self.taskDescription = [aDecoder decodeObjectForKey:@"taskDescripion"];
         self.taskPriority = [aDecoder decodeIntForKey:@"taskPriority"];
+       // self.comments = [aDecoder decodeObjectForKey:@"comments"];
+                         
         
         // TODO
         // Task media
@@ -35,7 +37,19 @@
     
     [aCoder encodeObject:self.taskTitle forKey:@"taskTitle"];
     [aCoder encodeObject:self.taskDescription forKey:@"taskDescripion"];
+   // [aCoder encodeObject:self.comments forKey:@"comments"];
     [aCoder encodeInteger:self.taskPriority forKey:@"taskPriority"];
+    
+}
+
+-(void) addTask: (CSCommentRealmModel *) newComment{
+    /*
+    _before = [CSCommentRealmModel objectsWhere:@"time < newComment.time"];
+    _after = [CSCommentRealmModel objectsWhere:@"time > newComment.time"];
+    
+    [_before addObject:newComment];
+    [_before addObjects:_after];
+    */
 }
 
 @end

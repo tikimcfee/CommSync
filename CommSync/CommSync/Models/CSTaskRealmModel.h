@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Realm/Realm.h>
+#import "CSCommentRealmModel.h"
 
 typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
@@ -15,6 +16,8 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
     CSTaskPriorityMedium,
     CSTaskPriorityHigh
 };
+
+RLM_ARRAY_TYPE(CSCommentRealmModel);
 
 @interface CSTaskRealmModel : RLMObject <NSCoding>
 
@@ -29,6 +32,13 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property NSString* taskDescription;
 @property CSTaskPriority taskPriority;
 
+
+
+//@property RLMArray<CSCommentRealmModel> *comments;
+//@property RLMArray<CSCommentRealmModel> *before;
+//@property RLMArray<CSCommentRealmModel> *after;
+
+
 // Task media
 //@property NSData* taskImageRawData;
 
@@ -36,5 +46,6 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 //@property id taskVideo;
 //@property id taskAttachmentData;
 
+-(void) addTask: (CSCommentRealmModel *) newComment;
 
 @end
