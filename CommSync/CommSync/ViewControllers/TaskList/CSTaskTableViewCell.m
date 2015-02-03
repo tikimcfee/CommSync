@@ -27,7 +27,7 @@
 }
 
 
-- (void)configureWithSourceTask:(CSTask *)task
+- (void)configureWithSourceTask:(CSTaskRealmModel *)task
 {
     self.sourceTask = task;
     self.title.text = task.taskTitle;

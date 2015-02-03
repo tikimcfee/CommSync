@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
-#import "CSTask.h"
 
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
 #define PULSE_STRING @"|~PULSE~|"
