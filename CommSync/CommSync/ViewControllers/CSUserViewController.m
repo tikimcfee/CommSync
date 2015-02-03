@@ -11,7 +11,7 @@
 
 @interface CSUserViewController ()
 {
-    
+    NSArray *tableData;
 }
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
@@ -20,23 +20,17 @@
 
 @implementation CSUserViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+
+    tableData = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
     
-    NSLog(@"Loaded user view!");
+    NSLog(@"Loaded task view!");
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
     NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
-    
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateConnectionCountAndTableView:)
-                                                 name:@"PEER_CHANGED_STATE"
-                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,27 +38,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"PEER_CHANGED_STATE"
-                                                  object:nil];
-}
-
-- (void)updateConnectionCountAndTableView:(NSNotification *)notification
-{
-    __weak CSUserViewController *weakSelf = self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
-        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
-        [weakSelf.tableView reloadData];
-    });
-}
-
-
 #pragma mark - UITableViewDataSource Delegates
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
@@ -74,13 +50,13 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    MCPeerID *peer = [_sessionManager.currentSession.connectedPeers objectAtIndex:indexPath.row];
-    cell.textLabel.text = peer.displayName;
+    cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
     return cell;
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
     return [_sessionManager.currentSession.connectedPeers count];
 }

@@ -7,41 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
-		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
-		4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4562F2051A78927200090005 /* CSTaskRealmModel.m */; };
 		4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4595391D19E38F1F00744747 /* CSSessionManager.m */; };
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
 		459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */; };
 		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
+		459D5F9619DB449A00C91EFA /* CommSyncTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F9519DB449A00C91EFA /* CommSyncTests.m */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
-		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
-		74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D11A7FDE4300ECBADB /* Connection.m */; };
-		74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D41A7FDE4300ECBADB /* JKConnection.m */; };
-		74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */; };
-		74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D91A7FDE4300ECBADB /* JKPeer.m */; };
-		74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */; };
-		74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */; };
-		74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */; };
-		74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */; };
-		74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E51A7FDE4300ECBADB /* Server.m */; };
-		74DB14F41A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14F31A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m */; };
-		74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
 		933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */; };
+		933AA1461A71DD3900DCC10A /* CSTaskListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1451A71DD3900DCC10A /* CSTaskListManager.m */; };
+		933AA1491A71DD5F00DCC10A /* CSTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1481A71DD5F00DCC10A /* CSTask.m */; };
 		95FAAAB91A1B2DEE00740311 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAAB71A1B2DEE00740311 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		459D5F9019DB449A00C91EFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 459D5F6B19DB449900C91EFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 459D5F7219DB449900C91EFA;
+			remoteInfo = CommSync;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
-		454D92091A78581F000B74A8 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		4562F2041A78927200090005 /* CSTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRealmModel.h; path = Models/CSTaskRealmModel.h; sourceTree = "<group>"; };
-		4562F2051A78927200090005 /* CSTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRealmModel.m; path = Models/CSTaskRealmModel.m; sourceTree = "<group>"; };
 		4595391C19E38F1F00744747 /* CSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionManager.h; path = "Session Management/CSSessionManager.h"; sourceTree = "<group>"; };
 		4595391D19E38F1F00744747 /* CSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionManager.m; path = "Session Management/CSSessionManager.m"; sourceTree = "<group>"; };
 		459D5F7319DB449900C91EFA /* CommSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,39 +46,13 @@
 		459D5F7E19DB449900C91EFA /* CommSync.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CommSync.xcdatamodel; sourceTree = "<group>"; };
 		459D5F8619DB449900C91EFA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		459D5F8F19DB449A00C91EFA /* CommSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		459D5F9419DB449A00C91EFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		459D5F9519DB449A00C91EFA /* CommSyncTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommSyncTests.m; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		7444522D1A0ACEDB00C87723 /* CSUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSUserViewController.h; path = ViewControllers/CSUserViewController.h; sourceTree = "<group>"; };
 		7444522E1A0ACEDB00C87723 /* CSUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSUserViewController.m; path = ViewControllers/CSUserViewController.m; sourceTree = "<group>"; };
-		74DB14CD1A7FDDE500ECBADB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		74DB14D01A7FDE4300ECBADB /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
-		74DB14D11A7FDE4300ECBADB /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
-		74DB14D21A7FDE4300ECBADB /* ConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionDelegate.h; sourceTree = "<group>"; };
-		74DB14D31A7FDE4300ECBADB /* JKConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKConnection.h; sourceTree = "<group>"; };
-		74DB14D41A7FDE4300ECBADB /* JKConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKConnection.m; sourceTree = "<group>"; };
-		74DB14D51A7FDE4300ECBADB /* JKConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKConnectionDelegate.h; sourceTree = "<group>"; };
-		74DB14D61A7FDE4300ECBADB /* JKLocalConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKLocalConnection.h; sourceTree = "<group>"; };
-		74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKLocalConnection.m; sourceTree = "<group>"; };
-		74DB14D81A7FDE4300ECBADB /* JKPeer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeer.h; sourceTree = "<group>"; };
-		74DB14D91A7FDE4300ECBADB /* JKPeer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeer.m; sourceTree = "<group>"; };
-		74DB14DA1A7FDE4300ECBADB /* JKPeerConnectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivity.h; sourceTree = "<group>"; };
-		74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeerConnectivity.m; sourceTree = "<group>"; };
-		74DB14DC1A7FDE4300ECBADB /* JKPeerConnectivityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivityDelegate.h; sourceTree = "<group>"; };
-		74DB14DD1A7FDE4300ECBADB /* JKPeerConnectivitySetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivitySetup.h; sourceTree = "<group>"; };
-		74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeerConnectivitySetup.m; sourceTree = "<group>"; };
-		74DB14DF1A7FDE4300ECBADB /* JKRemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRemoteConnection.h; sourceTree = "<group>"; };
-		74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRemoteConnection.m; sourceTree = "<group>"; };
-		74DB14E11A7FDE4300ECBADB /* PeerBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerBrowser.h; sourceTree = "<group>"; };
-		74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerBrowser.m; sourceTree = "<group>"; };
-		74DB14E31A7FDE4300ECBADB /* PeerDiscoveryDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerDiscoveryDelegate.h; sourceTree = "<group>"; };
-		74DB14E41A7FDE4300ECBADB /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
-		74DB14E51A7FDE4300ECBADB /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
-		74DB14E61A7FDE4300ECBADB /* ServerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerDelegate.h; sourceTree = "<group>"; };
-		74DB14F21A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSFrameworkSupportedConnectivityManager.h; path = "Session Management/Framework Supported/CSFrameworkSupportedConnectivityManager.h"; sourceTree = "<group>"; };
-		74DB14F31A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSFrameworkSupportedConnectivityManager.m; path = "Session Management/Framework Supported/CSFrameworkSupportedConnectivityManager.m"; sourceTree = "<group>"; };
-		74DB14F61A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSFrameworkSupportedDataServer.h; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.h"; sourceTree = "<group>"; };
-		74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSFrameworkSupportedDataServer.m; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.m"; sourceTree = "<group>"; };
-		74DB14F91A7FEC1000ECBADB /* CSConnectivityConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSConnectivityConstants.h; path = "Session Management/Framework Supported/CSConnectivityConstants.h"; sourceTree = "<group>"; };
 		933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskTableViewCell.h; path = ViewControllers/TaskList/CSTaskTableViewCell.h; sourceTree = "<group>"; };
 		933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskTableViewCell.m; path = ViewControllers/TaskList/CSTaskTableViewCell.m; sourceTree = "<group>"; };
 		933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskCreationViewController.h; path = ViewControllers/TaskList/CSTaskCreationViewController.h; sourceTree = "<group>"; };
@@ -93,6 +61,10 @@
 		933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskDetailViewController.m; path = ViewControllers/TaskList/CSTaskDetailViewController.m; sourceTree = "<group>"; };
 		933AA13F1A71DCF100DCC10A /* CSTaskListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskListViewController.h; path = ViewControllers/TaskList/CSTaskListViewController.h; sourceTree = "<group>"; };
 		933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListViewController.m; path = ViewControllers/TaskList/CSTaskListViewController.m; sourceTree = "<group>"; };
+		933AA1441A71DD3900DCC10A /* CSTaskListManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskListManager.h; path = "Task Management/CSTaskListManager.h"; sourceTree = "<group>"; };
+		933AA1451A71DD3900DCC10A /* CSTaskListManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListManager.m; path = "Task Management/CSTaskListManager.m"; sourceTree = "<group>"; };
+		933AA1471A71DD5F00DCC10A /* CSTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTask.h; path = Models/CSTask.h; sourceTree = "<group>"; };
+		933AA1481A71DD5F00DCC10A /* CSTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTask.m; path = Models/CSTask.m; sourceTree = "<group>"; };
 		95FAAAB81A1B2DEE00740311 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,30 +73,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */,
-				454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */,
-				454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		459D5F8C19DB449A00C91EFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		454D92061A7857AA000B74A8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */,
-				454D92071A7857CD000B74A8 /* Realm.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		4595391F19E38F2F00744747 /* Session Management */ = {
 			isa = PBXGroup;
 			children = (
 				4595391C19E38F1F00744747 /* CSSessionManager.h */,
 				4595391D19E38F1F00744747 /* CSSessionManager.m */,
-				74DB14F51A7FEAEB00ECBADB /* Framework Supported */,
 			);
 			name = "Session Management";
 			sourceTree = "<group>";
@@ -132,9 +98,8 @@
 		459D5F6A19DB449900C91EFA = {
 			isa = PBXGroup;
 			children = (
-				74DB14CD1A7FDDE500ECBADB /* UIKit.framework */,
-				454D92091A78581F000B74A8 /* libc++.dylib */,
 				459D5F7519DB449900C91EFA /* CommSync */,
+				459D5F9219DB449A00C91EFA /* CommSyncTests */,
 				459D5F7419DB449900C91EFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -143,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				459D5F7319DB449900C91EFA /* CommSync.app */,
+				459D5F8F19DB449A00C91EFA /* CommSyncTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,12 +116,11 @@
 		459D5F7519DB449900C91EFA /* CommSync */ = {
 			isa = PBXGroup;
 			children = (
-				454D92061A7857AA000B74A8 /* Frameworks */,
-				7409982D1A0C178000229AFC /* Task Management */,
 				933AA1331A71DA7200DCC10A /* Models */,
 				459D5F7A19DB449900C91EFA /* AppDelegate.h */,
 				459D5F7B19DB449900C91EFA /* AppDelegate.m */,
 				744452291A0ACE2700C87723 /* ViewControllers */,
+				7409982D1A0C178000229AFC /* Task Management */,
 				4595391F19E38F2F00744747 /* Session Management */,
 				459D5F8619DB449900C91EFA /* Images.xcassets */,
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
@@ -174,9 +139,28 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		459D5F9219DB449A00C91EFA /* CommSyncTests */ = {
+			isa = PBXGroup;
+			children = (
+				459D5F9519DB449A00C91EFA /* CommSyncTests.m */,
+				459D5F9319DB449A00C91EFA /* Supporting Files */,
+			);
+			path = CommSyncTests;
+			sourceTree = "<group>";
+		};
+		459D5F9319DB449A00C91EFA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				459D5F9419DB449A00C91EFA /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		7409982D1A0C178000229AFC /* Task Management */ = {
 			isa = PBXGroup;
 			children = (
+				933AA1441A71DD3900DCC10A /* CSTaskListManager.h */,
+				933AA1451A71DD3900DCC10A /* CSTaskListManager.m */,
 			);
 			name = "Task Management";
 			sourceTree = "<group>";
@@ -194,70 +178,11 @@
 			name = ViewControllers;
 			sourceTree = "<group>";
 		};
-		74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14F01A7FE22000ECBADB /* High Level Interface */,
-				74DB14F11A7FE22D00ECBADB /* Low Level */,
-			);
-			name = JKConnectivityBETA;
-			path = ThirdParty/JKConnectivityBETA;
-			sourceTree = "<group>";
-		};
-		74DB14F01A7FE22000ECBADB /* High Level Interface */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14D31A7FDE4300ECBADB /* JKConnection.h */,
-				74DB14D41A7FDE4300ECBADB /* JKConnection.m */,
-				74DB14D51A7FDE4300ECBADB /* JKConnectionDelegate.h */,
-				74DB14D61A7FDE4300ECBADB /* JKLocalConnection.h */,
-				74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */,
-				74DB14D81A7FDE4300ECBADB /* JKPeer.h */,
-				74DB14D91A7FDE4300ECBADB /* JKPeer.m */,
-				74DB14DA1A7FDE4300ECBADB /* JKPeerConnectivity.h */,
-				74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */,
-				74DB14DC1A7FDE4300ECBADB /* JKPeerConnectivityDelegate.h */,
-				74DB14DD1A7FDE4300ECBADB /* JKPeerConnectivitySetup.h */,
-				74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */,
-				74DB14DF1A7FDE4300ECBADB /* JKRemoteConnection.h */,
-				74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */,
-			);
-			name = "High Level Interface";
-			sourceTree = "<group>";
-		};
-		74DB14F11A7FE22D00ECBADB /* Low Level */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14D01A7FDE4300ECBADB /* Connection.h */,
-				74DB14D11A7FDE4300ECBADB /* Connection.m */,
-				74DB14D21A7FDE4300ECBADB /* ConnectionDelegate.h */,
-				74DB14E11A7FDE4300ECBADB /* PeerBrowser.h */,
-				74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */,
-				74DB14E31A7FDE4300ECBADB /* PeerDiscoveryDelegate.h */,
-				74DB14E41A7FDE4300ECBADB /* Server.h */,
-				74DB14E51A7FDE4300ECBADB /* Server.m */,
-				74DB14E61A7FDE4300ECBADB /* ServerDelegate.h */,
-			);
-			name = "Low Level";
-			sourceTree = "<group>";
-		};
-		74DB14F51A7FEAEB00ECBADB /* Framework Supported */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14F21A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.h */,
-				74DB14F31A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m */,
-				74DB14F61A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.h */,
-				74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */,
-				74DB14F91A7FEC1000ECBADB /* CSConnectivityConstants.h */,
-			);
-			name = "Framework Supported";
-			sourceTree = "<group>";
-		};
 		933AA1331A71DA7200DCC10A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
-				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
+				933AA1471A71DD5F00DCC10A /* CSTask.h */,
+				933AA1481A71DD5F00DCC10A /* CSTask.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -269,10 +194,10 @@
 				933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */,
 				933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */,
 				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
-				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
-				933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
+				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
+				933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */,
 			);
 			name = TaskList;
 			sourceTree = "<group>";
@@ -297,6 +222,24 @@
 			productReference = 459D5F7319DB449900C91EFA /* CommSync.app */;
 			productType = "com.apple.product-type.application";
 		};
+		459D5F8E19DB449A00C91EFA /* CommSyncTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 459D5F9C19DB449A00C91EFA /* Build configuration list for PBXNativeTarget "CommSyncTests" */;
+			buildPhases = (
+				459D5F8B19DB449A00C91EFA /* Sources */,
+				459D5F8C19DB449A00C91EFA /* Frameworks */,
+				459D5F8D19DB449A00C91EFA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				459D5F9119DB449A00C91EFA /* PBXTargetDependency */,
+			);
+			name = CommSyncTests;
+			productName = CommSyncTests;
+			productReference = 459D5F8F19DB449A00C91EFA /* CommSyncTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -308,6 +251,10 @@
 				TargetAttributes = {
 					459D5F7219DB449900C91EFA = {
 						CreatedOnToolsVersion = 6.0.1;
+					};
+					459D5F8E19DB449A00C91EFA = {
+						CreatedOnToolsVersion = 6.0.1;
+						TestTargetID = 459D5F7219DB449900C91EFA;
 					};
 				};
 			};
@@ -325,6 +272,7 @@
 			projectRoot = "";
 			targets = (
 				459D5F7219DB449900C91EFA /* CommSync */,
+				459D5F8E19DB449A00C91EFA /* CommSyncTests */,
 			);
 		};
 /* End PBXProject section */
@@ -340,6 +288,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		459D5F8D19DB449A00C91EFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -348,31 +303,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
-				74DB14F41A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m in Sources */,
-				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
-				74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
-				74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */,
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
-				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
-				74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
-				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
-				74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */,
+				933AA1461A71DD3900DCC10A /* CSTaskListManager.m in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
+				933AA1491A71DD5F00DCC10A /* CSTask.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
-				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
-				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
-				74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */,
-				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		459D5F8B19DB449A00C91EFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				459D5F9619DB449A00C91EFA /* CommSyncTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		459D5F9119DB449A00C91EFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 459D5F7219DB449900C91EFA /* CommSync */;
+			targetProxy = 459D5F9019DB449A00C91EFA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		459D5F8819DB449900C91EFA /* LaunchScreen.xib */ = {
@@ -431,7 +392,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6df39e00-acc3-411a-a5f4-720c4705923f";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -467,7 +428,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6df39e00-acc3-411a-a5f4-720c4705923f";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -479,10 +440,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: IVAN LUGO (8JV4UK999G)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CommSync/ThirdParty",
-				);
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -494,13 +451,43 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: IVAN LUGO (8JV4UK999G)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CommSync/ThirdParty",
-				);
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		459D5F9D19DB449A00C91EFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CommSyncTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommSync.app/CommSync";
+			};
+			name = Debug;
+		};
+		459D5F9E19DB449A00C91EFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CommSyncTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommSync.app/CommSync";
 			};
 			name = Release;
 		};
@@ -521,6 +508,15 @@
 			buildConfigurations = (
 				459D5F9A19DB449A00C91EFA /* Debug */,
 				459D5F9B19DB449A00C91EFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		459D5F9C19DB449A00C91EFA /* Build configuration list for PBXNativeTarget "CommSyncTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				459D5F9D19DB449A00C91EFA /* Debug */,
+				459D5F9E19DB449A00C91EFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
