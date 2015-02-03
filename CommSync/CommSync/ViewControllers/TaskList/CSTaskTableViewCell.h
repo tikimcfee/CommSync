@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Realm/Realm.h>
-#import "CSTaskRealmModel.h"
+#import "CSTask.h"
 
 @interface CSTaskTableViewCell : UITableViewCell
-@property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+@property (weak, nonatomic) CSTask *sourceTask;
 
-- (void)configureWithSourceTask:(CSTaskRealmModel *)task;
+- (void)configureWithSourceTask:(CSTask *)task;
 @end
