@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CSTask.h"
+#import "CSTaskRealmModel.h"
 
 @interface CSTaskDetailViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
-@property (strong, nonatomic) CSTask *sourceTask;
+@property (strong, nonatomic) CSTaskRealmModel *sourceTask;
 @end
