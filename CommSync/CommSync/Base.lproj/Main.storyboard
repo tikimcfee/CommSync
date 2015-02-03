@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -29,59 +29,6 @@
             </objects>
             <point key="canvasLocation" x="1767" y="1235"/>
         </scene>
-        <!--Settings-->
-        <scene sceneID="ylK-2V-9EZ">
-            <objects>
-                <viewController id="O8o-o0-fd4" customClass="CSSettingsViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="sLy-X5-KD7"/>
-                        <viewControllerLayoutGuide type="bottom" id="JZP-Ib-qrL"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="N74-pz-YHE">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyA-eZ-WSY">
-                                <rect key="frame" x="65" y="114" width="72" height="30"/>
-                                <state key="normal" title="Send Data">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="sendGlobalPulse:" destination="O8o-o0-fd4" eventType="touchUpInside" id="510-gq-cDc"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hJ-hf-ZdK">
-                                <rect key="frame" x="65" y="244" width="73" height="30"/>
-                                <state key="normal" title="Tear Down">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="tearDown:" destination="O8o-o0-fd4" eventType="touchUpInside" id="uar-8L-VUT"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Za-mU-zDw">
-                                <rect key="frame" x="75" y="373" width="53" height="30"/>
-                                <state key="normal" title="Rebuild">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="rebuild:" destination="O8o-o0-fd4" eventType="touchUpInside" id="ux0-mI-Czw"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="C8A-gG-iEi"/>
-                    <connections>
-                        <outlet property="rebuild" destination="3Za-mU-zDw" id="yh4-VV-J4o"/>
-                        <outlet property="sendPulse" destination="IyA-eZ-WSY" id="ZwJ-gY-PVg"/>
-                        <outlet property="tearDown" destination="0hJ-hf-ZdK" id="iq6-QU-qeM"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hUO-ah-z60" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="853" y="1235"/>
-        </scene>
         <!--Message View Controller-->
         <scene sceneID="YNU-23-h95">
             <objects>
@@ -106,12 +53,39 @@
                         <segue destination="BXf-C0-RVZ" kind="relationship" relationship="viewControllers" id="a0o-ZP-Jmz"/>
                         <segue destination="Suc-Lv-nyY" kind="relationship" relationship="viewControllers" id="JAd-mF-XtV"/>
                         <segue destination="Wwj-Np-afA" kind="relationship" relationship="viewControllers" id="tRy-XO-snU"/>
-                        <segue destination="O8o-o0-fd4" kind="relationship" relationship="viewControllers" id="M01-M4-4B8"/>
+                        <segue destination="85q-Sc-dkp" kind="relationship" relationship="viewControllers" id="aDU-4f-PrN"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x0u-1H-e9U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="853" y="435"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="04Q-qY-Cm3">
+            <objects>
+                <tableViewController id="85q-Sc-dkp" userLabel="Settings" customClass="CSSettingsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4yd-43-Zh5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="X1d-NX-oNP">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X1d-NX-oNP" id="e6v-bo-DMm">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="85q-Sc-dkp" id="hCS-Lq-wde"/>
+                            <outlet property="delegate" destination="85q-Sc-dkp" id="hL0-7W-AE8"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Item" id="h6Y-1V-hDj"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ESx-en-tpc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="853" y="1270"/>
         </scene>
         <!--Tasks-->
         <scene sceneID="9nJ-GG-Wi7">

@@ -7,13 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Realm/Realm.h>
+#import "CSTaskRealmModel.h"
 #import "AppDelegate.h"
 #import "CSSessionManager.h"
 
-@interface CSSettingsViewController : UIViewController
+@interface CSSettingsViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) IBOutlet UIButton *sendPulse;
-@property (strong, nonatomic) IBOutlet UIButton *tearDown;
-@property (strong, nonatomic) IBOutlet UIButton *rebuild;
+@property (copy, nonatomic) NSArray *settingsList;
+@property (weak, nonatomic) IBOutlet UITableView *myView;
+
+@property (strong, nonatomic) CSTaskRealmModel *tempTask;
+@property (weak, nonatomic) RLMRealm* realm;
+
+- (IBAction)resync;
+-(void) populate;
 
 @end
