@@ -124,7 +124,7 @@
 			children = (
 				4595391C19E38F1F00744747 /* CSSessionManager.h */,
 				4595391D19E38F1F00744747 /* CSSessionManager.m */,
-				74DB14F51A7FEAEB00ECBADB /* Framework Supported */,
+				74DB14F51A7FEAEB00ECBADB /* New Group */,
 			);
 			name = "Session Management";
 			sourceTree = "<group>";
@@ -241,7 +241,7 @@
 			name = "Low Level";
 			sourceTree = "<group>";
 		};
-		74DB14F51A7FEAEB00ECBADB /* Framework Supported */ = {
+		74DB14F51A7FEAEB00ECBADB /* New Group */ = {
 			isa = PBXGroup;
 			children = (
 				74DB14F21A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.h */,
@@ -250,7 +250,7 @@
 				74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */,
 				74DB14F91A7FEC1000ECBADB /* CSConnectivityConstants.h */,
 			);
-			name = "Framework Supported";
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		933AA1331A71DA7200DCC10A /* Models */ = {

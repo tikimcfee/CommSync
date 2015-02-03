@@ -7,15 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
-// Network information
 #define kAPPLICATIONNETWORKNAME @"CommSyncP2P_DLI"
 
-// Notification constants
-#define kPeerChangedStateNotification @"PEER_CHANGED_STATE"
-
-// Sent data types
 #define kIncomingDataTypeSingleTaskModel 1
 #define kIncomingDataTypeMultipleTaskModels 2
 #define kIncomingDataTypeStandardText 3
