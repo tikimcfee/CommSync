@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "CSSessionManager.h"
 
-@interface CSSettingsViewController : UIViewController
+@interface CSSettingsViewController : UITableViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *sendPulse;
 @property (strong, nonatomic) IBOutlet UIButton *tearDown;
