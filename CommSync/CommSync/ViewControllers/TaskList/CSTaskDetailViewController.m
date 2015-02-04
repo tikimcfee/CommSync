@@ -7,6 +7,7 @@
 //
 
 #import "CSTaskDetailViewController.h"
+#import "CSCommentRealmModel.h"
 
 @interface CSTaskDetailViewController ()
 
@@ -36,7 +37,7 @@
   
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"thisCell"];
     
-    cell.textLabel.text  = [self.sourceTask.comments objectAtIndex:indexPath.row];
+    //cell.textLabel.text  = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
     return cell;
 
@@ -52,4 +53,15 @@
 }
 
 
+- (IBAction)addComment:(id)sender {
+    
+    CSCommentRealmModel *tempComment = [[CSCommentRealmModel alloc] init];
+
+    tempComment.UID = [NSString stringWithFormat:@"%s", "UUID"];
+    tempComment.text = _commentText.text;
+    tempComment.time = 0;
+    
+    [self.sourceTask addComment:tempComment ];
+    
+}
 @end

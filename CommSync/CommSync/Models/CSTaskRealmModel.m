@@ -43,6 +43,7 @@
 }
 
 -(void) addComment: (CSCommentRealmModel *) newComment{
+    
     /*
     if(_comments == nil){
         [_comments addObject:newComment];
@@ -56,10 +57,16 @@
         [_before addObjects:_after];
         _comments = _before;
     } */
-    
-    [self.comments addObject:newComment];
+  /*  RLMRealm *realm =  [RLMRealm defaultRealm];
+    //[self.comments addObject:newComment];
 
+    //start write
+    [realm beginWriteTransaction];
+    //add the object to the list of tasks
+    [realm addOrUpdateObject: self];
     
+    //write to the database
+    [realm commitWriteTransaction]; */
     
 }
 
