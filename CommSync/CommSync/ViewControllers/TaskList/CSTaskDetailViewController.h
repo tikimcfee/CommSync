@@ -10,7 +10,13 @@
 #import "CSTaskRealmModel.h"
 
 @interface CSTaskDetailViewController : UIViewController
+{
+    IBOutlet UITableView *tableView;
+}
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+@property (weak, nonatomic) IBOutlet UILabel *IDLabel;
+
+
 @end

@@ -75,11 +75,22 @@
         //allocate space for the task object and initialize the object
         self.tempTask = [[CSTaskRealmModel alloc] init];
         
+        for(int j = 0; j < 10; j++)
+        {
+            self.tempComment = [[CSCommentRealmModel alloc] init];
+            
+            self.tempComment.UID = [NSString stringWithFormat:@"%s %d", "UUID", i];
+            _tempComment.text = [NSString stringWithFormat:@"%s %d", "blah blah blach blach blach", j];
+            _tempComment.time = j;
+            
+            [_tempTask addComment:_tempComment];
+        }
+        
         //populate variables
         
         _tempTask.UUID = [NSString stringWithFormat:@"%s %d", "UUID", i];
         _tempTask.deviceID = [NSString stringWithFormat:@"%s %d", "DID", i];
-        _tempTask.concatenatedID = [NSString stringWithFormat:@"%s %d", "CID", i];
+        _tempTask.concatenatedID =  [NSString stringWithFormat:@"%s %s", "uid", "did"];
         
         _tempTask.taskPriority = CSTaskPriorityLow;
         

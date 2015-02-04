@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -375,23 +375,60 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AmA-EH-N47">
-                                <rect key="frame" x="175" y="133" width="251" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AmA-EH-N47">
+                                <rect key="frame" x="66" y="72" width="251" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LO1-tj-NjR">
+                                <rect key="frame" x="143" y="101" width="251" height="137"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LO1-tj-NjR">
-                                <rect key="frame" x="175" y="203" width="251" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c6f-cQ-aQM">
+                                <rect key="frame" x="16" y="72" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="TbL-vs-fQ1">
+                                <rect key="frame" x="0.0" y="227" width="600" height="155"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="thisCell" id="fjO-AI-0Rw">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fjO-AI-0Rw" id="00G-mv-b3X">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="z8V-PH-fi6" id="Oc5-PU-aSV"/>
+                                    <outlet property="delegate" destination="z8V-PH-fi6" id="qaL-Qg-TbD"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="TbL-vs-fQ1" firstAttribute="leading" secondItem="frq-pa-ZIQ" secondAttribute="leadingMargin" constant="-16" id="5nf-gc-Ecz"/>
+                            <constraint firstItem="LO1-tj-NjR" firstAttribute="top" secondItem="AmA-EH-N47" secondAttribute="bottom" constant="8" id="60l-Fd-LPA"/>
+                            <constraint firstItem="AmA-EH-N47" firstAttribute="top" secondItem="Lle-zV-YA6" secondAttribute="bottom" constant="8" id="NOK-ft-AuC"/>
+                            <constraint firstItem="TbL-vs-fQ1" firstAttribute="top" secondItem="c6f-cQ-aQM" secondAttribute="bottom" constant="134" id="Nsn-46-CvL"/>
+                            <constraint firstItem="AmA-EH-N47" firstAttribute="leading" secondItem="c6f-cQ-aQM" secondAttribute="trailing" constant="8" id="YDw-Tg-WMj"/>
+                            <constraint firstItem="LO1-tj-NjR" firstAttribute="top" secondItem="AmA-EH-N47" secondAttribute="bottom" constant="39" id="aEF-vm-1Ac"/>
+                            <constraint firstItem="TbL-vs-fQ1" firstAttribute="top" secondItem="LO1-tj-NjR" secondAttribute="bottom" constant="45" id="gte-un-1dH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="TbL-vs-fQ1" secondAttribute="trailing" constant="-16" id="hCk-ty-hhA"/>
+                            <constraint firstItem="AmA-EH-N47" firstAttribute="leading" secondItem="c6f-cQ-aQM" secondAttribute="trailing" constant="8" id="hmN-JI-g9a"/>
+                            <constraint firstItem="TbL-vs-fQ1" firstAttribute="top" secondItem="LO1-tj-NjR" secondAttribute="bottom" constant="35" id="qN5-7k-hsl"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="IDLabel" destination="c6f-cQ-aQM" id="0dx-0C-SNa"/>
                         <outlet property="descriptionLabel" destination="LO1-tj-NjR" id="JrL-mK-uss"/>
+                        <outlet property="tableView" destination="TbL-vs-fQ1" id="7p7-VX-A1O"/>
                         <outlet property="titleLabel" destination="AmA-EH-N47" id="A4I-mt-knQ"/>
                     </connections>
                 </viewController>

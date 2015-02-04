@@ -32,11 +32,9 @@ RLM_ARRAY_TYPE(CSCommentRealmModel);
 @property NSString* taskDescription;
 @property CSTaskPriority taskPriority;
 
-
-
-//@property RLMArray<CSCommentRealmModel> *comments;
-//@property RLMArray<CSCommentRealmModel> *before;
-//@property RLMArray<CSCommentRealmModel> *after;
+@property RLMArray<CSCommentRealmModel> *comments;
+@property RLMArray<CSCommentRealmModel> *before;
+@property RLMArray<CSCommentRealmModel> *after;
 
 
 // Task media
@@ -46,6 +44,6 @@ RLM_ARRAY_TYPE(CSCommentRealmModel);
 //@property id taskVideo;
 //@property id taskAttachmentData;
 
--(void) addTask: (CSCommentRealmModel *) newComment;
+-(void) addComment: (CSCommentRealmModel *) newComment;
 
 @end

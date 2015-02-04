@@ -20,7 +20,7 @@
         self.taskTitle = [aDecoder decodeObjectForKey:@"taskTitle"];
         self.taskDescription = [aDecoder decodeObjectForKey:@"taskDescripion"];
         self.taskPriority = [aDecoder decodeIntForKey:@"taskPriority"];
-       // self.comments = [aDecoder decodeObjectForKey:@"comments"];
+        self.comments = [aDecoder decodeObjectForKey:@"comments"];
                          
         
         // TODO
@@ -37,19 +37,30 @@
     
     [aCoder encodeObject:self.taskTitle forKey:@"taskTitle"];
     [aCoder encodeObject:self.taskDescription forKey:@"taskDescripion"];
-   // [aCoder encodeObject:self.comments forKey:@"comments"];
+    [aCoder encodeObject:self.comments forKey:@"comments"];
     [aCoder encodeInteger:self.taskPriority forKey:@"taskPriority"];
     
 }
 
--(void) addTask: (CSCommentRealmModel *) newComment{
+-(void) addComment: (CSCommentRealmModel *) newComment{
     /*
-    _before = [CSCommentRealmModel objectsWhere:@"time < newComment.time"];
-    _after = [CSCommentRealmModel objectsWhere:@"time > newComment.time"];
+    if(_comments == nil){
+        [_comments addObject:newComment];
+    }
     
-    [_before addObject:newComment];
-    [_before addObjects:_after];
-    */
+    else{
+        _before = [CSCommentRealmModel objectsWhere:@"time < newComment.time"];
+        _after = [CSCommentRealmModel objectsWhere:@"time > newComment.time"];
+    
+        [_before addObject:newComment];
+        [_before addObjects:_after];
+        _comments = _before;
+    } */
+    
+    [self.comments addObject:newComment];
+
+    
+    
 }
 
 @end
