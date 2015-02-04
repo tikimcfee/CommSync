@@ -28,8 +28,6 @@
 		74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */; };
 		74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */; };
 		74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E51A7FDE4300ECBADB /* Server.m */; };
-		74DB14F41A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14F31A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m */; };
-		74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
@@ -348,7 +346,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
-				74DB14F41A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m in Sources */,
 				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
 				74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */,
@@ -367,7 +364,6 @@
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
 				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
-				74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */,
 				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +474,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: IVAN LUGO (8JV4UK999G)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CommSync/ThirdParty",
@@ -486,6 +482,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "99584206-3592-4b45-9009-242c3654a1dc";
 			};
 			name = Debug;
 		};
@@ -493,7 +490,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: IVAN LUGO (8JV4UK999G)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CommSync/ThirdParty",
@@ -501,6 +498,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "99584206-3592-4b45-9009-242c3654a1dc";
 			};
 			name = Release;
 		};
