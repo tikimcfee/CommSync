@@ -98,10 +98,43 @@
     return newSession;
 }
 
+- (void)nukeSession
+{
+    NSLog(@"Killing session");
+    // stop all browsing and advertising activity
+    [_serviceBrowser stopBrowsingForPeers];
+    [_serviceAdvertiser stopAdvertisingPeer];
+    
+    // reset browser and advertiser objects
+    _serviceBrowser = nil;
+    _serviceAdvertiser = nil;
+    
+    // kill session
+    [_currentSession disconnect];
+    _currentSession = nil;
+    
+    NSLog(@"Restarting session");
+    
+    // start all connections over again
+    _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
+    _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
+                                                           discoveryInfo:nil
+                                                             serviceType:COMMSYNC_SERVICE_ID];
+    
+    _serviceBrowser.delegate = self;
+    _serviceAdvertiser.delegate = self;
+    
+    [_serviceBrowser startBrowsingForPeers];
+    [_serviceAdvertiser startAdvertisingPeer];
+    
+    _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
+    _currentSession.delegate = self;
+}
+
 # pragma mark - MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedDescending;
+    BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedAscending;
 
     if(!shouldInvite || !_isResponsibleForSendingInvites)
     {

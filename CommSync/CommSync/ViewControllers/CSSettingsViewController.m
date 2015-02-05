@@ -18,7 +18,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks"];
+    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks", @"NUKE"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -26,14 +26,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
- #pragma mark - Navigation
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+
+- (void)nukeSession
+{
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    CSSessionManager *sessionManager = app.globalSessionManager;
+    
+    [sessionManager nukeSession];
+}
+
+
+
 - (IBAction)sendGlobalPulse {
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     CSSessionManager* sessionManager = d.globalSessionManager;
@@ -64,11 +67,7 @@
     NSLog(@"test");
     //get the database object
      _realm = [RLMRealm defaultRealm];
-    
-    
-   
-    
-    
+
     for(int i = 0; i < 5; i++){
         
         
@@ -150,26 +149,32 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     switch (indexPath.row) {
-        case 1:
+        case 0:
             [self sendGlobalPulse];
             break;
             
-        case 2:
+        case 1:
             [self tearDown];
             break;
             
-        case 3:
+        case 2:
             [self rebuild];
             break;
             
-        case 4:
+        case 3:
             [self resync];
+            break;
             
-        case 5:
+        case 4:
             [self populate];
+            break;
+
+        case 5:
+            [self nukeSession];
+            break;
     }
     
 }
