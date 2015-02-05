@@ -248,7 +248,7 @@
     else
     {
         id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [[NSKeyedUnarchiver unarchiveObjectWithData:data] class]);
+        NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
         
         if([receivedObject isKindOfClass:[CSTaskRealmModel class]])
         {
