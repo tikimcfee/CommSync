@@ -9,6 +9,7 @@
 #import "CSTaskDetailViewController.h"
 
 @interface CSTaskDetailViewController ()
+@property (strong, nonatomic) IBOutlet UIImageView *taskImage;
 
 @end
 
@@ -19,6 +20,12 @@
     // Do any additional setup after loading the view.
     self.titleLabel.text = self.sourceTask.taskTitle;
     self.descriptionLabel.text = self.sourceTask.taskDescription;
+    
+    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
+        if(didFinish) {
+            [self setImagesFromTask];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +40,12 @@
 //     Get the new view controller using [segue destinationViewController].
 //     Pass the selected object to the new view controller.
     
+}
+
+- (void)setImagesFromTask {
+//    dispatch_async(dispatch_get_main_queue(), ^{
+            self.taskImage.image = [self.sourceTask.TRANSIENT_taskImages objectAtIndex:0];
+//    });
 }
 
 
