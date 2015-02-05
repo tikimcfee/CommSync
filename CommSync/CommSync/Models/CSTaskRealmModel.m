@@ -83,7 +83,7 @@
         id imageMutableArray = [NSKeyedUnarchiver unarchiveObjectWithData:self.taskImages_NSDataArray_JPEG];
         
         if([imageMutableArray isKindOfClass:[NSMutableArray class]]) { // if it does ...
-            self.TRANSIENT_taskImages = [NSM utableArray new]; // ... make sure the task now has a container array
+            self.TRANSIENT_taskImages = [NSMutableArray new]; // ... make sure the task now has a container array
             NSMutableArray* imgs = (NSMutableArray*)imageMutableArray; /// convenience pointer
             for(NSData* newImageData in imgs) { // for every NSData representation of the image ...
                 [self.TRANSIENT_taskImages addObject:[UIImage imageWithData:newImageData]]; // ... add a new UIImage to the container

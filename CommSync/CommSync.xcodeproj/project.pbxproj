@@ -496,7 +496,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99584206-3592-4b45-9009-242c3654a1dc";
+				PROVISIONING_PROFILE = "b461910f-999a-41c4-8268-8db6116bad57";
 			};
 			name = Debug;
 		};
@@ -512,7 +512,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99584206-3592-4b45-9009-242c3654a1dc";
+				PROVISIONING_PROFILE = "b461910f-999a-41c4-8268-8db6116bad57";
 			};
 			name = Release;
 		};
