@@ -393,26 +393,26 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="752" verticalHuggingPriority="752" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="100" placeholderIntrinsicHeight="100" translatesAutoresizingMaskIntoConstraints="NO" id="zDj-7g-J4r">
-                                <rect key="frame" x="16" y="224" width="568" height="319"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LO1-tj-NjR">
                                 <rect key="frame" x="256" y="153" width="88" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="752" verticalHuggingPriority="752" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="zDj-7g-J4r">
+                                <rect key="frame" x="16" y="224" width="568" height="319"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="zDj-7g-J4r" firstAttribute="leading" secondItem="frq-pa-ZIQ" secondAttribute="leadingMargin" id="3Po-4I-1X1"/>
-                            <constraint firstItem="zDj-7g-J4r" firstAttribute="trailing" secondItem="frq-pa-ZIQ" secondAttribute="trailingMargin" id="d13-Ls-Cg1"/>
-                            <constraint firstAttribute="centerX" secondItem="LO1-tj-NjR" secondAttribute="centerX" id="fgV-9I-sVI"/>
-                            <constraint firstItem="SzZ-hB-g8n" firstAttribute="top" secondItem="zDj-7g-J4r" secondAttribute="bottom" constant="8" id="iAv-T5-BSs"/>
-                            <constraint firstItem="zDj-7g-J4r" firstAttribute="top" relation="lessThanOrEqual" secondItem="LO1-tj-NjR" secondAttribute="bottom" constant="50" id="nNm-QH-PcC"/>
-                            <constraint firstItem="LO1-tj-NjR" firstAttribute="top" secondItem="AmA-EH-N47" secondAttribute="bottom" constant="8" id="vXa-tc-P2t"/>
-                            <constraint firstAttribute="centerX" secondItem="AmA-EH-N47" secondAttribute="centerX" id="wka-bk-uq3"/>
-                            <constraint firstItem="AmA-EH-N47" firstAttribute="top" secondItem="Lle-zV-YA6" secondAttribute="bottom" constant="60" id="zpR-Ms-QrA"/>
+                            <constraint firstItem="zDj-7g-J4r" firstAttribute="leading" secondItem="frq-pa-ZIQ" secondAttribute="leadingMargin" id="4Dl-yo-nv0"/>
+                            <constraint firstItem="SzZ-hB-g8n" firstAttribute="top" secondItem="zDj-7g-J4r" secondAttribute="bottom" constant="8" id="63q-oa-iOp"/>
+                            <constraint firstItem="AmA-EH-N47" firstAttribute="top" secondItem="Lle-zV-YA6" secondAttribute="bottom" constant="60" id="70C-LW-AV9"/>
+                            <constraint firstItem="LO1-tj-NjR" firstAttribute="top" secondItem="AmA-EH-N47" secondAttribute="bottom" constant="8" id="9gI-uU-sxU"/>
+                            <constraint firstItem="zDj-7g-J4r" firstAttribute="trailing" secondItem="frq-pa-ZIQ" secondAttribute="trailingMargin" id="9xf-Xg-CtF"/>
+                            <constraint firstAttribute="centerX" secondItem="LO1-tj-NjR" secondAttribute="centerX" id="MhB-Fd-lHD"/>
+                            <constraint firstItem="zDj-7g-J4r" firstAttribute="top" secondItem="LO1-tj-NjR" secondAttribute="bottom" constant="50" id="XfV-9V-RxC"/>
+                            <constraint firstAttribute="centerX" secondItem="AmA-EH-N47" secondAttribute="centerX" id="wte-Dr-Ah7"/>
                         </constraints>
                     </view>
                     <connections>
