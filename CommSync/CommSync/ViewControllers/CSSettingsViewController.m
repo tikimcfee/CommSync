@@ -18,7 +18,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks", @"NUKE"];
+    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks", @"NUKE SESSION", @"NUKE DATABASE"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +33,14 @@
     CSSessionManager *sessionManager = app.globalSessionManager;
     
     [sessionManager nukeSession];
+}
+
+- (void)nukeRealm
+{
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    CSSessionManager *sessionManager = app.globalSessionManager;
+    
+    [sessionManager nukeRealm];
 }
 
 
@@ -174,6 +182,10 @@
 
         case 5:
             [self nukeSession];
+            break;
+            
+        case 6:
+            [self nukeRealm];
             break;
     }
     

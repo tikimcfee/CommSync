@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -7,7 +7,7 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Chats-->
+        <!--Chat-->
         <scene sceneID="63Q-t0-nVJ">
             <objects>
                 <viewController id="Wwj-Np-afA" customClass="MessageViewController" sceneMemberID="viewController">
@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Chats" id="alo-Zp-qMA"/>
+                    <tabBarItem key="tabBarItem" title="Chat" id="alo-Zp-qMA"/>
                     <connections>
                         <segue destination="VdV-z8-S1w" kind="show" identifier="TODO_TemporarySegue" id="Yha-gR-5bg"/>
                     </connections>
@@ -81,17 +81,17 @@
                             <outlet property="delegate" destination="85q-Sc-dkp" id="hL0-7W-AE8"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" id="h6Y-1V-hDj"/>
+                    <tabBarItem key="tabBarItem" systemItem="more" id="h6Y-1V-hDj"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ESx-en-tpc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="853" y="1270"/>
         </scene>
-        <!--Tasks-->
+        <!--Navigation Controller-->
         <scene sceneID="9nJ-GG-Wi7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BXf-C0-RVZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Tasks" id="hO2-xv-cyU"/>
+                    <tabBarItem key="tabBarItem" systemItem="mostViewed" id="hO2-xv-cyU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5N4-9i-Ybb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -457,11 +457,11 @@
             </objects>
             <point key="canvasLocation" x="2581" y="435"/>
         </scene>
-        <!--Users-->
+        <!--Navigation Controller-->
         <scene sceneID="wtP-1v-klN">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Suc-Lv-nyY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Users" id="Y1A-Y1-NNj"/>
+                    <tabBarItem key="tabBarItem" systemItem="contacts" id="Y1A-Y1-NNj"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bmI-Ax-f2g">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

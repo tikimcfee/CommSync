@@ -34,6 +34,7 @@
 - (void) sendPulseToPeers;
 - (void) sendDataPacketToPeers:(NSData*)dataPacket;
 - (void) nukeSession;
+- (void) nukeRealm;
 
 
 @end

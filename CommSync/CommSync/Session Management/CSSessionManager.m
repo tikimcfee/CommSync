@@ -129,7 +129,19 @@
     
     _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
     _currentSession.delegate = self;
+    
+    self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
+    self.isResponsibleForSendingInvites = YES;
 }
+
+
+- (void)nukeRealm
+{
+    [_realm beginWriteTransaction];
+    [_realm deleteAllObjects];
+    [_realm commitWriteTransaction];
+}
+
 
 # pragma mark - MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
