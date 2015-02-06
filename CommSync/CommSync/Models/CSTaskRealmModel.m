@@ -48,17 +48,7 @@
     // NOTE!
     // This is ALL KINDS OF EXTREMELY INEFFICIENT!
     // We should not rearchive and reconvert images we have already worked with
-    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.TRANSIENT_taskImages.count];
-    for(UIImage* image in self.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
-        NSData* thisImage = UIImageJPEGRepresentation(image, 0.3); // make a new JPEG data object with some compressed size
-        [tempArrayOfImages addObject:thisImage]; // add it to our container
-    }
-    
-    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages]; // archive the data ...
-    
-    [[RLMRealm defaultRealm] beginWriteTransaction];
-    self.taskImages_NSDataArray_JPEG = archivedImages; // and set the images of this task to the new archive
-    [[RLMRealm defaultRealm] commitWriteTransaction];
+    [self resetImageDataForTask];
     
     [aCoder encodeObject:self.taskImages_NSDataArray_JPEG forKey:@"taskImages"]; // encode the object and pray
 }
@@ -92,6 +82,21 @@
         
         completion(YES);
     });
+}
+
+- (void) resetImageDataForTask {
+    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.TRANSIENT_taskImages.count];
+    for(UIImage* image in self.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
+        NSData* thisImage = UIImageJPEGRepresentation(image, 0.3); // make a new JPEG data object with some compressed size
+        [tempArrayOfImages addObject:thisImage]; // add it to our container
+    }
+    
+    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages]; // archive the data ...
+    
+    [[RLMRealm defaultRealm] beginWriteTransaction];
+    self.taskImages_NSDataArray_JPEG = archivedImages; // and set the images of this task to the new archive
+    [[RLMRealm defaultRealm] commitWriteTransaction];
+
 }
 
 
