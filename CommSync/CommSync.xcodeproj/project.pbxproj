@@ -17,6 +17,7 @@
 		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
+		7439A51E1A82A786007D0D79 /* UIImage+normalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7439A51D1A82A786007D0D79 /* UIImage+normalize.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
 		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
 		74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D11A7FDE4300ECBADB /* Connection.m */; };
@@ -28,8 +29,6 @@
 		74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */; };
 		74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */; };
 		74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E51A7FDE4300ECBADB /* Server.m */; };
-		74DB14F41A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14F31A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m */; };
-		74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
@@ -55,6 +54,8 @@
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
+		7439A51C1A82A786007D0D79 /* UIImage+normalize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+normalize.h"; path = "Categories/UIImage+normalize.h"; sourceTree = "<group>"; };
+		7439A51D1A82A786007D0D79 /* UIImage+normalize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+normalize.m"; path = "Categories/UIImage+normalize.m"; sourceTree = "<group>"; };
 		7444522D1A0ACEDB00C87723 /* CSUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSUserViewController.h; path = ViewControllers/CSUserViewController.h; sourceTree = "<group>"; };
 		7444522E1A0ACEDB00C87723 /* CSUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSUserViewController.m; path = ViewControllers/CSUserViewController.m; sourceTree = "<group>"; };
 		74DB14CD1A7FDDE500ECBADB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -153,6 +154,7 @@
 		459D5F7519DB449900C91EFA /* CommSync */ = {
 			isa = PBXGroup;
 			children = (
+				7439A51B1A82A748007D0D79 /* Categories */,
 				454D92061A7857AA000B74A8 /* Frameworks */,
 				7409982D1A0C178000229AFC /* Task Management */,
 				933AA1331A71DA7200DCC10A /* Models */,
@@ -182,6 +184,15 @@
 			children = (
 			);
 			name = "Task Management";
+			sourceTree = "<group>";
+		};
+		7439A51B1A82A748007D0D79 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				7439A51C1A82A786007D0D79 /* UIImage+normalize.h */,
+				7439A51D1A82A786007D0D79 /* UIImage+normalize.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		744452291A0ACE2700C87723 /* ViewControllers */ = {
@@ -313,6 +324,7 @@
 				TargetAttributes = {
 					459D5F7219DB449900C91EFA = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = 8EGNUMD5CB;
 					};
 				};
 			};
@@ -353,9 +365,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
-				74DB14F41A7FEAE500ECBADB /* CSFrameworkSupportedConnectivityManager.m in Sources */,
 				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
+				7439A51E1A82A786007D0D79 /* UIImage+normalize.m in Sources */,
 				74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
 				74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */,
@@ -373,7 +385,6 @@
 				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
 				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
-				74DB14F81A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m in Sources */,
 				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,7 +495,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: IVAN LUGO (8JV4UK999G)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CommSync/ThirdParty",
@@ -492,6 +504,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9497ec39-4157-4325-96ff-d44273980c52";
 			};
 			name = Debug;
 		};
@@ -499,7 +512,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: IVAN LUGO (8JV4UK999G)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CommSync/ThirdParty",
@@ -507,6 +521,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9497ec39-4157-4325-96ff-d44273980c52";
 			};
 			name = Release;
 		};

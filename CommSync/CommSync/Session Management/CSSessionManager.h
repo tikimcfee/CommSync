@@ -31,8 +31,10 @@
 
 
 - (CSSessionManager*) initWithID:(NSString*)userID;
-- (void)sendPulseToPeers;
+- (void) sendPulseToPeers;
 - (void) sendDataPacketToPeers:(NSData*)dataPacket;
+- (void) nukeSession;
+- (void) nukeRealm;
 
 
 @end

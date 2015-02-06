@@ -64,18 +64,13 @@
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(incrementConnectedCount:)
-                                                 name:kUserConnectedNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveNewTask:)
                                                  name:kNewTaskNotification
                                                object:nil];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(decrementConnectedCount:)
-                                                 name:@"lostPeer"
+                                             selector:@selector(updateConnectionCountAndTableView:)
+                                                 name:@"PEER_CHANGED_STATE"
                                                object:nil];
 }
 
@@ -102,31 +97,22 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:@"lostPeer"
                                                   object:self];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"PEER_CHANGED_STATE"
+                                                  object:nil];
 
     [[RLMRealm defaultRealm] removeNotification:_updateUIToken];
 }
 
-- (void)incrementConnectedCount:(NSNotification *)notification
+- (void)updateConnectionCountAndTableView:(NSNotification *)notification
 {
-    int count = [_userConnectionCount.title intValue];
-    count = count + 1;
-    
     __weak CSTaskListViewController *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
-    });
-}
-
-- (void)decrementConnectedCount:(NSNotification *)notification
-{
-    int count = [_userConnectionCount.title intValue];
-    count = (count == 0) ? 0 : count - 1;
-    
-    __weak CSTaskListViewController *weakSelf = self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", count];
+        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
+        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+        [weakSelf.tableView reloadData];
     });
 }
 

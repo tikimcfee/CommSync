@@ -18,9 +18,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks"];
-    
-    self.test = @[@{@"first": @"i am first", @"second": @" i am second"},];
+    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks", @"NUKE SESSION", @"NUKE DATABASE"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -28,14 +26,25 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
- #pragma mark - Navigation
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+
+- (void)nukeSession
+{
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    CSSessionManager *sessionManager = app.globalSessionManager;
+    
+    [sessionManager nukeSession];
+}
+
+- (void)nukeRealm
+{
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    CSSessionManager *sessionManager = app.globalSessionManager;
+    
+    [sessionManager nukeRealm];
+}
+
+
+
 - (IBAction)sendGlobalPulse {
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     CSSessionManager* sessionManager = d.globalSessionManager;
@@ -66,33 +75,18 @@
     NSLog(@"test");
     //get the database object
      _realm = [RLMRealm defaultRealm];
-    
-    
-   
-    
-    
+
     for(int i = 0; i < 5; i++){
         
         
         //allocate space for the task object and initialize the object
         self.tempTask = [[CSTaskRealmModel alloc] init];
         
-        for(int j = 0; j < 10; j++)
-        {
-            self.tempComment = [[CSCommentRealmModel alloc] init];
-            
-            self.tempComment.UID = [NSString stringWithFormat:@"%s %d", "UUID", i];
-            _tempComment.text = [NSString stringWithFormat:@"%s %d", "blah blah blach blach blach", j];
-            _tempComment.time = j;
-            
-            [_tempTask addComment:_tempComment];
-        }
-        
         //populate variables
         
         _tempTask.UUID = [NSString stringWithFormat:@"%s %d", "UUID", i];
         _tempTask.deviceID = [NSString stringWithFormat:@"%s %d", "DID", i];
-        _tempTask.concatenatedID =  [NSString stringWithFormat:@"%s %s", "uid", "did"];
+        _tempTask.concatenatedID = [NSString stringWithFormat:@"%s %d", "CID", i];
         
         _tempTask.taskPriority = CSTaskPriorityLow;
         
@@ -180,9 +174,19 @@
             
         case 3:
             [self resync];
+            break;
             
         case 4:
             [self populate];
+            break;
+
+        case 5:
+            [self nukeSession];
+            break;
+            
+        case 6:
+            [self nukeRealm];
+            break;
     }
     
 }
