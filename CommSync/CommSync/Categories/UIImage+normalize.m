@@ -17,12 +17,14 @@
             completion(self);
             return;
         }
-        
-        UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
-        [self drawInRect:(CGRect){0, 0, self.size}];
+        CGSize newSize = CGSizeMake(self.size.width / 2, self.size.height / 2);
+//        UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
+        UIGraphicsBeginImageContextWithOptions(newSize, NO, self.scale);
+        [self drawInRect:(CGRect){0, 0, newSize}];
+//        [self drawInRect:(CGRect){0, 0, self.size}];
         UIImage *normalizedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        
+
         completion(normalizedImage);
     });
 }

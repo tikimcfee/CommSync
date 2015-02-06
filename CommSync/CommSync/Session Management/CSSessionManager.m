@@ -323,6 +323,8 @@
                 
                 [self sendDataPacketToPeers:contextData];
                 
+                NSTemporaryDirectory();
+                
                 [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
             }
             stateString = kUserConnectedNotification;
