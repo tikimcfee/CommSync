@@ -7,6 +7,7 @@
 //
 
 #import "CSTaskDetailViewController.h"
+#import "CustomHeaderCell.h"
 
 @interface CSTaskDetailViewController ()
 @property (strong, nonatomic) IBOutlet UIImageView *taskImage;
@@ -19,14 +20,59 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.titleLabel.text = self.sourceTask.taskTitle;
-    self.descriptionLabel.text = self.sourceTask.taskDescription;
+    //self.titleLabel.text = self.sourceTask.taskTitle;
+   // self.descriptionLabel.text = self.sourceTask.taskDescription;
     
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
         if(didFinish) {
-            [self setImagesFromTask];
+            //[self setImagesFromTask];
         }
     }];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 300;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    CustomHeaderCell* headerCell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
+    
+    headerCell.titleLabel.text = self.sourceTask.taskTitle;
+    headerCell.detailLabel.text = self.sourceTask.taskDescription;
+    headerCell.priorityLabel.text = self.sourceTask.taskTitle;;
+    
+    switch (self.sourceTask.taskPriority) {
+        case 2:
+            headerCell.priorityColor.backgroundColor = [UIColor redColor];
+            break;
+        
+        case 1:
+            headerCell.priorityColor.backgroundColor = [UIColor yellowColor];
+            break;
+            
+        default:
+            headerCell.priorityColor.backgroundColor = [UIColor greenColor];
+            break;
+    }
+    
+    return headerCell;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 5;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
+    
+    
+    cell.textLabel.text = @"this is a comment";
+    
+    return cell;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,6 +90,8 @@
         }
     });
 }
+
+
 
 
 @end

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
 
-@interface CSTaskDetailViewController : UIViewController
+@interface CSTaskDetailViewController : UITableViewController
 {
     IBOutlet UITableView *tableView;
 }
@@ -18,6 +18,7 @@
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
 @property (weak, nonatomic) IBOutlet UILabel *IDLabel;
 @property (weak, nonatomic) IBOutlet UITextField *commentText;
+@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
 
 - (IBAction)addComment:(id)sender;
 

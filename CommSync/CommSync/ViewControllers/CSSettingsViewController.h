@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *myView;
 
 @property (strong, nonatomic) CSTaskRealmModel *tempTask;
-@property (strong, nonatomic) CSCommentRealmModel *tempComment;
+//@property (strong, nonatomic) CSCommentRealmModel *tempComment;
 @property (weak, nonatomic) RLMRealm* realm;
 
 - (IBAction)resync;
