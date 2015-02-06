@@ -195,18 +195,6 @@
                                     <action selector="closeViewWithoutSaving:" destination="t1M-XD-1IS" eventType="touchUpInside" id="Okk-41-5nu"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9JX-dm-Fri">
-                                <rect key="frame" x="300" y="540" width="300" height="60"/>
-                                <color key="backgroundColor" red="0.019607843831181526" green="0.5215686559677124" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <state key="normal" title="Create">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="closeViewAndSave:" destination="t1M-XD-1IS" eventType="touchUpInside" id="KWS-tJ-aJC"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D6F-EK-ZAM">
                                 <rect key="frame" x="60" y="32" width="480" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
@@ -304,6 +292,18 @@
                                     <action selector="addImageToTask:" destination="t1M-XD-1IS" eventType="touchUpInside" id="si4-vB-hXB"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9JX-dm-Fri">
+                                <rect key="frame" x="300" y="540" width="300" height="60"/>
+                                <color key="backgroundColor" red="0.019607843831181526" green="0.5215686559677124" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <state key="normal" title="Create">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeViewAndSave:" destination="t1M-XD-1IS" eventType="touchUpInside" id="KWS-tJ-aJC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -375,7 +375,7 @@
             </objects>
             <point key="canvasLocation" x="3311" y="-719"/>
         </scene>
-        <!--Title-->
+        <!--Task Detail View Controller-->
         <scene sceneID="dbr-0e-lEr">
             <objects>
                 <tableViewController id="MXv-OO-Fer" customClass="CSTaskDetailViewController" sceneMemberID="viewController">
@@ -408,26 +408,29 @@
                                                 </label>
                                             </subviews>
                                         </scrollView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X2V-XI-Wxe" userLabel="Title">
-                                            <rect key="frame" x="8" y="9" width="584" height="71"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="39"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Priority" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TeH-zL-jkz" userLabel="Priority">
-                                            <rect key="frame" x="8" y="259" width="165" height="58"/>
+                                            <rect key="frame" x="8" y="256" width="224" height="58"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="26"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BhD-xm-kV9">
-                                            <rect key="frame" x="186" y="259" width="54" height="58"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BhD-xm-kV9">
+                                            <rect key="frame" x="508" y="256" width="54" height="58"/>
                                             <color key="backgroundColor" red="0.69947700473490082" green="0.98306687494270828" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X2V-XI-Wxe" userLabel="Title">
+                                            <rect key="frame" x="8" y="8" width="584" height="71"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="39"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="BhD-xm-kV9" secondAttribute="trailing" constant="30" id="Poa-Pa-Cq4"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="detailLabel" destination="0uQ-TM-WGe" id="nXb-y9-sHN"/>
@@ -442,13 +445,16 @@
                             <outlet property="delegate" destination="MXv-OO-Fer" id="XQk-T5-tzI"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="ulR-dR-vNS">
+                    <navigationItem key="navigationItem" id="ulR-dR-vNS">
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="bBO-iA-D5S" userLabel="Edit"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="navigationBar" destination="ulR-dR-vNS" id="pF5-PW-oYU"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cm-AQ-XcI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3322" y="20"/>
+            <point key="canvasLocation" x="3322" y="19"/>
         </scene>
         <!--User View Controller-->
         <scene sceneID="kd6-HM-lQb">

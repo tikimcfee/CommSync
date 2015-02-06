@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *IDLabel;
 @property (weak, nonatomic) IBOutlet UITextField *commentText;
 @property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 
 - (IBAction)addComment:(id)sender;
 

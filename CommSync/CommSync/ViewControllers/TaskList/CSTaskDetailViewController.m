@@ -22,7 +22,7 @@
     // Do any additional setup after loading the view.
     //self.titleLabel.text = self.sourceTask.taskTitle;
    // self.descriptionLabel.text = self.sourceTask.taskDescription;
-    
+    self.navigationBar.title = self.sourceTask.taskTitle;
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
         if(didFinish) {
             //[self setImagesFromTask];
@@ -40,7 +40,7 @@
     
     headerCell.titleLabel.text = self.sourceTask.taskTitle;
     headerCell.detailLabel.text = self.sourceTask.taskDescription;
-    headerCell.priorityLabel.text = self.sourceTask.taskTitle;;
+    headerCell.priorityLabel.text = self.sourceTask.taskTitle;
     
     switch (self.sourceTask.taskPriority) {
         case 2:
