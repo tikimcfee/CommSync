@@ -90,6 +90,7 @@
         }
         
         [self.pendingTask.TRANSIENT_taskImages addObject:image];
+//        [self.pendingTask resetImageDataForTask];
     };
     
     [image normalizedImageWithCompletionBlock:fixImageIfNeeded];
