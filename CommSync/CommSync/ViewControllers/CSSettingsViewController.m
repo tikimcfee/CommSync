@@ -19,6 +19,8 @@
     // Do any additional setup after loading the view.
     
     self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks"];
+    
+    self.test = @[@{@"first": @"i am first", @"second": @" i am second"},];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -161,25 +163,25 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     switch (indexPath.row) {
-        case 1:
+        case 0:
             [self sendGlobalPulse];
             break;
             
-        case 2:
+        case 1:
             [self tearDown];
             break;
             
-        case 3:
+        case 2:
             [self rebuild];
             break;
             
-        case 4:
+        case 3:
             [self resync];
             
-        case 5:
+        case 4:
             [self populate];
     }
     
