@@ -10,7 +10,8 @@
 
 @interface CustomHeaderCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *detailLabel;
+
+@property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *priorityColor;

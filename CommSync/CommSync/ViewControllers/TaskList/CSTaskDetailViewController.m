@@ -39,20 +39,23 @@
     CustomHeaderCell* headerCell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
     
     headerCell.titleLabel.text = self.sourceTask.taskTitle;
-    headerCell.detailLabel.text = self.sourceTask.taskDescription;
+    headerCell.descriptionLabel.text = self.sourceTask.taskDescription;
     headerCell.priorityLabel.text = self.sourceTask.taskTitle;
     
     switch (self.sourceTask.taskPriority) {
         case 2:
             headerCell.priorityColor.backgroundColor = [UIColor redColor];
+            headerCell.priorityLabel.text = @"High Priority";
             break;
         
         case 1:
             headerCell.priorityColor.backgroundColor = [UIColor yellowColor];
+            headerCell.priorityLabel.text = @"Standard Priority";
             break;
             
         default:
             headerCell.priorityColor.backgroundColor = [UIColor greenColor];
+            headerCell.priorityLabel.text = @"Low Priority";
             break;
     }
     
