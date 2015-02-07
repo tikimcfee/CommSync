@@ -20,7 +20,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *commentText;
 @property (weak, nonatomic) IBOutlet UILabel *commentLabel;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
+@property (weak, nonatomic) IBOutlet UITextField *commentField;
+- (IBAction)resfresh:(id)sender;
 
-- (IBAction)addComment:(id)sender;
-
+- (IBAction)editTask:(id)sender;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
 @end

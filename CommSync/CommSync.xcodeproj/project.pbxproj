@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
+		3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F96AB581A86D036000A50F4 /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
@@ -35,10 +37,12 @@
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
 		933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
-		95FAAAB91A1B2DEE00740311 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95FAAAB71A1B2DEE00740311 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
+		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
+		3F96AB591A86D036000A50F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
 		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
@@ -100,7 +104,6 @@
 		933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListViewController.m; path = ViewControllers/TaskList/CSTaskListViewController.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
-		95FAAAB81A1B2DEE00740311 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +120,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F416E641A86A6EC00EDC347 /* Task Detail */ = {
+			isa = PBXGroup;
+			children = (
+				3FD986121A8466DB0084781B /* CustomHeaderCell.m */,
+				3F416E681A86C77500EDC347 /* CustomFooterCell.h */,
+				3F416E691A86C77500EDC347 /* CustomFooterCell.m */,
+				3FD986111A8466DB0084781B /* CustomHeaderCell.h */,
+				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
+				933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */,
+			);
+			name = "Task Detail";
+			sourceTree = "<group>";
+		};
 		454D92061A7857AA000B74A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +184,7 @@
 				459D5F8619DB449900C91EFA /* Images.xcassets */,
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
+				3F96AB581A86D036000A50F4 /* Main.storyboard */,
 				459D5F7619DB449900C91EFA /* Supporting Files */,
 			);
 			path = CommSync;
@@ -206,9 +223,6 @@
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
 				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
-				95FAAAB71A1B2DEE00740311 /* Main.storyboard */,
-				3FD986111A8466DB0084781B /* CustomHeaderCell.h */,
-				3FD986121A8466DB0084781B /* CustomHeaderCell.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -290,8 +304,7 @@
 				933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */,
 				933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */,
 				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
-				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
-				933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */,
+				3F416E641A86A6EC00EDC347 /* Task Detail */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
 			);
@@ -356,8 +369,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95FAAAB91A1B2DEE00740311 /* Main.storyboard in Resources */,
 				459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */,
+				3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */,
 				459D5F8719DB449900C91EFA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,26 +405,27 @@
 				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
+				3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		3F96AB581A86D036000A50F4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3F96AB591A86D036000A50F4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		459D5F8819DB449900C91EFA /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				459D5F8919DB449900C91EFA /* Base */,
 			);
 			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-		95FAAAB71A1B2DEE00740311 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				95FAAAB81A1B2DEE00740311 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

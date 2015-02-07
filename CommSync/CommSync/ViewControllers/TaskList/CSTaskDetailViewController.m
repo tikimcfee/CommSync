@@ -8,6 +8,10 @@
 
 #import "CSTaskDetailViewController.h"
 #import "CustomHeaderCell.h"
+#import "CSCommentRealmModel.h"
+#import "CustomFooterCell.h"
+#import <Realm/Realm.h>
+#import "CSTaskCreationViewController.h"
 
 @interface CSTaskDetailViewController ()
 @property (strong, nonatomic) IBOutlet UIImageView *taskImage;
@@ -30,14 +34,16 @@
     }];
 }
 
+//header size
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 300;
+    return 400;
 }
 
+//initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     CustomHeaderCell* headerCell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
-    
     headerCell.titleLabel.text = self.sourceTask.taskTitle;
     headerCell.descriptionLabel.text = self.sourceTask.taskDescription;
     headerCell.priorityLabel.text = self.sourceTask.taskTitle;
@@ -62,21 +68,39 @@
     return headerCell;
 }
 
+
+
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return [self.sourceTask.comments count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
     
+    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = @"this is a comment";
+    cell.textLabel.text = comment.text;
     
     return cell;
 }
+
+
+//footer size
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 200;
+}
+
+//initiate the header
+-(UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    CustomFooterCell* footerCell = [tableView dequeueReusableCellWithIdentifier:@"FooterCell"];
+    footerCell.sourceTask = _sourceTask;
+    return footerCell;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -95,6 +119,28 @@
 }
 
 
+- (IBAction)resfresh:(id)sender {
+    NSLog(@"refresh");
+      [self.tableView reloadData];
+}
 
+- (IBAction)editTask:(id)sender {
+    
+    CSTaskCreationViewController *edit = [[CSTaskCreationViewController alloc] init];
+    
+    [self performSegueWithIdentifier:@"editModal" sender:edit];
+}
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"editModal"])
+    {
+        CSTaskCreationViewController *vc = [segue destinationViewController];
+        if ([sender isKindOfClass:[CSTaskRealmModel class]])
+        {
+            [vc setSourceTask:sender];
+        }
+    }
+}
 @end

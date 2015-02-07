@@ -10,6 +10,7 @@
 #import "CSTaskRealmModel.h"
 #import "AppDelegate.h"
 #import "UIImage+normalize.h"
+#import "CSCommentRealmModel.h"
 
 #import <Realm/Realm.h>
 
@@ -148,6 +149,10 @@
     [_realm beginWriteTransaction];
     [_realm addObject:self.pendingTask];
     [_realm commitWriteTransaction];
+    
+  
+    
+    
     
     AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];

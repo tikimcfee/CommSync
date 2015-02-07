@@ -15,3 +15,5 @@
 @property int time;
 
 @end
+
+RLM_ARRAY_TYPE(CSCommentRealmModel)
