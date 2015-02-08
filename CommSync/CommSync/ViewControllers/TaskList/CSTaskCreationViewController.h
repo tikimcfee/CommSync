@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CSTaskRealmModel.h"
 
 @interface CSTaskCreationViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 
+@property (strong, nonatomic) CSTaskRealmModel *sourceTask;
 @end

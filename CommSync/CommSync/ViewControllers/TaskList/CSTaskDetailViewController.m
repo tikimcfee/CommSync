@@ -120,18 +120,16 @@
 
 
 - (IBAction)resfresh:(id)sender {
-    NSLog(@"refresh");
       [self.tableView reloadData];
 }
 
 - (IBAction)editTask:(id)sender {
-    
-    CSTaskCreationViewController *edit = [[CSTaskCreationViewController alloc] init];
-    
-    [self performSegueWithIdentifier:@"editModal" sender:edit];
+    NSLog(@"about to send");
+    [self performSegueWithIdentifier:@"editModal" sender:self.sourceTask];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSLog(@"about to sent");
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"editModal"])

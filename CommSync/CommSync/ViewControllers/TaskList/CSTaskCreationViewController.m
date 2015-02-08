@@ -50,11 +50,20 @@
                    arc4random_uniform(25)+97];
     
     _realm = [RLMRealm defaultRealm];
-    
     self.pendingTask = [[CSTaskRealmModel alloc] init];
-    _pendingTask.UUID = U;
-    _pendingTask.deviceID = D;
-    _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
+    if(!_sourceTask){
+        
+        _pendingTask.UUID = U;
+        _pendingTask.deviceID = D;
+        _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
+    }
+    
+    else{
+        _titleTextField.text = _sourceTask.taskTitle;
+        _descriptionTextField.text = _sourceTask.taskDescription;
+        //_acceptButton.text = @"change";
+    }
+    
 }
 
 
@@ -133,26 +142,32 @@
 }
 - (IBAction)closeViewAndSave:(id)sender {
     
+    if(!_sourceTask){
+        self.pendingTask.taskTitle = self.titleTextField.text;
+        self.pendingTask.taskDescription = self.descriptionTextField.text;
     
-    self.pendingTask.taskTitle = self.titleTextField.text;
-    self.pendingTask.taskDescription = self.descriptionTextField.text;
+        NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.pendingTask.TRANSIENT_taskImages.count];
+            for(UIImage* image in self.pendingTask.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
+                NSData* thisImage = UIImageJPEGRepresentation(image, 0.3); // make a new JPEG data object with some compressed size
+                [tempArrayOfImages addObject:thisImage]; // add it to our container
+            }
     
-    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.pendingTask.TRANSIENT_taskImages.count];
-    for(UIImage* image in self.pendingTask.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
-        NSData* thisImage = UIImageJPEGRepresentation(image, 0.3); // make a new JPEG data object with some compressed size
-        [tempArrayOfImages addObject:thisImage]; // add it to our container
+        NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages]; // archive the data ...
+        self.pendingTask.taskImages_NSDataArray_JPEG = archivedImages; // and set the images of this task to the new archive
+    
+        [_realm beginWriteTransaction];
+        [_realm addObject:self.pendingTask];
+        [_realm commitWriteTransaction];
+    
     }
     
-    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages]; // archive the data ...
-    self.pendingTask.taskImages_NSDataArray_JPEG = archivedImages; // and set the images of this task to the new archive
-    
-    [_realm beginWriteTransaction];
-    [_realm addObject:self.pendingTask];
-    [_realm commitWriteTransaction];
-    
-  
-    
-    
+    else{
+        [_realm beginWriteTransaction];
+        _sourceTask.taskTitle = self.titleTextField.text;
+        _sourceTask.taskDescription = self.descriptionTextField.text;
+        _sourceTask.taskPriority = _pendingTask.taskPriority;
+        [_realm commitWriteTransaction];
+    }
     
     AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
