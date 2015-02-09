@@ -34,7 +34,7 @@
     }];
 }
 
-//header size
+//header size just a temp value
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 400;
@@ -43,7 +43,10 @@
 //initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    //creates the header
     CustomHeaderCell* headerCell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
+    
+    //sets the
     headerCell.titleLabel.text = self.sourceTask.taskTitle;
     headerCell.descriptionLabel.text = self.sourceTask.taskDescription;
     headerCell.priorityLabel.text = self.sourceTask.taskTitle;
@@ -58,7 +61,8 @@
             headerCell.priorityColor.backgroundColor = [UIColor yellowColor];
             headerCell.priorityLabel.text = @"Standard Priority";
             break;
-            
+        
+        //if green is selected or nothing is selected the task defaults to low priority
         default:
             headerCell.priorityColor.backgroundColor = [UIColor greenColor];
             headerCell.priorityLabel.text = @"Low Priority";
@@ -70,19 +74,28 @@
 
 
 
-
+//as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.sourceTask.comments count];
 }
 
+//inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
     
     CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = comment.text;
     
+    
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:comment.time];
+    
+    
+    cell.textLabel.text = [NSString stringWithFormat: @"(ID: %@) %@ time %@", comment.UID, comment.text, newDateString];
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12];
+    //cell.textLabel.text = comment.text;
     return cell;
 }
 
@@ -123,21 +136,20 @@
       [self.tableView reloadData];
 }
 
+
+//pushes a modal edit view on top
 - (IBAction)editTask:(id)sender {
-    NSLog(@"about to send");
-    [self performSegueWithIdentifier:@"editModal" sender:self.sourceTask];
+    [self performSegueWithIdentifier:@"editModal" sender:self];
 }
 
+//sends a reference to the current view controller to the create page so that it can be modified
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSLog(@"about to sent");
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"editModal"])
     {
         CSTaskCreationViewController *vc = [segue destinationViewController];
-        if ([sender isKindOfClass:[CSTaskRealmModel class]])
+        if ([sender isKindOfClass:[CSTaskDetailViewController class]])
         {
-            [vc setSourceTask:sender];
+            [vc setTaskScreen:sender];
         }
     }
 }

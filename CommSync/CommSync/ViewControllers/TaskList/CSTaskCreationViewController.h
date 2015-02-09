@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
+#import "CSTaskDetailViewController.h"
 
 @interface CSTaskCreationViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 
-@property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+@property (strong, nonatomic) CSTaskDetailViewController *taskScreen;
 @end

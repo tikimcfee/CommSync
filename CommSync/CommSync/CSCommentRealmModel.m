@@ -15,7 +15,7 @@
     if (self = [super init]) {
         self.UID = [aDecoder decodeObjectForKey:@"UID"];
         self.text = [aDecoder decodeObjectForKey:@"text"];
-        self.time = [aDecoder decodeIntForKey:@"time"];
+        self.time = [aDecoder decodeObjectForKey:@"time"];
         
        
         
@@ -29,7 +29,7 @@
 {
     [aCoder encodeObject:self.UID forKey:@"UID"];
     [aCoder encodeObject:self.text forKey:@"text"];
-    [aCoder encodeInteger:self.time forKey:@"time"];
+    [aCoder encodeObject:self.time forKey:@"time"];
     
 }
 @end

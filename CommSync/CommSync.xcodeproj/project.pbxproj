@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
 		3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F96AB581A86D036000A50F4 /* Main.storyboard */; };
-		3F96AB5D1A86DAD2000A50F4 /* CSTaskEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F96AB5C1A86DAD2000A50F4 /* CSTaskEditViewController.m */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
@@ -44,8 +43,6 @@
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
 		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
 		3F96AB591A86D036000A50F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3F96AB5B1A86DAD2000A50F4 /* CSTaskEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTaskEditViewController.h; sourceTree = "<group>"; };
-		3F96AB5C1A86DAD2000A50F4 /* CSTaskEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTaskEditViewController.m; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
 		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
@@ -128,8 +125,6 @@
 			children = (
 				3FD986121A8466DB0084781B /* CustomHeaderCell.m */,
 				3F416E681A86C77500EDC347 /* CustomFooterCell.h */,
-				3F96AB5B1A86DAD2000A50F4 /* CSTaskEditViewController.h */,
-				3F96AB5C1A86DAD2000A50F4 /* CSTaskEditViewController.m */,
 				3F416E691A86C77500EDC347 /* CustomFooterCell.m */,
 				3FD986111A8466DB0084781B /* CustomHeaderCell.h */,
 				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
@@ -309,9 +304,9 @@
 				933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */,
 				933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */,
 				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
-				3F416E641A86A6EC00EDC347 /* Task Detail */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
+				3F416E641A86A6EC00EDC347 /* Task Detail */,
 			);
 			name = TaskList;
 			sourceTree = "<group>";
@@ -395,7 +390,6 @@
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
 				74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */,
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
-				3F96AB5D1A86DAD2000A50F4 /* CSTaskEditViewController.m in Sources */,
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
 				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,

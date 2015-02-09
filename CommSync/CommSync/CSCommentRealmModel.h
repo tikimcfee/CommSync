@@ -12,7 +12,7 @@
 
 @property NSString* text;
 @property NSString* UID;
-@property int time;
+@property NSDate* time;
 
 @end
 

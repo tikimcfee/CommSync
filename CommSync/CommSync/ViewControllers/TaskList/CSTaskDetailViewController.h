@@ -13,14 +13,10 @@
 {
     IBOutlet UITableView *tableView;
 }
-@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
-@property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
+
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
-@property (weak, nonatomic) IBOutlet UILabel *IDLabel;
-@property (weak, nonatomic) IBOutlet UITextField *commentText;
-@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
-@property (weak, nonatomic) IBOutlet UITextField *commentField;
 - (IBAction)resfresh:(id)sender;
 
 - (IBAction)editTask:(id)sender;

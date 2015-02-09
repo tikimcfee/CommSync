@@ -27,9 +27,9 @@
     
     NSLog(@"addcomment");
     CSCommentRealmModel *comment = [CSCommentRealmModel new];
-    comment.UID = @"added comment";
+    comment.UID = @"Temp ID";
     comment.text = self.commentField.text;
-    comment.time = 3;
+    comment.time = [NSDate date];
     
     [_realm beginWriteTransaction];
     [_sourceTask addComment:comment];
