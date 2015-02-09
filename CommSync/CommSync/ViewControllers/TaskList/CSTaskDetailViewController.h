@@ -11,7 +11,7 @@
 
 @interface CSTaskDetailViewController : UITableViewController
 {
-    IBOutlet UITableView *tableView;
+    
 }
 
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;

@@ -89,9 +89,9 @@
     NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.TRANSIENT_taskImages.count];
     for(UIImage* image in self.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
         
-        NSLog(@"New size is after normalization only is %d", [[NSKeyedArchiver archivedDataWithRootObject:image] length]);
+        NSLog(@"New size is after normalization only is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
         NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
-        NSLog(@"New size is after JPEG compression is %d", [[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
+        NSLog(@"New size is after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
         
         [tempArrayOfImages addObject:thisImage]; // add it to our container
     }
