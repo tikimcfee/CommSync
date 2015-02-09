@@ -54,17 +54,24 @@
     [aCoder encodeObject:self.taskImages_NSDataArray_JPEG forKey:@"taskImages"]; // encode the object and pray
 }
 
+#pragma mark - Realm modeling protocol
+
 + (NSArray*)ignoredProperties {
     
     return @[@"TRANSIENT_taskImages"];
 }
 
-//+ (NSDictionary*)defaultPropertyValues {
-//    NSMutableArray* tempArrayOfImages = [NSMutableArray new];
-//    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
-//    
-//    return @{@"taskImages_NSDataArray_JPEG":archivedImages};
-//}
++ (NSDictionary *)defaultPropertyValues {
+    
+    NSDictionary* defaults = nil;
+    
+    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
+    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
+    
+    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages};
+    
+    return defaults;
+}
 
 #pragma mark - Accessors and Helpers
 
@@ -105,19 +112,7 @@
 }
 
 - (void) addComment: (CSCommentRealmModel *) newComment{
-    [self.comments addObject : newComment];
-}
-
-+ (NSDictionary *)defaultPropertyValues {
-    
-    NSDictionary* defaults = nil;
-    
-    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
-    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
-    
-    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages};
-    
-    return defaults;
+    [self.comments addObject :newComment];
 }
 
 

@@ -84,16 +84,6 @@
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
-//    UIImage *correctedImage = [UIImage imageWithCGImage:[image CGImage]
-//                        scale:1.0
-//                  orientation: UIImageOrientationUp];
-//    
-//    if(!self.pendingTask.TRANSIENT_taskImages) {
-//        self.pendingTask.TRANSIENT_taskImages = [NSMutableArray new];
-//    }
-//    
-//    [self.pendingTask.TRANSIENT_taskImages addObject:correctedImage];
-    
     void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
         if(!self.pendingTask.TRANSIENT_taskImages) {
             self.pendingTask.TRANSIENT_taskImages = [NSMutableArray new];
