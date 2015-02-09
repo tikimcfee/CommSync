@@ -9,8 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
 
-@interface CSTaskDetailViewController : UIViewController
-@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
-@property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
+@interface CSTaskDetailViewController : UITableViewController
+{
+    IBOutlet UITableView *tableView;
+}
+
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
+- (IBAction)resfresh:(id)sender;
+
+- (IBAction)editTask:(id)sender;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
 @end

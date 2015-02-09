@@ -8,6 +8,7 @@
 
 #import "CSTaskRealmModel.h"
 
+
 @implementation CSTaskRealmModel
 
 #pragma mark - Lifecycle
@@ -101,6 +102,22 @@
     self.taskImages_NSDataArray_JPEG = archivedImages; // and set the images of this task to the new archive
     [[RLMRealm defaultRealm] commitWriteTransaction];
 
+}
+
+- (void) addComment: (CSCommentRealmModel *) newComment{
+    [self.comments addObject : newComment];
+}
+
++ (NSDictionary *)defaultPropertyValues {
+    
+    NSDictionary* defaults = nil;
+    
+    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
+    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
+    
+    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages};
+    
+    return defaults;
 }
 
 

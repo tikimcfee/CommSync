@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Realm/Realm.h>
+#import "CSCommentRealmModel.h"
 
 typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
@@ -17,6 +18,8 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 };
 
 @interface CSTaskRealmModel : RLMObject <NSCoding, UIImagePickerControllerDelegate>
+
+@property RLMArray<CSCommentRealmModel> *comments;
 
 // Task persistence properties
 @property NSString* UUID;
@@ -37,5 +40,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 //@property id taskAttachmentData;
 
 - (void) getAllImagesForTaskWithCompletionBlock:(void (^)(BOOL))completion;
+
+- (void) addComment: (CSCommentRealmModel *) newComment;
 
 @end
