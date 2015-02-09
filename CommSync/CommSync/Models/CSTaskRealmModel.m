@@ -104,6 +104,18 @@
     [self.comments addObject : newComment];
 }
 
++ (NSDictionary *)defaultPropertyValues {
+    
+    NSDictionary* defaults = nil;
+    
+    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
+    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
+    
+    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages};
+    
+    return defaults;
+}
+
 
 
 @end
