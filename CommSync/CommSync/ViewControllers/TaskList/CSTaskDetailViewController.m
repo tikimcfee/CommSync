@@ -36,36 +36,36 @@
 
 //header size just a temp value
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 400;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    //return 100;
+//}
 
 //initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     //creates the header
-    CustomHeaderCell* headerCell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
+    CustomHeaderCell* headerCell = [[CustomHeaderCell alloc] init];
     
     //sets the
-    headerCell.titleLabel.text = self.sourceTask.taskTitle;
-    headerCell.descriptionLabel.text = self.sourceTask.taskDescription;
-    headerCell.priorityLabel.text = self.sourceTask.taskTitle;
+    _titleLabel.text = self.sourceTask.taskTitle;
+    _descriptionLabel.text = self.sourceTask.taskDescription;
+    _priorityLabel.text = self.sourceTask.taskTitle;
     
     switch (self.sourceTask.taskPriority) {
         case 2:
-            headerCell.priorityColor.backgroundColor = [UIColor redColor];
-            headerCell.priorityLabel.text = @"High Priority";
+            _priorityColor.backgroundColor = [UIColor redColor];
+            _priorityLabel.text = @"High Priority";
             break;
         
         case 1:
-            headerCell.priorityColor.backgroundColor = [UIColor yellowColor];
-            headerCell.priorityLabel.text = @"Standard Priority";
+           _priorityColor.backgroundColor = [UIColor yellowColor];
+           _priorityLabel.text = @"Standard Priority";
             break;
         
         //if green is selected or nothing is selected the task defaults to low priority
         default:
-            headerCell.priorityColor.backgroundColor = [UIColor greenColor];
-            headerCell.priorityLabel.text = @"Low Priority";
+           _priorityColor.backgroundColor = [UIColor greenColor];
+           _priorityLabel.text = @"Low Priority";
             break;
     }
     
@@ -103,14 +103,13 @@
 //footer size
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 200;
+    return 0;
 }
 
 //initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    CustomFooterCell* footerCell = [tableView dequeueReusableCellWithIdentifier:@"FooterCell"];
-    footerCell.sourceTask = _sourceTask;
+    CustomFooterCell* footerCell = [[CustomFooterCell alloc] init];
     return footerCell;
 }
 
@@ -152,5 +151,18 @@
             [vc setTaskScreen:sender];
         }
     }
+}
+- (IBAction)addComment:(id)sender {
+    if([_commentField.text  isEqual: @""]) return;
+    
+    NSLog(@"addcomment");
+    CSCommentRealmModel *comment = [CSCommentRealmModel new];
+    comment.UID = @"Temp ID";
+    comment.text = _commentField.text;
+    comment.time = [NSDate date];
+    
+    
+    [_sourceTask addComment:comment];
+    
 }
 @end

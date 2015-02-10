@@ -186,9 +186,9 @@
 			isa = PBXGroup;
 			children = (
 				3FD986121A8466DB0084781B /* CustomHeaderCell.m */,
+				3FD986111A8466DB0084781B /* CustomHeaderCell.h */,
 				3F416E681A86C77500EDC347 /* CustomFooterCell.h */,
 				3F416E691A86C77500EDC347 /* CustomFooterCell.m */,
-				3FD986111A8466DB0084781B /* CustomHeaderCell.h */,
 				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
 				933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */,
 			);

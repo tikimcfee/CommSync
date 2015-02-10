@@ -14,6 +14,8 @@
 #pragma mark - Lifecycle
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
+    
+    
     if (self = [super init]) {
         self.UUID = [aDecoder decodeObjectForKey:@"UUID"];
         self.deviceID = [aDecoder decodeObjectForKey:@"deviceID"];
@@ -112,8 +114,15 @@
 }
 
 - (void) addComment: (CSCommentRealmModel *) newComment{
+   
+    RLMRealm* realm = [RLMRealm defaultRealm];
+
+    
+    [realm beginWriteTransaction];
     [self.comments addObject :newComment];
+    [realm commitWriteTransaction]; 
 }
+
 
 
 

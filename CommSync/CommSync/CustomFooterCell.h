@@ -10,8 +10,7 @@
 #import "CSTaskRealmModel.h"
 #import "CSCommentRealmModel.h"
 
-@interface CustomFooterCell : UITableViewCell
-
+@interface CustomFooterCell : UIView
 @property (weak, nonatomic) IBOutlet UITextField *commentField;
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
 @property (weak, nonatomic) RLMRealm* realm;

@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 
 @property RLMArray<CSCommentRealmModel> *comments;
 
+
+
 // Task persistence properties
 @property NSString* UUID;
 @property NSString* deviceID;
