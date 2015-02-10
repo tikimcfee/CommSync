@@ -12,11 +12,17 @@
 #import "UIImage+normalize.h"
 #import "CSCommentRealmModel.h"
 
+#import "SZTextView.h"
+
+#import "CSAudioPlotViewController.h"
+
 #import <Realm/Realm.h>
 
 @interface CSTaskCreationViewController()
+
+// Main view
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
-@property (strong, nonatomic) IBOutlet UITextView *descriptionTextField;
+@property (strong, nonatomic) IBOutlet SZTextView *descriptionTextField;
 @property (strong, nonatomic) IBOutlet UIButton *lowPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *mediumPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *highPriorityButton;
@@ -24,6 +30,9 @@
 
 // Image picker
 @property (strong, nonatomic) UIImagePickerController* imagePicker;
+
+// VC for audio recording
+@property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
 
 @property (weak, nonatomic) RLMRealm* realm;
 @property (strong, nonatomic) CSTaskRealmModel *pendingTask;
@@ -56,6 +65,7 @@
         _pendingTask.UUID = U;
         _pendingTask.deviceID = D;
         _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
+        self.descriptionTextField.placeholder = @"Enter description here...";
     }
     
     else{
@@ -135,6 +145,9 @@
     if(!_taskScreen){
         self.pendingTask.taskTitle = self.titleTextField.text;
         self.pendingTask.taskDescription = self.descriptionTextField.text;
+        
+        NSData* audio = [NSData dataWithContentsOfURL:self.audioRecorder.fileOutputURL];
+        NSLog(@"Audio length turned out to be : %ldkb", audio.length / 1024);
     
         NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.pendingTask.TRANSIENT_taskImages.count];
             for(UIImage* image in self.pendingTask.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
@@ -164,6 +177,13 @@
     [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"CSAudioPlotViewController"]) {
+        self.audioRecorder = (CSAudioPlotViewController*)[segue destinationViewController];
+        self.audioRecorder.fileNameSansExtension = self.pendingTask.concatenatedID;
+    }
 }
 
 - (BOOL) prefersStatusBarHidden

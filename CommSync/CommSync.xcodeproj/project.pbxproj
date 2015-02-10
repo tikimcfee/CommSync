@@ -10,6 +10,7 @@
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
 		3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F96AB581A86D036000A50F4 /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
+		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
 		4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4562F2051A78927200090005 /* CSTaskRealmModel.m */; };
@@ -19,6 +20,7 @@
 		459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */; };
 		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
+		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		7439A51E1A82A786007D0D79 /* UIImage+normalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7439A51D1A82A786007D0D79 /* UIImage+normalize.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
@@ -64,6 +66,8 @@
 		3F96AB591A86D036000A50F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
+		45190C2E1A89BD360030CB05 /* SZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZTextView.h; sourceTree = "<group>"; };
+		45190C2F1A89BD360030CB05 /* SZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SZTextView.m; sourceTree = "<group>"; };
 		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
 		454D92091A78581F000B74A8 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4562F2041A78927200090005 /* CSTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRealmModel.h; path = Models/CSTaskRealmModel.h; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 		459D5F7E19DB449900C91EFA /* CommSync.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CommSync.xcdatamodel; sourceTree = "<group>"; };
 		459D5F8619DB449900C91EFA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioPlotViewController.h; path = ViewControllers/TaskList/CSAudioPlotViewController.h; sourceTree = "<group>"; };
+		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		7439A51C1A82A786007D0D79 /* UIImage+normalize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+normalize.h"; path = "Categories/UIImage+normalize.h"; sourceTree = "<group>"; };
@@ -189,18 +195,37 @@
 			name = "Task Detail";
 			sourceTree = "<group>";
 		};
-		454D92061A7857AA000B74A8 /* Frameworks */ = {
+		45190C2C1A89BD130030CB05 /* iOS Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				746F6AAE1A892613007A83E8 /* EZAudio */,
 				746F6A801A891DDC007A83E8 /* Foundation.framework */,
 				746F6A7E1A891DD4007A83E8 /* CoreGraphics.framework */,
 				746F6A7C1A891DCC007A83E8 /* AVFoundation.framework */,
 				746F6A7A1A891DC7007A83E8 /* AudioToolbox.framework */,
 				746F6A781A891DB5007A83E8 /* GLKit.framework */,
 				74DB14CD1A7FDDE500ECBADB /* UIKit.framework */,
-				74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */,
+			);
+			name = "iOS Frameworks";
+			sourceTree = "<group>";
+		};
+		45190C2D1A89BD360030CB05 /* SZTextView */ = {
+			isa = PBXGroup;
+			children = (
+				45190C2E1A89BD360030CB05 /* SZTextView.h */,
+				45190C2F1A89BD360030CB05 /* SZTextView.m */,
+			);
+			name = SZTextView;
+			path = ThirdParty/SZTextView;
+			sourceTree = "<group>";
+		};
+		454D92061A7857AA000B74A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45190C2D1A89BD360030CB05 /* SZTextView */,
+				45190C2C1A89BD130030CB05 /* iOS Frameworks */,
 				454D92071A7857CD000B74A8 /* Realm.framework */,
+				746F6AAE1A892613007A83E8 /* EZAudio */,
+				74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -412,6 +437,8 @@
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
 				3F416E641A86A6EC00EDC347 /* Task Detail */,
+				45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */,
+				45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */,
 			);
 			name = TaskList;
 			sourceTree = "<group>";
@@ -442,7 +469,7 @@
 		459D5F6B19DB449900C91EFA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = AppsByDLI;
 				TargetAttributes = {
 					459D5F7219DB449900C91EFA = {
@@ -505,6 +532,7 @@
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
 				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
+				45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
 				74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */,
@@ -522,6 +550,7 @@
 				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				746F6AD11A892613007A83E8 /* EZMicrophone.m in Sources */,
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
+				45190C301A89BD360030CB05 /* SZTextView.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
 				3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */,
@@ -586,7 +615,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
