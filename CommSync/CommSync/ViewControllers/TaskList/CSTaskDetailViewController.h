@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
 
-@interface CSTaskDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+#import <AVFoundation/AVFoundation.h>
+
+@interface CSTaskDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate>
 {
     
 }

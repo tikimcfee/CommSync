@@ -13,10 +13,10 @@
 #import <Realm/Realm.h>
 #import "CSTaskCreationViewController.h"
 
-#import <AVFoundation/AVFoundation.h>
-
 @interface CSTaskDetailViewController ()
 @property (strong, nonatomic) IBOutlet UIImageView *taskImage;
+
+@property (strong, nonatomic) AVAudioPlayer* audioPlayer;
 
 @end
 
@@ -33,11 +33,23 @@
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     
+    
+    NSData* audioData = self.sourceTask.taskAudio;
+    NSError* error;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
+    [self.audioPlayer play];
+    
+    self.audioPlayer.delegate = self;
+    
 //    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
 //        if(didFinish) {
 //            //[self setImagesFromTask];
 //        }
 //    }];
+}
+
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.audioPlayer = nil;
 }
 
 //header size just a temp value
