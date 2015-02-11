@@ -148,6 +148,7 @@
         
         NSData* audio = [NSData dataWithContentsOfURL:self.audioRecorder.fileOutputURL];
         NSLog(@"Audio length turned out to be : %ldkb", audio.length / 1024);
+        self.pendingTask.taskAudio = audio;
     
         NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.pendingTask.TRANSIENT_taskImages.count];
             for(UIImage* image in self.pendingTask.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task

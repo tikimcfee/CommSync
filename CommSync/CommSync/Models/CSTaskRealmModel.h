@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 
 // Task media
 @property NSData* taskImages_NSDataArray_JPEG;
+@property NSData* taskAudio;
 @property (strong, nonatomic) NSMutableArray* TRANSIENT_taskImages;
 
 //@property id taskAudio;

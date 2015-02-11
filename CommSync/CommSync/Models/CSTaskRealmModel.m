@@ -32,7 +32,14 @@
         } else {
             NSMutableArray* tempArrayOfImages = [NSMutableArray new];
             NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
-           self.taskImages_NSDataArray_JPEG = archivedImages;
+            self.taskImages_NSDataArray_JPEG = archivedImages;
+        }
+        id taskAudio_DATA = [aDecoder decodeObjectForKey:@"taskAudio"];
+        if(taskAudio_DATA) {
+            self.taskAudio = taskAudio_DATA;
+        } else {
+            NSData* empty = [NSData data];
+            self.taskAudio = empty;
         }
     }
     return self;
@@ -52,8 +59,9 @@
     // This is ALL KINDS OF EXTREMELY INEFFICIENT!
     // We should not rearchive and reconvert images we have already worked with
     [self resetImageDataForTask];
+    [aCoder encodeObject:self.taskImages_NSDataArray_JPEG forKey:@"taskImages"];
     
-    [aCoder encodeObject:self.taskImages_NSDataArray_JPEG forKey:@"taskImages"]; // encode the object and pray
+    [aCoder encodeObject:self.taskAudio forKey:@"taskAudio"];
 }
 
 #pragma mark - Realm modeling protocol
@@ -70,7 +78,10 @@
     NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
     NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
     
-    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages};
+    NSData* emptyAudio = [NSData data];
+    
+    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages,
+                 @"taskAudio":emptyAudio};
     
     return defaults;
 }
