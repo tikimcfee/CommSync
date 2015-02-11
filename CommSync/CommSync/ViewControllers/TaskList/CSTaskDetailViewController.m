@@ -29,7 +29,10 @@
    // self.descriptionLabel.text = self.sourceTask.taskDescription;
     self.navigationBar.title = self.sourceTask.taskTitle;
     //scroll to bottom
-    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
+   // [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
+    
+    
+    _tableView.tableHeaderView = _headerView;
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
         if(didFinish) {
             //[self setImagesFromTask];
@@ -40,7 +43,7 @@
 //header size just a temp value
 
 //-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    //return 100;
+//    return 100;
 //}
 
 //initiate the header
@@ -138,11 +141,11 @@
 
 
 - (IBAction)increaseHeight:(id)sender {
-    _heightConst.constant = 200;
+  //  _heightConst.constant = 200;
 }
 
 - (IBAction)decreaseHeight:(id)sender {
-    _heightConst.constant = 50;
+   // _heightConst.constant = 50;
 }
 
 
@@ -167,6 +170,20 @@
 - (IBAction)editTask:(id)sender {
     [self performSegueWithIdentifier:@"editModal" sender:self];
 }
+
+
+
+
+
+/*
+- (void)keyboardWasShown:(NSNotification*)aNotification {
+    NSLog(@"keyboard shown");
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    _heightConst.constant += kbSize.height;
+
+    //[_tableView setContentOffset:CGPointMake(0.0, activeField.frame.origin.y-kbSize.height) animated:YES];
+} */
 
 //sends a reference to the current view controller to the create page so that it can be modified
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

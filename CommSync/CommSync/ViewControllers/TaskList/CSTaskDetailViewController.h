@@ -36,6 +36,7 @@
 
 - (IBAction)addComment:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIView *headerView;
 - (IBAction)editTask:(id)sender;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
 @end
