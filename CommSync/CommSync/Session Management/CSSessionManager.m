@@ -9,7 +9,9 @@
 #import "CSSessionManager.h"
 #import "AppDelegate.h"
 #import <Realm/Realm.h>
+
 #import "CSTaskRealmModel.h"
+#import "CSTaskTransientObjectStore.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -173,14 +175,15 @@
     MCSession* inviteSession = _currentSession;
     
     // Task list as discovery info
-    RLMResults* allTasks = [CSTaskRealmModel allObjects];
-    NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
-    for(CSTaskRealmModel* t in allTasks)
-        [taskDataStore addObject:t];
     
-    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+//    RLMResults* allTasks = [CSTaskRealmModel allObjects];
+//    NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
+//    for(CSTaskRealmModel* t in allTasks)
+//        [taskDataStore addObject:t];
+//    
+//    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
 
-    [browser invitePeer:peerID toSession:inviteSession withContext:contextData timeout:linkDeadTime];
+    [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
 }
@@ -260,9 +263,10 @@
     else
     {
         id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        
         NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
         
-        if([receivedObject isKindOfClass:[CSTaskRealmModel class]])
+        if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
         {
             //
             [self batchUpdateRealmWithTasks:@[receivedObject]];
@@ -285,17 +289,20 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         RLMResults *results = [CSTaskRealmModel allObjects];
-        [_realm beginWriteTransaction];
-        for(CSTaskRealmModel* task in tasks)
+//        [_realm beginWriteTransaction];
+//        for(CSTaskRealmModel* task in tasks)
+        for(CSTaskTransientObjectStore* task in tasks)
         {
             NSPredicate *uniqueTaskPredicate = [NSPredicate predicateWithFormat:@"concatenatedID == %@", task.concatenatedID];
             if([results objectsWithPredicate:uniqueTaskPredicate].count == 0) {
-                [_realm addObject:task];
+//                [_realm addOrUpdateObject:task];
+                CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
+                [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm];
             } else {
                 NSLog(@"Duplicate task not being stored");
             }
         }
-        [_realm commitWriteTransaction];
+//        [_realm commitWriteTransaction];
     });
 }
 
@@ -311,22 +318,22 @@
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
-            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-            {
-
-                RLMResults* allTasks = [CSTaskRealmModel allObjects];
-                NSMutableArray* taskList = [NSMutableArray arrayWithCapacity:allTasks.count];
-                for(CSTaskRealmModel* t in taskList)
-                    [taskList addObject:t];
-                
-                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
-                
-                [self sendDataPacketToPeers:contextData];
-                
-                NSTemporaryDirectory();
-                
-                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-            }
+//            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+//            {
+//
+//                RLMResults* allTasks = [CSTaskRealmModel allObjects];
+//                NSMutableArray* taskList = [NSMutableArray arrayWithCapacity:allTasks.count];
+//                for(CSTaskRealmModel* t in taskList)
+//                    [taskList addObject:t];
+//                
+//                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
+//                
+//                [self sendDataPacketToPeers:contextData];
+//                
+//                NSTemporaryDirectory();
+//                
+//                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+//            }
             stateString = kUserConnectedNotification;
             break;
         default:

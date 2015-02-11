@@ -10,6 +10,8 @@
 #import <Realm/Realm.h>
 #import "CSCommentRealmModel.h"
 
+@class CSTaskTransientObjectStore;
+
 typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
     CSTaskPriorityLow = 0,
@@ -17,11 +19,9 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
     CSTaskPriorityHigh
 };
 
-@interface CSTaskRealmModel : RLMObject <NSCoding, UIImagePickerControllerDelegate>
+@interface CSTaskRealmModel : RLMObject
 
 @property RLMArray<CSCommentRealmModel> *comments;
-
-
 
 // Task persistence properties
 @property NSString* UUID;
@@ -36,14 +36,9 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 // Task media
 @property NSData* taskImages_NSDataArray_JPEG;
 @property NSData* taskAudio;
-@property (strong, nonatomic) NSMutableArray* TRANSIENT_taskImages;
-
-//@property id taskAudio;
-//@property id taskVideo;
-//@property id taskAttachmentData;
-
-- (void) getAllImagesForTaskWithCompletionBlock:(void (^)(BOOL))completion;
 
 - (void) addComment: (CSCommentRealmModel *) newComment;
+
+- (CSTaskTransientObjectStore*) getTransientObjectForModel;
 
 @end

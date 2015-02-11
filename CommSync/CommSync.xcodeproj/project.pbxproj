@@ -43,6 +43,7 @@
 		746F6AD61A892613007A83E8 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC81A892613007A83E8 /* CHANGELOG */; };
 		746F6AD71A892613007A83E8 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC91A892613007A83E8 /* VERSION */; };
 		746F6ADA1A8926AA007A83E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746F6A7C1A891DCC007A83E8 /* AVFoundation.framework */; };
+		74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */; };
 		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
 		74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D11A7FDE4300ECBADB /* Connection.m */; };
 		74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D41A7FDE4300ECBADB /* JKConnection.m */; };
@@ -122,6 +123,8 @@
 		746F6AC81A892613007A83E8 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		746F6AC91A892613007A83E8 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		746F6ADB1A8927EE007A83E8 /* CommSync-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommSync-Prefix.pch"; sourceTree = "<group>"; };
+		74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskTransientObjectStore.h; path = Models/CSTaskTransientObjectStore.h; sourceTree = "<group>"; };
+		74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskTransientObjectStore.m; path = Models/CSTaskTransientObjectStore.m; sourceTree = "<group>"; };
 		74DB14CD1A7FDDE500ECBADB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		74DB14D01A7FDE4300ECBADB /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
 		74DB14D11A7FDE4300ECBADB /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
@@ -420,6 +423,8 @@
 			isa = PBXGroup;
 			children = (
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
+				74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */,
+				74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */,
 				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
@@ -530,6 +535,7 @@
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
 				746F6ACC1A892613007A83E8 /* EZAudioFile.m in Sources */,
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
+				74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */,
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
 				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
 				45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */,
@@ -674,7 +680,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9497ec39-4157-4325-96ff-d44273980c52";
+				PROVISIONING_PROFILE = "5d75ff6b-8a22-4443-8afa-892a0f537da3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -694,7 +700,7 @@
 				INFOPLIST_FILE = CommSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9497ec39-4157-4325-96ff-d44273980c52";
+				PROVISIONING_PROFILE = "5d75ff6b-8a22-4443-8afa-892a0f537da3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

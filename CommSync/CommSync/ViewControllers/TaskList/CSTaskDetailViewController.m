@@ -13,6 +13,8 @@
 #import <Realm/Realm.h>
 #import "CSTaskCreationViewController.h"
 
+#import <AVFoundation/AVFoundation.h>
+
 @interface CSTaskDetailViewController ()
 @property (strong, nonatomic) IBOutlet UIImageView *taskImage;
 
@@ -30,11 +32,12 @@
     self.navigationBar.title = self.sourceTask.taskTitle;
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
-    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
-        if(didFinish) {
-            //[self setImagesFromTask];
-        }
-    }];
+    
+//    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
+//        if(didFinish) {
+//            //[self setImagesFromTask];
+//        }
+//    }];
 }
 
 //header size just a temp value
@@ -128,12 +131,13 @@
 
 # pragma mark - Callbacks and UI State
 - (void)setImagesFromTask {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.sourceTask.TRANSIENT_taskImages.count > 0) {
-            UIImage* img = [self.sourceTask.TRANSIENT_taskImages objectAtIndex:0];
-            self.taskImage.image = img;
-        }
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (self.sourceTask.TRANSIENT_taskImages.count > 0) {
+//            UIImage* img = [self.sourceTask.TRANSIENT_taskImages objectAtIndex:0];
+//            self.taskImage.image = img;
+//        }
+//    });
+    
 }
 
 
