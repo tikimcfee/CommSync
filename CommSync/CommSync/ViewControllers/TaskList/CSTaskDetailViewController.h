@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
 
-@interface CSTaskDetailViewController : UITableViewController
+@interface CSTaskDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
     
 }
@@ -19,16 +19,22 @@
 @property (weak, nonatomic) IBOutlet UILabel *priorityLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityColor;
+@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
 //Footer Items
 @property (weak, nonatomic) IBOutlet UITextField *commentField;
-- (IBAction)addComment:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIView *footerView;
 
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
-- (IBAction)resfresh:(id)sender;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConst;
+- (IBAction)increaseHeight:(id)sender;
+@property (weak, nonatomic) IBOutlet UITextField *decreaseHeight;
+- (IBAction)increase:(id)sender;
+
+- (IBAction)addComment:(id)sender;
 
 - (IBAction)editTask:(id)sender;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;

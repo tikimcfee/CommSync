@@ -23,10 +23,13 @@
 #pragma mark - Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     //self.titleLabel.text = self.sourceTask.taskTitle;
    // self.descriptionLabel.text = self.sourceTask.taskDescription;
-    self.navigationBar.title = self.sourceTask.taskTitle;
+    self.navigationBar.topItem.title = self.sourceTask.taskTitle;
+    //scroll to bottom
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
         if(didFinish) {
             //[self setImagesFromTask];
@@ -76,6 +79,8 @@
 
 //as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    //scroll to bottom
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     return [self.sourceTask.comments count];
 }
 
@@ -86,7 +91,7 @@
     
     CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
-    
+    NSLog(@"loading cell");
     
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"HH:mm:ss"];
@@ -103,10 +108,11 @@
 //footer size
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0;
+   return 0;
 }
 
 //initiate the header
+
 -(UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     CustomFooterCell* footerCell = [[CustomFooterCell alloc] init];
@@ -131,11 +137,35 @@
 }
 
 
-- (IBAction)resfresh:(id)sender {
-      [self.tableView reloadData];
+- (IBAction)increaseHeight:(id)sender {
+    _heightConst.constant = 200;
+}
+
+- (IBAction)decreaseHeight:(id)sender {
+    _heightConst.constant = 50;
+}
+
+- (IBAction)increase:(id)sender {
+    _heightConst.constant = 200;
 }
 
 
+- (IBAction)addComment:(id)sender {
+    if([_commentField.text  isEqual: @""]) return;
+    
+    NSLog(@"addcomment");
+    CSCommentRealmModel *comment = [CSCommentRealmModel new];
+    comment.UID = @"Temp ID";
+    comment.text = _commentField.text;
+    comment.time = [NSDate date];
+   // _heightConst.constant = 50;
+    
+    [_commentField setText:nil];
+    [_sourceTask addComment:comment];
+    [self.tableView reloadData];
+    
+    
+    }
 //pushes a modal edit view on top
 - (IBAction)editTask:(id)sender {
     [self performSegueWithIdentifier:@"editModal" sender:self];
@@ -151,18 +181,5 @@
             [vc setTaskScreen:sender];
         }
     }
-}
-- (IBAction)addComment:(id)sender {
-    if([_commentField.text  isEqual: @""]) return;
-    
-    NSLog(@"addcomment");
-    CSCommentRealmModel *comment = [CSCommentRealmModel new];
-    comment.UID = @"Temp ID";
-    comment.text = _commentField.text;
-    comment.time = [NSDate date];
-    
-    
-    [_sourceTask addComment:comment];
-    
 }
 @end

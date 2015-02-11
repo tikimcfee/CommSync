@@ -170,7 +170,7 @@
         _taskScreen.sourceTask.taskDescription = self.descriptionTextField.text;
         _taskScreen.sourceTask.taskPriority = _pendingTask.taskPriority;
         [_realm commitWriteTransaction];
-        [_taskScreen.tableView reloadData];
+       // [_taskScreen.tableView reloadData];
     }
     
     AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
