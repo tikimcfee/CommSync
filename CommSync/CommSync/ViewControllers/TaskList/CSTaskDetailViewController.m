@@ -27,7 +27,7 @@
     // Do any additional setup after loading the view.
     //self.titleLabel.text = self.sourceTask.taskTitle;
    // self.descriptionLabel.text = self.sourceTask.taskDescription;
-    self.navigationBar.topItem.title = self.sourceTask.taskTitle;
+    self.navigationBar.title = self.sourceTask.taskTitle;
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
@@ -145,9 +145,6 @@
     _heightConst.constant = 50;
 }
 
-- (IBAction)increase:(id)sender {
-    _heightConst.constant = 200;
-}
 
 
 - (IBAction)addComment:(id)sender {
@@ -158,7 +155,7 @@
     comment.UID = @"Temp ID";
     comment.text = _commentField.text;
     comment.time = [NSDate date];
-   // _heightConst.constant = 50;
+    _heightConst.constant = 50;
     
     [_commentField setText:nil];
     [_sourceTask addComment:comment];

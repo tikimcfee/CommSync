@@ -428,7 +428,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oaU-GL-ADl" userLabel="Description">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oaU-GL-ADl" userLabel="Description">
                                         <rect key="frame" x="8" y="42" width="580" height="105"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -536,6 +536,15 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="zIB-rK-eDC">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="oJe-eR-Aby" userLabel="Edit">
+                            <connections>
+                                <segue destination="t1M-XD-1IS" kind="popoverPresentation" identifier="editModal" popoverAnchorBarButtonItem="oJe-eR-Aby" id="4cY-yL-21O">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -544,6 +553,7 @@
                         <outlet property="descriptionLabel" destination="oaU-GL-ADl" id="VfN-kG-Tyw"/>
                         <outlet property="footerView" destination="4Mh-NZ-J8m" id="fST-RD-22j"/>
                         <outlet property="heightConst" destination="Yd6-UR-ndu" id="P8P-hD-i2y"/>
+                        <outlet property="navigationBar" destination="zIB-rK-eDC" id="TSY-mc-mNg"/>
                         <outlet property="priorityColor" destination="K0D-Zy-4OQ" id="bve-QD-H3K"/>
                         <outlet property="priorityLabel" destination="1Ro-vM-Sjc" id="9Om-G4-LTc"/>
                         <outlet property="tableView" destination="gib-tP-h9q" id="Xur-wC-nCM"/>
@@ -662,4 +672,7 @@
     <resources>
         <image name="Play Button" width="56" height="56"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="4cY-yL-21O"/>
+    </inferredMetricsTieBreakers>
 </document>

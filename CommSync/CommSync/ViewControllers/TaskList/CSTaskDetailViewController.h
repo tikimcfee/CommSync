@@ -19,11 +19,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *priorityLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityColor;
-@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
 //Footer Items
 @property (weak, nonatomic) IBOutlet UITextField *commentField;
 
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 @property (weak, nonatomic) IBOutlet UIView *footerView;
 
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
