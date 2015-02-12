@@ -13,13 +13,31 @@
 #define kConcatenatedID @"kConcatenatedID"
 #define kTaskTitle @"kTaskTitle"
 #define kTaskPriority @"kTaskPriority"
-#define kTaskDescription @"kTaskPriority"
+#define kTaskDescription @"kTaskDescription"
 #define kTaskImages @"kTaskImages"
 #define kTaskAudio @"taskAudio"
 
 @implementation CSTaskTransientObjectStore
 
 #pragma mark - Lifecycle
+- (id)initWithRealmModel:(CSTaskRealmModel*)model {
+    
+    if(self = [super init]) {
+        self.UUID = model.UUID;
+        self.deviceID = model.deviceID;
+        self.concatenatedID = model.concatenatedID;
+        
+        self.taskTitle = model.taskTitle;
+        self.taskDescription = model.taskDescription;
+        self.taskPriority = model.taskPriority;
+        
+        self.taskAudio = model.taskAudio;
+        self.taskImages_NSDataArray_JPEG = model.taskImages_NSDataArray_JPEG;
+    }
+    
+    return self;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init]) {
@@ -69,8 +87,10 @@
 #pragma mark - Persistence indirection layer
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
                                        inRealm:(RLMRealm*)realm
+                               withTransaction:(BOOL)transcation
 {
-    [realm beginWriteTransaction];
+    if(transcation)
+        [realm beginWriteTransaction];
     
     model.UUID = self.UUID;
     model.deviceID = self.deviceID;
@@ -83,14 +103,14 @@
     // Compute task images on the fly
     NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.TRANSIENT_taskImages.count];
     for(UIImage* image in self.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
-
+        
         NSLog(@"New size after normalization only is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
         NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
         NSLog(@"New size after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
-
+        
         [tempArrayOfImages addObject:thisImage]; // add it to our container
     }
-
+    
     NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
     model.taskImages_NSDataArray_JPEG = archivedImages;
     
@@ -99,7 +119,14 @@
     
     [realm addObject:model];
     
-    [realm commitWriteTransaction];
+    if(transcation)
+        [realm commitWriteTransaction];
+}
+
+- (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
+                                       inRealm:(RLMRealm*)realm
+{
+    [self setAndPersistPropertiesOfNewTaskObject:model inRealm:realm withTransaction:YES];
 }
 
 #pragma mark - ASYNC callbacks

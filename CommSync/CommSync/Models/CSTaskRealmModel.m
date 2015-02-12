@@ -39,6 +39,16 @@
 
 #pragma mark - Accessors and Helpers
 
++ (NSMutableArray*)getTransientTaskList {
+    RLMResults* allTasks = [CSTaskRealmModel allObjects];
+    NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
+    for(CSTaskRealmModel* t in allTasks) {
+        [taskDataStore addObject: [[CSTaskTransientObjectStore alloc] initWithRealmModel:t]];
+    }
+    
+    return taskDataStore;
+}
+
 - (void) addComment: (CSCommentRealmModel *) newComment{
    
     RLMRealm* realm = [RLMRealm defaultRealm];

@@ -28,7 +28,16 @@
 @property (strong, nonatomic) NSData* taskImages_NSDataArray_JPEG;
 
 
+
+- (id)initWithRealmModel:(CSTaskRealmModel*)model;
+
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
                                        inRealm:(RLMRealm*)realm;
+
+- (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
+                                       inRealm:(RLMRealm*)realm
+                               withTransaction:(BOOL)transcation;
+
+
 
 @end

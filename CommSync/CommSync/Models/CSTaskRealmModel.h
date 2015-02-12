@@ -40,5 +40,6 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 - (void) addComment: (CSCommentRealmModel *) newComment;
 
 - (CSTaskTransientObjectStore*) getTransientObjectForModel;
++ (NSMutableArray*) getTransientTaskList;
 
 @end
