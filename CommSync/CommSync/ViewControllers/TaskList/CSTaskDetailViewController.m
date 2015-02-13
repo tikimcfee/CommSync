@@ -31,8 +31,13 @@
     //scroll to bottom
    // [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     
+    [_commentField setDelegate:self];
     
     _tableView.tableHeaderView = _headerView;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
         if(didFinish) {
             //[self setImagesFromTask];
@@ -83,7 +88,7 @@
 //as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     //scroll to bottom
-    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
     return [self.sourceTask.comments count];
 }
 
@@ -140,16 +145,6 @@
 }
 
 
-- (IBAction)increaseHeight:(id)sender {
-  //  _heightConst.constant = 200;
-}
-
-- (IBAction)decreaseHeight:(id)sender {
-   // _heightConst.constant = 50;
-}
-
-
-
 - (IBAction)addComment:(id)sender {
     if([_commentField.text  isEqual: @""]) return;
     
@@ -157,8 +152,8 @@
     CSCommentRealmModel *comment = [CSCommentRealmModel new];
     comment.UID = @"Temp ID";
     comment.text = _commentField.text;
+    //comment.text = @"asdfasdFSAD";
     comment.time = [NSDate date];
-    _heightConst.constant = 50;
     
     [_commentField setText:nil];
     [_sourceTask addComment:comment];
@@ -174,17 +169,6 @@
 
 
 
-
-/*
-- (void)keyboardWasShown:(NSNotification*)aNotification {
-    NSLog(@"keyboard shown");
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    _heightConst.constant += kbSize.height;
-
-    //[_tableView setContentOffset:CGPointMake(0.0, activeField.frame.origin.y-kbSize.height) animated:YES];
-} */
-
 //sends a reference to the current view controller to the create page so that it can be modified
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"editModal"])
@@ -196,4 +180,33 @@
         }
     }
 }
+
+
+
+
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [_commentField resignFirstResponder];
+    return YES;
+}
+
+
+- (void)keyboardDidShow:(NSNotification *)sender {
+    CGRect frame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect newFrame = [self.view convertRect:frame fromView:[[UIApplication sharedApplication] delegate].window];
+    
+    [self.view layoutIfNeeded];
+    _heightConst.constant = newFrame.size.height;
+    [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
+    NSLog(@"show");
+}
+
+- (void)keyboardWillHide:(NSNotification *)sender {
+    [self.view layoutIfNeeded];
+    _heightConst.constant = 50;
+    [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
+    NSLog(@"dissapear");
+}
+
 @end

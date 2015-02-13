@@ -30,13 +30,15 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConst;
-- (IBAction)increaseHeight:(id)sender;
-@property (weak, nonatomic) IBOutlet UITextField *decreaseHeight;
-- (IBAction)increase:(id)sender;
 
 - (IBAction)addComment:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 - (IBAction)editTask:(id)sender;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
+
+-(void)keyboardWillHide:(NSNotification *) sender;
+-(void)keyboardDidShow:(NSNotification *) sender;
+
+
 @end
