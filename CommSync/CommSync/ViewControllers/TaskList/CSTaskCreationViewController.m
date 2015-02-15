@@ -60,20 +60,11 @@
     
     _realm = [RLMRealm defaultRealm];
     self.pendingTask = [[CSTaskRealmModel alloc] init];
-    if(!_taskScreen){
-        NSLog(@"asdfasdf");
-        _pendingTask.UUID = U;
-        _pendingTask.deviceID = D;
-        _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
-        self.descriptionTextField.placeholder = @"Enter description here...";
-    }
-    
-    else{
-        _titleTextField.text = _taskScreen.sourceTask.taskTitle;
-        _descriptionTextField.text = _taskScreen.sourceTask.taskDescription;
-        //_acceptButton.text = @"change";
-    }
-    
+  
+    _pendingTask.UUID = U;
+    _pendingTask.deviceID = D;
+    _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
+    self.descriptionTextField.placeholder = @"Enter description here...";
 }
 
 
@@ -142,7 +133,7 @@
 }
 - (IBAction)closeViewAndSave:(id)sender {
     
-    if(!_taskScreen){
+
         self.pendingTask.taskTitle = self.titleTextField.text;
         self.pendingTask.taskDescription = self.descriptionTextField.text;
         
@@ -162,16 +153,7 @@
         [_realm addObject:self.pendingTask];
         [_realm commitWriteTransaction];
     
-    }
     
-    else{
-        [_realm beginWriteTransaction];
-        _taskScreen.sourceTask.taskTitle = self.titleTextField.text;
-        _taskScreen.sourceTask.taskDescription = self.descriptionTextField.text;
-        _taskScreen.sourceTask.taskPriority = _pendingTask.taskPriority;
-        [_realm commitWriteTransaction];
-       // [_taskScreen.tableView reloadData];
-    }
     
     AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];

@@ -13,5 +13,4 @@
 @interface CSTaskCreationViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 
-@property (strong, nonatomic) CSTaskDetailViewController *taskScreen;
 @end

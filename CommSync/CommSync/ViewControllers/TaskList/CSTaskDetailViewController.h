@@ -15,7 +15,8 @@
 }
 
 //Header Items
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
+@property (weak, nonatomic) IBOutlet UITextField *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityColor;
@@ -34,11 +35,17 @@
 - (IBAction)addComment:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
-- (IBAction)editTask:(id)sender;
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
 
 -(void)keyboardWillHide:(NSNotification *) sender;
 -(void)keyboardDidShow:(NSNotification *) sender;
 
+- (IBAction)editMode:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (weak, nonatomic) IBOutlet UIButton *greenButton;
+@property (weak, nonatomic) IBOutlet UIButton *yellowButton;
+@property (weak, nonatomic) IBOutlet UIButton *redButton;
+- (IBAction)setRed:(id)sender;
+- (IBAction)setGreen:(id)sender;
+- (IBAction)setYellow:(id)sender;
 
 @end

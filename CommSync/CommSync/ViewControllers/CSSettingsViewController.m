@@ -154,6 +154,7 @@
     
     cell.textLabel.text = self.settingsList[indexPath.row];
     
+    
     return cell;
 }
 

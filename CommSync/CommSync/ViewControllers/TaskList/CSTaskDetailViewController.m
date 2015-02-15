@@ -25,18 +25,16 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view.
-    //self.titleLabel.text = self.sourceTask.taskTitle;
-   // self.descriptionLabel.text = self.sourceTask.taskDescription;
-    self.navigationBar.title = self.sourceTask.taskTitle;
-    //scroll to bottom
-   // [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
+    self.navigationBar.title = @"Task Details";
     
+    //create delegate and receptors
     [_commentField setDelegate:self];
     
     _tableView.tableHeaderView = _headerView;
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    
+    [_titleLabel setEnabled:NO];
     
     [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
         if(didFinish) {
@@ -45,37 +43,36 @@
     }];
 }
 
-//header size just a temp value
-
-//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    return 100;
-//}
-
 //initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     //creates the header
     CustomHeaderCell* headerCell = [[CustomHeaderCell alloc] init];
     
-    //sets the
+    //sets the items
     _titleLabel.text = self.sourceTask.taskTitle;
     _descriptionLabel.text = self.sourceTask.taskDescription;
     _priorityLabel.text = self.sourceTask.taskTitle;
     
+    
+    //priority label case
     switch (self.sourceTask.taskPriority) {
         case 2:
             _priorityColor.backgroundColor = [UIColor redColor];
+            _redButton.alpha = 1;
             _priorityLabel.text = @"High Priority";
             break;
         
         case 1:
            _priorityColor.backgroundColor = [UIColor yellowColor];
+            _yellowButton.alpha = 1;
            _priorityLabel.text = @"Standard Priority";
             break;
         
         //if green is selected or nothing is selected the task defaults to low priority
         default:
            _priorityColor.backgroundColor = [UIColor greenColor];
+            _greenButton.alpha  = 1;
            _priorityLabel.text = @"Low Priority";
             break;
     }
@@ -87,8 +84,8 @@
 
 //as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    //scroll to bottom
-    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
+    
+    if( [_titleLabel isEnabled] ) return 0;
     return [self.sourceTask.comments count];
 }
 
@@ -96,37 +93,19 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
-    
     CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
-    NSLog(@"loading cell");
-    
+    //formates the time string
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"HH:mm:ss"];
     NSString *newDateString = [outputFormatter stringFromDate:comment.time];
     
-    
+    //sets the comments text
     cell.textLabel.text = [NSString stringWithFormat: @"(ID: %@) %@ time %@", comment.UID, comment.text, newDateString];
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12];
-    //cell.textLabel.text = comment.text;
+    
     return cell;
 }
-
-
-//footer size
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-   return 0;
-}
-
-//initiate the header
-
--(UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    CustomFooterCell* footerCell = [[CustomFooterCell alloc] init];
-    return footerCell;
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -148,43 +127,23 @@
 - (IBAction)addComment:(id)sender {
     if([_commentField.text  isEqual: @""]) return;
     
-    NSLog(@"addcomment");
+    //creates comment
     CSCommentRealmModel *comment = [CSCommentRealmModel new];
     comment.UID = @"Temp ID";
     comment.text = _commentField.text;
-    //comment.text = @"asdfasdFSAD";
     comment.time = [NSDate date];
     
+    //stores comment and reloads screen to show comment
     [_commentField setText:nil];
     [_sourceTask addComment:comment];
     [self.tableView reloadData];
     
-    
-    }
-//pushes a modal edit view on top
-- (IBAction)editTask:(id)sender {
-    [self performSegueWithIdentifier:@"editModal" sender:self];
+    //scrolls table to new comment
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
 }
 
 
-
-
-//sends a reference to the current view controller to the create page so that it can be modified
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"editModal"])
-    {
-        CSTaskCreationViewController *vc = [segue destinationViewController];
-        if ([sender isKindOfClass:[CSTaskDetailViewController class]])
-        {
-            [vc setTaskScreen:sender];
-        }
-    }
-}
-
-
-
-
-
+//dismisses keyboared when enter is hit
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [_commentField resignFirstResponder];
@@ -192,21 +151,94 @@
 }
 
 
+//the keyboard shows up
 - (void)keyboardDidShow:(NSNotification *)sender {
+    if(_titleLabel.isEnabled) return;
+    //get the size of the keyboard
     CGRect frame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect newFrame = [self.view convertRect:frame fromView:[[UIApplication sharedApplication] delegate].window];
     
+    //animate view moving uop
     [self.view layoutIfNeeded];
     _heightConst.constant = newFrame.size.height;
     [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
-    NSLog(@"show");
+}
+
+- (IBAction)editMode:(id)sender {
+    
+    if(![_titleLabel isEnabled]){
+        
+        [_titleLabel setEnabled:YES];
+        [_titleLabel setBackgroundColor: [UIColor lightGrayColor]];
+        [_descriptionLabel setEditable:YES];
+        [_descriptionLabel setBackgroundColor: [UIColor lightGrayColor]];
+        [_editButton setTitle:@"Save"];
+      
+        [_priorityColor setHidden:YES];
+        [self.tableView reloadData];
+        [_footerView setHidden:YES];
+        
+        [_greenButton setHidden:NO];
+        [_yellowButton setHidden:NO];
+        [_redButton setHidden:NO];
+        
+    }
+    
+    else{
+        RLMRealm* realm = [RLMRealm defaultRealm];
+    
+    
+        [realm beginWriteTransaction];
+        [ _sourceTask setTaskTitle:_titleLabel.text];
+        [_sourceTask setTaskDescription:_descriptionLabel.text];
+        [_titleLabel setBackgroundColor: [UIColor whiteColor]];
+        [_descriptionLabel setBackgroundColor: [UIColor whiteColor]];
+        
+        
+        
+        if(_redButton.alpha == 1) [_sourceTask setTaskPriority:2];
+        else if (_yellowButton.alpha == 1) [_sourceTask setTaskPriority:1];
+        else [_sourceTask setTaskPriority:0];
+
+        [realm commitWriteTransaction];
+        
+        [_titleLabel setEnabled:NO];
+        [_descriptionLabel setEditable:NO];
+        [_editButton setTitle:@"Edit"];
+        
+        [_footerView setHidden:NO];
+        
+        [self.tableView reloadData];
+        [_greenButton setHidden:YES];
+        [_yellowButton setHidden:YES];
+        [_redButton setHidden:YES];
+        [_priorityColor setHidden:NO];
+    }
 }
 
 - (void)keyboardWillHide:(NSNotification *)sender {
+    if(_titleLabel.isEnabled) return;
+    //animate view moving down
     [self.view layoutIfNeeded];
     _heightConst.constant = 50;
     [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
-    NSLog(@"dissapear");
 }
 
+- (IBAction)setRed:(id)sender {
+    [_redButton setAlpha:1];
+    [_yellowButton setAlpha:.25];
+    [_greenButton setAlpha:.25];
+}
+
+- (IBAction)setGreen:(id)sender {
+    [_redButton setAlpha:.25];
+    [_yellowButton setAlpha:.25];
+    [_greenButton setAlpha:1];
+}
+
+- (IBAction)setYellow:(id)sender {
+    [_redButton setAlpha:.25];
+    [_yellowButton setAlpha:1];
+    [_greenButton setAlpha:.25];
+}
 @end
