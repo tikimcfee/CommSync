@@ -177,14 +177,14 @@
     }
     
     NSTimeInterval linkDeadTime = 15;
-    
     MCSession* inviteSession = _currentSession;
+
+//    // Task list as discovery info
+//    NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
+//    
+//    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
     
-    // Task list as discovery info
-    NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
-    
-    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
-    [browser invitePeer:peerID toSession:inviteSession withContext:contextData timeout:linkDeadTime];
+    [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
 }
@@ -224,13 +224,12 @@
     NSLog(@"...Auto accepting...");
     
     // add tasks to list...
-    
-    id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
-    
-    if([potentialList isKindOfClass:[NSMutableArray class]])
-    {
-        [self batchUpdateRealmWithTasks:potentialList];
-    }
+//    id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
+//    
+//    if([potentialList isKindOfClass:[NSMutableArray class]])
+//    {
+//        [self batchUpdateRealmWithTasks:potentialList];
+//    }
     
     
     invitationHandler(YES, _currentSession);
@@ -310,6 +309,7 @@
     NSString* stateString;
     switch (state) {
         case MCSessionStateNotConnected:
+            [self setInvitationSwitch];
             stateString = kUserNotConnectedNotification;
             if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
             {
@@ -319,14 +319,15 @@
                 NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
                 [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
                 
-//                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
             }
             break;
         case MCSessionStateConnecting:
+            [self setInvitationSwitch];
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
-//            [self setInvitationSwitch];
+            [self setInvitationSwitch];
             if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
             {
                 NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
@@ -360,6 +361,11 @@
                                                                                ascending:YES
                                                                                 selector:@selector(localizedStandardCompare:)];
     NSArray* sorted = [self.currentSession.connectedPeers sortedArrayUsingDescriptors:@[displayNameSortDecriptor]];
+    if(!sorted || !sorted.count > 0){
+        _isResponsibleForSendingInvites = YES;
+        return;
+    }
+    
     MCPeerID* firstPeer = [sorted objectAtIndex:0];
     BOOL shouldInvite = [_myPeerID.displayName compare:firstPeer.displayName] == NSOrderedAscending;
     if(shouldInvite){
