@@ -7,6 +7,8 @@
 //
 
 #import "CSTaskProgressTableViewCell.h"
+#import "CSSessionManager.h"
+#import "CSTaskTransientObjectStore.h"
 
 @implementation CSTaskProgressTableViewCell
 
@@ -20,7 +22,7 @@
     // Configure the view for the selected state
 }
 
-- (void)configureWithSourceInformation:(NSDictionary *)task andIndexPath:(NSIndexPath*)path; {
+- (void)configureWithSourceInformation:(NSDictionary *)task andIndexPath:(NSIndexPath*)path {
 
     // Set label view traits
     self.taskStatusLabel.layer.borderWidth = 0.5f;
@@ -63,23 +65,54 @@
     // Set completion block and state information
     _progressCompletionBlock = [task valueForKey:@"callback"];
     _pathToSelf = path;
+    _resourceName = [task valueForKey:@"resourceName"];
+
+    _incomingTaskRow = [task valueForKey:@"incomingCountBeforeAddition"];
+    
+    [self registerForNotifications];
+}
+
+- (void)registerForNotifications {
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newTaskStreamFinished:)
+                                                 name:kCSDidFinishReceivingResourceWithName
+                                               object:nil];
     
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [_progressRingView setProgress:_loadProgress.fractionCompleted animated:YES];
+- (void) newTaskStreamFinished:(NSNotification*)notification {
+    NSDictionary* info = notification.userInfo;
+    NSString* resourceName = [info valueForKey:@"resourceName"];
+    if( ![resourceName isEqualToString:_resourceName] ) {
+        return;
+    }
     
     __weak typeof(self) weakSelf = self;
-    if(_loadProgress.fractionCompleted == 1.0) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
         
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
-                if(weakSelf.progressCompletionBlock) {
-                    weakSelf.progressCompletionBlock(weakSelf.pathToSelf);
-                };
-                
-            });
-    }
+        NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
+        NSData* taskData = [NSData dataWithContentsOfURL:location];
+        id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
+        
+        if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+        {
+            CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
+            [(CSTaskTransientObjectStore*)newTask setAndPersistPropertiesOfNewTaskObject:newModel
+                                                                                 inRealm:[RLMRealm defaultRealm]
+                                                                         withTransaction:YES];
+            
+            if(weakSelf.progressCompletionBlock) {
+                weakSelf.progressCompletionBlock(weakSelf.pathToSelf, weakSelf.incomingTaskRow);
+            }
+        }
+        
+    });
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [_progressRingView setProgress:_loadProgress.fractionCompleted animated:YES];
 }
 
 @end

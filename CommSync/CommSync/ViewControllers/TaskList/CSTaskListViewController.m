@@ -186,7 +186,8 @@
         static NSString *simpleTableIdentifier = @"CSTaskProgressTableViewCell";
         CSTaskProgressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         
-        [cell configureWithSourceInformation:[_incomingTasks objectAtIndex:indexPath.row - [CSTaskRealmModel allObjects].count] andIndexPath:indexPath];
+        [cell configureWithSourceInformation:[_incomingTasks objectAtIndex:indexPath.row - [CSTaskRealmModel allObjects].count]
+                                andIndexPath:indexPath];
         
         return cell;
     }
@@ -213,17 +214,9 @@
     NSString* name = ((MCPeerID*)[info valueForKey:@"peerID"]).displayName;
     
     __weak typeof(self) weakSelf = self;
-    void (^callback)(NSIndexPath*) = ^void(NSIndexPath* path) {
+    void (^callback)(NSIndexPath*, NSNumber*) = ^void(NSIndexPath* path, NSNumber* incomingTaskRow) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            static NSString *simpleTableIdentifier = @"CSTaskTableItem";
-            CSTaskTableViewCell *cell = [weakSelf.tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-            
-            RLMResults* results = [CSTaskRealmModel allObjects];
-            CSTaskRealmModel* task = [results objectAtIndex:path.row];
-            
-            [cell configureWithSourceTask:task];
-            
-            [_incomingTasks removeObjectAtIndex:path.row];
+            [_incomingTasks removeObjectAtIndex:[incomingTaskRow unsignedLongValue]];
             
             [weakSelf.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation: UITableViewRowAnimationFade];
         });
@@ -231,7 +224,9 @@
     
     [_incomingTasks addObject:@{@"peerName":name,
                                 @"progress":progress,
-                                @"callback":[NSNull null]}];
+                                @"resourceName":[info valueForKey:@"resourceName"],
+                                @"callback":callback,
+                                @"incomingCountBeforeAddition":[NSNumber numberWithUnsignedLong:_incomingTasks.count]}];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
@@ -244,19 +239,19 @@
 }
 
 - (void)newTaskStreamFinished:(NSNotification*)notification {
-    NSDictionary* info = notification.userInfo;
-    NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
-    
-    NSData* taskData = [NSData dataWithContentsOfURL:location];
-    id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
-    
-    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
-            [(CSTaskTransientObjectStore*)newTask setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:YES];
-        });
-    }
+//    NSDictionary* info = notification.userInfo;
+//    NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
+//    
+//    NSData* taskData = [NSData dataWithContentsOfURL:location];
+//    id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
+//    
+//    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+//    {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+////            CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
+////            [(CSTaskTransientObjectStore*)newTask setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:YES];
+//        });
+//    }
 //
 //    [_incomingTasks removeObjectAtIndex:<#(NSUInteger)#>];
 }

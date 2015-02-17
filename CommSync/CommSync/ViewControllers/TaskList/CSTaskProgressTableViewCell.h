@@ -13,13 +13,20 @@
 
 @interface CSTaskProgressTableViewCell : UITableViewCell
 
+// View hierarcy and UI
 @property (strong, nonatomic) IBOutlet M13ProgressViewRing *progressRingView;
 @property (strong, nonatomic) IBOutlet UILabel *taskStatusLabel;
-@property (strong, nonatomic) NSDictionary *sourceTask;
 @property (strong, nonatomic) NSProgress* loadProgress;
-@property (strong, nonatomic) void (^progressCompletionBlock)(NSIndexPath*);
-@property (strong, nonatomic) NSIndexPath* pathToSelf;
 
+// Task information and state
+@property (strong, nonatomic) NSDictionary *sourceTask;
+@property (strong, nonatomic) NSString* resourceName;
+
+@property (strong, nonatomic) void (^progressCompletionBlock)(NSIndexPath*, NSNumber*);
+@property (strong, nonatomic) NSIndexPath* pathToSelf;
+@property (strong, nonatomic) NSNumber* incomingTaskRow;
+
+// Configuration method
 - (void)configureWithSourceInformation:(NSDictionary *)task
                           andIndexPath:(NSIndexPath*)path;
 
