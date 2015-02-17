@@ -32,12 +32,7 @@
     self.navigationBar.title = self.sourceTask.taskTitle;
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
-    
-    
-    NSData* audioData = self.sourceTask.taskAudio;
-    NSError* error;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
-    [self.audioPlayer play];
+   
     
     self.audioPlayer.delegate = self;
     
@@ -52,11 +47,6 @@
     self.audioPlayer = nil;
 }
 
-//header size just a temp value
-
-//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    //return 100;
-//}
 
 //initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -156,6 +146,7 @@
     
     //scrolls table to new comment
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
+    [_commentField resignFirstResponder];
 }
 
 
@@ -189,7 +180,8 @@
         [_descriptionLabel setEditable:YES];
         [_descriptionLabel setBackgroundColor: [UIColor lightGrayColor]];
         [_editButton setTitle:@"Save"];
-      
+        [_audioButton setBackgroundColor:[UIColor redColor]];
+        [_audioButton setTitle:@"Record Audio" forState:UIControlStateNormal];
         [_priorityColor setHidden:YES];
         [self.tableView reloadData];
         [_footerView setHidden:YES];
@@ -209,7 +201,9 @@
         [_sourceTask setTaskDescription:_descriptionLabel.text];
         [_titleLabel setBackgroundColor: [UIColor whiteColor]];
         [_descriptionLabel setBackgroundColor: [UIColor whiteColor]];
-        
+        [_audioButton setBackgroundColor:[UIColor greenColor]];
+        [_audioButton setTitle:@"Play" forState:UIControlStateNormal];
+         
         
         
         if(_redButton.alpha == 1) [_sourceTask setTaskPriority:2];
@@ -256,5 +250,18 @@
     [_redButton setAlpha:.25];
     [_yellowButton setAlpha:1];
     [_greenButton setAlpha:.25];
+}
+- (IBAction)playAudio:(id)sender {
+    
+    if(!_titleLabel.isEnabled)
+    {
+        NSData* audioData = self.sourceTask.taskAudio;
+        NSError* error;
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
+        [self.audioPlayer play];
+    }
+    else{
+        
+    }
 }
 @end

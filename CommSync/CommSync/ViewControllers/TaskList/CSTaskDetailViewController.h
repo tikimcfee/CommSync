@@ -50,4 +50,7 @@
 - (IBAction)setGreen:(id)sender;
 - (IBAction)setYellow:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIButton *audioButton;
+- (IBAction)playAudio:(id)sender;
+
 @end
