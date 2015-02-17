@@ -147,6 +147,40 @@
                                     <outlet property="title" destination="wPL-hL-oRQ" id="qPU-GW-aH5"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CSTaskProgressTableViewCell" id="zRq-w0-J9u" customClass="CSTaskProgressTableViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zRq-w0-J9u" id="WPW-Zf-RfE">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9qH-69-CNw" customClass="M13ProgressViewRing">
+                                            <rect key="frame" x="441" y="0.0" width="59" height="59"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="59" id="62M-z8-sd8"/>
+                                            </constraints>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receiving task from [] ..." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eyf-AL-lW2">
+                                            <rect key="frame" x="108" y="19" width="183" height="21"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-ThinItalic" family="Helvetica Neue" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="9qH-69-CNw" firstAttribute="top" secondItem="WPW-Zf-RfE" secondAttribute="top" id="06g-ko-3yg"/>
+                                        <constraint firstItem="9qH-69-CNw" firstAttribute="leading" secondItem="Eyf-AL-lW2" secondAttribute="trailing" constant="150" id="0Ez-4s-EOC"/>
+                                        <constraint firstAttribute="centerY" secondItem="Eyf-AL-lW2" secondAttribute="centerY" id="Zme-3y-Zie"/>
+                                        <constraint firstAttribute="bottom" secondItem="9qH-69-CNw" secondAttribute="bottom" id="gYd-Q2-9Gs"/>
+                                        <constraint firstAttribute="trailing" secondItem="9qH-69-CNw" secondAttribute="trailing" constant="100" id="pUz-fh-uxD"/>
+                                        <constraint firstItem="Eyf-AL-lW2" firstAttribute="leading" secondItem="WPW-Zf-RfE" secondAttribute="leadingMargin" constant="100" id="pgK-DO-bZO"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="progressRingView" destination="9qH-69-CNw" id="W7L-Up-KPd"/>
+                                    <outlet property="taskStatusLabel" destination="Eyf-AL-lW2" id="lbK-Dg-Xmj"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="ogc-W8-25c" id="exK-Jn-vCx"/>
@@ -169,7 +203,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ayk-rN-MkQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2557" y="-336"/>
+            <point key="canvasLocation" x="2557" y="-337"/>
         </scene>
         <!--Task Creation View Controller-->
         <scene sceneID="Gy8-SG-2ls">
@@ -627,7 +661,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="60"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
                                 <rect key="frame" x="408" y="1" width="56" height="60"/>
                                 <state key="normal" image="Play Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -673,6 +707,6 @@
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4cY-yL-21O"/>
+        <segue reference="Alw-jW-3q5"/>
     </inferredMetricsTieBreakers>
 </document>

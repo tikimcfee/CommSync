@@ -9,30 +9,40 @@
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 
+// Session management strings
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
 #define PULSE_STRING @"|~PULSE~|"
 #define PULSE_BACK_STRING @"|~PULSE-BACK~|"
 #define MANUAL_DISCONNECT_STRING @"|~DISCONNECT~|"
+
+// Notification names
+#define kCSDidStartReceivingResourceWithName @"kCSDidStartReceivingResourceWithName"
+#define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
+#define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
+
+@class CSTaskTransientObjectStore;
 
 @interface CSSessionManager : NSObject <MCNearbyServiceBrowserDelegate,
                                         MCNearbyServiceAdvertiserDelegate,
                                         MCSessionDelegate>
 
 // MCMultiPeer objects
-@property (strong, nonatomic) MCSession* currentSession;
-
-//@property (strong, nonatomic) NSMutableDictionary* userSessionsServiceIDSToSessions;
-
 @property (strong, nonatomic) MCPeerID* myPeerID;
-//@property (strong, nonatomic) NSString* userID;
 
+@property (strong, nonatomic) MCSession* currentSession;
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 
 
+// Lifecycle and connection testing
 - (CSSessionManager*) initWithID:(NSString*)userID;
 - (void) sendPulseToPeers;
+
+// Task transmission
+- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
 - (void) sendDataPacketToPeers:(NSData*)dataPacket;
+
+// Repair methods
 - (void) nukeSession;
 - (void) nukeRealm;
 

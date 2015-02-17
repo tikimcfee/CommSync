@@ -22,6 +22,9 @@
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
+		741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE96C1A92C47300AC488F /* CSTaskProgressTableViewCell.m */; };
+		741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE9721A92C86800AC488F /* M13ProgressView.m */; };
+		741DE9761A92C86800AC488F /* M13ProgressViewRing.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE9741A92C86800AC488F /* M13ProgressViewRing.m */; };
 		7439A51E1A82A786007D0D79 /* UIImage+normalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7439A51D1A82A786007D0D79 /* UIImage+normalize.m */; };
 		7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7444522E1A0ACEDB00C87723 /* CSUserViewController.m */; };
 		746F6A7F1A891DD4007A83E8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746F6A7E1A891DD4007A83E8 /* CoreGraphics.framework */; };
@@ -87,6 +90,12 @@
 		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
+		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
+		741DE96C1A92C47300AC488F /* CSTaskProgressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskProgressTableViewCell.m; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.m; sourceTree = "<group>"; };
+		741DE9711A92C86800AC488F /* M13ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressView.h; sourceTree = "<group>"; };
+		741DE9721A92C86800AC488F /* M13ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressView.m; sourceTree = "<group>"; };
+		741DE9731A92C86800AC488F /* M13ProgressViewRing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewRing.h; sourceTree = "<group>"; };
+		741DE9741A92C86800AC488F /* M13ProgressViewRing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewRing.m; sourceTree = "<group>"; };
 		7439A51C1A82A786007D0D79 /* UIImage+normalize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+normalize.h"; path = "Categories/UIImage+normalize.h"; sourceTree = "<group>"; };
 		7439A51D1A82A786007D0D79 /* UIImage+normalize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+normalize.m"; path = "Categories/UIImage+normalize.m"; sourceTree = "<group>"; };
 		7444522D1A0ACEDB00C87723 /* CSUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSUserViewController.h; path = ViewControllers/CSUserViewController.h; sourceTree = "<group>"; };
@@ -224,6 +233,7 @@
 		454D92061A7857AA000B74A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				741DE9701A92C86800AC488F /* M13ProgressView */,
 				45190C2D1A89BD360030CB05 /* SZTextView */,
 				45190C2C1A89BD130030CB05 /* iOS Frameworks */,
 				454D92071A7857CD000B74A8 /* Realm.framework */,
@@ -295,6 +305,29 @@
 			children = (
 			);
 			name = "Task Management";
+			sourceTree = "<group>";
+		};
+		741DE96E1A92C47D00AC488F /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */,
+				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
+				741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */,
+				741DE96C1A92C47300AC488F /* CSTaskProgressTableViewCell.m */,
+			);
+			name = "Table Cells";
+			sourceTree = "<group>";
+		};
+		741DE9701A92C86800AC488F /* M13ProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				741DE9711A92C86800AC488F /* M13ProgressView.h */,
+				741DE9721A92C86800AC488F /* M13ProgressView.m */,
+				741DE9731A92C86800AC488F /* M13ProgressViewRing.h */,
+				741DE9741A92C86800AC488F /* M13ProgressViewRing.m */,
+			);
+			name = M13ProgressView;
+			path = ThirdParty/M13ProgressView;
 			sourceTree = "<group>";
 		};
 		7439A51B1A82A748007D0D79 /* Categories */ = {
@@ -437,8 +470,7 @@
 			children = (
 				933AA13F1A71DCF100DCC10A /* CSTaskListViewController.h */,
 				933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */,
-				933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */,
-				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
+				741DE96E1A92C47D00AC488F /* Table Cells */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
 				3F416E641A86A6EC00EDC347 /* Task Detail */,
@@ -530,6 +562,7 @@
 				746F6AD51A892613007A83E8 /* TPCircularBuffer.c in Sources */,
 				746F6ACB1A892613007A83E8 /* EZAudio.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
+				741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */,
 				74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */,
 				746F6ACD1A892613007A83E8 /* EZAudioPlayer.m in Sources */,
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
@@ -542,6 +575,7 @@
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
 				74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */,
+				741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */,
 				746F6ACE1A892613007A83E8 /* EZAudioPlot.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
 				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
@@ -552,6 +586,7 @@
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
+				741DE9761A92C86800AC488F /* M13ProgressViewRing.m in Sources */,
 				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
 				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				746F6AD11A892613007A83E8 /* EZMicrophone.m in Sources */,

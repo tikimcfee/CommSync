@@ -63,15 +63,36 @@
     // set connection count
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
+    // Notification registrations
+    [self registerForNotifications];
+}
+
+- (void)registerForNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveNewTask:)
                                                  name:kNewTaskNotification
                                                object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateConnectionCountAndTableView:)
                                                  name:@"PEER_CHANGED_STATE"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newTaskStreamStarted:)
+                                                 name:kCSDidStartReceivingResourceWithName
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newTaskStreamUpdated:)
+                                                 name:kCSReceivingProgressNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newTaskStreamFinished:)
+                                                 name:kCSDidFinishReceivingResourceWithName
+                                               object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -92,6 +113,18 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kNewTaskNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kCSDidStartReceivingResourceWithName
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kCSDidFinishReceivingResourceWithName
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kCSReceivingProgressNotification
                                                   object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
@@ -156,6 +189,18 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
+}
+
+- (void)newTaskStreamStarted:(NSNotification*)notification {
+    
+}
+
+- (void)newTaskStreamUpdated:(NSNotification*)notification {
+    
+}
+
+- (void)newTaskStreamFinished:(NSNotification*)notification {
+    
 }
 
 

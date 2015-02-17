@@ -33,6 +33,9 @@
 
 - (CSSessionManager*) initWithID:(NSString*)userID
 {
+    //
+    // Session management objects
+    //
     _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
     
     _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
@@ -49,10 +52,12 @@
     _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
     _currentSession.delegate = self;
     
+    // Connection deferrement
     self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
     self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
     self.isResponsibleForSendingInvites = YES;
     
+    // Getting default realm from disk
     _realm = [RLMRealm defaultRealm];
     _realm.autorefresh = YES;
     
@@ -91,6 +96,31 @@
                       toPeers:_currentSession.connectedPeers
                      withMode:MCSessionSendDataReliable
                         error:&error];
+}
+
+- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
+{
+    if(self.currentSession.connectedPeers.count > 0)
+    {
+        MCPeerID* peer = [self.currentSession.connectedPeers objectAtIndex:0];
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
+        [self.currentSession sendResourceAtURL:[newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob]
+                                      withName:newTask.concatenatedID
+                                        toPeer:peer withCompletionHandler:^(NSError *error) {
+                                            //
+                                            if(error) {
+                                                NSLog(@"Task sending FAILED with error: %@\n", error);
+                                            }
+                                            else {
+                                                NSLog(@"Task sending COMPLETE with name: %@\n", newTask.taskTitle);
+                                                NSLog(@"Removing file from disk...");
+                                                if ([newTask removeTemporaryTaskDataFromDisk])
+                                                {
+                                                    NSLog(@"Well, shit...");
+                                                }
+                                            }
+        }];
+    }
 }
 
 # pragma mark - Session Helpers
@@ -268,7 +298,6 @@
         
         if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
         {
-            //
             [self batchUpdateRealmWithTasks:@[receivedObject]];
         }
         else if([receivedObject isKindOfClass:[NSMutableArray class]])
@@ -378,18 +407,56 @@
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
 {
-    NSLog(@"Started receiving resource: %@", resourceName);
+    // Create a notification dictionary for resource progress tracking
+    NSDictionary *dict = @{@"resourceName"  :   resourceName,
+                           @"peerID"        :   peerID,
+                           @"progress"      :   progress
+                           };
+    
+    // Post notification globally
+    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
+                                                        object:nil
+                                                      userInfo:dict];
+    
+    // Register the sessiona manager as the observation delegate
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [progress addObserver:self
+                   forKeyPath:@"fractionCompleted"
+                      options:NSKeyValueObservingOptionNew
+                      context:nil];
+    });
 }
 
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
-    NSLog(@"Finished receiving resource: %@", resourceName);
+    // Create a notification dictionary for final location and name
+    NSDictionary *dict = @{@"resourceName"  :   resourceName,
+                           @"peerID"        :   peerID,
+                           @"localURL"      :   localURL
+                           };
+    
+    // Post notification globally
+    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
+                                                        object:nil
+                                                      userInfo:dict];
 }
 
 - (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
 {
     NSLog(@"Peer: [%@] is streaming", peerID.displayName);
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    // Post global notification that the progress of a resource stream has changed.
+    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+    NSLog(@"Task progress: %f", ((NSProgress *)object).fractionCompleted);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCSReceivingProgressNotification
+                                                        object:nil
+                                                      userInfo:@{@"progress": (NSProgress *)object}];
 }
 
 

@@ -27,8 +27,15 @@
 @property (strong, nonatomic) NSData* taskAudio;
 @property (strong, nonatomic) NSData* taskImages_NSDataArray_JPEG;
 
+// URL for accessing data from disk
+@property (strong, nonatomic) NSURL* temporaryFileURL;
+@property (strong, nonatomic) NSError* temporaryWriteError;
 
+// Temporary persistence
+- (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
+- (BOOL) removeTemporaryTaskDataFromDisk;
 
+// Realm modeling and lifecycle
 - (id)initWithRealmModel:(CSTaskRealmModel*)model;
 
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model

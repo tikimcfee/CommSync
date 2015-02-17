@@ -171,9 +171,12 @@
         CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
 
         [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];
+
         
         AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-        [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
+        [d.globalSessionManager sendNewTaskToPeers:self.pendingTask];
+//        AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//        [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
     }
     
     else{
@@ -183,6 +186,8 @@
         _taskScreen.sourceTask.taskPriority = _pendingTask.taskPriority;
         [_realm commitWriteTransaction];
     }
+    
+    
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
