@@ -160,7 +160,7 @@
         NSLog(@"Task Removal Error for task %@ : \n%@", self.taskTitle, error);
     }
     
-    return error ? NO : YES;
+    return error ? YES : NO;
 }
 
 #pragma mark - ASYNC callbacks

@@ -9,6 +9,8 @@
 #import "CSTaskListViewController.h"
 #import "CSTaskDetailViewController.h"
 #import "CSTaskTableViewCell.h"
+#import "CSTaskProgressTableViewCell.h"
+#import "CSTaskTransientObjectStore.h"
 #import "AppDelegate.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
@@ -24,6 +26,9 @@
 // Realm data persistence and UI ties
 @property (strong, nonatomic) RLMRealm* realm;
 @property (strong, nonatomic) RLMNotificationToken* updateUIToken;
+
+// New incoming and non-complete task transfers
+@property (strong, nonatomic) NSMutableArray* incomingTasks;
 
 @end
 
@@ -42,7 +47,7 @@
         });
     };
     
-    _updateUIToken = [[RLMRealm defaultRealm] addNotificationBlock:realmNotificationBlock];
+//    _updateUIToken = [[RLMRealm defaultRealm] addNotificationBlock:realmNotificationBlock];
     
     [super viewDidLoad];
     
@@ -52,7 +57,6 @@
     
     // get connection count
     NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count]; // subtract 1 to account for yourself
-    
     NSLog(@"%@", _sessionManager.currentSession.connectedPeers);
     
     
@@ -65,6 +69,9 @@
     
     // Notification registrations
     [self registerForNotifications];
+    
+    // Initialize storage
+    self.incomingTasks = [NSMutableArray new];
 }
 
 - (void)registerForNotifications {
@@ -142,11 +149,11 @@
 {
     __weak CSTaskListViewController *weakSelf = self;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
-        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
-        [weakSelf.tableView reloadData];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
+//        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+//        [weakSelf.tableView reloadData];
+//    });
 }
 
 #pragma mark - UITableView Delegates
@@ -160,47 +167,98 @@
 #pragma mark - UITableViewDataSource Delegates
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *simpleTableIdentifier = @"CSTaskTableItem";
-    CSTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    if(indexPath.row < [CSTaskRealmModel allObjects].count) {
+        static NSString *simpleTableIdentifier = @"CSTaskTableItem";
+        CSTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        
+        if (cell == nil) {
+            cell = [[CSTaskTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                              reuseIdentifier:simpleTableIdentifier];
+        }
+        
+        RLMResults* results = [CSTaskRealmModel allObjects];
+        CSTaskRealmModel* task = [results objectAtIndex:indexPath.row];
+        
+        [cell configureWithSourceTask:task];
     
-    if (cell == nil) {
-        cell = [[CSTaskTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                          reuseIdentifier:simpleTableIdentifier];
+        return cell;
+    } else {
+        static NSString *simpleTableIdentifier = @"CSTaskProgressTableViewCell";
+        CSTaskProgressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        
+        [cell configureWithSourceInformation:[_incomingTasks objectAtIndex:indexPath.row - [CSTaskRealmModel allObjects].count] andIndexPath:indexPath];
+        
+        return cell;
     }
-    
-//    CSTaskRealmModel *task = [_taskManager.currentTaskList objectAtIndex:indexPath.row];
-    RLMResults* results = [CSTaskRealmModel allObjects];
-    CSTaskRealmModel* task = [results objectAtIndex:indexPath.row];
-    
-    [cell configureWithSourceTask:task];
-    
-    return cell;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [CSTaskRealmModel allObjects].count;
+    return [CSTaskRealmModel allObjects].count + _incomingTasks.count;
 }
 
 #pragma mark - Task creation view refresh
 - (void)didReceiveNewTask:(NSNotification*)notification
 {
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.tableView reloadData];
+//    });
+}
+
+- (void)newTaskStreamStarted:(NSNotification*)notification {
+    NSDictionary* info = notification.userInfo;
+    
+    NSProgress* progress = [info valueForKey:@"progress"];
+    NSString* name = ((MCPeerID*)[info valueForKey:@"peerID"]).displayName;
+    
+    __weak typeof(self) weakSelf = self;
+    void (^callback)(NSIndexPath*) = ^void(NSIndexPath* path) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            static NSString *simpleTableIdentifier = @"CSTaskTableItem";
+            CSTaskTableViewCell *cell = [weakSelf.tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            
+            RLMResults* results = [CSTaskRealmModel allObjects];
+            CSTaskRealmModel* task = [results objectAtIndex:path.row];
+            
+            [cell configureWithSourceTask:task];
+            
+            [_incomingTasks removeObjectAtIndex:path.row];
+            
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation: UITableViewRowAnimationFade];
+        });
+    };
+    
+    [_incomingTasks addObject:@{@"peerName":name,
+                                @"progress":progress,
+                                @"callback":[NSNull null]}];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
 }
 
-- (void)newTaskStreamStarted:(NSNotification*)notification {
-    
-}
-
 - (void)newTaskStreamUpdated:(NSNotification*)notification {
-    
+//    NSDictionary* info = notification.userInfo;
+//    NSString* name = ((MCPeerID*)[info valueForKey:@"peerID"]).displayName;
 }
 
 - (void)newTaskStreamFinished:(NSNotification*)notification {
+    NSDictionary* info = notification.userInfo;
+    NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
     
+    NSData* taskData = [NSData dataWithContentsOfURL:location];
+    id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
+    
+    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
+            [(CSTaskTransientObjectStore*)newTask setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:YES];
+        });
+    }
+//
+//    [_incomingTasks removeObjectAtIndex:<#(NSUInteger)#>];
 }
 
 

@@ -420,12 +420,13 @@
                                                       userInfo:dict];
     
     // Register the sessiona manager as the observation delegate
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [progress addObserver:self
-                   forKeyPath:@"fractionCompleted"
-                      options:NSKeyValueObservingOptionNew
-                      context:nil];
-    });
+
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [progress addObserver:self
+//                   forKeyPath:@"fractionCompleted"
+//                      options:NSKeyValueObservingOptionNew
+//                      context:nil];
+//    });
 }
 
 
