@@ -182,7 +182,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
 
 -(NSURL*)testFilePathURL {
     NSString* append = _fileNameSansExtension ? _fileNameSansExtension : kAudioFilePath;
-    NSURL* toReturn = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@",
+    NSURL* toReturn = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@.m4a",
                                               [self applicationDocumentsDirectory],
                                               append]];
     self.fileOutputURL = toReturn;

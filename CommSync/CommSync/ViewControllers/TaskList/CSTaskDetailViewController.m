@@ -16,6 +16,8 @@
 @interface CSTaskDetailViewController ()
 @property (strong, nonatomic) IBOutlet UIImageView *taskImage;
 
+@property (strong, nonatomic) AVAudioPlayer* audioPlayer;
+
 @end
 
 @implementation CSTaskDetailViewController
@@ -25,23 +27,36 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view.
-    self.navigationBar.title = @"Task Details";
+    //self.titleLabel.text = self.sourceTask.taskTitle;
+   // self.descriptionLabel.text = self.sourceTask.taskDescription;
+    self.navigationBar.title = self.sourceTask.taskTitle;
+    //scroll to bottom
+    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     
-    //create delegate and receptors
-    [_commentField setDelegate:self];
     
-    _tableView.tableHeaderView = _headerView;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    NSData* audioData = self.sourceTask.taskAudio;
+    NSError* error;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
+    [self.audioPlayer play];
     
-    [_titleLabel setEnabled:NO];
+    self.audioPlayer.delegate = self;
     
-    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
-        if(didFinish) {
-            //[self setImagesFromTask];
-        }
-    }];
+//    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
+//        if(didFinish) {
+//            //[self setImagesFromTask];
+//        }
+//    }];
 }
+
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.audioPlayer = nil;
+}
+
+//header size just a temp value
+
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    //return 100;
+//}
 
 //initiate the header
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -115,12 +130,13 @@
 
 # pragma mark - Callbacks and UI State
 - (void)setImagesFromTask {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.sourceTask.TRANSIENT_taskImages.count > 0) {
-            UIImage* img = [self.sourceTask.TRANSIENT_taskImages objectAtIndex:0];
-            self.taskImage.image = img;
-        }
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (self.sourceTask.TRANSIENT_taskImages.count > 0) {
+//            UIImage* img = [self.sourceTask.TRANSIENT_taskImages objectAtIndex:0];
+//            self.taskImage.image = img;
+//        }
+//    });
+    
 }
 
 

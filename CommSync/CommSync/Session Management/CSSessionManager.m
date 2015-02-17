@@ -9,7 +9,9 @@
 #import "CSSessionManager.h"
 #import "AppDelegate.h"
 #import <Realm/Realm.h>
+
 #import "CSTaskRealmModel.h"
+#import "CSTaskTransientObjectStore.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -18,6 +20,7 @@
 @interface CSSessionManager()
 
 @property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
+@property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
 //@property (nonatomic, strong) NSMutableArray* sortedArrayOfPeers;
 @property (nonatomic, strong) RLMRealm* realm;
 
@@ -47,6 +50,7 @@
     _currentSession.delegate = self;
     
     self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
+    self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
     self.isResponsibleForSendingInvites = YES;
     
     _realm = [RLMRealm defaultRealm];
@@ -157,6 +161,10 @@
         self.isResponsibleForSendingInvites = NO;
         return;
     }
+    else
+    {
+        [self.devicesThatDeferredToMeDisplayNamesToPeerIDs setObject:peerID forKey:peerID.displayName];
+    }
 
     
     for(MCPeerID* peer in _currentSession.connectedPeers)
@@ -169,18 +177,14 @@
     }
     
     NSTimeInterval linkDeadTime = 15;
-    
     MCSession* inviteSession = _currentSession;
-    
-    // Task list as discovery info
-    RLMResults* allTasks = [CSTaskRealmModel allObjects];
-    NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
-    for(CSTaskRealmModel* t in allTasks)
-        [taskDataStore addObject:t];
-    
-    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
 
-    [browser invitePeer:peerID toSession:inviteSession withContext:contextData timeout:linkDeadTime];
+//    // Task list as discovery info
+//    NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
+//    
+//    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+    
+    [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
 }
@@ -220,13 +224,12 @@
     NSLog(@"...Auto accepting...");
     
     // add tasks to list...
-    
-    id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
-    
-    if([potentialList isKindOfClass:[NSMutableArray class]])
-    {
-        [self batchUpdateRealmWithTasks:potentialList];
-    }
+//    id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
+//    
+//    if([potentialList isKindOfClass:[NSMutableArray class]])
+//    {
+//        [self batchUpdateRealmWithTasks:potentialList];
+//    }
     
     
     invitationHandler(YES, _currentSession);
@@ -260,9 +263,10 @@
     else
     {
         id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        
         NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
         
-        if([receivedObject isKindOfClass:[CSTaskRealmModel class]])
+        if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
         {
             //
             [self batchUpdateRealmWithTasks:@[receivedObject]];
@@ -275,9 +279,6 @@
         {
             
         }
-//        CSTask* newTaskFromData = [[CSTask alloc]
-//                                   initWithCoder:[NSKeyedUnarchiver
-//                                                  unarchiveObjectWithData:data]]
     }
 }
 
@@ -286,11 +287,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         RLMResults *results = [CSTaskRealmModel allObjects];
         [_realm beginWriteTransaction];
-        for(CSTaskRealmModel* task in tasks)
+
+        for(CSTaskTransientObjectStore* task in tasks)
         {
             NSPredicate *uniqueTaskPredicate = [NSPredicate predicateWithFormat:@"concatenatedID == %@", task.concatenatedID];
             if([results objectsWithPredicate:uniqueTaskPredicate].count == 0) {
-                [_realm addObject:task];
+
+                CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
+                [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
+                
             } else {
                 NSLog(@"Duplicate task not being stored");
             }
@@ -304,28 +309,34 @@
     NSString* stateString;
     switch (state) {
         case MCSessionStateNotConnected:
+            [self setInvitationSwitch];
             stateString = kUserNotConnectedNotification;
-//            [self setInvitationSwitch];
+            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+            {
+                NSLog(@"Retrying connection to [%@]", peerID.displayName);
+                NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
+                
+                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+                [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
+                
+                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+            }
             break;
         case MCSessionStateConnecting:
+            [self setInvitationSwitch];
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
+            [self setInvitationSwitch];
             if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
             {
-
-                RLMResults* allTasks = [CSTaskRealmModel allObjects];
-                NSMutableArray* taskList = [NSMutableArray arrayWithCapacity:allTasks.count];
-                for(CSTaskRealmModel* t in taskList)
-                    [taskList addObject:t];
-                
+                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
                 NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
                 
                 [self sendDataPacketToPeers:contextData];
                 
-                NSTemporaryDirectory();
-                
                 [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
             }
             stateString = kUserConnectedNotification;
             break;
@@ -350,6 +361,11 @@
                                                                                ascending:YES
                                                                                 selector:@selector(localizedStandardCompare:)];
     NSArray* sorted = [self.currentSession.connectedPeers sortedArrayUsingDescriptors:@[displayNameSortDecriptor]];
+    if(!sorted || !sorted.count > 0){
+        _isResponsibleForSendingInvites = YES;
+        return;
+    }
+    
     MCPeerID* firstPeer = [sorted objectAtIndex:0];
     BOOL shouldInvite = [_myPeerID.displayName compare:firstPeer.displayName] == NSOrderedAscending;
     if(shouldInvite){
