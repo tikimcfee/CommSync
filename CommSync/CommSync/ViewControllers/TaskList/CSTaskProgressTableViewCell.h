@@ -14,8 +14,8 @@
 @interface CSTaskProgressTableViewCell : UITableViewCell
 
 // View hierarcy and UI
-@property (strong, nonatomic) IBOutlet M13ProgressViewRing *progressRingView;
-@property (strong, nonatomic) IBOutlet UILabel *taskStatusLabel;
+@property (weak, nonatomic) IBOutlet M13ProgressViewRing *progressRingView;
+@property (weak, nonatomic) IBOutlet UILabel *taskStatusLabel;
 @property (strong, nonatomic) NSProgress* loadProgress;
 
 // Task information and state

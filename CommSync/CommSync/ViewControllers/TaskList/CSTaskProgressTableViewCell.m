@@ -45,8 +45,9 @@
     
     // Set progress ring state and observations
     _loadProgress = [task valueForKey:@"progress"];
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_loadProgress addObserver:self
+        [weakSelf.loadProgress addObserver:self
                    forKeyPath:@"fractionCompleted"
                       options:NSKeyValueObservingOptionNew
                       context:nil];
@@ -80,6 +81,30 @@
                                                object:nil];
     
 }
+- (void)deregisterNotifications {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                  name:kCSDidFinishReceivingResourceWithName
+                                                object:nil];
+    
+    [_loadProgress removeObserver:self forKeyPath:@"fractionCompleted" context:nil];
+}
+
+- (void) cleanup {
+    [self deregisterNotifications];
+    
+    self.progressRingView = nil;
+    self.taskStatusLabel = nil;
+    self.loadProgress = nil;
+    self.sourceTask = nil;
+    self.resourceName = nil;
+    self.pathToSelf = nil;
+    self.incomingTaskRow = nil;
+    self.progressCompletionBlock = nil;
+}
+
+- (void) dealloc {
+    NSLog(@"Task progress cell deallocated.");
+}
 
 - (void) newTaskStreamFinished:(NSNotification*)notification {
     NSDictionary* info = notification.userInfo;
@@ -90,7 +115,9 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
+        CSTaskProgressTableViewCell* strSelf = weakSelf;
+        strSelf.progressRingView.showPercentage = NO;
+        [strSelf.progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
         
         NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
         NSData* taskData = [NSData dataWithContentsOfURL:location];
@@ -103,11 +130,12 @@
                                                                                  inRealm:[RLMRealm defaultRealm]
                                                                          withTransaction:YES];
             
-            if(weakSelf.progressCompletionBlock) {
-                weakSelf.progressCompletionBlock(weakSelf.pathToSelf, weakSelf.incomingTaskRow);
+            if(strSelf.progressCompletionBlock) {
+                strSelf.progressCompletionBlock(strSelf.pathToSelf, strSelf.incomingTaskRow);
             }
+            
+            [strSelf cleanup];
         }
-        
     });
 }
 

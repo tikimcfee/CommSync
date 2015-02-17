@@ -102,24 +102,24 @@
 {
     if(self.currentSession.connectedPeers.count > 0)
     {
-        MCPeerID* peer = [self.currentSession.connectedPeers objectAtIndex:0];
         NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
-        [self.currentSession sendResourceAtURL:[newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob]
-                                      withName:newTask.concatenatedID
-                                        toPeer:peer withCompletionHandler:^(NSError *error) {
-                                            //
-                                            if(error) {
-                                                NSLog(@"Task sending FAILED with error: %@\n", error);
-                                            }
-                                            else {
-                                                NSLog(@"Task sending COMPLETE with name: %@\n", newTask.taskTitle);
-                                                NSLog(@"Removing file from disk...");
-                                                if ([newTask removeTemporaryTaskDataFromDisk])
-                                                {
-                                                    NSLog(@"Well, shit...");
+        NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+        
+        for(MCPeerID* peer in self.currentSession.connectedPeers) {
+            
+            [self.currentSession sendResourceAtURL:URLOfNewTask
+                                          withName:newTask.concatenatedID
+                                            toPeer:peer withCompletionHandler:^(NSError *error) {
+                                                //
+                                                if(error) {
+                                                    NSLog(@"Task sending FAILED with error: %@\n", error);
                                                 }
-                                            }
-        }];
+                                                else {
+                                                    NSLog(@"Task sending COMPLETE with name: %@\n", newTask.taskTitle);
+                                                    NSLog(@"Removing file from disk...");
+                                                }
+                                            }];
+        }
     }
 }
 
@@ -362,7 +362,7 @@
                 NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
                 NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
                 
-                [self sendDataPacketToPeers:contextData];
+//                [self sendDataPacketToPeers:contextData];
                 
                 [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
                 [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
@@ -432,6 +432,10 @@
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
+    if (error) {
+        NSLog(@"%@",error);
+        return;
+    }
     // Create a notification dictionary for final location and name
     NSDictionary *dict = @{@"resourceName"  :   resourceName,
                            @"peerID"        :   peerID,
