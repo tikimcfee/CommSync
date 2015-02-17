@@ -74,10 +74,13 @@
 		74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */; };
 		74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */; };
 		74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E51A7FDE4300ECBADB /* Server.m */; };
+		9313F7961A8BF14800C50736 /* CSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9313F7951A8BF14800C50736 /* CSChatViewController.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
 		933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */; };
+		93CA13CE1A92C8BE00402BE4 /* CSChatMessageRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */; };
+		93EBAB551A93F024006BAF4A /* CSChatMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBAB541A93F024006BAF4A /* CSChatMessageView.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 /* End PBXBuildFile section */
 
@@ -217,6 +220,8 @@
 		74DB14F61A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSFrameworkSupportedDataServer.h; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.h"; sourceTree = "<group>"; };
 		74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSFrameworkSupportedDataServer.m; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.m"; sourceTree = "<group>"; };
 		74DB14F91A7FEC1000ECBADB /* CSConnectivityConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSConnectivityConstants.h; path = "Session Management/Framework Supported/CSConnectivityConstants.h"; sourceTree = "<group>"; };
+		9313F7941A8BF14800C50736 /* CSChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSChatViewController.h; path = ViewControllers/CSChatViewController.h; sourceTree = "<group>"; };
+		9313F7951A8BF14800C50736 /* CSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSChatViewController.m; path = ViewControllers/CSChatViewController.m; sourceTree = "<group>"; };
 		933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskTableViewCell.h; path = ViewControllers/TaskList/CSTaskTableViewCell.h; sourceTree = "<group>"; };
 		933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskTableViewCell.m; path = ViewControllers/TaskList/CSTaskTableViewCell.m; sourceTree = "<group>"; };
 		933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskCreationViewController.h; path = ViewControllers/TaskList/CSTaskCreationViewController.h; sourceTree = "<group>"; };
@@ -225,6 +230,10 @@
 		933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskDetailViewController.m; path = ViewControllers/TaskList/CSTaskDetailViewController.m; sourceTree = "<group>"; };
 		933AA13F1A71DCF100DCC10A /* CSTaskListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskListViewController.h; path = ViewControllers/TaskList/CSTaskListViewController.h; sourceTree = "<group>"; };
 		933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListViewController.m; path = ViewControllers/TaskList/CSTaskListViewController.m; sourceTree = "<group>"; };
+		93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSChatMessageRealmModel.h; path = Models/CSChatMessageRealmModel.h; sourceTree = "<group>"; };
+		93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSChatMessageRealmModel.m; path = Models/CSChatMessageRealmModel.m; sourceTree = "<group>"; };
+		93EBAB531A93F024006BAF4A /* CSChatMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatMessageView.h; sourceTree = "<group>"; };
+		93EBAB541A93F024006BAF4A /* CSChatMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatMessageView.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -328,6 +337,8 @@
 		459D5F7519DB449900C91EFA /* CommSync */ = {
 			isa = PBXGroup;
 			children = (
+				93EBAB531A93F024006BAF4A /* CSChatMessageView.h */,
+				93EBAB541A93F024006BAF4A /* CSChatMessageView.m */,
 				7439A51B1A82A748007D0D79 /* Categories */,
 				454D92061A7857AA000B74A8 /* Frameworks */,
 				7409982D1A0C178000229AFC /* Task Management */,
@@ -400,6 +411,8 @@
 				933AA13A1A71DCA800DCC10A /* TaskList */,
 				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+				9313F7941A8BF14800C50736 /* CSChatViewController.h */,
+				9313F7951A8BF14800C50736 /* CSChatViewController.m */,
 				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
 				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
 			);
@@ -617,6 +630,8 @@
 				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
+				93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */,
+				93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -748,11 +763,13 @@
 				74C541F41A93E67100FC29AD /* TLDynamicHeightLabelCell.m in Sources */,
 				746F6AD01A892613007A83E8 /* EZAudioPlotGLKViewController.m in Sources */,
 				746F6AD21A892613007A83E8 /* EZOutput.m in Sources */,
+				93CA13CE1A92C8BE00402BE4 /* CSChatMessageRealmModel.m in Sources */,
 				74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,
 				74C541F21A93E67100FC29AD /* TLCollapsibleTableViewController.m in Sources */,
+				9313F7961A8BF14800C50736 /* CSChatViewController.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
 				741DE9761A92C86800AC488F /* M13ProgressViewRing.m in Sources */,
 				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
@@ -763,6 +780,7 @@
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
 				45190C301A89BD360030CB05 /* SZTextView.m in Sources */,
 				74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */,
+				93EBAB551A93F024006BAF4A /* CSChatMessageView.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				74C541EE1A93E67100FC29AD /* TLIndexPathSectionInfo.m in Sources */,
 				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
@@ -877,7 +895,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -897,7 +915,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
