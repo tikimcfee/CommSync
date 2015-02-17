@@ -7,9 +7,10 @@
 //
 
 #import "CSSessionManager.h"
-#import "AppDelegate.h"
 #import <Realm/Realm.h>
 #import "CSTaskRealmModel.h"
+#import "AppDelegate.h"
+#import "CSChatMessageRealmModel.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -271,6 +272,10 @@
         {
             [self batchUpdateRealmWithTasks:receivedObject];
         }
+        else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+        {
+            [self updateRealmWithChatMessage:receivedObject];
+        }
         else if([receivedObject isKindOfClass:[NSDictionary class]])
         {
             
@@ -279,6 +284,21 @@
 //                                   initWithCoder:[NSKeyedUnarchiver
 //                                                  unarchiveObjectWithData:data]]
     }
+}
+
+- (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSString *chatRealmPath = [basePath stringByAppendingString:@"/chat.realm"];
+
+        RLMRealm *chatRealm = [RLMRealm realmWithPath:chatRealmPath];
+        
+        [chatRealm beginWriteTransaction];
+        [chatRealm addObject:message];
+        [chatRealm commitWriteTransaction];
+    });
 }
 
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
