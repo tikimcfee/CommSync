@@ -38,6 +38,10 @@
     if(stringFromData)
     {
         NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
+        if(!stringComponents || stringComponents.count <= 1) {
+            NSLog(@"<?> String parse failed - malformed string. [%@]", stringFromData);
+            return;
+        }
         
         // -- TASK CREATION --
         // Is the string a prompt of new task creation?
