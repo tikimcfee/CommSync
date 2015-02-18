@@ -38,6 +38,9 @@
 }
 
 #pragma mark - Accessors and Helpers
+- (CSTaskTransientObjectStore*)getTransientObjectForModel {
+    return [[CSTaskTransientObjectStore alloc] initWithRealmModel:self];
+}
 
 + (NSMutableArray*)getTransientTaskList {
     RLMResults* allTasks = [CSTaskRealmModel allObjects];

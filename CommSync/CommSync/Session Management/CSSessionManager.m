@@ -100,35 +100,58 @@
 
 - (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
 {
-//    if(self.currentSession.connectedPeers.count > 0)
-//    
-//    {
-//        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
-//        NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
-//    
-//        for(MCPeerID* peer in self.currentSession.connectedPeers) {
+    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
+    {
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
+        NSLog(@"Total size going out: %f.2kB (%ud Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
-//            [self.currentSession sendResourceAtURL:URLOfNewTask
-//                                          withName:newTask.concatenatedID
-//                                            toPeer:peer withCompletionHandler:^(NSError *error) {
-//                                                //
-//                                                if(error) {
-//                                                    NSLog(@"Task sending FAILED with error: %@\n", error);
-//                                                }
-//                                                else {
-//                                                    NSLog(@"Task sending COMPLETE with name: %@\n", newTask.taskTitle);
-//                                                    NSLog(@"Removing file from disk...");
-//                                                }
-//                                            }];
-//        }
-//    }
+        NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+        
+        NSArray* allSessions = [_sessionLookupDisplayNamesToSessions allValues];
+        
+        for(MCSession* session in allSessions) {
+            if(session.connectedPeers.count > 1) {
+                NSLog(@"! WARNING ! - Session with multiple users (%@)", session.connectedPeers);
+            } else if (session.connectedPeers <= 0) {
+                NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", session.connectedPeers);
+            }
+        
+            MCPeerID* thisPeer = [session.connectedPeers objectAtIndex:0];
+            [session sendResourceAtURL:URLOfNewTask
+                              withName:newTask.concatenatedID
+                                toPeer:thisPeer
+                 withCompletionHandler:
+             ^(NSError *error) {
+                 if(error) {
+                     NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
+                 }
+                 else {
+                     NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", newTask.taskTitle, thisPeer.displayName);
+                 }
+             }];
+        }
+    }
+    
+    NSLog(@"Removing file from disk...");
+    if([newTask removeTemporaryTaskDataFromDisk])
+    {
+        NSLog(@"Task %@ still exists on disk!", newTask);
+    }
 }
 
 # pragma mark - Session Helpers
-- (MCSession*)addPeerToSession:(MCPeerID*)peerID
-{
+- (MCSession*)setAndReturnNewSessionForPeer:(MCPeerID*)peer {
     MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
     newSession.delegate = self;
+    
+    if([_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName]) {
+        NSLog(@"[!] A session already exists for this peer. Disconnecting from that session and RESETTING value to new session.");
+        MCSession* oldSession = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
+        [oldSession disconnect];
+        oldSession.delegate = nil;
+    }
+    
+    [_sessionLookupDisplayNamesToSessions setValue:newSession forKey:peer.displayName];
     
     return newSession;
 }
