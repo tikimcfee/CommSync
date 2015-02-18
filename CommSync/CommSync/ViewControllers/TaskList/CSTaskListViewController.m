@@ -56,8 +56,8 @@
     self.sessionManager = app.globalSessionManager;
     
     // get connection count
-    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count]; // subtract 1 to account for yourself
-    NSLog(@"%@", _sessionManager.currentSession.connectedPeers);
+//    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count]; // subtract 1 to account for yourself
+//    NSLog(@"%@", _sessionManager.currentSession.connectedPeers);
     
     
     // Realms
@@ -65,7 +65,7 @@
     _realm.autorefresh = YES;
     
     // set connection count
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+//    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
     // Notification registrations
     [self registerForNotifications];

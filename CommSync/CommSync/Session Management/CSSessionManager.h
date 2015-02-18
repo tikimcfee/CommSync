@@ -29,9 +29,11 @@
 // MCMultiPeer objects
 @property (strong, nonatomic) MCPeerID* myPeerID;
 
-@property (strong, nonatomic) MCSession* currentSession;
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
+
+// 1-1 session objects
+@property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
 
 
 // Lifecycle and connection testing

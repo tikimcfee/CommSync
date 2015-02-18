@@ -28,8 +28,8 @@
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
-    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+//    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
+//    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
     
     
@@ -56,8 +56,8 @@
     __weak CSUserViewController *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
-        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+//        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
+//        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
         [weakSelf.tableView reloadData];
     });
 }
@@ -74,15 +74,16 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    MCPeerID *peer = [_sessionManager.currentSession.connectedPeers objectAtIndex:indexPath.row];
-    cell.textLabel.text = peer.displayName;
+//    MCPeerID *peer = [_sessionManager.currentSession.connectedPeers objectAtIndex:indexPath.row];
+//    cell.textLabel.text = peer.displayName;
     return cell;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_sessionManager.currentSession.connectedPeers count];
+//    return [_sessionManager.currentSession.connectedPeers count];
+    return 0;
 }
 
 

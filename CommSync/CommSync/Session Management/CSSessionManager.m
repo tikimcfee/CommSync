@@ -39,19 +39,18 @@
     //
     _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
     
+    // There will only ever be a single service browser and advertiser, but multiple sessions
     _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
     _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
                                                            discoveryInfo:nil
                                                              serviceType:COMMSYNC_SERVICE_ID];
-    
     _serviceBrowser.delegate = self;
     _serviceAdvertiser.delegate = self;
     
     [_serviceBrowser startBrowsingForPeers];
     [_serviceAdvertiser startAdvertisingPeer];
     
-    _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
-    _currentSession.delegate = self;
+    _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
     
     // Connection deferrement
     self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -80,48 +79,49 @@
     NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
     NSError* error;
     
-    for(MCPeerID* peer in _currentSession.connectedPeers)
-    {
-        [_currentSession sendData:newPulse
-                          toPeers:@[peer]
-                         withMode:MCSessionSendDataReliable
-                            error:&error];
-    }
+//    for(MCPeerID* peer in _currentSession.connectedPeers)
+//    {
+//        [_currentSession sendData:newPulse
+//                          toPeers:@[peer]
+//                         withMode:MCSessionSendDataReliable
+//                            error:&error];
+//    }
 }
 
 - (void) sendDataPacketToPeers:(NSData*)dataPacket
 {
     NSError* error;
     
-    [_currentSession sendData:dataPacket
-                      toPeers:_currentSession.connectedPeers
-                     withMode:MCSessionSendDataReliable
-                        error:&error];
+//    [_currentSession sendData:dataPacket
+//                      toPeers:_currentSession.connectedPeers
+//                     withMode:MCSessionSendDataReliable
+//                        error:&error];
 }
 
 - (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
 {
-    if(self.currentSession.connectedPeers.count > 0)
-    {
-        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
-        NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+//    if(self.currentSession.connectedPeers.count > 0)
+//    
+//    {
+//        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
+//        NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+//    
+//        for(MCPeerID* peer in self.currentSession.connectedPeers) {
         
-        for(MCPeerID* peer in self.currentSession.connectedPeers) {
-            
-            [self.currentSession sendResourceAtURL:URLOfNewTask
-                                          withName:newTask.concatenatedID
-                                            toPeer:peer withCompletionHandler:^(NSError *error) {
-                                                //
-                                                if(error) {
-                                                    NSLog(@"Task sending FAILED with error: %@\n", error);
-                                                }
-                                                else {
-                                                    NSLog(@"Task sending COMPLETE with name: %@\n", newTask.taskTitle);
-                                                    NSLog(@"Removing file from disk...");
-                                                }
-                                            }];
-        }
-    }
+//            [self.currentSession sendResourceAtURL:URLOfNewTask
+//                                          withName:newTask.concatenatedID
+//                                            toPeer:peer withCompletionHandler:^(NSError *error) {
+//                                                //
+//                                                if(error) {
+//                                                    NSLog(@"Task sending FAILED with error: %@\n", error);
+//                                                }
+//                                                else {
+//                                                    NSLog(@"Task sending COMPLETE with name: %@\n", newTask.taskTitle);
+//                                                    NSLog(@"Removing file from disk...");
+//                                                }
+//                                            }];
+//        }
+//    }
 }
 
 # pragma mark - Session Helpers
@@ -145,8 +145,9 @@
     _serviceAdvertiser = nil;
     
     // kill session
-    [_currentSession disconnect];
-    _currentSession = nil;
+    
+//    [_currentSession disconnect];
+//    _currentSession = nil;
     
     NSLog(@"Restarting session");
     
@@ -162,8 +163,8 @@
     [_serviceBrowser startBrowsingForPeers];
     [_serviceAdvertiser startAdvertisingPeer];
     
-    _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
-    _currentSession.delegate = self;
+//    _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
+//    _currentSession.delegate = self;
     
     self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
     self.isResponsibleForSendingInvites = YES;
@@ -183,13 +184,12 @@
 {
     BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedAscending;
 
-    if(!shouldInvite || !_isResponsibleForSendingInvites)
+    if(!shouldInvite)
     {
         NSLog(@"Deferring connection from %@", peerID.displayName);
         // on deferall, we must send the current task list to the new peer we connect to,
         // should the connection be successful; at the moment, just add to them to a dict
         [self.deferredConnectionsDisplayNamesToPeerIDs setObject:peerID forKey:peerID.displayName];
-        self.isResponsibleForSendingInvites = NO;
         return;
     }
     else
@@ -197,27 +197,30 @@
         [self.devicesThatDeferredToMeDisplayNamesToPeerIDs setObject:peerID forKey:peerID.displayName];
     }
 
-    
-    for(MCPeerID* peer in _currentSession.connectedPeers)
+    if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
     {
-        if([peerID isEqual:peer])
-        {
-            NSLog(@"[%@] is already connected.", peerID.displayName);
-            return;
-        }
+        NSLog(@"[%@] is already in a session.", peerID.displayName);
+        return;
     }
     
-    NSTimeInterval linkDeadTime = 15;
-    MCSession* inviteSession = _currentSession;
+    [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:info];
+}
 
-//    // Task list as discovery info
-//    NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
-//    
-//    NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+- (void) attemptPeerInvitationForPeer:(MCPeerID *)peerID
+                    withDiscoveryInfo:(NSDictionary *)info {
     
-    [browser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
+    NSTimeInterval linkDeadTime = 15;
+    MCSession* inviteSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
+    if(!inviteSession) {
+        inviteSession = [[MCSession alloc] initWithPeer:_myPeerID];
+        inviteSession.delegate = self;
+        [_sessionLookupDisplayNamesToSessions setValue:inviteSession forKey:peerID.displayName];
+    }
+    
+    [_serviceBrowser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
     
     NSLog(@"Inviting PeerID:[%@] to session...", peerID.displayName);
+    
 }
 
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
@@ -233,37 +236,28 @@
     NSLog(@"Start browsing failed :: %@", error);
 }
 
+
 # pragma mark - MCAdvertiser Delegate
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID
        withContext:(NSData *)context
  invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler
 {
     NSLog(@"PeerID:[%@] sent an invitation.", peerID.displayName);
-//    BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedDescending;
     
-    
-    for(MCPeerID* peer in _currentSession.connectedPeers)
+    if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
     {
-        if([peer isEqual:peerID])
-        {
-            NSLog(@"Peer already in session; sending NO.");
-            invitationHandler(NO, _currentSession);
-            return;
-        }
+        NSLog(@"Peer already in session; sending NO.");
+        invitationHandler(NO, nil);
+        return;
     }
     
     NSLog(@"...Auto accepting...");
     
-    // add tasks to list...
-//    id potentialList = [NSKeyedUnarchiver unarchiveObjectWithData:context];
-//    
-//    if([potentialList isKindOfClass:[NSMutableArray class]])
-//    {
-//        [self batchUpdateRealmWithTasks:potentialList];
-//    }
+    MCSession* acceptSession = [[MCSession alloc] initWithPeer:_myPeerID];
+    acceptSession.delegate = self;
+    [_sessionLookupDisplayNamesToSessions setValue:acceptSession forKey:peerID.displayName];
     
-    
-    invitationHandler(YES, _currentSession);
+    invitationHandler(YES, acceptSession);
 }
 
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didNotStartAdvertisingPeer:(NSError *)error
@@ -358,35 +352,35 @@
     NSString* stateString;
     switch (state) {
         case MCSessionStateNotConnected:
-            [self setInvitationSwitch];
+//            [self setInvitationSwitch];
             stateString = kUserNotConnectedNotification;
-            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-            {
-                NSLog(@"Retrying connection to [%@]", peerID.displayName);
-                NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
-                
-                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
-                [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
-                
-                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-            }
+//            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+//            {
+//                NSLog(@"Retrying connection to [%@]", peerID.displayName);
+//                NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
+//                
+//                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+//                [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
+//                
+//                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+//            }
             break;
         case MCSessionStateConnecting:
-            [self setInvitationSwitch];
+//            [self setInvitationSwitch];
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
-            [self setInvitationSwitch];
-            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-            {
-                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
-                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
-                
-//                [self sendDataPacketToPeers:contextData];
-                
-                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-            }
+//            [self setInvitationSwitch];
+//            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+//            {
+//                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
+//                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
+//                
+////                [self sendDataPacketToPeers:contextData];
+//                
+//                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+//                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+//            }
             stateString = kUserConnectedNotification;
             break;
         default:
@@ -409,7 +403,9 @@
     NSSortDescriptor *displayNameSortDecriptor = [NSSortDescriptor sortDescriptorWithKey:@"displayName"
                                                                                ascending:YES
                                                                                 selector:@selector(localizedStandardCompare:)];
-    NSArray* sorted = [self.currentSession.connectedPeers sortedArrayUsingDescriptors:@[displayNameSortDecriptor]];
+//    NSArray* sorted = [self.currentSession.connectedPeers sortedArrayUsingDescriptors:@[displayNameSortDecriptor]];
+    NSArray* sorted = nil;
+
     if(!sorted || !sorted.count > 0){
         _isResponsibleForSendingInvites = YES;
         return;
