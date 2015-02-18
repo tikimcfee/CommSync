@@ -45,6 +45,7 @@
 - (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer;
 
 - (void) sendDataPacketToPeers:(NSData*)dataPacket;
+- (void) sendSingleDataPacket:(NSData*)dataPacket toSinglePeer:(MCPeerID*)peer;
 
 // Repair methods
 - (void) nukeSession;

@@ -9,12 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "CSSessionManager.h"
 
+@class RLMRealm;
 @interface CSSessionDataAnalyzer : NSObject
 
 @property (nonatomic, strong) CSSessionManager* globalManager;
+@property (nonatomic, strong) RLMRealm* realm;
 
 + (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager;
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
+- (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
 
 @end

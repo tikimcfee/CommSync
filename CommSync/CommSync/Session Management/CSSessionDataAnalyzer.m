@@ -8,6 +8,8 @@
 
 #import "CSSessionDataAnalyzer.h"
 #import "CSChatMessageRealmModel.h"
+#import "CSTaskTransientObjectStore.h"
+#import "CSTaskRealmModel.h"
 
 
 // Critical constants for building data transmission strings
@@ -19,28 +21,85 @@
 
 @implementation CSSessionDataAnalyzer
 
+#pragma mark - Shared instance initializer
 + (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager {
     static dispatch_once_t once;
     static CSSessionDataAnalyzer* sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.globalManager = manager;
+        sharedInstance.realm = [RLMRealm defaultRealm];
     });
     
     return sharedInstance;
 }
 
-- (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer{
+#pragma mark - Data transmission
+- (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task
+{
+    NSString* newTaskString = [self buildNewTaskStringFromNewTaskID:task.concatenatedID];
+    NSData* newTaskData = [newTaskString dataUsingEncoding:kCSDefaultStringEncodingMethod];
     
+    [_globalManager sendDataPacketToPeers:newTaskData];
+}
+
+#pragma mark - Data analysis
+- (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer
+{
     // Determine if data is a string / command
     NSString* stringFromData = [[NSString alloc] initWithData:receivedData encoding:kCSDefaultStringEncodingMethod];
     
     if(stringFromData)
     {
+        NSLog(@"<?> Data string received : [%@]", stringFromData);
         NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
         if(!stringComponents || stringComponents.count <= 1) {
             NSLog(@"<?> String parse failed - malformed string. [%@]", stringFromData);
             return;
+        }
+        
+        if([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_NEW_TASK])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for NEW_TASK. [%@]", stringFromData);
+                return;
+            }
+            
+            // check to see if the task already exists
+            CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:[stringComponents objectAtIndex:1]];
+            if(model)
+            {
+                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",[stringComponents objectAtIndex:1]);
+                return;
+            }
+            
+            // build the request string
+            NSString* requestString = [self buildTaskRequestStringFromNewTaskID:(NSString*)[stringComponents objectAtIndex:1]];
+            NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
+            
+            // send the request
+            [_globalManager sendSingleDataPacket:requestData toSinglePeer:peer];
+        }
+        else if ([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_TASK_REQUEST])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for TASK_REQUEST. [%@]", stringFromData);
+                return;
+            }
+            
+            // check to see if the task exists
+            CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:[stringComponents objectAtIndex:1]];
+            if(!model)
+            {
+                NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed string?");
+                return;
+            }
+            
+            // Send the task to the peer
+            CSTaskTransientObjectStore* transient = [model getTransientObjectForModel];
+            [_globalManager sendSingleTask:transient toSinglePeer:peer];
         }
         
         // -- TASK CREATION --
@@ -64,21 +123,14 @@
     
 }
 
-- (NSString*) buildTaskRequestStringFromNewTaskString:(NSString*)sourceString
+
+#pragma mark - String builders
+- (NSString*) buildTaskRequestStringFromNewTaskID:(NSString*)taskID
 {
-    if(!sourceString) {
-        NSLog(@"<?> String build failed - no source string.");
+    if(!taskID) {
+        NSLog(@"<?> String build failed - no taskID.");
         return nil;
     }
-    
-    NSArray* stringComponents = [sourceString componentsSeparatedByString:kCS_STRING_SEPERATOR];
-    
-    if(stringComponents.count < 2) {
-        NSLog(@"<?> String build failed - malformed new task string");
-        return nil;
-    }
-    
-    NSString* taskID = [stringComponents objectAtIndex:1];
     
     NSString* requestString = [NSString stringWithFormat:@"%@%@%@",
                                kCS_HEADER_TASK_REQUEST,
@@ -86,6 +138,21 @@
                                taskID];
     
     return requestString;
+}
+
+- (NSString*) buildNewTaskStringFromNewTaskID:(NSString*)taskID
+{
+    if(!taskID) {
+        NSLog(@"<?> String build failed - no taskID.");
+        return nil;
+    }
+    
+    NSString* newTaskString = [NSString stringWithFormat:@"%@%@%@",
+                               kCS_HEADER_NEW_TASK,
+                               kCS_STRING_SEPERATOR,
+                               taskID];
+    
+    return newTaskString;
 }
 
 

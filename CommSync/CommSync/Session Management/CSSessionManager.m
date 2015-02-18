@@ -96,10 +96,50 @@
 {
     NSError* error;
     
-//    [_currentSession sendData:dataPacket
-//                      toPeers:_currentSession.connectedPeers
-//                     withMode:MCSessionSendDataReliable
-//                        error:&error];
+    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
+    {
+        NSArray* allSessions = [_sessionLookupDisplayNamesToSessions allValues];
+        
+        for(MCSession* session in allSessions) {
+            if(session.connectedPeers.count > 1) {
+                NSLog(@"! WARNING ! - Session with multiple users (%@)", session.connectedPeers);
+                NSLog(@"! WARNING ! - ... will attempt to send to peer (%@)", [session.connectedPeers objectAtIndex:0]);
+            } else if (session.connectedPeers <= 0) {
+                NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", session.connectedPeers);
+                continue;
+            }
+            
+            MCPeerID* thisPeer = [session.connectedPeers objectAtIndex:0];
+            [session sendData:dataPacket toPeers:@[thisPeer]
+                     withMode:MCSessionSendDataReliable
+                        error:&error];
+        }
+    }
+}
+
+- (void) sendSingleDataPacket:(NSData*)dataPacket toSinglePeer:(MCPeerID*)peer
+{
+    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
+    {
+        MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
+        if(!sessionToSendOn) {
+            NSLog(@"! No active session found for peer [%@]", peer.displayName);
+            return;
+        }
+        
+        if(sessionToSendOn.connectedPeers.count > 1) {
+            NSLog(@"! WARNING ! - Session with multiple users (%@)", sessionToSendOn.connectedPeers);
+        } else if (sessionToSendOn.connectedPeers <= 0) {
+            NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", sessionToSendOn.connectedPeers);
+            return;
+        }
+        MCPeerID* thisPeer = [sessionToSendOn.connectedPeers objectAtIndex:0];
+        
+        NSError* error;
+        [sessionToSendOn sendData:dataPacket
+                          toPeers:@[thisPeer]
+                         withMode:MCSessionSendDataReliable error:&error];
+    }
 }
 
 - (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
@@ -107,7 +147,7 @@
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
         NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
-        NSLog(@"Total size going out: %f.2kB (%ud Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
+        NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
         NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
         
@@ -163,7 +203,8 @@
         }
         
         NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:task];
-        NSLog(@"Total size going out: %f.2kB (%ud Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
+        
+        NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
         NSURL* URLOfNewTask = [task temporarilyPersistTaskDataToDisk:newTaskDataBlob];
         
@@ -348,29 +389,29 @@
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
 {
     [_dataAnalyzer analyzeReceivedData:data fromPeer:peerID];
-    
-    NSString* stringFromData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
-    id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        
-    NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
-    
-    if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
-    {
-        [self batchUpdateRealmWithTasks:@[receivedObject]];
-    }
-    else if([receivedObject isKindOfClass:[NSMutableArray class]])
-    {
-        [self batchUpdateRealmWithTasks:receivedObject];
-    }
-    else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
-    {
-        [self updateRealmWithChatMessage:receivedObject];
-    }
-    else if([receivedObject isKindOfClass:[NSDictionary class]])
-    {
-        
-    }
+//    
+//    NSString* stringFromData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    
+//    id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//        
+//    NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
+//    
+//    if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
+//    {
+//        [self batchUpdateRealmWithTasks:@[receivedObject]];
+//    }
+//    else if([receivedObject isKindOfClass:[NSMutableArray class]])
+//    {
+//        [self batchUpdateRealmWithTasks:receivedObject];
+//    }
+//    else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+//    {
+//        [self updateRealmWithChatMessage:receivedObject];
+//    }
+//    else if([receivedObject isKindOfClass:[NSDictionary class]])
+//    {
+//        
+//    }
 }
 
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
