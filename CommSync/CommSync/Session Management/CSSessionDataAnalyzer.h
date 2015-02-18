@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CSSessionManager.h"
 
 @interface CSSessionDataAnalyzer : NSObject
+
+@property (nonatomic, strong) CSSessionManager* globalManager;
+
++ (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager;
+
+- (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 
 @end

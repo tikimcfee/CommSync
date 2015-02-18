@@ -42,6 +42,8 @@
 
 // Task transmission
 - (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
+- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer;
+
 - (void) sendDataPacketToPeers:(NSData*)dataPacket;
 
 // Repair methods

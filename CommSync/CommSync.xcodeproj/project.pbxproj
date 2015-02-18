@@ -301,9 +301,9 @@
 		4595391F19E38F2F00744747 /* Session Management */ = {
 			isa = PBXGroup;
 			children = (
+				74DB14F51A7FEAEB00ECBADB /* Framework Supported */,
 				4595391C19E38F1F00744747 /* CSSessionManager.h */,
 				4595391D19E38F1F00744747 /* CSSessionManager.m */,
-				74DB14F51A7FEAEB00ECBADB /* Framework Supported */,
 				7499A8281A950078009A28B6 /* CSSessionDataAnalyzer.h */,
 				7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */,
 			);

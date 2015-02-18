@@ -13,6 +13,7 @@
 #import "CSTaskTransientObjectStore.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
+#import "CSSessionDataAnalyzer.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -24,6 +25,7 @@
 @property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
 //@property (nonatomic, strong) NSMutableArray* sortedArrayOfPeers;
 @property (nonatomic, strong) RLMRealm* realm;
+@property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
 
 @property (nonatomic, assign) BOOL isResponsibleForSendingInvites;
 
@@ -38,6 +40,7 @@
     // Session management objects
     //
     _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
+    _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
     
     // There will only ever be a single service browser and advertiser, but multiple sessions
     _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
@@ -72,7 +75,7 @@
     return nil;
 }
 
-# pragma Heartbeat
+# pragma mark - Heartbeat
 - (void) sendPulseToPeers
 {
     NSString* pulseText = PULSE_STRING;
@@ -88,6 +91,7 @@
 //    }
 }
 
+#pragma mark - Data transmission helpers
 - (void) sendDataPacketToPeers:(NSData*)dataPacket
 {
     NSError* error;
@@ -112,8 +116,10 @@
         for(MCSession* session in allSessions) {
             if(session.connectedPeers.count > 1) {
                 NSLog(@"! WARNING ! - Session with multiple users (%@)", session.connectedPeers);
+                NSLog(@"! WARNING ! - ... will attempt to send to peer (%@)", [session.connectedPeers objectAtIndex:0]);
             } else if (session.connectedPeers <= 0) {
                 NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", session.connectedPeers);
+                continue;
             }
         
             MCPeerID* thisPeer = [session.connectedPeers objectAtIndex:0];
@@ -132,10 +138,54 @@
         }
     }
     
-    NSLog(@"Removing file from disk...");
-    if([newTask removeTemporaryTaskDataFromDisk])
+//    NSLog(@"Removing file from disk...");
+//    if([newTask removeTemporaryTaskDataFromDisk])
+//    {
+//        NSLog(@"Task %@ still exists on disk!", newTask);
+//    }
+}
+
+- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer
+{
+    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
-        NSLog(@"Task %@ still exists on disk!", newTask);
+        MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
+        if(!sessionToSendOn) {
+            NSLog(@"! No active session found for peer [%@]", peer.displayName);
+            return;
+        }
+        
+        if(sessionToSendOn.connectedPeers.count > 1) {
+            NSLog(@"! WARNING ! - Session with multiple users (%@)", sessionToSendOn.connectedPeers);
+        } else if (sessionToSendOn.connectedPeers <= 0) {
+            NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", sessionToSendOn.connectedPeers);
+            return;
+        }
+        
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:task];
+        NSLog(@"Total size going out: %f.2kB (%ud Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
+        
+        NSURL* URLOfNewTask = [task temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+        
+        MCPeerID* thisPeer = [sessionToSendOn.connectedPeers objectAtIndex:0];
+        [sessionToSendOn sendResourceAtURL:URLOfNewTask
+                                  withName:task.concatenatedID
+                                    toPeer:thisPeer
+                     withCompletionHandler:
+         ^(NSError *error) {
+             if(error) {
+                 NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
+             }
+             else {
+                 NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", task.taskTitle, thisPeer.displayName);
+             }
+         }];
+        
+//        NSLog(@"Removing file from disk...");
+//        if([task removeTemporaryTaskDataFromDisk])
+//        {
+//            NSLog(@"Task %@ still exists on disk!", task);
+//        }
     }
 }
 
@@ -297,77 +347,30 @@
 
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
 {
+    [_dataAnalyzer analyzeReceivedData:data fromPeer:peerID];
+    
     NSString* stringFromData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    if(stringFromData) {
-        NSLog(@"-- RESPONDING TO HEARTBEART --");
-        NSError* error;
-        NSString* pulseBack = PULSE_BACK_STRING;
+    id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         
-        [session sendData:[pulseBack dataUsingEncoding:NSUTF8StringEncoding] toPeers:@[peerID]
-                    withMode:MCSessionSendDataReliable
-                       error:&error];
-    }
-    else
-    {
-        id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        
-        NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
-        
-        if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
-        {
-            [self batchUpdateRealmWithTasks:@[receivedObject]];
-        }
-        else if([receivedObject isKindOfClass:[NSMutableArray class]])
-        {
-            [self batchUpdateRealmWithTasks:receivedObject];
-        }
-        else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
-        {
-            [self updateRealmWithChatMessage:receivedObject];
-        }
-        else if([receivedObject isKindOfClass:[NSDictionary class]])
-        {
-            
-        }
-    }
-}
-
-- (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-        NSString *chatRealmPath = [basePath stringByAppendingString:@"/chat.realm"];
-
-        RLMRealm *chatRealm = [RLMRealm realmWithPath:chatRealmPath];
-        
-        [chatRealm beginWriteTransaction];
-        [chatRealm addObject:message];
-        [chatRealm commitWriteTransaction];
-    });
-}
-
-- (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
+    NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        RLMResults *results = [CSTaskRealmModel allObjects];
-        [_realm beginWriteTransaction];
-
-        for(CSTaskTransientObjectStore* task in tasks)
-        {
-            NSPredicate *uniqueTaskPredicate = [NSPredicate predicateWithFormat:@"concatenatedID == %@", task.concatenatedID];
-            if([results objectsWithPredicate:uniqueTaskPredicate].count == 0) {
-
-                CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
-                [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
-                
-            } else {
-                NSLog(@"Duplicate task not being stored");
-            }
-        }
-        [_realm commitWriteTransaction];
-    });
+    if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
+    {
+        [self batchUpdateRealmWithTasks:@[receivedObject]];
+    }
+    else if([receivedObject isKindOfClass:[NSMutableArray class]])
+    {
+        [self batchUpdateRealmWithTasks:receivedObject];
+    }
+    else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+    {
+        [self updateRealmWithChatMessage:receivedObject];
+    }
+    else if([receivedObject isKindOfClass:[NSDictionary class]])
+    {
+        
+    }
 }
 
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
@@ -375,7 +378,6 @@
     NSString* stateString;
     switch (state) {
         case MCSessionStateNotConnected:
-//            [self setInvitationSwitch];
             stateString = kUserNotConnectedNotification;
 //            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
 //            {
@@ -389,11 +391,9 @@
 //            }
             break;
         case MCSessionStateConnecting:
-//            [self setInvitationSwitch];
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
-//            [self setInvitationSwitch];
 //            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
 //            {
 //                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
@@ -420,6 +420,10 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PEER_CHANGED_STATE" object:self];
 }
 
+/**
+ An invitation switch is not necessary for a one-to-one session management system; a simple deferment is
+ needed between two devices so as not to cause issues with the so-fragile MCSession object
+ 
 - (void)setInvitationSwitch {
     
     // Set invitation switched based on new connected peers
@@ -443,6 +447,7 @@
     }
     
 }
+ **/
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
 {
@@ -460,14 +465,17 @@
     
     // Register the sessiona manager as the observation delegate
 
+    /**
+     Use this code if you want to observe the progress of a data transfer from the 
+     session manager and then send notifications out as progress changes
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        [progress addObserver:self
 //                   forKeyPath:@"fractionCompleted"
 //                      options:NSKeyValueObservingOptionNew
 //                      context:nil];
 //    });
+     **/
 }
-
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
@@ -493,6 +501,8 @@
     NSLog(@"Peer: [%@] is streaming", peerID.displayName);
 }
 
+#pragma mark - OBSERVATION CALLBACK
+/**
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     // Post global notification that the progress of a resource stream has changed.
     // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
@@ -501,6 +511,48 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSReceivingProgressNotification
                                                         object:nil
                                                       userInfo:@{@"progress": (NSProgress *)object}];
+}
+**/
+
+
+
+
+#pragma mark - Database actions
+- (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSString *chatRealmPath = [basePath stringByAppendingString:@"/chat.realm"];
+        
+        RLMRealm *chatRealm = [RLMRealm realmWithPath:chatRealmPath];
+        
+        [chatRealm beginWriteTransaction];
+        [chatRealm addObject:message];
+        [chatRealm commitWriteTransaction];
+    });
+}
+
+- (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RLMResults *results = [CSTaskRealmModel allObjects];
+        [_realm beginWriteTransaction];
+        
+        for(CSTaskTransientObjectStore* task in tasks)
+        {
+            NSPredicate *uniqueTaskPredicate = [NSPredicate predicateWithFormat:@"concatenatedID == %@", task.concatenatedID];
+            if([results objectsWithPredicate:uniqueTaskPredicate].count == 0) {
+                
+                CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
+                [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
+                
+            } else {
+                NSLog(@"Duplicate task not being stored");
+            }
+        }
+        [_realm commitWriteTransaction];
+    });
 }
 
 

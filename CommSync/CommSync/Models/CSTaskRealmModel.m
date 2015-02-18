@@ -37,6 +37,10 @@
     return defaults;
 }
 
++ (NSString*)primaryKey {
+    return @"concatenatedID";
+}
+
 #pragma mark - Accessors and Helpers
 - (CSTaskTransientObjectStore*)getTransientObjectForModel {
     return [[CSTaskTransientObjectStore alloc] initWithRealmModel:self];
@@ -60,10 +64,6 @@
     [realm beginWriteTransaction];
     [self.comments addObject :newComment];
     [realm commitWriteTransaction]; 
-}
-
-+ (NSString*)primaryKey {
-    return @"concatenatedID";
 }
 
 @end
