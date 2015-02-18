@@ -80,7 +80,6 @@
 		933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */; };
 		933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */; };
 		93CA13CE1A92C8BE00402BE4 /* CSChatMessageRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */; };
-		93EBAB551A93F024006BAF4A /* CSChatMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBAB541A93F024006BAF4A /* CSChatMessageView.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 /* End PBXBuildFile section */
 
@@ -232,8 +231,6 @@
 		933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListViewController.m; path = ViewControllers/TaskList/CSTaskListViewController.m; sourceTree = "<group>"; };
 		93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSChatMessageRealmModel.h; path = Models/CSChatMessageRealmModel.h; sourceTree = "<group>"; };
 		93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSChatMessageRealmModel.m; path = Models/CSChatMessageRealmModel.m; sourceTree = "<group>"; };
-		93EBAB531A93F024006BAF4A /* CSChatMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatMessageView.h; sourceTree = "<group>"; };
-		93EBAB541A93F024006BAF4A /* CSChatMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatMessageView.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -337,8 +334,6 @@
 		459D5F7519DB449900C91EFA /* CommSync */ = {
 			isa = PBXGroup;
 			children = (
-				93EBAB531A93F024006BAF4A /* CSChatMessageView.h */,
-				93EBAB541A93F024006BAF4A /* CSChatMessageView.m */,
 				7439A51B1A82A748007D0D79 /* Categories */,
 				454D92061A7857AA000B74A8 /* Frameworks */,
 				7409982D1A0C178000229AFC /* Task Management */,
@@ -780,7 +775,6 @@
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
 				45190C301A89BD360030CB05 /* SZTextView.m in Sources */,
 				74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */,
-				93EBAB551A93F024006BAF4A /* CSChatMessageView.m in Sources */,
 				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				74C541EE1A93E67100FC29AD /* TLIndexPathSectionInfo.m in Sources */,
 				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
