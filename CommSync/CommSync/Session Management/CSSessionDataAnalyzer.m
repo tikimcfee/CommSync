@@ -51,6 +51,14 @@
     
     if(stringFromData)
     {
+        // -- TASK CREATION --
+        // Is the string a prompt of new task creation?
+        // Check the task realm for the task; if it does not exist, send the peer a request for the task
+        // +++!!!+++ IF IT NEEDS TO BE UPDATED, REQUEST!
+        
+        // Is the string a request for a task?
+        // Make sure you have the requested task, and initiate a resource send of task to the requesting peer
+        
         NSLog(@"<?> Data string received : [%@]", stringFromData);
         NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
         if(!stringComponents || stringComponents.count <= 1) {
@@ -79,6 +87,7 @@
             NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
             
             // send the request
+            NSLog(@"<?> Sending request string [%@] to peer [%@]", requestString, peer.displayName);
             [_globalManager sendSingleDataPacket:requestData toSinglePeer:peer];
         }
         else if ([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_TASK_REQUEST])
@@ -98,17 +107,10 @@
             }
             
             // Send the task to the peer
+            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", [stringComponents objectAtIndex:1], peer.displayName);
             CSTaskTransientObjectStore* transient = [model getTransientObjectForModel];
             [_globalManager sendSingleTask:transient toSinglePeer:peer];
         }
-        
-        // -- TASK CREATION --
-        // Is the string a prompt of new task creation?
-            // Check the task realm for the task; if it does not exist, send the peer a request for the task
-                // +++!!!+++ IF IT NEEDS TO BE UPDATED, REQUEST!
-        
-        // Is the string a request for a task?
-            // Make sure you have the requested task, and initiate a resource send of task to the requesting peer
         
     }
     else
