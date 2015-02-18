@@ -38,6 +38,6 @@
                                        inRealm:(RLMRealm*)realm
                                withTransaction:(BOOL)transcation;
 
-
+- (void) getAllImagesForTaskWithCompletionBlock:(void (^)(BOOL))completion;
 
 @end

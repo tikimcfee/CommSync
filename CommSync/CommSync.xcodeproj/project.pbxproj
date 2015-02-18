@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F3497541A941EF800CC5A98 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3497531A941EF800CC5A98 /* ImageCell.m */; };
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
 		3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F96AB581A86D036000A50F4 /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
@@ -62,6 +63,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F3497521A941EF800CC5A98 /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
+		3F3497531A941EF800CC5A98 /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
 		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
 		3F96AB591A86D036000A50F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -188,6 +191,8 @@
 		3F416E641A86A6EC00EDC347 /* Task Detail */ = {
 			isa = PBXGroup;
 			children = (
+				3F3497521A941EF800CC5A98 /* ImageCell.h */,
+				3F3497531A941EF800CC5A98 /* ImageCell.m */,
 				3FD986121A8466DB0084781B /* CustomHeaderCell.m */,
 				3FD986111A8466DB0084781B /* CustomHeaderCell.h */,
 				3F416E681A86C77500EDC347 /* CustomFooterCell.h */,
@@ -423,9 +428,9 @@
 			isa = PBXGroup;
 			children = (
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
+				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */,
 				74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */,
-				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
 			);
@@ -522,6 +527,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
+				3F3497541A941EF800CC5A98 /* ImageCell.m in Sources */,
 				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */,
 				7439A51E1A82A786007D0D79 /* UIImage+normalize.m in Sources */,

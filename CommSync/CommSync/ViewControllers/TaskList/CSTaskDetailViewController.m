@@ -12,9 +12,10 @@
 #import "CustomFooterCell.h"
 #import <Realm/Realm.h>
 #import "CSTaskCreationViewController.h"
+#import "ImageCell.h"
 
 @interface CSTaskDetailViewController ()
-@property (strong, nonatomic) IBOutlet UIImageView *taskImage;
+@property (strong, nonatomic) IBOutlet UIImage *taskImage;
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
 
@@ -26,21 +27,30 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
-    //self.titleLabel.text = self.sourceTask.taskTitle;
-   // self.descriptionLabel.text = self.sourceTask.taskDescription;
+    //creates a transient task based off the current source task
+    _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
+
     self.navigationBar.title = self.sourceTask.taskTitle;
+    
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
    
+    //create delegate and receptors
+    [_commentField setDelegate:self];
+    
+    _tableView.tableHeaderView = _headerView;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    
+    [_titleLabel setEnabled:NO];
     
     self.audioPlayer.delegate = self;
     
-//    [self.sourceTask getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
-//        if(didFinish) {
-//            //[self setImagesFromTask];
-//        }
-//    }];
+    [_transientTask  getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
+        if(didFinish) {
+            [self setImagesFromTask];
+        }
+    }];
 }
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
@@ -91,14 +101,22 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     if( [_titleLabel isEnabled] ) return 0;
-    return [self.sourceTask.comments count];
+    return ([self.sourceTask.comments count]  + 1);
 }
 
 //inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    if(indexPath.row == 0)
+    {
+        ImageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell"];
+        cell.pictureView.image = self.taskImage;
+        return cell;
+        
+    }
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
-    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
+    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row -1];
     
     //formates the time string
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -120,12 +138,13 @@
 
 # pragma mark - Callbacks and UI State
 - (void)setImagesFromTask {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (self.sourceTask.TRANSIENT_taskImages.count > 0) {
-//            UIImage* img = [self.sourceTask.TRANSIENT_taskImages objectAtIndex:0];
-//            self.taskImage.image = img;
-//        }
-//    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_transientTask.TRANSIENT_taskImages.count > 0) {
+            UIImage* img = [_transientTask.TRANSIENT_taskImages objectAtIndex:0];
+            self.taskImage = img;
+            [self.tableView reloadData];
+        }
+    });
     
 }
 

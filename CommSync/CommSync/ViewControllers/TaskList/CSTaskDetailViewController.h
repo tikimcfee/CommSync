@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
+#import "CSTaskTransientObjectStore.h"
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -15,6 +16,10 @@
 {
     
 }
+
+//task objects
+@property (strong, nonatomic) CSTaskRealmModel           *sourceTask;
+@property (strong, nonatomic) CSTaskTransientObjectStore *transientTask;
 
 //Header Items
 
@@ -29,28 +34,30 @@
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 @property (weak, nonatomic) IBOutlet UIView *footerView;
 
-@property (strong, nonatomic) CSTaskRealmModel *sourceTask;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConst;
 
-- (IBAction)addComment:(id)sender;
+
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 
--(void)keyboardWillHide:(NSNotification *) sender;
--(void)keyboardDidShow:(NSNotification *) sender;
-
-- (IBAction)editMode:(id)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *greenButton;
 @property (weak, nonatomic) IBOutlet UIButton *yellowButton;
 @property (weak, nonatomic) IBOutlet UIButton *redButton;
-- (IBAction)setRed:(id)sender;
-- (IBAction)setGreen:(id)sender;
-- (IBAction)setYellow:(id)sender;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *audioButton;
-- (IBAction)playAudio:(id)sender;
+
+- (IBAction)    playAudio:(id)sender;
+- (IBAction)    setRed:(id)sender;
+- (IBAction)    setGreen:(id)sender;
+- (IBAction)    addComment:(id)sender;
+- (IBAction)    setYellow:(id)sender;
+- (IBAction)    editMode:(id)sender;
+- (void)        setImagesFromTask;
+- (void)        keyboardWillHide:(NSNotification *) sender;
+- (void)        keyboardDidShow:(NSNotification *) sender;
 
 @end
