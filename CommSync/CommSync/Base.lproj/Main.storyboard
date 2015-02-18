@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -542,16 +542,22 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="imageCell" rowHeight="40" id="8Ku-RD-hgU" customClass="ImageCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="imageCell" rowHeight="133" id="8Ku-RD-hgU" customClass="ImageCell">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Ku-RD-hgU" id="VZG-e3-3qK">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="79t-Pz-cKB">
-                                                    <rect key="frame" x="8" y="0.0" width="600" height="41"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="79t-Pz-cKB">
+                                                    <rect key="frame" x="177" y="8" width="247" height="114"/>
                                                 </imageView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerX" secondItem="79t-Pz-cKB" secondAttribute="centerX" id="YGq-kM-W4N"/>
+                                                <constraint firstAttribute="centerY" secondItem="79t-Pz-cKB" secondAttribute="centerY" id="dls-Pm-7l9"/>
+                                                <constraint firstItem="79t-Pz-cKB" firstAttribute="top" secondItem="VZG-e3-3qK" secondAttribute="topMargin" id="hOi-H5-7x5"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="79t-Pz-cKB" secondAttribute="bottom" id="zow-va-JFM"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="pictureView" destination="79t-Pz-cKB" id="HgT-sZ-mOJ"/>
@@ -578,10 +584,12 @@
                             <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="BuA-Zo-fi5" secondAttribute="leading" id="HnQ-wb-qj4"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gib-tP-h9q" secondAttribute="trailing" constant="-16" id="P67-X8-seK"/>
                             <constraint firstAttribute="trailing" secondItem="gib-tP-h9q" secondAttribute="trailing" id="PpQ-u4-twT"/>
+                            <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="4Mh-NZ-J8m" secondAttribute="trailing" constant="-600" id="Wet-F8-2So"/>
                             <constraint firstItem="1Uh-3U-vka" firstAttribute="top" secondItem="4Mh-NZ-J8m" secondAttribute="bottom" id="i1T-JN-Y16"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="top" secondItem="4JZ-01-sqh" secondAttribute="bottom" id="jmF-dZ-Nr6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4Mh-NZ-J8m" secondAttribute="trailing" constant="-16" id="mGI-CK-F0h"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="top" secondItem="4JZ-01-sqh" secondAttribute="bottom" id="mHj-1X-27b"/>
+                            <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="4Mh-NZ-J8m" secondAttribute="trailing" constant="-600" id="pPt-Fq-Tss"/>
                             <constraint firstItem="4Mh-NZ-J8m" firstAttribute="top" secondItem="gib-tP-h9q" secondAttribute="bottom" constant="14" id="uQH-lU-2Ui"/>
                         </constraints>
                     </view>
@@ -615,7 +623,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZK-jE-Jr7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3251" y="-51"/>
+            <point key="canvasLocation" x="3251" y="-53"/>
         </scene>
         <!--User View Controller-->
         <scene sceneID="kd6-HM-lQb">

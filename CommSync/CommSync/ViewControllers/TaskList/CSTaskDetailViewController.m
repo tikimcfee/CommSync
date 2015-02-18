@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UIImage *taskImage;
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
+@property int activePic;
 
 @end
 
@@ -31,7 +32,7 @@
     _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
 
     self.navigationBar.title = self.sourceTask.taskTitle;
-    
+    _activePic = -1;
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
    
@@ -101,13 +102,13 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     if( [_titleLabel isEnabled] ) return 0;
-    return ([self.sourceTask.comments count]  + 1);
+    return ([self.sourceTask.comments count]  +  [_transientTask.TRANSIENT_taskImages count]);
 }
 
 //inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.row == 0)
+    if(indexPath.row < [_transientTask.TRANSIENT_taskImages count])
     {
         ImageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell"];
         cell.pictureView.image = self.taskImage;
@@ -116,7 +117,7 @@
     }
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
-    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row -1];
+    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row - [_transientTask.TRANSIENT_taskImages count]];
     
     //formates the time string
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -128,6 +129,38 @@
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12];
     
     return cell;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < [_transientTask.TRANSIENT_taskImages count]  ) {
+        
+        if(_activePic == indexPath.row){
+            return 500;
+        }
+        return 150;
+    }
+    
+    return 60;
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    if(indexPath.row < [_transientTask.TRANSIENT_taskImages count])
+    {
+        if(_activePic ==  indexPath.row)
+        {
+            _activePic = -1;
+        }
+        else _activePic = indexPath.row;
+       
+        [[self tableView] beginUpdates];
+        
+        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]withRowAnimation: UITableViewRowAnimationAutomatic];
+        [[self tableView] endUpdates];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

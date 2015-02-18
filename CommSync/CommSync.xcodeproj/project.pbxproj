@@ -443,12 +443,12 @@
 				933AA13F1A71DCF100DCC10A /* CSTaskListViewController.h */,
 				933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */,
 				933AA1371A71DC9A00DCC10A /* CSTaskTableViewCell.h */,
-				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
 				3F416E641A86A6EC00EDC347 /* Task Detail */,
 				45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */,
 				45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */,
+				933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */,
 			);
 			name = TaskList;
 			sourceTree = "<group>";
