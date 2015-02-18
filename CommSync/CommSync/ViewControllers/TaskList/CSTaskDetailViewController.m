@@ -101,7 +101,7 @@
 //as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    if( [_titleLabel isEnabled] ) return 0;
+    if( [_titleLabel isEnabled] ) return [_transientTask.TRANSIENT_taskImages count];
     return ([self.sourceTask.comments count]  +  [_transientTask.TRANSIENT_taskImages count]);
 }
 
@@ -111,7 +111,7 @@
     if(indexPath.row < [_transientTask.TRANSIENT_taskImages count])
     {
         ImageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell"];
-        cell.pictureView.image = self.taskImage;
+        cell.pictureView.image = [_transientTask.TRANSIENT_taskImages objectAtIndex:indexPath.row];
         return cell;
         
     }
