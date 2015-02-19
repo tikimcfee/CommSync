@@ -39,30 +39,34 @@
     //
     // Session management objects
     //
-    _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
-    _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
-    
-    // There will only ever be a single service browser and advertiser, but multiple sessions
-    _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
-    _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
-                                                           discoveryInfo:nil
-                                                             serviceType:COMMSYNC_SERVICE_ID];
-    _serviceBrowser.delegate = self;
-    _serviceAdvertiser.delegate = self;
-    
-    [_serviceBrowser startBrowsingForPeers];
-    [_serviceAdvertiser startAdvertisingPeer];
-    
-    _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
-    
-    // Connection deferrement
-    self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
-    self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
-    self.isResponsibleForSendingInvites = YES;
-    
-    // Getting default realm from disk
-    _realm = [RLMRealm defaultRealm];
-    _realm.autorefresh = YES;
+    if(self = [super init])
+    {
+        _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
+        _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
+        _dataHandlingDelegate = _dataAnalyzer;
+        
+        // There will only ever be a single service browser and advertiser, but multiple sessions
+        _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
+        _serviceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:_myPeerID
+                                                               discoveryInfo:nil
+                                                                 serviceType:COMMSYNC_SERVICE_ID];
+        _serviceBrowser.delegate = self;
+        _serviceAdvertiser.delegate = self;
+        
+        [_serviceBrowser startBrowsingForPeers];
+        [_serviceAdvertiser startAdvertisingPeer];
+        
+        _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
+        
+        // Connection deferrement
+        self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
+        self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
+        self.isResponsibleForSendingInvites = YES;
+        
+        // Getting default realm from disk
+        _realm = [RLMRealm defaultRealm];
+        _realm.autorefresh = YES;
+    }
     
     return self;
 }
@@ -78,9 +82,9 @@
 # pragma mark - Heartbeat
 - (void) sendPulseToPeers
 {
-    NSString* pulseText = PULSE_STRING;
-    NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
-    NSError* error;
+//    NSString* pulseText = PULSE_STRING;
+//    NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
+//    NSError* error;
     
 //    for(MCPeerID* peer in _currentSession.connectedPeers)
 //    {
@@ -386,65 +390,37 @@
     certificateHandler(YES);
 }
 
-- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
-{
-    [_dataAnalyzer analyzeReceivedData:data fromPeer:peerID];
-//    
-//    NSString* stringFromData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//    
-//    id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-//        
-//    NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
-//    
-//    if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
-//    {
-//        [self batchUpdateRealmWithTasks:@[receivedObject]];
-//    }
-//    else if([receivedObject isKindOfClass:[NSMutableArray class]])
-//    {
-//        [self batchUpdateRealmWithTasks:receivedObject];
-//    }
-//    else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
-//    {
-//        [self updateRealmWithChatMessage:receivedObject];
-//    }
-//    else if([receivedObject isKindOfClass:[NSDictionary class]])
-//    {
-//        
-//    }
-}
-
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     NSString* stateString;
     switch (state) {
         case MCSessionStateNotConnected:
             stateString = kUserNotConnectedNotification;
-//            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-//            {
-//                NSLog(@"Retrying connection to [%@]", peerID.displayName);
-//                NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
-//                
-//                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
-//                [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
-//                
-//                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-//            }
+            //            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+            //            {
+            //                NSLog(@"Retrying connection to [%@]", peerID.displayName);
+            //                NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
+            //
+            //                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
+            //                [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
+            //
+            //                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+            //            }
             break;
         case MCSessionStateConnecting:
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
-//            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-//            {
-//                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
-//                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
-//                
-////                [self sendDataPacketToPeers:contextData];
-//                
-//                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-//                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-//            }
+            //            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
+            //            {
+            //                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
+            //                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
+            //
+            ////                [self sendDataPacketToPeers:contextData];
+            //
+            //                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+            //                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
+            //            }
             stateString = kUserConnectedNotification;
             break;
         default:
@@ -456,7 +432,7 @@
     
     NSLog(@"\t\tPeer: [%@] --> New State: [%@]", peerID.displayName, stateString);
     NSLog(@"\t\t-- --");
-
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:stateString object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PEER_CHANGED_STATE" object:self];
 }
@@ -490,72 +466,60 @@
 }
  **/
 
+- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
+{
+//    [_dataAnalyzer analyzeReceivedData:data fromPeer:peerID];
+    
+    if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
+    {
+        [_dataHandlingDelegate session:session didReceiveData:data fromPeer:peerID];
+    }
+//    
+//    NSString* stringFromData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    
+//    id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//        
+//    NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
+//    
+//    if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
+//    {
+//        [self batchUpdateRealmWithTasks:@[receivedObject]];
+//    }
+//    else if([receivedObject isKindOfClass:[NSMutableArray class]])
+//    {
+//        [self batchUpdateRealmWithTasks:receivedObject];
+//    }
+//    else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+//    {
+//        [self updateRealmWithChatMessage:receivedObject];
+//    }
+//    else if([receivedObject isKindOfClass:[NSDictionary class]])
+//    {
+//        
+//    }
+}
+
+#pragma mark - Data handling delegate passthroughs
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
 {
-    // Create a notification dictionary for resource progress tracking
-    NSDictionary *dict = @{@"resourceName"  :   resourceName,
-                           @"peerID"        :   peerID,
-                           @"progress"      :   progress
-                           };
-    
-    // Post notification globally
-    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
-                                                        object:nil
-                                                      userInfo:dict];
-    
-    // Register the sessiona manager as the observation delegate
-
-    /**
-     Use this code if you want to observe the progress of a data transfer from the 
-     session manager and then send notifications out as progress changes
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [progress addObserver:self
-//                   forKeyPath:@"fractionCompleted"
-//                      options:NSKeyValueObservingOptionNew
-//                      context:nil];
-//    });
-     **/
+    if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
+    {
+        [_dataHandlingDelegate session:session didStartReceivingResourceWithName:resourceName fromPeer:peerID withProgress:progress];
+    }
 }
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
-    if (error) {
-        NSLog(@"%@",error);
-        return;
+    if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
+    {
+        [_dataHandlingDelegate session:session didFinishReceivingResourceWithName:resourceName fromPeer:peerID atURL:localURL withError:error];
     }
-    // Create a notification dictionary for final location and name
-    NSDictionary *dict = @{@"resourceName"  :   resourceName,
-                           @"peerID"        :   peerID,
-                           @"localURL"      :   localURL
-                           };
-    
-    // Post notification globally
-    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
-                                                        object:nil
-                                                      userInfo:dict];
 }
 
 - (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
 {
     NSLog(@"Peer: [%@] is streaming", peerID.displayName);
 }
-
-#pragma mark - OBSERVATION CALLBACK
-/**
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    // Post global notification that the progress of a resource stream has changed.
-    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    NSLog(@"Task progress: %f", ((NSProgress *)object).fractionCompleted);
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSReceivingProgressNotification
-                                                        object:nil
-                                                      userInfo:@{@"progress": (NSProgress *)object}];
-}
-**/
-
-
 
 
 #pragma mark - Database actions

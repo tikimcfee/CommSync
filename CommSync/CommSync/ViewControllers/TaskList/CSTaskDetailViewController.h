@@ -34,10 +34,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConst;
 - (IBAction)increaseHeight:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextField *decreaseHeight;
-- (IBAction)increase:(id)sender;
 
 - (IBAction)addComment:(id)sender;
 
-- (IBAction)editTask:(id)sender;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
 @end

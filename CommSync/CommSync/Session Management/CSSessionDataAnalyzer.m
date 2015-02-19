@@ -34,6 +34,82 @@
     return sharedInstance;
 }
 
+#pragma mark - Data handling
+- (void)session:(MCSession *)session
+ didReceiveData:(NSData *)data
+       fromPeer:(MCPeerID *)peerID
+{
+    [self analyzeReceivedData:data fromPeer:peerID];
+}
+
+- (void)session:(MCSession *)session
+didStartReceivingResourceWithName:(NSString *)resourceName
+       fromPeer:(MCPeerID *)peerID
+   withProgress:(NSProgress *)progress
+{
+    // Create a notification dictionary for resource progress tracking
+    NSDictionary *dict = @{@"resourceName"  :   resourceName,
+                           @"peerID"        :   peerID,
+                           @"progress"      :   progress
+                           };
+    
+    // Post notification globally
+    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
+                                                        object:nil
+                                                      userInfo:dict];
+    
+    /**
+     Use this code if you want to observe the progress of a data transfer from the
+     data analyzer and then send notifications out as progress changes
+     //    dispatch_async(dispatch_get_main_queue(), ^{
+     //        [progress addObserver:self
+     //                   forKeyPath:@"fractionCompleted"
+     //                      options:NSKeyValueObservingOptionNew
+     //                      context:nil];
+     //    });
+     **/
+}
+
+
+
+- (void)session:(MCSession *)session
+didFinishReceivingResourceWithName:(NSString *)resourceName
+       fromPeer:(MCPeerID *)peerID
+          atURL:(NSURL *)localURL
+      withError:(NSError *)error
+{
+    if (error) {
+        NSLog(@"%@",error);
+        return;
+    }
+ 
+    // Create a notification dictionary for final location and name
+    NSDictionary *dict = @{@"resourceName"  :   resourceName,
+                           @"peerID"        :   peerID,
+                           @"localURL"      :   localURL
+                           };
+    
+    // Post notification globally
+    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
+                                                        object:nil
+                                                      userInfo:dict];
+}
+
+#pragma mark - OBSERVATION CALLBACK
+/**
+ -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+ // Post global notification that the progress of a resource stream has changed.
+ // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+ NSLog(@"Task progress: %f", ((NSProgress *)object).fractionCompleted);
+ 
+ [[NSNotificationCenter defaultCenter] postNotificationName:kCSReceivingProgressNotification
+ object:nil
+ userInfo:@{@"progress": (NSProgress *)object}];
+ }
+ **/
+
 #pragma mark - Data transmission
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task
 {

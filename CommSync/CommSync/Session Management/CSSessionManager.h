@@ -20,6 +20,17 @@
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
 
+@protocol MCSessionDataHandlingDelegate <NSObject>
+
+@required
+- (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress;
+
+- (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error;
+
+- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID;
+
+@end
+
 @class CSTaskTransientObjectStore;
 
 @interface CSSessionManager : NSObject <MCNearbyServiceBrowserDelegate,
@@ -35,6 +46,8 @@
 // 1-1 session objects
 @property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
 
+// Delegate objects for handling callbacks
+@property (strong, nonatomic) id <MCSessionDataHandlingDelegate> dataHandlingDelegate;
 
 // Lifecycle and connection testing
 - (CSSessionManager*) initWithID:(NSString*)userID;

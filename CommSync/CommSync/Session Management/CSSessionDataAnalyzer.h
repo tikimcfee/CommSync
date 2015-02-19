@@ -10,7 +10,7 @@
 #import "CSSessionManager.h"
 
 @class RLMRealm;
-@interface CSSessionDataAnalyzer : NSObject
+@interface CSSessionDataAnalyzer : NSObject <MCSessionDataHandlingDelegate>
 
 @property (nonatomic, strong) CSSessionManager* globalManager;
 @property (nonatomic, strong) RLMRealm* realm;

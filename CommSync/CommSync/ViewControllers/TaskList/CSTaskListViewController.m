@@ -176,7 +176,7 @@
 
 - (void)updateConnectionCountAndTableView:(NSNotification *)notification
 {
-    __weak CSTaskListViewController *weakSelf = self;
+//    __weak CSTaskListViewController *weakSelf = self;
     
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count];
