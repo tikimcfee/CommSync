@@ -23,7 +23,7 @@
     // Configure the view for the selected state
 }
 
-- (void)configureWithSourceInformation:(NSDictionary *)task andIndexPath:(NSIndexPath*)path {
+- (void)configureWithSourceInformation:(NSDictionary *)task {
 
     // Set label view traits
     self.taskStatusLabel.layer.borderWidth = 0.5f;
@@ -66,10 +66,8 @@
     
     // Set completion block and state information
     _progressCompletionBlock = [task valueForKey:@"callback"];
-    _pathToSelf = path;
     _resourceName = [task valueForKey:@"resourceName"];
-
-    _incomingTaskRow = [task valueForKey:@"incomingCountBeforeAddition"];
+    _sourceTask = task;
     
     [self registerForNotifications];
 }
@@ -98,8 +96,6 @@
     self.loadProgress = nil;
     self.sourceTask = nil;
     self.resourceName = nil;
-    self.pathToSelf = nil;
-    self.incomingTaskRow = nil;
     self.progressCompletionBlock = nil;
 }
 
@@ -136,7 +132,7 @@
             [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
             
             if(strSelf.progressCompletionBlock) {
-                strSelf.progressCompletionBlock(strSelf.pathToSelf, strSelf.incomingTaskRow);
+                strSelf.progressCompletionBlock(strSelf.sourceTask);
             }
             
             [strSelf cleanup];

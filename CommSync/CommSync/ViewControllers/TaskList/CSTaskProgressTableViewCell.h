@@ -21,13 +21,10 @@
 // Task information and state
 @property (strong, nonatomic) NSDictionary *sourceTask;
 @property (strong, nonatomic) NSString* resourceName;
+@property (strong, nonatomic) void (^progressCompletionBlock)(NSDictionary*);
 
-@property (strong, nonatomic) void (^progressCompletionBlock)(NSIndexPath*, NSNumber*);
-@property (strong, nonatomic) NSIndexPath* pathToSelf;
-@property (strong, nonatomic) NSNumber* incomingTaskRow;
 
 // Configuration method
-- (void)configureWithSourceInformation:(NSDictionary *)task
-                          andIndexPath:(NSIndexPath*)path;
+- (void)configureWithSourceInformation:(NSDictionary *)task;
 
 @end
