@@ -108,7 +108,7 @@
             
             // Send the task to the peer
             NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", [stringComponents objectAtIndex:1], peer.displayName);
-            CSTaskTransientObjectStore* transient = [model getTransientObjectForModel];
+            CSTaskTransientObjectStore* transient = model.transientModel;
             [_globalManager sendSingleTask:transient toSinglePeer:peer];
         }
         

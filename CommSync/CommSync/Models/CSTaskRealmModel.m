@@ -37,13 +37,22 @@
     return defaults;
 }
 
++ (NSArray*)ignoredProperties {
+    return @[@"transientModel"];
+}
+
 + (NSString*)primaryKey {
     return @"concatenatedID";
 }
 
 #pragma mark - Accessors and Helpers
-- (CSTaskTransientObjectStore*)getTransientObjectForModel {
-    return [[CSTaskTransientObjectStore alloc] initWithRealmModel:self];
+- (CSTaskTransientObjectStore*)transientModel {
+    if(_transientModel)
+        return _transientModel;
+    
+    _transientModel = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self];
+    
+    return _transientModel;
 }
 
 + (NSMutableArray*)getTransientTaskList {
