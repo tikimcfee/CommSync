@@ -11,6 +11,8 @@
 #import "CSTaskRealmModel.h"
 #import "M13ProgressViewRing.h"
 
+@class CSNewTaskResourceInformationContainer;
+
 @interface CSTaskProgressTableViewCell : UITableViewCell
 
 // View hierarcy and UI
@@ -19,12 +21,12 @@
 @property (strong, nonatomic) NSProgress* loadProgress;
 
 // Task information and state
-@property (strong, nonatomic) NSDictionary *sourceTask;
+@property (strong, nonatomic) CSNewTaskResourceInformationContainer *sourceTask;
 @property (strong, nonatomic) NSString* resourceName;
-@property (strong, nonatomic) void (^progressCompletionBlock)(NSDictionary*);
+@property (strong, nonatomic) void (^progressCompletionBlock)(CSTaskProgressTableViewCell*);
 
 
 // Configuration method
-- (void)configureWithSourceInformation:(NSDictionary *)task;
+- (void)configureWithSourceInformation:(CSNewTaskResourceInformationContainer*)container;
 
 @end

@@ -18,6 +18,8 @@
 #define kCS_HEADER_TASK_REQUEST @"TASK_REQUEST"
 #define kCS_STRING_SEPERATOR    @":"
 
+@implementation CSNewTaskResourceInformationContainer
+@end
 
 @implementation CSSessionDataAnalyzer
 
@@ -28,7 +30,8 @@
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.globalManager = manager;
-        sharedInstance.realm = [RLMRealm defaultRealm];
+        sharedInstance.taskPool = [NSMutableDictionary new];
+        sharedInstance.requestPool = [NSMutableDictionary new];
     });
     
     return sharedInstance;
@@ -48,16 +51,21 @@ didStartReceivingResourceWithName:(NSString *)resourceName
    withProgress:(NSProgress *)progress
 {
     // Create a notification dictionary for resource progress tracking
-    NSDictionary *dict = @{@"resourceName"  :   resourceName,
-                           @"peerID"        :   peerID,
-                           @"progress"      :   progress
-                           };
+    CSNewTaskResourceInformationContainer* container = [CSNewTaskResourceInformationContainer new];
+    container.resourceName = resourceName;
+    container.peerID = peerID;
+    container.progressObject = progress;
+    
+    NSDictionary *containerDictionary = @{kCSNewTaskResourceInformationContainer:container};
     
     // Post notification globally
     // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
                                                         object:nil
-                                                      userInfo:dict];
+                                                      userInfo:containerDictionary];
+    
+    // we have made a request and been served - add it to our pool
+    [_requestPool setValue:peerID forKey:resourceName];
     
     /**
      Use this code if you want to observe the progress of a data transfer from the
@@ -90,11 +98,27 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
                            @"localURL"      :   localURL
                            };
     
+    // We have finished our request - get rid out of it
+    [_requestPool removeObjectForKey:resourceName];
+    
     // Post notification globally
     // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
                                                         object:nil
                                                       userInfo:dict];
+}
+
+#pragma mark - Data persistence
+- (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
+{
+    if([_taskPool valueForKey:taskID]) {
+        return [_taskPool valueForKey:taskID];
+    }
+    CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
+    if(model)
+        return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
+
+    return nil;
 }
 
 #pragma mark - OBSERVATION CALLBACK
@@ -150,16 +174,25 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
                 return;
             }
             
+            NSString* newTaskId = [stringComponents objectAtIndex:1];
+            
+            // check to see if already made request from someone
+            if([_requestPool valueForKey:newTaskId])
+            {
+                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                return;
+            }
+            
             // check to see if the task already exists
-            CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:[stringComponents objectAtIndex:1]];
+            CSTaskTransientObjectStore* model = [self getTransientModelFromQueueOrDatabaseWithID:newTaskId];
             if(model)
             {
-                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",[stringComponents objectAtIndex:1]);
+                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
                 return;
             }
             
             // build the request string
-            NSString* requestString = [self buildTaskRequestStringFromNewTaskID:(NSString*)[stringComponents objectAtIndex:1]];
+            NSString* requestString = [self buildTaskRequestStringFromNewTaskID:newTaskId];
             NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
             
             // send the request
@@ -174,8 +207,10 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
                 return;
             }
             
+            NSString* requestedTaskID = [stringComponents objectAtIndex:1];
+            
             // check to see if the task exists
-            CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:[stringComponents objectAtIndex:1]];
+            CSTaskTransientObjectStore* model = [self getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
             if(!model)
             {
                 NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed string?");
@@ -183,9 +218,8 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
             }
             
             // Send the task to the peer
-            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", [stringComponents objectAtIndex:1], peer.displayName);
-            CSTaskTransientObjectStore* transient = model.transientModel;
-            [_globalManager sendSingleTask:transient toSinglePeer:peer];
+            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, peer.displayName);
+            [_globalManager sendSingleTask:model toSinglePeer:peer];
         }
         
     }

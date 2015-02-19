@@ -11,6 +11,7 @@
 #import "CSTaskTableViewCell.h"
 #import "CSTaskProgressTableViewCell.h"
 #import "CSTaskTransientObjectStore.h"
+#import "CSSessionDataAnalyzer.h"
 #import "AppDelegate.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
@@ -31,6 +32,7 @@
 @property (strong, nonatomic) TLIndexPathController* indexPathController;
 @property (assign, nonatomic) BOOL willRefreshFromIncomingTask;
 @property (strong, nonatomic) NSMutableArray* incomingTasks;
+@property (copy, nonatomic) void (^incomingTaskCallback)(CSTaskProgressTableViewCell*);
 
 @end
 
@@ -73,6 +75,15 @@
     // Notification registrations
     [self registerForNotifications];
     
+    // Incoming task execution block
+    _incomingTaskCallback = ^void(CSTaskProgressTableViewCell* sourceData)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [weakSelf.incomingTasks removeObject:sourceData];
+            [weakSelf reloadDataModels];
+        });
+    };;
+    
     // Initialize storage
     self.incomingTasks = [NSMutableArray new];
     [self setupInitialTaskDataModels];
@@ -93,10 +104,10 @@
 }
 
 - (void)reloadDataModels {
-    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList];
-    [tasks addObjectsFromArray:_incomingTasks];
+    NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+    [newDataModel addObjectsFromArray:_incomingTasks];
     
-    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
+    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
     _indexPathController.dataModel = tasksDataModel;
     if(self.willRefreshFromIncomingTask)
         self.willRefreshFromIncomingTask = NO;
@@ -209,14 +220,9 @@
         return cell;
     }
     
-    else if([dataSource isKindOfClass:[NSDictionary class]]) {
+    else if([dataSource isKindOfClass:[CSTaskProgressTableViewCell class]]) {
         
-        static NSString *simpleTableIdentifier = @"CSTaskProgressTableViewCell";
-        CSTaskProgressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-        
-        [cell configureWithSourceInformation:dataSource];
-        
-        return cell;
+        return dataSource;
     }
     
     return nil;
@@ -237,35 +243,25 @@
 }
 
 - (void)newTaskStreamStarted:(NSNotification*)notification {
+    
     NSDictionary* info = notification.userInfo;
+    CSNewTaskResourceInformationContainer* container = [info valueForKey:kCSNewTaskResourceInformationContainer];
     
-    NSProgress* progress = [info valueForKey:@"progress"];
-    NSString* name = ((MCPeerID*)[info valueForKey:@"peerID"]).displayName;
-    NSString* resourceName = [info valueForKey:@"resourceName"];
+    NSMutableArray* newArray = [NSMutableArray arrayWithArray:self.indexPathController.items];
     
-    __weak typeof(self) weakSelf = self;
-    void (^callback)(NSDictionary*) = ^void(NSDictionary* sourceData)
-    {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [weakSelf.incomingTasks removeObject:sourceData];
-            [weakSelf reloadDataModels];
-        });
-    };
+    static NSString *simpleTableIdentifier = @"CSTaskProgressTableViewCell";
+    CSTaskProgressTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    [cell configureWithSourceInformation:container];
+    cell.progressCompletionBlock = _incomingTaskCallback;
     
-    NSMutableArray* newArray = [self.indexPathController.items mutableCopy];
-    NSDictionary* newSourceData = @{@"peerName":name,
-                                    @"progress":progress,
-                                    @"resourceName":resourceName,
-                                    @"callback":callback,
-                                    @"incomingCountBeforeAddition":[NSNumber numberWithUnsignedLong:_incomingTasks.count]};
-    [newArray addObject:newSourceData];
-    [_incomingTasks addObject:newSourceData];
+    [newArray addObject:cell];
+    [_incomingTasks addObject:cell];
     
     TLIndexPathDataModel* newModel = [[TLIndexPathDataModel alloc] initWithItems:newArray];
     self.indexPathController.dataModel = newModel;
-    [self reloadDataModels];
+//    [self reloadDataModels];
     
-    _willRefreshFromIncomingTask = YES;
+     _willRefreshFromIncomingTask = YES;
     
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        [self.tableView reloadData];
@@ -299,7 +295,9 @@
 
 - (void)controller:(TLIndexPathController *)controller didUpdateDataModel:(TLIndexPathUpdates *)updates
 {
-    [updates performBatchUpdatesOnTableView:self.tableView withRowAnimation:UITableViewRowAnimationFade];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [updates performBatchUpdatesOnTableView:self.tableView withRowAnimation:UITableViewRowAnimationFade];
+    });
 }
 
 

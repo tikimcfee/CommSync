@@ -10,6 +10,7 @@
 #import "CSSessionDataAnalyzer.h"
 #import "CSSessionManager.h"
 #import "CSTaskTransientObjectStore.h"
+#import "CSSessionDataAnalyzer.h"
 
 @implementation CSTaskProgressTableViewCell
 
@@ -23,7 +24,7 @@
     // Configure the view for the selected state
 }
 
-- (void)configureWithSourceInformation:(NSDictionary *)task {
+- (void)configureWithSourceInformation:(CSNewTaskResourceInformationContainer *)container {
 
     // Set label view traits
     self.taskStatusLabel.layer.borderWidth = 0.5f;
@@ -37,7 +38,7 @@
     NSMutableAttributedString* label = [self.taskStatusLabel.attributedText mutableCopy];
     NSDictionary* attributes = [label attributesAtIndex:0 effectiveRange:nil];
     
-    NSString* peerName = [NSString stringWithFormat:@"\n%@..", [task valueForKey:@"peerName"]];
+    NSString* peerName = [NSString stringWithFormat:@"\n%@..", container.peerID.displayName];
     NSMutableAttributedString* sourceName = [[NSMutableAttributedString alloc] initWithString:peerName attributes:attributes];
     
     [label appendAttributedString:sourceName];
@@ -45,7 +46,7 @@
     [self.taskStatusLabel setAttributedText:label];
     
     // Set progress ring state and observations
-    _loadProgress = [task valueForKey:@"progress"];
+    _loadProgress = container.progressObject;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.loadProgress addObserver:self
@@ -65,9 +66,8 @@
     _progressRingView.showPercentage = YES;
     
     // Set completion block and state information
-    _progressCompletionBlock = [task valueForKey:@"callback"];
-    _resourceName = [task valueForKey:@"resourceName"];
-    _sourceTask = task;
+    _resourceName = container.resourceName;
+    _sourceTask = container;
     
     [self registerForNotifications];
 }
@@ -132,7 +132,7 @@
             [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
             
             if(strSelf.progressCompletionBlock) {
-                strSelf.progressCompletionBlock(strSelf.sourceTask);
+                strSelf.progressCompletionBlock(self);
             }
             
             [strSelf cleanup];

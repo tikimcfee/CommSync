@@ -9,15 +9,29 @@
 #import <Foundation/Foundation.h>
 #import "CSSessionManager.h"
 
+#define kCSNewTaskResourceInformationContainer @"resourceInformationContainer"
+
 @class RLMRealm;
 @interface CSSessionDataAnalyzer : NSObject <MCSessionDataHandlingDelegate>
 
+// Task queue for new tasks that are waiting for database writes
+@property (nonatomic, strong) NSMutableDictionary* taskPool;
+@property (nonatomic, strong) NSMutableDictionary* requestPool;
+
 @property (nonatomic, strong) CSSessionManager* globalManager;
-@property (nonatomic, strong) RLMRealm* realm;
 
 + (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager;
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
+
+
+@end
+
+@interface CSNewTaskResourceInformationContainer : NSObject
+
+@property (strong, nonatomic) NSString* resourceName;
+@property (strong, nonatomic) MCPeerID* peerID;
+@property (strong, nonatomic) NSProgress* progressObject;
 
 @end

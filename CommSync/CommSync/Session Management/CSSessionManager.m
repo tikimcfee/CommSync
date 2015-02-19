@@ -108,7 +108,7 @@
             if(session.connectedPeers.count > 1) {
                 NSLog(@"! WARNING ! - Session with multiple users (%@)", session.connectedPeers);
                 NSLog(@"! WARNING ! - ... will attempt to send to peer (%@)", [session.connectedPeers objectAtIndex:0]);
-            } else if (session.connectedPeers <= 0) {
+            } else if (session.connectedPeers.count <= 0) {
                 NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", session.connectedPeers);
                 continue;
             }
@@ -133,7 +133,7 @@
         
         if(sessionToSendOn.connectedPeers.count > 1) {
             NSLog(@"! WARNING ! - Session with multiple users (%@)", sessionToSendOn.connectedPeers);
-        } else if (sessionToSendOn.connectedPeers <= 0) {
+        } else if (sessionToSendOn.connectedPeers.count <= 0) {
             NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", sessionToSendOn.connectedPeers);
             return;
         }
@@ -201,7 +201,7 @@
         
         if(sessionToSendOn.connectedPeers.count > 1) {
             NSLog(@"! WARNING ! - Session with multiple users (%@)", sessionToSendOn.connectedPeers);
-        } else if (sessionToSendOn.connectedPeers <= 0) {
+        } else if (sessionToSendOn.connectedPeers.count <= 0) {
             NSLog(@"! WARNING ! - Session with ZERO connected users (%@)", sessionToSendOn.connectedPeers);
             return;
         }
@@ -321,7 +321,7 @@
         return;
     }
     
-    [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:info];
+    [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil];
 }
 
 - (void) attemptPeerInvitationForPeer:(MCPeerID *)peerID
@@ -396,6 +396,20 @@
     switch (state) {
         case MCSessionStateNotConnected:
             stateString = kUserNotConnectedNotification;
+            if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
+            {
+                MCSession* badSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
+                [badSession disconnect];
+                badSession.delegate = nil;
+                [_sessionLookupDisplayNamesToSessions removeObjectForKey:peerID.displayName];
+            }
+            BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedAscending;
+            
+            if(shouldInvite)
+            {
+                NSLog(@"Attemping to reestablish a connection to peer %@...", peerID.displayName);
+                [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil];
+            }
             //            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
             //            {
             //                NSLog(@"Retrying connection to [%@]", peerID.displayName);
@@ -465,6 +479,7 @@
     
 }
  **/
+#pragma mark - Data handling delegate passthroughs
 
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
 {
@@ -499,7 +514,7 @@
 //    }
 }
 
-#pragma mark - Data handling delegate passthroughs
+
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
 {
     if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
