@@ -166,8 +166,8 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="ogc-W8-25c" id="exK-Jn-vCx"/>
-                            <outlet property="delegate" destination="ogc-W8-25c" id="X7I-br-F81"/>
+                            <outlet property="dataSource" destination="ogc-W8-25c" id="Hgd-cy-Or5"/>
+                            <outlet property="delegate" destination="ogc-W8-25c" id="yPs-Wo-Ftj"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Zer-Jg-xgp">

@@ -46,6 +46,7 @@
 		746F6AD61A892613007A83E8 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC81A892613007A83E8 /* CHANGELOG */; };
 		746F6AD71A892613007A83E8 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC91A892613007A83E8 /* VERSION */; };
 		746F6ADA1A8926AA007A83E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746F6A7C1A891DCC007A83E8 /* AVFoundation.framework */; };
+		7499A82A1A950078009A28B6 /* CSSessionDataAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */; };
 		74C541EB1A93E67100FC29AD /* TLIndexPathController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541C11A93E67100FC29AD /* TLIndexPathController.m */; };
 		74C541EC1A93E67100FC29AD /* TLIndexPathDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541C41A93E67100FC29AD /* TLIndexPathDataModel.m */; };
 		74C541ED1A93E67100FC29AD /* TLIndexPathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541C61A93E67100FC29AD /* TLIndexPathItem.m */; };
@@ -65,15 +66,6 @@
 		74C541FB1A93E67100FC29AD /* TLTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541EA1A93E67100FC29AD /* TLTableViewController.m */; };
 		74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */; };
 		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
-		74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D11A7FDE4300ECBADB /* Connection.m */; };
-		74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D41A7FDE4300ECBADB /* JKConnection.m */; };
-		74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */; };
-		74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14D91A7FDE4300ECBADB /* JKPeer.m */; };
-		74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */; };
-		74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */; };
-		74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */; };
-		74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */; };
-		74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DB14E51A7FDE4300ECBADB /* Server.m */; };
 		9313F7961A8BF14800C50736 /* CSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9313F7951A8BF14800C50736 /* CSChatViewController.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
@@ -196,6 +188,8 @@
 		746F6AC81A892613007A83E8 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		746F6AC91A892613007A83E8 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		746F6ADB1A8927EE007A83E8 /* CommSync-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommSync-Prefix.pch"; sourceTree = "<group>"; };
+		7499A8281A950078009A28B6 /* CSSessionDataAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionDataAnalyzer.h; path = "Session Management/CSSessionDataAnalyzer.h"; sourceTree = "<group>"; };
+		7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionDataAnalyzer.m; path = "Session Management/CSSessionDataAnalyzer.m"; sourceTree = "<group>"; };
 		74C541C01A93E67100FC29AD /* TLIndexPathController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLIndexPathController.h; sourceTree = "<group>"; };
 		74C541C11A93E67100FC29AD /* TLIndexPathController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLIndexPathController.m; sourceTree = "<group>"; };
 		74C541C31A93E67100FC29AD /* TLIndexPathDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLIndexPathDataModel.h; sourceTree = "<group>"; };
@@ -456,9 +450,11 @@
 		4595391F19E38F2F00744747 /* Session Management */ = {
 			isa = PBXGroup;
 			children = (
+				74DB14F51A7FEAEB00ECBADB /* Framework Supported */,
 				4595391C19E38F1F00744747 /* CSSessionManager.h */,
 				4595391D19E38F1F00744747 /* CSSessionManager.m */,
-				74DB14F51A7FEAEB00ECBADB /* Framework Supported */,
+				7499A8281A950078009A28B6 /* CSSessionDataAnalyzer.h */,
+				7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */,
 			);
 			name = "Session Management";
 			sourceTree = "<group>";
@@ -1094,7 +1090,6 @@
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
 				741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */,
 				74C541F81A93E67100FC29AD /* UITableView+ScrollOptimizer.m in Sources */,
-				74DB14EA1A7FDE4300ECBADB /* JKPeer.m in Sources */,
 				746F6ACD1A892613007A83E8 /* EZAudioPlayer.m in Sources */,
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
 				93EBABDB1A964552006BAF4A /* JSQMessagesBubbleImage.m in Sources */,
@@ -1132,13 +1127,13 @@
 				746F6AD01A892613007A83E8 /* EZAudioPlotGLKViewController.m in Sources */,
 				746F6AD21A892613007A83E8 /* EZOutput.m in Sources */,
 				93CA13CE1A92C8BE00402BE4 /* CSChatMessageRealmModel.m in Sources */,
-				74DB14EF1A7FDE4300ECBADB /* Server.m in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,
 				74C541F21A93E67100FC29AD /* TLCollapsibleTableViewController.m in Sources */,
 				9313F7961A8BF14800C50736 /* CSChatViewController.m in Sources */,
 				93EBABEA1A964552006BAF4A /* JSQMessagesMediaPlaceholderView.m in Sources */,
+				7499A82A1A950078009A28B6 /* CSSessionDataAnalyzer.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
 				93EBABED1A964552006BAF4A /* JSQMessagesTypingIndicatorFooterView.m in Sources */,
 				741DE9761A92C86800AC488F /* M13ProgressViewRing.m in Sources */,

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <Realm/Realm.h>
 
+#import "TLIndexPathTools.h"
+
 @interface CSTaskListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

@@ -37,9 +37,11 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property NSData* taskImages_NSDataArray_JPEG;
 @property NSData* taskAudio;
 
-- (void) addComment: (CSCommentRealmModel *) newComment;
+// Transient backing model
+@property (strong, nonatomic) CSTaskTransientObjectStore* transientModel;
+- (CSTaskTransientObjectStore*)transientModel;
 
-- (CSTaskTransientObjectStore*) getTransientObjectForModel;
+- (void) addComment: (CSCommentRealmModel *) newComment;
 + (NSMutableArray*) getTransientTaskList;
 
 @end

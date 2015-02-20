@@ -121,6 +121,17 @@
     
     if(transcation)
         [realm commitWriteTransaction];
+    
+    self.BACKING_DATABASE_MODEL = model;
+}
+
+- (CSTaskRealmModel*)BACKING_DATABASE_MODEL {
+    if(_BACKING_DATABASE_MODEL)
+        return _BACKING_DATABASE_MODEL;
+    
+    _BACKING_DATABASE_MODEL = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:_concatenatedID];
+    
+    return _BACKING_DATABASE_MODEL;
 }
 
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
