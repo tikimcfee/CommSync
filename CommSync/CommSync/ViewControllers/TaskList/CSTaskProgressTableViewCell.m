@@ -116,25 +116,9 @@
         strSelf.progressRingView.showPercentage = NO;
         [strSelf.progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
         
-#warning I don't think the propogation of tasks belongs in the task cell.. come to think of it, why is the cell making the object anyway? This seems sloppy.
-        
-        NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
-        NSData* taskData = [NSData dataWithContentsOfURL:location];
-        id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
-        
-        if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+        if(strSelf.progressCompletionBlock)
         {
-            CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
-            [(CSTaskTransientObjectStore*)newTask setAndPersistPropertiesOfNewTaskObject:newModel
-                                                                                 inRealm:[RLMRealm defaultRealm]
-                                                                         withTransaction:YES];
-            
-            [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
-            
-            if(strSelf.progressCompletionBlock) {
-                strSelf.progressCompletionBlock(self);
-            }
-            
+            strSelf.progressCompletionBlock(self);
             [strSelf cleanup];
         }
     });

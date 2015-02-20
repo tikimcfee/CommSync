@@ -259,13 +259,8 @@
     
     TLIndexPathDataModel* newModel = [[TLIndexPathDataModel alloc] initWithItems:newArray];
     self.indexPathController.dataModel = newModel;
-//    [self reloadDataModels];
     
      _willRefreshFromIncomingTask = YES;
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.tableView reloadData];
-//    });
 }
 
 - (void)newTaskStreamUpdated:(NSNotification*)notification {

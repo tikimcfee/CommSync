@@ -21,6 +21,13 @@
 @implementation CSNewTaskResourceInformationContainer
 @end
 
+@interface CSSessionDataAnalyzer ()
+
+@property (strong, nonatomic) dispatch_queue_t realmAccessThread;
+
+@end
+
+
 @implementation CSSessionDataAnalyzer
 
 #pragma mark - Shared instance initializer
@@ -32,6 +39,7 @@
         sharedInstance.globalManager = manager;
         sharedInstance.taskPool = [NSMutableDictionary new];
         sharedInstance.requestPool = [NSMutableDictionary new];
+        sharedInstance.realmAccessThread = dispatch_queue_create("comm_sync_realm_access", DISPATCH_QUEUE_SERIAL);
     });
     
     return sharedInstance;
@@ -101,6 +109,17 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     // We have finished our request - get rid out of it
     [_requestPool removeObjectForKey:resourceName];
     
+    // create the task and set up the write for it
+    NSData* taskData = [NSData dataWithContentsOfURL:localURL];
+    id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
+    
+    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+    {
+        [self addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:resourceName];
+        
+        [self sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
+    }
+    
     // Post notification globally
     // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
@@ -109,6 +128,38 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 }
 
 #pragma mark - Data persistence
+- (void) addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:(NSString*)identifier{
+    [_taskPool setValue:newTask forKey:identifier];
+    __weak typeof(self) weakSelf = self;
+    
+    if(!self.realmAccessThreadIsRunning)
+    {
+        dispatch_async(self.realmAccessThread, ^{
+            weakSelf.realmAccessThreadIsRunning = YES;
+            [[RLMRealm defaultRealm] beginWriteTransaction];
+            
+            for(CSTaskTransientObjectStore* unwrittenTask in [weakSelf.taskPool allValues]) {
+                CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
+                [unwrittenTask setAndPersistPropertiesOfNewTaskObject:newTask
+                                                              inRealm:[RLMRealm defaultRealm]
+                                                      withTransaction:NO];
+                NSArray* keyForTask = [weakSelf.taskPool allKeysForObject:unwrittenTask];
+                if(keyForTask.count == 1)
+                {
+                    [weakSelf.taskPool removeObjectForKey:[keyForTask objectAtIndex:0]];
+                }
+                else
+                {
+                    NSLog(@"<!!> WARNING :: TASK POOL HAS MULTIPLE ENTRIES FOR SAME NEW TASK - SOMETHING HAS GONE WRONG.");
+                }
+            }
+            
+            [[RLMRealm defaultRealm] commitWriteTransaction];
+            weakSelf.realmAccessThreadIsRunning = NO;
+        });
+    }
+}
+
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
     if([_taskPool valueForKey:taskID]) {

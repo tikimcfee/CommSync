@@ -17,6 +17,7 @@
 // Task queue for new tasks that are waiting for database writes
 @property (nonatomic, strong) NSMutableDictionary* taskPool;
 @property (nonatomic, strong) NSMutableDictionary* requestPool;
+@property (nonatomic, assign) BOOL realmAccessThreadIsRunning;
 
 @property (nonatomic, strong) CSSessionManager* globalManager;
 
