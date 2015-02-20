@@ -21,6 +21,7 @@
 		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
+		45C956461A97CF0C00364555 /* CSRealmWriteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE96C1A92C47300AC488F /* CSTaskProgressTableViewCell.m */; };
 		741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE9721A92C86800AC488F /* M13ProgressView.m */; };
@@ -144,6 +145,8 @@
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioPlotViewController.h; path = ViewControllers/TaskList/CSAudioPlotViewController.h; sourceTree = "<group>"; };
 		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
+		45C956441A97CF0C00364555 /* CSRealmWriteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRealmWriteOperation.h; path = "Session Management/CSRealmWriteOperation.h"; sourceTree = "<group>"; };
+		45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRealmWriteOperation.m; path = "Session Management/CSRealmWriteOperation.m"; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
@@ -455,6 +458,8 @@
 				4595391D19E38F1F00744747 /* CSSessionManager.m */,
 				7499A8281A950078009A28B6 /* CSSessionDataAnalyzer.h */,
 				7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */,
+				45C956441A97CF0C00364555 /* CSRealmWriteOperation.h */,
+				45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */,
 			);
 			name = "Session Management";
 			sourceTree = "<group>";
@@ -1067,7 +1072,6 @@
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
 				93EBABC71A964552006BAF4A /* NSString+JSQMessages.m in Sources */,
 				93EBABD41A964552006BAF4A /* JSQMessagesCollectionViewFlowLayout.m in Sources */,
-				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				93EBABE01A964552006BAF4A /* JSQMessagesCollectionViewCell.m in Sources */,
 				93EBABE51A964552006BAF4A /* JSQMessagesComposerTextView.m in Sources */,
 				74C541FB1A93E67100FC29AD /* TLTableViewController.m in Sources */,
@@ -1077,7 +1081,6 @@
 				74C541F71A93E67100FC29AD /* TLTreeTableViewController.m in Sources */,
 				93EBABE81A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.m in Sources */,
 				93EBABD71A964552006BAF4A /* JSQLocationMediaItem.m in Sources */,
-				74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */,
 				746F6ACF1A892613007A83E8 /* EZAudioPlotGL.m in Sources */,
 				74C541F11A93E67100FC29AD /* TLCollapsibleHeaderView.m in Sources */,
 				93EBABEB1A964552006BAF4A /* JSQMessagesToolbarContentView.m in Sources */,
@@ -1103,14 +1106,12 @@
 				74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */,
 				93EBABC91A964552006BAF4A /* UIDevice+JSQMessages.m in Sources */,
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
-				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
 				93EBABC61A964552006BAF4A /* JSQSystemSoundPlayer+JSQMessages.m in Sources */,
 				45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				74C541F51A93E67100FC29AD /* TLIndexPathTreeItem.m in Sources */,
 				93EBABC81A964552006BAF4A /* UIColor+JSQMessages.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
-				74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */,
 				93EBABE71A964552006BAF4A /* JSQMessagesLabel.m in Sources */,
 				741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */,
 				93EBABE31A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
@@ -1136,10 +1137,10 @@
 				7499A82A1A950078009A28B6 /* CSSessionDataAnalyzer.m in Sources */,
 				459D5F7919DB449900C91EFA /* main.m in Sources */,
 				93EBABED1A964552006BAF4A /* JSQMessagesTypingIndicatorFooterView.m in Sources */,
+				45C956461A97CF0C00364555 /* CSRealmWriteOperation.m in Sources */,
 				741DE9761A92C86800AC488F /* M13ProgressViewRing.m in Sources */,
 				93EBABE11A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
 				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
-				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				93EBABCB1A964552006BAF4A /* UIView+JSQMessages.m in Sources */,
 				93EBABCA1A964552006BAF4A /* UIImage+JSQMessages.m in Sources */,
 				74C541EF1A93E67100FC29AD /* TLIndexPathUpdates.m in Sources */,
@@ -1152,11 +1153,9 @@
 				74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */,
 				93EBABD01A964552006BAF4A /* JSQMessagesBubbleImageFactory.m in Sources */,
 				93EBABD51A964552006BAF4A /* JSQMessagesCollectionViewFlowLayoutInvalidationContext.m in Sources */,
-				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				93EBABDD1A964552006BAF4A /* JSQVideoMediaItem.m in Sources */,
 				74C541EE1A93E67100FC29AD /* TLIndexPathSectionInfo.m in Sources */,
 				93EBABCF1A964552006BAF4A /* JSQMessagesAvatarImageFactory.m in Sources */,
-				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
 				93EBABDF1A964552006BAF4A /* JSQMessagesCollectionView.m in Sources */,
 				3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */,
 				74C541F61A93E67100FC29AD /* TLTreeDataModel.m in Sources */,

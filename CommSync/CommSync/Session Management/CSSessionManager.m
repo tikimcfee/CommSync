@@ -23,11 +23,8 @@
 
 @property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
 @property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
-//@property (nonatomic, strong) NSMutableArray* sortedArrayOfPeers;
 @property (nonatomic, strong) RLMRealm* realm;
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
-
-@property (nonatomic, assign) BOOL isResponsibleForSendingInvites;
 
 @end
 
@@ -61,7 +58,6 @@
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
         self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
-        self.isResponsibleForSendingInvites = YES;
         
         // Getting default realm from disk
         _realm = [RLMRealm defaultRealm];
@@ -193,6 +189,7 @@
 {
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
+        CSTaskTransientObjectStore* strongTask = task;
         MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
         if(!sessionToSendOn) {
             NSLog(@"! No active session found for peer [%@]", peer.displayName);
@@ -206,15 +203,15 @@
             return;
         }
         
-        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:task];
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:strongTask];
         
         NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
-        NSURL* URLOfNewTask = [task temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+        NSURL* URLOfNewTask = [strongTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
         
         MCPeerID* thisPeer = [sessionToSendOn.connectedPeers objectAtIndex:0];
         [sessionToSendOn sendResourceAtURL:URLOfNewTask
-                                  withName:task.concatenatedID
+                                  withName:strongTask.concatenatedID
                                     toPeer:thisPeer
                      withCompletionHandler:
          ^(NSError *error) {
@@ -222,7 +219,7 @@
                  NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
              }
              else {
-                 NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", task.taskTitle, thisPeer.displayName);
+                 NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", strongTask.taskTitle, thisPeer.displayName);
              }
          }];
         
@@ -253,7 +250,7 @@
 
 - (void)nukeSession
 {
-    NSLog(@"Killing session");
+    NSLog(@"Restarting all Session Objects");
     // stop all browsing and advertising activity
     [_serviceBrowser stopBrowsingForPeers];
     [_serviceAdvertiser stopAdvertisingPeer];
@@ -261,13 +258,6 @@
     // reset browser and advertiser objects
     _serviceBrowser = nil;
     _serviceAdvertiser = nil;
-    
-    // kill session
-    
-//    [_currentSession disconnect];
-//    _currentSession = nil;
-    
-    NSLog(@"Restarting session");
     
     // start all connections over again
     _serviceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:_myPeerID serviceType:COMMSYNC_SERVICE_ID];
@@ -281,11 +271,18 @@
     [_serviceBrowser startBrowsingForPeers];
     [_serviceAdvertiser startAdvertisingPeer];
     
-//    _currentSession = [[MCSession alloc] initWithPeer:_myPeerID];
-//    _currentSession.delegate = self;
+    // reset all MCSessions on local device
+    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
+    {
+        NSArray* allSessions = [_sessionLookupDisplayNamesToSessions allValues];
+        for(MCSession* session in allSessions) {
+            [session disconnect];
+            session.delegate = nil;
+        }
+    }
+    _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
     
     self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
-    self.isResponsibleForSendingInvites = YES;
 }
 
 
@@ -315,17 +312,23 @@
         [self.devicesThatDeferredToMeDisplayNamesToPeerIDs setObject:peerID forKey:peerID.displayName];
     }
 
+#warning THIS MAY BE TERRIBLE BEHAVIOR... HOPE NOT!
+    BOOL shouldRecreate = NO;
     if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
     {
         NSLog(@"[%@] is already in a session.", peerID.displayName);
-        return;
+        NSLog(@"Assuming a reconnection attempt needs to be made... rebuilding session for peer [%@]", peerID.displayName);
+//        return;
+        shouldRecreate = YES;
     }
     
-    [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil];
+    [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil shouldRecreate:shouldRecreate];
 }
 
 - (void) attemptPeerInvitationForPeer:(MCPeerID *)peerID
-                    withDiscoveryInfo:(NSDictionary *)info {
+                    withDiscoveryInfo:(NSDictionary *)info
+                       shouldRecreate:(BOOL)recreate
+{
     
     NSTimeInterval linkDeadTime = 15;
     MCSession* inviteSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
@@ -333,6 +336,13 @@
         inviteSession = [[MCSession alloc] initWithPeer:_myPeerID];
         inviteSession.delegate = self;
         [_sessionLookupDisplayNamesToSessions setValue:inviteSession forKey:peerID.displayName];
+    } else if (recreate) {
+        MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
+        newSession.delegate = self;
+        inviteSession.delegate = nil;
+        [_sessionLookupDisplayNamesToSessions removeObjectForKey:peerID.displayName];
+        [_sessionLookupDisplayNamesToSessions setValue:newSession forKey:peerID.displayName];
+        inviteSession = newSession;
     }
     
     [_serviceBrowser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
@@ -396,6 +406,8 @@
     switch (state) {
         case MCSessionStateNotConnected:
             stateString = kUserNotConnectedNotification;
+            
+            // We never connected, or lost a connection to, the peer. Let's try to reconnect.
             if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
             {
                 MCSession* badSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
@@ -408,33 +420,14 @@
             if(shouldInvite)
             {
                 NSLog(@"Attemping to reestablish a connection to peer %@...", peerID.displayName);
-                [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil];
+                [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil shouldRecreate:YES];
             }
-            //            if([self.devicesThatDeferredToMeDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-            //            {
-            //                NSLog(@"Retrying connection to [%@]", peerID.displayName);
-            //                NSMutableArray* taskDataStore = [CSTaskRealmModel getTransientTaskList];
-            //
-            //                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskDataStore];
-            //                [_serviceBrowser invitePeer:peerID toSession:_currentSession withContext:contextData timeout:30];
-            //
-            //                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-            //            }
+            
             break;
         case MCSessionStateConnecting:
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
-            //            if([self.deferredConnectionsDisplayNamesToPeerIDs valueForKey:peerID.displayName])
-            //            {
-            //                NSMutableArray* taskList = [CSTaskRealmModel getTransientTaskList];
-            //                NSData* contextData = [NSKeyedArchiver archivedDataWithRootObject: taskList];
-            //
-            ////                [self sendDataPacketToPeers:contextData];
-            //
-            //                [self.deferredConnectionsDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-            //                [self.devicesThatDeferredToMeDisplayNamesToPeerIDs removeObjectForKey:peerID.displayName];
-            //            }
             stateString = kUserConnectedNotification;
             break;
         default:
@@ -483,35 +476,10 @@
 
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
 {
-//    [_dataAnalyzer analyzeReceivedData:data fromPeer:peerID];
-    
     if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
     {
         [_dataHandlingDelegate session:session didReceiveData:data fromPeer:peerID];
     }
-//    
-//    NSString* stringFromData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//    
-//    id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-//        
-//    NSLog(@"~~~~~~~~~Received Data: [ %@ ]~~~~~~~~~", [receivedObject class]);
-//    
-//    if([receivedObject isKindOfClass:[CSTaskTransientObjectStore class]])
-//    {
-//        [self batchUpdateRealmWithTasks:@[receivedObject]];
-//    }
-//    else if([receivedObject isKindOfClass:[NSMutableArray class]])
-//    {
-//        [self batchUpdateRealmWithTasks:receivedObject];
-//    }
-//    else if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
-//    {
-//        [self updateRealmWithChatMessage:receivedObject];
-//    }
-//    else if([receivedObject isKindOfClass:[NSDictionary class]])
-//    {
-//        
-//    }
 }
 
 

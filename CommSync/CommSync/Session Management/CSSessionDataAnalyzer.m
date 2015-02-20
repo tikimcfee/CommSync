@@ -23,7 +23,8 @@
 
 @interface CSSessionDataAnalyzer ()
 
-@property (strong, nonatomic) dispatch_queue_t realmAccessThread;
+//@property (strong, nonatomic) dispatch_queue_t realmAccessThread;
+@property (strong, nonatomic) NSOperationQueue* realmWriteQueue;
 
 @end
 
@@ -39,7 +40,9 @@
         sharedInstance.globalManager = manager;
         sharedInstance.taskPool = [NSMutableDictionary new];
         sharedInstance.requestPool = [NSMutableDictionary new];
-        sharedInstance.realmAccessThread = dispatch_queue_create("comm_sync_realm_access", DISPATCH_QUEUE_SERIAL);
+//        sharedInstance.realmAccessThread = dispatch_queue_create("comm_sync_realm_access", DISPATCH_QUEUE_SERIAL);
+        sharedInstance.realmWriteQueue = [[NSOperationQueue alloc] init];
+        sharedInstance.realmWriteQueue.maxConcurrentOperationCount = 1;
     });
     
     return sharedInstance;
@@ -73,7 +76,9 @@ didStartReceivingResourceWithName:(NSString *)resourceName
                                                       userInfo:containerDictionary];
     
     // we have made a request and been served - add it to our pool
-    [_requestPool setValue:peerID forKey:resourceName];
+    @synchronized (_requestPool) {
+        [_requestPool setValue:peerID forKey:resourceName];
+    }
     
     /**
      Use this code if you want to observe the progress of a data transfer from the
@@ -107,7 +112,9 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
                            };
     
     // We have finished our request - get rid out of it
-    [_requestPool removeObjectForKey:resourceName];
+    @synchronized (_requestPool) {
+        [_requestPool removeObjectForKey:resourceName];
+    }
     
     // create the task and set up the write for it
     NSData* taskData = [NSData dataWithContentsOfURL:localURL];
@@ -129,7 +136,9 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 
 #pragma mark - Data persistence
 - (void) addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:(NSString*)identifier{
-    [_taskPool setValue:newTask forKey:identifier];
+    @synchronized (_taskPool) {
+        [_taskPool setValue:newTask forKey:identifier];
+    }
     __weak typeof(self) weakSelf = self;
     
     if(!self.realmAccessThreadIsRunning)
@@ -138,19 +147,18 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
             weakSelf.realmAccessThreadIsRunning = YES;
             [[RLMRealm defaultRealm] beginWriteTransaction];
             
-            for(CSTaskTransientObjectStore* unwrittenTask in [weakSelf.taskPool allValues]) {
+            NSArray* newTasksToWrite = nil;
+            @synchronized (weakSelf.taskPool) {
+                newTasksToWrite = [NSArray arrayWithArray:weakSelf.taskPool.allValues];
+            }
+            
+            for(CSTaskTransientObjectStore* unwrittenTask in newTasksToWrite) {
                 CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
                 [unwrittenTask setAndPersistPropertiesOfNewTaskObject:newTask
                                                               inRealm:[RLMRealm defaultRealm]
                                                       withTransaction:NO];
-                NSArray* keyForTask = [weakSelf.taskPool allKeysForObject:unwrittenTask];
-                if(keyForTask.count == 1)
-                {
-                    [weakSelf.taskPool removeObjectForKey:[keyForTask objectAtIndex:0]];
-                }
-                else
-                {
-                    NSLog(@"<!!> WARNING :: TASK POOL HAS MULTIPLE ENTRIES FOR SAME NEW TASK - SOMETHING HAS GONE WRONG.");
+                @synchronized (weakSelf.taskPool) {
+                    [weakSelf.taskPool removeObjectForKey:unwrittenTask.concatenatedID];
                 }
             }
             
@@ -162,9 +170,13 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
-    if([_taskPool valueForKey:taskID]) {
-        return [_taskPool valueForKey:taskID];
+    @synchronized (_taskPool) {
+        NSMutableDictionary* taskPoolCopy = [_taskPool copy];
+        if([taskPoolCopy valueForKey:taskID]) {
+            return [taskPoolCopy valueForKey:taskID];
+        }
     }
+    
     CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
     if(model)
         return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
@@ -228,10 +240,14 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
             NSString* newTaskId = [stringComponents objectAtIndex:1];
             
             // check to see if already made request from someone
-            if([_requestPool valueForKey:newTaskId])
-            {
-                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
-                return;
+            BOOL MUST_RETURN = NO;
+            @synchronized (_requestPool) {
+                NSMutableDictionary* requestPoolCopy = [_requestPool copy];
+                if([requestPoolCopy valueForKey:newTaskId])
+                {
+                    NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                    MUST_RETURN = YES;
+                }
             }
             
             // check to see if the task already exists
@@ -239,8 +255,10 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
             if(model)
             {
                 NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
-                return;
+                MUST_RETURN = YES;
             }
+            if(MUST_RETURN)
+                return;
             
             // build the request string
             NSString* requestString = [self buildTaskRequestStringFromNewTaskID:newTaskId];
