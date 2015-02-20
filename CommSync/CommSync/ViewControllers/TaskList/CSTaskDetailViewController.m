@@ -137,7 +137,9 @@
     if (indexPath.row < [_transientTask.TRANSIENT_taskImages count]  ) {
         
         if(_activePic == indexPath.row){
-            return 500;
+            
+            UIImage *temp = [_transientTask.TRANSIENT_taskImages objectAtIndex:indexPath.row] ;
+            return temp.size.height;
         }
         return 150;
     }
