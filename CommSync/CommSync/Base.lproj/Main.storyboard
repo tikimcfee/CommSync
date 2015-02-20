@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -22,6 +22,7 @@
                         <segue destination="Suc-Lv-nyY" kind="relationship" relationship="viewControllers" id="JAd-mF-XtV"/>
                         <segue destination="OnN-eA-coc" kind="relationship" relationship="viewControllers" id="xMG-BS-FwA"/>
                         <segue destination="85q-Sc-dkp" kind="relationship" relationship="viewControllers" id="aDU-4f-PrN"/>
+                        <segue destination="6ZR-ay-eUY" kind="relationship" relationship="viewControllers" id="Mhm-LQ-jXA"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x0u-1H-e9U" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -705,7 +706,27 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="toD-oJ-Pvh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1629" y="1567"/>
+            <point key="canvasLocation" x="1563" y="1270"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="aiq-mD-3Xc">
+            <objects>
+                <viewController id="6ZR-ay-eUY" customClass="ChatTestViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QAU-Wn-b67"/>
+                        <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gE5-eO-iRi">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <tabBarItem key="tabBarItem" title="Item" id="0Xd-38-kme"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Qy-o6-8Jp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2271" y="1270"/>
         </scene>
         <!--Audio Plot View Controller-->
         <scene sceneID="XEl-YI-oaj">
@@ -759,23 +780,6 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3311" y="-1118"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="mlL-HR-mJ3">
-            <objects>
-                <viewController id="tdf-Dy-LG9" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ei8-TS-tAe"/>
-                        <viewControllerLayoutGuide type="bottom" id="nQA-f2-O6V"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="v4n-cl-Wr9">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="AdA-3q-O13" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>

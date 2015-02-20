@@ -25,6 +25,9 @@
 @end
 
 @implementation CSChatViewController
+{
+    RLMNotificationToken* _chatRealmNotification;
+}
 
 #pragma mark - View Lifecycle
 - (void)viewDidLoad
@@ -41,6 +44,7 @@
     _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
     _chatRealm.autorefresh = YES;
     
+    [self registerForChatRealmNotifications];
     [self registerForKeyboardNotifications];
 }
 
@@ -52,6 +56,24 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[RLMRealm defaultRealm] removeNotification:_chatRealmNotification];
+}
+
+#pragma mark - Private Class Methods
+- (void)registerForChatRealmNotifications
+{
+    __weak CSChatViewController *weakSelf = self;
+    _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+            
+            // Scroll to the bottom so we focus on the latest message
+            NSUInteger numberOfRows = [weakSelf.tableView numberOfRowsInSection:0];
+            if (numberOfRows) {
+                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(numberOfRows - 1) inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }
+        });
+    }];
 }
 
 - (void)registerForKeyboardNotifications
@@ -65,7 +87,7 @@
                                              selector:@selector(KeyboardWillHideNotification:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-    
+
 }
 
 - (IBAction)sendMessageAction:(id)sender
