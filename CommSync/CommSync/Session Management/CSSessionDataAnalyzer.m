@@ -18,16 +18,119 @@
 #define kCS_HEADER_TASK_REQUEST @"TASK_REQUEST"
 #define kCS_STRING_SEPERATOR    @":"
 
+// Implementation of task information container
 @implementation CSNewTaskResourceInformationContainer
 @end
 
-@interface CSSessionDataAnalyzer ()
+// Implementation of Data Analysis Operation
+@implementation CSDataAnalysisOperation
 
-//@property (strong, nonatomic) dispatch_queue_t realmAccessThread;
-@property (strong, nonatomic) NSOperationQueue* realmWriteQueue;
+- (void) main
+{
+    // Determine if data is a string / command
+    NSString* stringFromData = [[NSString alloc] initWithData:_dataToAnalyze encoding:kCSDefaultStringEncodingMethod];
+    
+    if(stringFromData)
+    {
+        
+        NSLog(@"<?> Data string received : [%@]", stringFromData);
+        NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
+        if(!stringComponents || stringComponents.count <= 1) {
+            NSLog(@"<?> String parse failed - malformed string. [%@]", stringFromData);
+            return;
+        }
+        
+        if([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_NEW_TASK])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for NEW_TASK. [%@]", stringFromData);
+                return;
+            }
+            
+            NSString* newTaskId = [stringComponents objectAtIndex:1];
+            
+            // check to see if already made request from someone
+            BOOL MUST_RETURN = NO;
+            
+            @synchronized (_requestPool){
+                if([_requestPool valueForKey:newTaskId])
+                {
+                    NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                    MUST_RETURN = YES;
+                }
+            }
+            
+            // check to see if the task already exists
+            CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:newTaskId];
+            if(model)
+            {
+                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
+                MUST_RETURN = YES;
+            }
+            if(MUST_RETURN)
+                return;
+
+            @synchronized (_requestPool){
+                [_requestPool setValue:_peer forKey:newTaskId];
+            }
+            
+            // build the request string
+            NSString* requestString = [_parentAnalyzer buildTaskRequestStringFromNewTaskID:newTaskId];
+            NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
+            
+            // send the request
+            NSLog(@"<?> Sending request string [%@] to peer [%@]", requestString, _peer.displayName);
+            [_parentAnalyzer.globalManager sendSingleDataPacket:requestData toSinglePeer:_peer];
+        }
+        else if ([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_TASK_REQUEST])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for TASK_REQUEST. [%@]", stringFromData);
+                return;
+            }
+            
+            NSString* requestedTaskID = [stringComponents objectAtIndex:1];
+            
+            // check to see if the task exists
+            CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
+            if(!model)
+            {
+                NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed string?");
+                return;
+            }
+            
+            // Send the task to the peer
+            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, _peer.displayName);
+            [_parentAnalyzer.globalManager sendSingleTask:model toSinglePeer:_peer];
+        }
+        
+    }
+    else
+    {
+        id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
+        
+        if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+        {
+            // OP
+        }
+    }
+}
 
 @end
 
+/**
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ **/
+
+@interface CSSessionDataAnalyzer ()
+@property (strong, nonatomic) NSOperationQueue* realmWriteQueue;
+@property (strong, nonatomic) NSOperationQueue* dataAnalysisQueue;
+@end
 
 @implementation CSSessionDataAnalyzer
 
@@ -40,8 +143,12 @@
         sharedInstance = [[self alloc] init];
         sharedInstance.globalManager = manager;
         sharedInstance.requestPool = [NSMutableDictionary new];
+        
         sharedInstance.realmWriteQueue = [[NSOperationQueue alloc] init];
         sharedInstance.realmWriteQueue.maxConcurrentOperationCount = 1;
+        
+        sharedInstance.dataAnalysisQueue = [NSOperationQueue new];
+        sharedInstance.dataAnalysisQueue.maxConcurrentOperationCount = 1;
     });
     
     return sharedInstance;
@@ -75,7 +182,9 @@ didStartReceivingResourceWithName:(NSString *)resourceName
                                                       userInfo:containerDictionary];
     
     // we have made a request and been served - add it to our pool
-    [_requestPool setValue:peerID forKey:resourceName];
+    @synchronized (_requestPool){
+        [_requestPool setValue:peerID forKey:resourceName];
+    }
     
     /**
      Use this code if you want to observe the progress of a data transfer from the
@@ -111,7 +220,10 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     // We have finished our request - get rid out of it
     // TODO
     // PERHAPS MAKE A REQUEST QUEUE?
-    [_requestPool removeObjectForKey:resourceName];
+    @synchronized (_requestPool){
+        [_requestPool removeObjectForKey:resourceName];
+    }
+    
     
     // create the task and set up the write for it
     NSData* taskData = [NSData dataWithContentsOfURL:localURL];
@@ -141,17 +253,13 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
-    // TODO
-    // RETURN TASK FROM OPERATION QUEUE
     NSArray* currentWriteQueue = _realmWriteQueue.operations;
     for(CSRealmWriteOperation* operation in currentWriteQueue) {
         if([operation.pendingTransientTask.concatenatedID isEqualToString:taskID]) {
             return operation.pendingTransientTask;
         }
     }
-    
-    
-    
+
     CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
     if(model)
         return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
@@ -184,97 +292,13 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 #pragma mark - Data analysis
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer
 {
-    // Determine if data is a string / command
-    NSString* stringFromData = [[NSString alloc] initWithData:receivedData encoding:kCSDefaultStringEncodingMethod];
+    CSDataAnalysisOperation* newOperation = [CSDataAnalysisOperation new];
+    newOperation.dataToAnalyze = receivedData;
+    newOperation.peer = peer;
+    newOperation.requestPool = _requestPool;
+    newOperation.parentAnalyzer = self;
     
-    if(stringFromData)
-    {
-        // -- TASK CREATION --
-        // Is the string a prompt of new task creation?
-        // Check the task realm for the task; if it does not exist, send the peer a request for the task
-        // +++!!!+++ IF IT NEEDS TO BE UPDATED, REQUEST!
-        
-        // Is the string a request for a task?
-        // Make sure you have the requested task, and initiate a resource send of task to the requesting peer
-        
-        NSLog(@"<?> Data string received : [%@]", stringFromData);
-        NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
-        if(!stringComponents || stringComponents.count <= 1) {
-            NSLog(@"<?> String parse failed - malformed string. [%@]", stringFromData);
-            return;
-        }
-        
-        if([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_NEW_TASK])
-        {
-            if(stringComponents.count > 2)
-            {
-                NSLog(@"<?> String parse failed - malformed string for NEW_TASK. [%@]", stringFromData);
-                return;
-            }
-            
-            NSString* newTaskId = [stringComponents objectAtIndex:1];
-            
-            // check to see if already made request from someone
-            BOOL MUST_RETURN = NO;
-
-            if([_requestPool valueForKey:newTaskId])
-            {
-                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
-                MUST_RETURN = YES;
-            }
-            
-            // check to see if the task already exists
-            CSTaskTransientObjectStore* model = [self getTransientModelFromQueueOrDatabaseWithID:newTaskId];
-            if(model)
-            {
-                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
-                MUST_RETURN = YES;
-            }
-            if(MUST_RETURN)
-                return;
-            
-            // build the request string
-            NSString* requestString = [self buildTaskRequestStringFromNewTaskID:newTaskId];
-            NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
-            
-            // send the request
-            NSLog(@"<?> Sending request string [%@] to peer [%@]", requestString, peer.displayName);
-            [_globalManager sendSingleDataPacket:requestData toSinglePeer:peer];
-        }
-        else if ([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_TASK_REQUEST])
-        {
-            if(stringComponents.count > 2)
-            {
-                NSLog(@"<?> String parse failed - malformed string for TASK_REQUEST. [%@]", stringFromData);
-                return;
-            }
-            
-            NSString* requestedTaskID = [stringComponents objectAtIndex:1];
-            
-            // check to see if the task exists
-            CSTaskTransientObjectStore* model = [self getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
-            if(!model)
-            {
-                NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed string?");
-                return;
-            }
-            
-            // Send the task to the peer
-            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, peer.displayName);
-            [_globalManager sendSingleTask:model toSinglePeer:peer];
-        }
-        
-    }
-    else
-    {
-        id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:receivedData];
-        
-        if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
-        {
-            // OP
-        }
-    }
-    
+    [_dataAnalysisQueue addOperation:newOperation];
 }
 
 

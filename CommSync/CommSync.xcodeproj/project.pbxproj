@@ -22,6 +22,9 @@
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
 		45C956461A97CF0C00364555 /* CSRealmWriteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */; };
+		45C956491A97EE8100364555 /* CSTaskListUpdateOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */; };
+		45C9564D1A98CEF800364555 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C9564B1A98CEF800364555 /* Crashlytics.framework */; };
+		45C9564E1A98CEF800364555 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C9564C1A98CEF800364555 /* Fabric.framework */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE96C1A92C47300AC488F /* CSTaskProgressTableViewCell.m */; };
 		741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE9721A92C86800AC488F /* M13ProgressView.m */; };
@@ -147,6 +150,10 @@
 		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
 		45C956441A97CF0C00364555 /* CSRealmWriteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRealmWriteOperation.h; path = "Session Management/CSRealmWriteOperation.h"; sourceTree = "<group>"; };
 		45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRealmWriteOperation.m; path = "Session Management/CSRealmWriteOperation.m"; sourceTree = "<group>"; };
+		45C956471A97EE8100364555 /* CSTaskListUpdateOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskListUpdateOperation.h; path = ViewControllers/TaskList/CSTaskListUpdateOperation.h; sourceTree = "<group>"; };
+		45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListUpdateOperation.m; path = ViewControllers/TaskList/CSTaskListUpdateOperation.m; sourceTree = "<group>"; };
+		45C9564B1A98CEF800364555 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		45C9564C1A98CEF800364555 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
@@ -386,6 +393,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				746F6AAC1A892189007A83E8 /* AudioToolbox.framework in Frameworks */,
+				45C9564E1A98CEF800364555 /* Fabric.framework in Frameworks */,
+				45C9564D1A98CEF800364555 /* Crashlytics.framework in Frameworks */,
 				746F6ADA1A8926AA007A83E8 /* AVFoundation.framework in Frameworks */,
 				746F6AAD1A892191007A83E8 /* GLKit.framework in Frameworks */,
 				454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */,
@@ -438,6 +447,8 @@
 		454D92061A7857AA000B74A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				45C9564B1A98CEF800364555 /* Crashlytics.framework */,
+				45C9564C1A98CEF800364555 /* Fabric.framework */,
 				93EBAB571A964552006BAF4A /* JSQMessagesViewController */,
 				74C541BE1A93E67100FC29AD /* TLIndexPathTools */,
 				741DE9701A92C86800AC488F /* M13ProgressView */,
@@ -786,6 +797,8 @@
 		933AA13A1A71DCA800DCC10A /* TaskList */ = {
 			isa = PBXGroup;
 			children = (
+				45C956471A97EE8100364555 /* CSTaskListUpdateOperation.h */,
+				45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */,
 				933AA13F1A71DCF100DCC10A /* CSTaskListViewController.h */,
 				933AA1401A71DCF100DCC10A /* CSTaskListViewController.m */,
 				741DE96E1A92C47D00AC488F /* Table Cells */,
@@ -984,6 +997,7 @@
 				459D5F6F19DB449900C91EFA /* Sources */,
 				459D5F7019DB449900C91EFA /* Frameworks */,
 				459D5F7119DB449900C91EFA /* Resources */,
+				45C9564A1A98CEB600364555 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1063,6 +1077,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		45C9564A1A98CEB600364555 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 1fb01066ed8440fbeaaefe4cd42a7cf7ab7f65a7 047bfec83b662183a7f0d2a5b968f0964a69cb80aebb41721fa00b379a35d48f";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		459D5F6F19DB449900C91EFA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1123,6 +1153,7 @@
 				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
 				93EBABCD1A964552006BAF4A /* JSQMessagesViewController.m in Sources */,
 				93EBABD31A964552006BAF4A /* JSQMessagesToolbarButtonFactory.m in Sources */,
+				45C956491A97EE8100364555 /* CSTaskListUpdateOperation.m in Sources */,
 				746F6ACA1A892613007A83E8 /* AEFloatConverter.m in Sources */,
 				74C541F41A93E67100FC29AD /* TLDynamicHeightLabelCell.m in Sources */,
 				746F6AD01A892613007A83E8 /* EZAudioPlotGLKViewController.m in Sources */,
@@ -1295,6 +1326,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CommSync/ThirdParty",
+					"$(PROJECT_DIR)/CommSync",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$SRCROOT/CommSync/CommSync-Prefix.pch";
@@ -1315,6 +1347,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CommSync/ThirdParty",
+					"$(PROJECT_DIR)/CommSync",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$SRCROOT/CommSync/CommSync-Prefix.pch";

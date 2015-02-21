@@ -251,6 +251,24 @@
 - (void)nukeSession
 {
     NSLog(@"Restarting all Session Objects");
+    [self resetBrowserAndAdvertiser];
+    
+    // reset all MCSessions on local device
+    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
+    {
+        NSArray* allSessions = [_sessionLookupDisplayNamesToSessions allValues];
+        for(MCSession* session in allSessions) {
+            [session disconnect];
+            session.delegate = nil;
+        }
+    }
+    _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
+    
+    self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
+}
+
+- (void) resetBrowserAndAdvertiser
+{
     // stop all browsing and advertising activity
     [_serviceBrowser stopBrowsingForPeers];
     [_serviceAdvertiser stopAdvertisingPeer];
@@ -270,19 +288,6 @@
     
     [_serviceBrowser startBrowsingForPeers];
     [_serviceAdvertiser startAdvertisingPeer];
-    
-    // reset all MCSessions on local device
-    if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
-    {
-        NSArray* allSessions = [_sessionLookupDisplayNamesToSessions allValues];
-        for(MCSession* session in allSessions) {
-            [session disconnect];
-            session.delegate = nil;
-        }
-    }
-    _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
-    
-    self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
 }
 
 
@@ -312,14 +317,14 @@
         [self.devicesThatDeferredToMeDisplayNamesToPeerIDs setObject:peerID forKey:peerID.displayName];
     }
 
-#warning THIS MAY BE TERRIBLE BEHAVIOR... HOPE NOT!
+//#warning THIS MAY BE TERRIBLE BEHAVIOR... HOPE NOT!
     BOOL shouldRecreate = NO;
     if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
     {
         NSLog(@"[%@] is already in a session.", peerID.displayName);
-        NSLog(@"Assuming a reconnection attempt needs to be made... rebuilding session for peer [%@]", peerID.displayName);
-//        return;
-        shouldRecreate = YES;
+//        NSLog(@"Assuming a reconnection attempt needs to be made... rebuilding session for peer [%@]", peerID.displayName);
+        return;
+//        shouldRecreate = YES;
     }
     
     [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil shouldRecreate:shouldRecreate];
@@ -410,18 +415,21 @@
             // We never connected, or lost a connection to, the peer. Let's try to reconnect.
             if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
             {
+                NSLog(@"Removing peer [%@] from known session.", peerID.displayName);
                 MCSession* badSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
                 [badSession disconnect];
                 badSession.delegate = nil;
                 [_sessionLookupDisplayNamesToSessions removeObjectForKey:peerID.displayName];
             }
-            BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedAscending;
             
-            if(shouldInvite)
-            {
-                NSLog(@"Attemping to reestablish a connection to peer %@...", peerID.displayName);
-                [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil shouldRecreate:YES];
-            }
+            [self resetBrowserAndAdvertiser];
+//            BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedAscending;
+            
+//            if(shouldInvite)
+//            {
+//                NSLog(@"Attempting to reestablish a connection to peer %@...", peerID.displayName);
+//                [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil shouldRecreate:YES];
+//            }
             
             break;
         case MCSessionStateConnecting:

@@ -118,7 +118,7 @@
         
         if(strSelf.progressCompletionBlock)
         {
-            strSelf.progressCompletionBlock(self);
+            strSelf.progressCompletionBlock(self, nil);
             [strSelf cleanup];
         }
     });

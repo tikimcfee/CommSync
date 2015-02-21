@@ -21,7 +21,7 @@
     NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
     NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
     
-    NSData* emptyAudio = [@"NO_AUDIO" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData* emptyAudio = [NSKeyedArchiver archivedDataWithRootObject:[NSNull null]];
     
     defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages,
                  @"taskAudio":emptyAudio,

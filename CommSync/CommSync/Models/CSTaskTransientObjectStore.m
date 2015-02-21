@@ -115,7 +115,9 @@
     model.taskImages_NSDataArray_JPEG = archivedImages;
     
     // Grab task audio on the fly
-    model.taskAudio = self.taskAudio ? self.taskAudio : [NSData dataWithContentsOfURL:_TRANSIENT_audioDataURL];
+    if(self.taskAudio) {
+        model.taskAudio = self.taskAudio;
+    }
     
     [realm addObject:model];
     
