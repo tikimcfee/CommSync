@@ -13,9 +13,9 @@
 #import <Realm/Realm.h>
 #import "CSTaskCreationViewController.h"
 #import "ImageCell.h"
+#import "CSPictureViewController.h"
 
 @interface CSTaskDetailViewController ()
-@property (strong, nonatomic) IBOutlet UIImage *taskImage;
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
 @property int activePic;
@@ -101,23 +101,16 @@
 //as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    if( [_titleLabel isEnabled] ) return [_transientTask.TRANSIENT_taskImages count];
-    return ([self.sourceTask.comments count]  +  [_transientTask.TRANSIENT_taskImages count]);
+    if( [_titleLabel isEnabled] ) return 0;
+    return [self.sourceTask.comments count];
 }
 
 //inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.row < [_transientTask.TRANSIENT_taskImages count])
-    {
-        ImageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell"];
-        cell.pictureView.image = [_transientTask.TRANSIENT_taskImages objectAtIndex:indexPath.row];
-        return cell;
-        
-    }
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
-    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row - [_transientTask.TRANSIENT_taskImages count]];
+    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
     //formates the time string
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -134,36 +127,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < [_transientTask.TRANSIENT_taskImages count]  ) {
-        
-        if(_activePic == indexPath.row){
-            
-            UIImage *temp = [_transientTask.TRANSIENT_taskImages objectAtIndex:indexPath.row] ;
-            return temp.size.height;
-        }
-        return 150;
-    }
-    
     return 60;
-    
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    if(indexPath.row < [_transientTask.TRANSIENT_taskImages count])
-    {
-        if(_activePic ==  indexPath.row)
-        {
-            _activePic = -1;
-        }
-        else _activePic = indexPath.row;
-       
-        [[self tableView] beginUpdates];
-        
-        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]withRowAnimation: UITableViewRowAnimationAutomatic];
-        [[self tableView] endUpdates];
-    }
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -175,10 +141,9 @@
 - (void)setImagesFromTask {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_transientTask.TRANSIENT_taskImages.count > 0) {
-            UIImage* img = [_transientTask.TRANSIENT_taskImages objectAtIndex:0];
-            self.taskImage = img;
-            [self.tableView reloadData];
-        }
+            _embed.taskImages = _transientTask.TRANSIENT_taskImages;
+            [_embed.tableView reloadData];
+       }
     });
     
 }
@@ -201,6 +166,7 @@
     //scrolls table to new comment
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
     [_commentField resignFirstResponder];
+
 }
 
 
@@ -306,9 +272,10 @@
     [_greenButton setAlpha:.25];
 }
 - (IBAction)playAudio:(id)sender {
-    
+  
     if(!_titleLabel.isEnabled)
     {
+        
         NSData* audioData = self.sourceTask.taskAudio;
         NSError* error;
         self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
@@ -316,6 +283,13 @@
     }
     else{
         
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"pictureTable"]) {
+        _embed = segue.destinationViewController;
     }
 }
 @end

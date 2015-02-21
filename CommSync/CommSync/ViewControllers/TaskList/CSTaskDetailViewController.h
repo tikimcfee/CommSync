@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
 #import "CSTaskTransientObjectStore.h"
+#import "CSPictureViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -49,6 +50,8 @@
 
 
 @property (weak, nonatomic) IBOutlet UIButton *audioButton;
+
+@property (weak, nonatomic) IBOutlet CSPictureViewController *embed;
 
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;
