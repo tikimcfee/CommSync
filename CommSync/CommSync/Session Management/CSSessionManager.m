@@ -54,6 +54,7 @@
         [_serviceAdvertiser startAdvertisingPeer];
         
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
+        _currentConnectedPeers = [NSMutableDictionary new];
         
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -412,7 +413,13 @@
         case MCSessionStateNotConnected:
             stateString = kUserNotConnectedNotification;
             
-            // We never connected, or lost a connection to, the peer. Let's try to reconnect.
+            if([_currentConnectedPeers valueForKey:peerID.displayName])
+            {
+                [_currentConnectedPeers removeObjectForKey:peerID.displayName];
+            }
+            
+            // We never connected, or lost a connection to, the peer.
+            // Reset connection browsing and move on.
             if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
             {
                 NSLog(@"Removing peer [%@] from known session.", peerID.displayName);
@@ -423,20 +430,13 @@
             }
             
             [self resetBrowserAndAdvertiser];
-//            BOOL shouldInvite = [_myPeerID.displayName compare:peerID.displayName] == NSOrderedAscending;
-            
-//            if(shouldInvite)
-//            {
-//                NSLog(@"Attempting to reestablish a connection to peer %@...", peerID.displayName);
-//                [self attemptPeerInvitationForPeer:peerID withDiscoveryInfo:nil shouldRecreate:YES];
-//            }
-            
             break;
         case MCSessionStateConnecting:
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
             stateString = kUserConnectedNotification;
+            [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
             break;
         default:
             break;

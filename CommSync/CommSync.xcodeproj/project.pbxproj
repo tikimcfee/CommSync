@@ -1331,9 +1331,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$SRCROOT/CommSync/CommSync-Prefix.pch";
 				INFOPLIST_FILE = CommSync/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5d75ff6b-8a22-4443-8afa-892a0f537da3";
+				PROVISIONING_PROFILE = "caa061d0-5cf0-4b5c-a136-7d2d551fb8aa";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1352,9 +1353,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$SRCROOT/CommSync/CommSync-Prefix.pch";
 				INFOPLIST_FILE = CommSync/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5d75ff6b-8a22-4443-8afa-892a0f537da3";
+				PROVISIONING_PROFILE = "caa061d0-5cf0-4b5c-a136-7d2d551fb8aa";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
