@@ -11,5 +11,7 @@
 @interface CSPictureViewController : UITableViewController
 
 @property (strong, nonatomic) NSMutableArray* taskImages;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
 
 @end

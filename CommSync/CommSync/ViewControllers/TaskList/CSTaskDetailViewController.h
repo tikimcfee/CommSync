@@ -52,6 +52,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *audioButton;
 
 @property (weak, nonatomic) IBOutlet CSPictureViewController *embed;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
 
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;

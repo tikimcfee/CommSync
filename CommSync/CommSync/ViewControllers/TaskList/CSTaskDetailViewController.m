@@ -143,6 +143,7 @@
         if (_transientTask.TRANSIENT_taskImages.count > 0) {
             _embed.taskImages = _transientTask.TRANSIENT_taskImages;
             [_embed.tableView reloadData];
+            [self.tableView reloadData];
        }
     });
     
@@ -290,6 +291,8 @@
 {
     if ([[segue identifier] isEqualToString:@"pictureTable"]) {
         _embed = segue.destinationViewController;
+        _embed.containerHeight = _containerHeight;
+        _embed.containerWidth = _containerWidth;
     }
 }
 @end
