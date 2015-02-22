@@ -30,20 +30,24 @@
     
     //creates a transient task based off the current source task
     _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
-
+    //[_top setActive:NO];
     self.navigationBar.title = self.sourceTask.taskTitle;
-    _activePic = -1;
+
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
-   
+    _distanceEdge.constant = 8;
+    
     //create delegate and receptors
     [_commentField setDelegate:self];
-    
+
     _tableView.tableHeaderView = _headerView;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     
     [_titleLabel setEnabled:NO];
+    
+    
+    [_top setActive:YES];
     
     self.audioPlayer.delegate = self;
     
@@ -82,7 +86,7 @@
         case 1:
            _priorityColor.backgroundColor = [UIColor yellowColor];
             _yellowButton.alpha = 1;
-           _priorityLabel.text = @"Standard Priority";
+           _priorityLabel.text = @"Med Priority";
             break;
         
         //if green is selected or nothing is selected the task defaults to low priority
@@ -111,6 +115,8 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
     CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
+    
+    if(indexPath.row % 2 == 1)cell.backgroundColor = [UIColor lightGrayColor];
     
     //formates the time string
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -201,11 +207,12 @@
         [_descriptionLabel setEditable:YES];
         [_descriptionLabel setBackgroundColor: [UIColor lightGrayColor]];
         [_editButton setTitle:@"Save"];
-        [_audioButton setBackgroundColor:[UIColor redColor]];
-        [_audioButton setTitle:@"Record Audio" forState:UIControlStateNormal];
-        [_priorityColor setHidden:YES];
+
         [self.tableView reloadData];
         [_footerView setHidden:YES];
+        
+        [_audioButton setHidden:YES];
+        [_audioContainer setHidden:NO];
         
         [_greenButton setHidden:NO];
         [_yellowButton setHidden:NO];
@@ -222,10 +229,6 @@
         [_sourceTask setTaskDescription:_descriptionLabel.text];
         [_titleLabel setBackgroundColor: [UIColor whiteColor]];
         [_descriptionLabel setBackgroundColor: [UIColor whiteColor]];
-        [_audioButton setBackgroundColor:[UIColor greenColor]];
-        [_audioButton setTitle:@"Play" forState:UIControlStateNormal];
-         
-        
         
         if(_redButton.alpha == 1) [_sourceTask setTaskPriority:2];
         else if (_yellowButton.alpha == 1) [_sourceTask setTaskPriority:1];
@@ -239,11 +242,14 @@
         
         [_footerView setHidden:NO];
         
+        
         [self.tableView reloadData];
         [_greenButton setHidden:YES];
         [_yellowButton setHidden:YES];
         [_redButton setHidden:YES];
-        [_priorityColor setHidden:NO];
+        
+        [_audioButton setHidden:NO];
+        [_audioContainer setHidden:YES];
     }
 }
 
@@ -259,21 +265,27 @@
     [_redButton setAlpha:1];
     [_yellowButton setAlpha:.25];
     [_greenButton setAlpha:.25];
+     _priorityColor.backgroundColor = [UIColor redColor];
+    _priorityLabel.text = @"High Priority";
 }
 
 - (IBAction)setGreen:(id)sender {
     [_redButton setAlpha:.25];
     [_yellowButton setAlpha:.25];
     [_greenButton setAlpha:1];
+     _priorityColor.backgroundColor = [UIColor greenColor];
+    _priorityLabel.text = @"Low Priority";
 }
 
 - (IBAction)setYellow:(id)sender {
     [_redButton setAlpha:.25];
     [_yellowButton setAlpha:1];
     [_greenButton setAlpha:.25];
+     _priorityColor.backgroundColor = [UIColor yellowColor];
+    _priorityLabel.text = @"Med Priority";
 }
 - (IBAction)playAudio:(id)sender {
-  
+  [_distanceEdge setActive:YES];
     if(!_titleLabel.isEnabled)
     {
         
@@ -293,6 +305,9 @@
         _embed = segue.destinationViewController;
         _embed.containerHeight = _containerHeight;
         _embed.containerWidth = _containerWidth;
+        _embed.distanceEdge = _distanceEdge;
+        _embed.top = _top;
+      
     }
 }
 @end

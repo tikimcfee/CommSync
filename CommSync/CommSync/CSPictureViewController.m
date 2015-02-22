@@ -50,13 +50,15 @@
 {
 
         if(_activePic == indexPath.row){
-            
+            [_top setActive:NO];
             UIImage *temp = [_taskImages objectAtIndex:indexPath.row] ;
-            _containerHeight.constant = temp.size.height + 50;
-            _containerWidth.constant = temp.size.width + 50;
+            _containerHeight.constant = temp.size.height;
+            _containerWidth.constant = temp.size.width;
+            _distanceEdge.constant = temp.size.width + 20;
+            
+            
             return temp.size.height;
         }
-
     return 200;
     
 }
@@ -68,6 +70,9 @@
             _activePic = -1;
             _containerHeight.constant = 200;
             _containerWidth.constant = 200;
+            _distanceEdge.constant = 8;
+            [_top setActive:YES];
+          
         }
         else _activePic = indexPath.row;
         

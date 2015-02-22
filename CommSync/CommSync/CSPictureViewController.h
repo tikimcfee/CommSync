@@ -13,5 +13,8 @@
 @property (strong, nonatomic) NSMutableArray* taskImages;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *distanceEdge;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *top;
+
 
 @end
