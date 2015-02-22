@@ -21,7 +21,7 @@
     NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
     NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
     
-    NSData* emptyAudio = [@"NO_AUDIO" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData* emptyAudio = [NSKeyedArchiver archivedDataWithRootObject:[NSNull null]];
     
     defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages,
                  @"taskAudio":emptyAudio,
@@ -37,7 +37,23 @@
     return defaults;
 }
 
++ (NSArray*)ignoredProperties {
+    return @[@"transientModel"];
+}
+
++ (NSString*)primaryKey {
+    return @"concatenatedID";
+}
+
 #pragma mark - Accessors and Helpers
+- (CSTaskTransientObjectStore*)transientModel {
+    if(_transientModel)
+        return _transientModel;
+    
+    _transientModel = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self];
+    
+    return _transientModel;
+}
 
 + (NSMutableArray*)getTransientTaskList {
     RLMResults* allTasks = [CSTaskRealmModel allObjects];
@@ -57,10 +73,6 @@
     [realm beginWriteTransaction];
     [self.comments addObject :newComment];
     [realm commitWriteTransaction]; 
-}
-
-+ (NSString*)primaryKey {
-    return @"concatenatedID";
 }
 
 @end

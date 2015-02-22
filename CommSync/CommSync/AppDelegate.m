@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 #import <Realm/Realm.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
 
 @interface AppDelegate ()
 
@@ -17,6 +20,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // Initialize Crashlytics
+    [Fabric with:@[CrashlyticsKit]];
     
     // init the application's session manager
     NSString* name = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
