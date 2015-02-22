@@ -657,7 +657,6 @@
                         <outlet property="redButton" destination="Mae-CW-EG8" id="3Ns-st-K8f"/>
                         <outlet property="tableView" destination="gib-tP-h9q" id="Xur-wC-nCM"/>
                         <outlet property="titleLabel" destination="LGj-9R-lLV" id="ZJ2-L1-fc4"/>
-                        <outlet property="top" destination="R6G-uz-k2N" id="gw0-Q4-oYA"/>
                         <outlet property="yellowButton" destination="PTB-Ga-syN" id="aBx-VR-0Q5"/>
                     </connections>
                 </viewController>
