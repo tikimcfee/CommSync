@@ -57,6 +57,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *distanceEdge;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *top;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *minWidth;
 
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;

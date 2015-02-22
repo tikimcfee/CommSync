@@ -18,7 +18,7 @@
 @interface CSTaskDetailViewController ()
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
-@property int activePic;
+@property float pictureWidth;
 
 @end
 
@@ -33,6 +33,11 @@
     //[_top setActive:NO];
     self.navigationBar.title = self.sourceTask.taskTitle;
 
+    
+    _pictureWidth = self.tableView.frame.size.width / 4;
+    _containerWidth.constant = _pictureWidth;
+    _minWidth.constant = _tableView.frame.size.height / 5;
+    
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     _distanceEdge.constant = 8;
@@ -307,6 +312,7 @@
         _embed.containerWidth = _containerWidth;
         _embed.distanceEdge = _distanceEdge;
         _embed.top = _top;
+        _embed.pictureWidth = _pictureWidth;
       
     }
 }
