@@ -115,18 +115,65 @@
     model.taskImages_NSDataArray_JPEG = archivedImages;
     
     // Grab task audio on the fly
-    model.taskAudio = self.taskAudio ? self.taskAudio : [NSData dataWithContentsOfURL:_TRANSIENT_audioDataURL];
+    if(self.taskAudio) {
+        model.taskAudio = self.taskAudio;
+    }
     
     [realm addObject:model];
     
     if(transcation)
         [realm commitWriteTransaction];
+    
+    self.BACKING_DATABASE_MODEL = model;
+}
+
+- (CSTaskRealmModel*)BACKING_DATABASE_MODEL {
+    if(_BACKING_DATABASE_MODEL)
+        return _BACKING_DATABASE_MODEL;
+    
+    _BACKING_DATABASE_MODEL = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:_concatenatedID];
+    
+    return _BACKING_DATABASE_MODEL;
 }
 
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
                                        inRealm:(RLMRealm*)realm
 {
     [self setAndPersistPropertiesOfNewTaskObject:model inRealm:realm withTransaction:YES];
+}
+
+#pragma mark - Temporary resource on disk for task streaming
+- (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData {
+    
+    // We don't need complex unique identifiers; we will clean up immediately when finished sending
+    // This is time inefficient, but safe and manageable
+    NSString* temporaryUniqueID = [[NSUUID UUID] UUIDString];
+    
+    // Generate the file name from the above AND this task's concat_id. Unique much?
+    NSString *fileName = [NSString stringWithFormat:@"%@_%@",
+                          temporaryUniqueID, self.concatenatedID];
+    NSURL *fileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+    
+    NSError* error;
+    _temporaryWriteError = error;
+    [thisTasksData writeToURL:fileURL options:NSDataWritingAtomic error:&error];
+    
+    if(!error)
+        self.temporaryFileURL = fileURL;
+    
+    return self.temporaryFileURL;
+}
+
+- (BOOL) removeTemporaryTaskDataFromDisk {
+    NSError *error = nil;
+    
+    [[NSFileManager defaultManager] removeItemAtURL:self.temporaryFileURL error:&error];
+    
+    if(error) {
+        NSLog(@"Task Removal Error for task %@ : \n%@", self.taskTitle, error);
+    }
+    
+    return error ? YES : NO;
 }
 
 #pragma mark - ASYNC callbacks

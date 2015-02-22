@@ -6,20 +6,24 @@
 //  Copyright (c) 2014 AppsByDLI. All rights reserved.
 //
 
+
 #import "CSTaskCreationViewController.h"
 
+// Data models
+#import <Realm/Realm.h>
 #import "CSTaskTransientObjectStore.h"
 #import "CSTaskRealmModel.h"
-
-#import "AppDelegate.h"
-#import "UIImage+normalize.h"
 #import "CSCommentRealmModel.h"
 
-#import "SZTextView.h"
+// Categories
+#import "UIImage+normalize.h"
 
+// UI
+#import "SZTextView.h"
 #import "CSAudioPlotViewController.h"
 
-#import <Realm/Realm.h>
+// Data transmission
+#import "CSSessionDataAnalyzer.h"
 
 @interface CSTaskCreationViewController()
 
@@ -81,10 +85,19 @@
     _realm = [RLMRealm defaultRealm];
     
     self.pendingTask = [[CSTaskTransientObjectStore alloc] init];
+<<<<<<< HEAD
         _pendingTask.UUID = U;
         _pendingTask.deviceID = D;
         _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
         self.descriptionTextField.placeholder = @"Enter description here...";
+=======
+    _pendingTask.UUID = U;
+    _pendingTask.deviceID = D;
+    _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
+    
+    self.descriptionTextField.placeholder = @"Enter description here...";
+
+>>>>>>> master
 }
 
 
@@ -153,6 +166,7 @@
 }
 
 - (IBAction)closeViewAndSave:(id)sender {
+<<<<<<< HEAD
     
     
         self.pendingTask.taskTitle = self.titleTextField.text;
@@ -166,6 +180,25 @@
         
         AppDelegate *d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
         [d.globalSessionManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:self.pendingTask]];
+=======
+
+    self.pendingTask.taskTitle = self.titleTextField.text;
+    self.pendingTask.taskDescription = self.descriptionTextField.text;
+    self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
+    if(!self.pendingTask.taskAudio && self.pendingTask.TRANSIENT_audioDataURL) {
+        self.pendingTask.taskAudio = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
+    } else {
+        self.pendingTask.taskAudio = nil;
+    }
+    
+    self.pendingTask.taskAudio = self.pendingTask.taskAudio ? self.pendingTask.taskAudio : [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
+    
+    CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
+    [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];
+    
+    [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:self.pendingTask];
+
+>>>>>>> master
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

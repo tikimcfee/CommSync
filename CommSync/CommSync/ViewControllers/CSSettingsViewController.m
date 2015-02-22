@@ -60,12 +60,12 @@
 
 - (IBAction)rebuild {
     
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    CSSessionManager* sessionManager = d.globalSessionManager;
-    
-    MCSession* s =[[MCSession alloc] initWithPeer:sessionManager.myPeerID];
-    s.delegate = sessionManager;
-    sessionManager.currentSession = s;
+//    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//    CSSessionManager* sessionManager = d.globalSessionManager;
+//    
+//    MCSession* s =[[MCSession alloc] initWithPeer:sessionManager.myPeerID];
+//    s.delegate = sessionManager;
+////    sessionManager.currentSession = s;
     
 }
 
