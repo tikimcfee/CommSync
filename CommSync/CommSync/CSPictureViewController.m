@@ -11,7 +11,6 @@
 
 @interface CSPictureViewController ()
 @property int activePic;
-
 @end
 
 @implementation CSPictureViewController
@@ -69,8 +68,8 @@
         if(_activePic ==  indexPath.row)
         {
             _activePic = -1;
-            _containerHeight.constant = _pictureWidth / 9 * 16;
-            _containerWidth.constant = _pictureWidth;
+            _containerHeight.constant = 200;
+            _containerWidth.constant = 200;
             _distanceEdge.constant = 8;
             [_top setActive:YES];
           

@@ -38,14 +38,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConst;
-<<<<<<< HEAD
-=======
-- (IBAction)increaseHeight:(id)sender;
-@property (weak, nonatomic) IBOutlet UITextField *decreaseHeight;
->>>>>>> master
 
 
-<<<<<<< HEAD
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 
@@ -63,7 +57,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *distanceEdge;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *top;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *minWidth;
 
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;
@@ -75,7 +68,4 @@
 - (void)        keyboardWillHide:(NSNotification *) sender;
 - (void)        keyboardDidShow:(NSNotification *) sender;
 
-=======
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
->>>>>>> master
 @end

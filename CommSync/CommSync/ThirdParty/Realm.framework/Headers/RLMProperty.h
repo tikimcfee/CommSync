@@ -54,4 +54,9 @@
  */
 @property (nonatomic, readonly, copy) NSString *objectClassName;
 
+/**
+ Returns YES if property objects are equal
+ */
+- (BOOL)isEqualToProperty:(RLMProperty *)prop;
+
 @end
