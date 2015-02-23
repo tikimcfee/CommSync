@@ -63,6 +63,76 @@
     // set connection count
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
+    // Execution blocks and callbacks
+    _reloadModels = ^void(CSTaskProgressTableViewCell* sourceData)
+    {
+        @synchronized (weakSelf.incomingTasks) {
+            if(sourceData)
+                [weakSelf.incomingTasks removeObject:sourceData];
+        }
+        
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+        @synchronized (weakSelf.incomingTasks) {
+            [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
+        }
+
+        
+        TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
+        weakSelf.indexPathController.dataModel = tasksDataModel;
+    };
+    
+    _incomingTaskCallback = ^void(CSTaskProgressTableViewCell* sourceData, TLIndexPathUpdates* precomputedUpdates)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            CSTaskListUpdateOperation* newUpdate = [CSTaskListUpdateOperation new];
+            
+            newUpdate.updatesToPerform = precomputedUpdates;
+            newUpdate.sourceDataToRemove = sourceData;
+            newUpdate.tableviewToUpdate = weakSelf.tableView;
+            newUpdate.tableviewIsVisible = weakSelf.controllerIsVisible;
+            newUpdate.reloadBlock = weakSelf.reloadModels;
+            newUpdate.indexPathController = weakSelf.indexPathController;
+        
+            [weakSelf.tableviewUpdateQueue addOperation:newUpdate];
+        });
+    };
+    
+    // Initialize variables
+    self.incomingTasks = [NSMutableArray new];
+    self.tableviewUpdateQueue = [NSOperationQueue new];
+    self.tableviewUpdateQueue.maxConcurrentOperationCount = 1;
+    [self setupInitialTaskDataModels];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+}
+
+- (void)setupInitialTaskDataModels {
+    
+    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList];
+    
+    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
+//    _mainTasksDataModel = tasksDataModel;
+    
+    self.indexPathController = [[TLIndexPathController alloc] initWithDataModel:tasksDataModel];
+    self.indexPathController.delegate = self;
+}
+
+- (void)reloadDataModels {
+    
+    NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+    @synchronized (_incomingTasks) {
+        [newDataModel addObjectsFromArray:_incomingTasks];
+    }
+
+    
+    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
+    _indexPathController.dataModel = tasksDataModel;
+    if(self.willRefreshFromIncomingTask)
+        self.willRefreshFromIncomingTask = NO;
+}
+
+- (void)registerForNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveNewTask:)
                                                  name:kNewTaskNotification
@@ -158,6 +228,24 @@
     });
 }
 
+- (void)newTaskStreamStarted:(NSNotification*)notification {
+    
+    NSDictionary* info = notification.userInfo;
+    CSNewTaskResourceInformationContainer* container = [info valueForKey:kCSNewTaskResourceInformationContainer];
+    
+    static NSString *simpleTableIdentifier = @"CSTaskProgressTableViewCell";
+    CSTaskProgressTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    [cell configureWithSourceInformation:container];
+    cell.progressCompletionBlock = _incomingTaskCallback;
+
+    @synchronized (_incomingTasks) {
+        [_incomingTasks addObject:cell];
+    }
+   
+    _incomingTaskCallback(nil, nil);
+    
+     _willRefreshFromIncomingTask = YES;
+}
 
 #pragma mark - Navigation
 
