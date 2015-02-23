@@ -10,7 +10,7 @@
 #import "CSChatMessageRealmModel.h"
 #import "CSTaskTransientObjectStore.h"
 #import "CSTaskRealmModel.h"
-
+#import "CSRealmWriteOperation.h"
 
 // Critical constants for building data transmission strings
 #define kCSDefaultStringEncodingMethod NSUTF16StringEncoding
@@ -18,15 +18,119 @@
 #define kCS_HEADER_TASK_REQUEST @"TASK_REQUEST"
 #define kCS_STRING_SEPERATOR    @":"
 
+// Implementation of task information container
 @implementation CSNewTaskResourceInformationContainer
 @end
 
-@interface CSSessionDataAnalyzer ()
+// Implementation of Data Analysis Operation
+@implementation CSDataAnalysisOperation
 
-@property (strong, nonatomic) dispatch_queue_t realmAccessThread;
+- (void) main
+{
+    // Determine if data is a string / command
+    NSString* stringFromData = [[NSString alloc] initWithData:_dataToAnalyze encoding:kCSDefaultStringEncodingMethod];
+    
+    if(stringFromData)
+    {
+        
+        NSLog(@"<?> Data string received : [%@]", stringFromData);
+        NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
+        if(!stringComponents || stringComponents.count <= 1) {
+            NSLog(@"<?> String parse failed - malformed string. [%@]", stringFromData);
+            return;
+        }
+        
+        if([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_NEW_TASK])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for NEW_TASK. [%@]", stringFromData);
+                return;
+            }
+            
+            NSString* newTaskId = [stringComponents objectAtIndex:1];
+            
+            // check to see if already made request from someone
+            BOOL MUST_RETURN = NO;
+            
+            @synchronized (_requestPool){
+                if([_requestPool valueForKey:newTaskId])
+                {
+                    NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                    MUST_RETURN = YES;
+                }
+            }
+            
+            // check to see if the task already exists
+            CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:newTaskId];
+            if(model)
+            {
+                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
+                MUST_RETURN = YES;
+            }
+            if(MUST_RETURN)
+                return;
+
+            @synchronized (_requestPool){
+                [_requestPool setValue:_peer forKey:newTaskId];
+            }
+            
+            // build the request string
+            NSString* requestString = [_parentAnalyzer buildTaskRequestStringFromNewTaskID:newTaskId];
+            NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
+            
+            // send the request
+            NSLog(@"<?> Sending request string [%@] to peer [%@]", requestString, _peer.displayName);
+            [_parentAnalyzer.globalManager sendSingleDataPacket:requestData toSinglePeer:_peer];
+        }
+        else if ([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_TASK_REQUEST])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for TASK_REQUEST. [%@]", stringFromData);
+                return;
+            }
+            
+            NSString* requestedTaskID = [stringComponents objectAtIndex:1];
+            
+            // check to see if the task exists
+            CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
+            if(!model)
+            {
+                NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed string?");
+                return;
+            }
+            
+            // Send the task to the peer
+            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, _peer.displayName);
+            [_parentAnalyzer.globalManager sendSingleTask:model toSinglePeer:_peer];
+        }
+        
+    }
+    else
+    {
+        id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
+        
+        if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+        {
+            // OP
+        }
+    }
+}
 
 @end
 
+/**
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS --  END OF HEADER IMPLEMENTATIONS
+ **/
+
+@interface CSSessionDataAnalyzer ()
+@property (strong, nonatomic) NSOperationQueue* realmWriteQueue;
+@property (strong, nonatomic) NSOperationQueue* dataAnalysisQueue;
+@end
 
 @implementation CSSessionDataAnalyzer
 
@@ -34,12 +138,17 @@
 + (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager {
     static dispatch_once_t once;
     static CSSessionDataAnalyzer* sharedInstance;
+    
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.globalManager = manager;
-        sharedInstance.taskPool = [NSMutableDictionary new];
         sharedInstance.requestPool = [NSMutableDictionary new];
-        sharedInstance.realmAccessThread = dispatch_queue_create("comm_sync_realm_access", DISPATCH_QUEUE_SERIAL);
+        
+        sharedInstance.realmWriteQueue = [[NSOperationQueue alloc] init];
+        sharedInstance.realmWriteQueue.maxConcurrentOperationCount = 1;
+        
+        sharedInstance.dataAnalysisQueue = [NSOperationQueue new];
+        sharedInstance.dataAnalysisQueue.maxConcurrentOperationCount = 1;
     });
     
     return sharedInstance;
@@ -73,7 +182,9 @@ didStartReceivingResourceWithName:(NSString *)resourceName
                                                       userInfo:containerDictionary];
     
     // we have made a request and been served - add it to our pool
-    [_requestPool setValue:peerID forKey:resourceName];
+    @synchronized (_requestPool){
+        [_requestPool setValue:peerID forKey:resourceName];
+    }
     
     /**
      Use this code if you want to observe the progress of a data transfer from the
@@ -107,7 +218,12 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
                            };
     
     // We have finished our request - get rid out of it
-    [_requestPool removeObjectForKey:resourceName];
+    // TODO
+    // PERHAPS MAKE A REQUEST QUEUE?
+    @synchronized (_requestPool){
+        [_requestPool removeObjectForKey:resourceName];
+    }
+    
     
     // create the task and set up the write for it
     NSData* taskData = [NSData dataWithContentsOfURL:localURL];
@@ -116,7 +232,6 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
     {
         [self addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:resourceName];
-        
         [self sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
     }
     
@@ -129,42 +244,22 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 
 #pragma mark - Data persistence
 - (void) addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:(NSString*)identifier{
-    [_taskPool setValue:newTask forKey:identifier];
-    __weak typeof(self) weakSelf = self;
     
-    if(!self.realmAccessThreadIsRunning)
-    {
-        dispatch_async(self.realmAccessThread, ^{
-            weakSelf.realmAccessThreadIsRunning = YES;
-            [[RLMRealm defaultRealm] beginWriteTransaction];
-            
-            for(CSTaskTransientObjectStore* unwrittenTask in [weakSelf.taskPool allValues]) {
-                CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
-                [unwrittenTask setAndPersistPropertiesOfNewTaskObject:newTask
-                                                              inRealm:[RLMRealm defaultRealm]
-                                                      withTransaction:NO];
-                NSArray* keyForTask = [weakSelf.taskPool allKeysForObject:unwrittenTask];
-                if(keyForTask.count == 1)
-                {
-                    [weakSelf.taskPool removeObjectForKey:[keyForTask objectAtIndex:0]];
-                }
-                else
-                {
-                    NSLog(@"<!!> WARNING :: TASK POOL HAS MULTIPLE ENTRIES FOR SAME NEW TASK - SOMETHING HAS GONE WRONG.");
-                }
-            }
-            
-            [[RLMRealm defaultRealm] commitWriteTransaction];
-            weakSelf.realmAccessThreadIsRunning = NO;
-        });
-    }
+    CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
+    newWriteOperation.pendingTransientTask = newTask;
+    [self.realmWriteQueue addOperation:newWriteOperation];
+    
 }
 
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
-    if([_taskPool valueForKey:taskID]) {
-        return [_taskPool valueForKey:taskID];
+    NSArray* currentWriteQueue = _realmWriteQueue.operations;
+    for(CSRealmWriteOperation* operation in currentWriteQueue) {
+        if([operation.pendingTransientTask.concatenatedID isEqualToString:taskID]) {
+            return operation.pendingTransientTask;
+        }
     }
+
     CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
     if(model)
         return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
@@ -303,6 +398,13 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
         }
     }
     
+    CSDataAnalysisOperation* newOperation = [CSDataAnalysisOperation new];
+    newOperation.dataToAnalyze = receivedData;
+    newOperation.peer = peer;
+    newOperation.requestPool = _requestPool;
+    newOperation.parentAnalyzer = self;
+    
+    [_dataAnalysisQueue addOperation:newOperation];
 }
 
 

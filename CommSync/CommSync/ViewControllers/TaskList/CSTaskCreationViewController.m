@@ -163,6 +163,12 @@
     self.pendingTask.taskTitle = self.titleTextField.text;
     self.pendingTask.taskDescription = self.descriptionTextField.text;
     self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
+    if(!self.pendingTask.taskAudio && self.pendingTask.TRANSIENT_audioDataURL) {
+        self.pendingTask.taskAudio = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
+    } else {
+        self.pendingTask.taskAudio = nil;
+    }
+    
     self.pendingTask.taskAudio = self.pendingTask.taskAudio ? self.pendingTask.taskAudio : [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
     
     CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];

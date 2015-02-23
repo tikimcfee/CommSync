@@ -10,6 +10,7 @@
 #import <Realm/Realm.h>
 #import "CSTaskRealmModel.h"
 #import "M13ProgressViewRing.h"
+#import "TLIndexPathTools.h"
 
 @class CSNewTaskResourceInformationContainer;
 
@@ -23,7 +24,7 @@
 // Task information and state
 @property (strong, nonatomic) CSNewTaskResourceInformationContainer *sourceTask;
 @property (strong, nonatomic) NSString* resourceName;
-@property (strong, nonatomic) void (^progressCompletionBlock)(CSTaskProgressTableViewCell*);
+@property (strong, nonatomic) void (^progressCompletionBlock)(CSTaskProgressTableViewCell*, TLIndexPathUpdates* updates);
 
 
 // Configuration method

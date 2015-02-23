@@ -39,9 +39,9 @@
 
 // MCMultiPeer objects
 @property (strong, nonatomic) MCPeerID* myPeerID;
-
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
+@property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
 
 // 1-1 session objects
 @property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
@@ -62,6 +62,7 @@
 
 // Repair methods
 - (void) nukeSession;
+- (void) resetBrowserAndAdvertiser;
 - (void) nukeRealm;
 
 

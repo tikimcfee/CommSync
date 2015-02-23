@@ -12,7 +12,9 @@
 #import "CSTaskProgressTableViewCell.h"
 #import "CSTaskTransientObjectStore.h"
 #import "CSSessionDataAnalyzer.h"
+#import "CSTaskListUpdateOperation.h"
 #import "AppDelegate.h"
+#import <Crashlytics/Crashlytics.h>
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -29,10 +31,14 @@
 @property (strong, nonatomic) RLMNotificationToken* updateUIToken;
 
 // New incoming and non-complete task transfers
+@property (nonatomic, assign) BOOL controllerIsVisible;
 @property (strong, nonatomic) TLIndexPathController* indexPathController;
+@property (strong, nonatomic) NSOperationQueue* tableviewUpdateQueue;
+
 @property (assign, nonatomic) BOOL willRefreshFromIncomingTask;
 @property (strong, nonatomic) NSMutableArray* incomingTasks;
-@property (copy, nonatomic) void (^incomingTaskCallback)(CSTaskProgressTableViewCell*);
+@property (copy, nonatomic) void (^incomingTaskCallback)(CSTaskProgressTableViewCell*, TLIndexPathUpdates* precomputedUpdates);
+@property (copy, nonatomic) void (^reloadModels)(CSTaskProgressTableViewCell* sourceData);
 
 @end
 
@@ -46,9 +52,8 @@
     
     __weak typeof(self) weakSelf = self;
     void (^realmNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            if(!weakSelf.willRefreshFromIncomingTask)
-                [weakSelf reloadDataModels];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                _incomingTaskCallback(nil, nil);
         });
     };
     
@@ -60,32 +65,52 @@
     AppDelegate *app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = app.globalSessionManager;
     
-    // get connection count
-//    NSInteger connectionCount = [_sessionManager.currentSession.connectedPeers count]; // subtract 1 to account for yourself
-//    NSLog(@"%@", _sessionManager.currentSession.connectedPeers);
-    
     
     // Realms
     _realm = [RLMRealm defaultRealm];
     _realm.autorefresh = YES;
     
-    // set connection count
-//    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
-    
     // Notification registrations
     [self registerForNotifications];
     
-    // Incoming task execution block
-    _incomingTaskCallback = ^void(CSTaskProgressTableViewCell* sourceData)
+    // Execution blocks and callbacks
+    _reloadModels = ^void(CSTaskProgressTableViewCell* sourceData)
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [weakSelf.incomingTasks removeObject:sourceData];
-            [weakSelf reloadDataModels];
-        });
-    };;
+        @synchronized (weakSelf.incomingTasks) {
+            if(sourceData)
+                [weakSelf.incomingTasks removeObject:sourceData];
+        }
+        
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+        @synchronized (weakSelf.incomingTasks) {
+            [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
+        }
+
+        
+        TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
+        weakSelf.indexPathController.dataModel = tasksDataModel;
+    };
     
-    // Initialize storage
+    _incomingTaskCallback = ^void(CSTaskProgressTableViewCell* sourceData, TLIndexPathUpdates* precomputedUpdates)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            CSTaskListUpdateOperation* newUpdate = [CSTaskListUpdateOperation new];
+            
+            newUpdate.updatesToPerform = precomputedUpdates;
+            newUpdate.sourceDataToRemove = sourceData;
+            newUpdate.tableviewToUpdate = weakSelf.tableView;
+            newUpdate.tableviewIsVisible = weakSelf.controllerIsVisible;
+            newUpdate.reloadBlock = weakSelf.reloadModels;
+            newUpdate.indexPathController = weakSelf.indexPathController;
+        
+            [weakSelf.tableviewUpdateQueue addOperation:newUpdate];
+        });
+    };
+    
+    // Initialize variables
     self.incomingTasks = [NSMutableArray new];
+    self.tableviewUpdateQueue = [NSOperationQueue new];
+    self.tableviewUpdateQueue.maxConcurrentOperationCount = 1;
     [self setupInitialTaskDataModels];
     
     self.tableView.dataSource = self;
@@ -104,8 +129,12 @@
 }
 
 - (void)reloadDataModels {
+    
     NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
-    [newDataModel addObjectsFromArray:_incomingTasks];
+    @synchronized (_incomingTasks) {
+        [newDataModel addObjectsFromArray:_incomingTasks];
+    }
+
     
     TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
     _indexPathController.dataModel = tasksDataModel;
@@ -141,10 +170,24 @@
     
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    _controllerIsVisible = NO;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    _controllerIsVisible = YES;
+    _incomingTaskCallback(nil, nil);
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -237,9 +280,7 @@
 #pragma mark - Task creation view refresh
 - (void)didReceiveNewTask:(NSNotification*)notification
 {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.tableView reloadData];
-//    });
+
 }
 
 - (void)newTaskStreamStarted:(NSNotification*)notification {
@@ -247,52 +288,39 @@
     NSDictionary* info = notification.userInfo;
     CSNewTaskResourceInformationContainer* container = [info valueForKey:kCSNewTaskResourceInformationContainer];
     
-    NSMutableArray* newArray = [NSMutableArray arrayWithArray:self.indexPathController.items];
-    
     static NSString *simpleTableIdentifier = @"CSTaskProgressTableViewCell";
     CSTaskProgressTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     [cell configureWithSourceInformation:container];
     cell.progressCompletionBlock = _incomingTaskCallback;
-    
-    [newArray addObject:cell];
-    [_incomingTasks addObject:cell];
-    
-    TLIndexPathDataModel* newModel = [[TLIndexPathDataModel alloc] initWithItems:newArray];
-    self.indexPathController.dataModel = newModel;
+
+    @synchronized (_incomingTasks) {
+        [_incomingTasks addObject:cell];
+    }
+   
+    _incomingTaskCallback(nil, nil);
     
      _willRefreshFromIncomingTask = YES;
 }
 
 - (void)newTaskStreamUpdated:(NSNotification*)notification {
-//    NSDictionary* info = notification.userInfo;
-//    NSString* name = ((MCPeerID*)[info valueForKey:@"peerID"]).displayName;
+
 }
 
 - (void)newTaskStreamFinished:(NSNotification*)notification {
-//    NSDictionary* info = notification.userInfo;
-//    NSURL* location = (NSURL*)[info valueForKey:@"localURL"];
-//    
-//    NSData* taskData = [NSData dataWithContentsOfURL:location];
-//    id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
-//    
-//    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
-//    {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-////            CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
-////            [(CSTaskTransientObjectStore*)newTask setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:YES];
-//        });
-//    }
-//
-//    [_incomingTasks removeObjectAtIndex:<#(NSUInteger)#>];
+    _incomingTaskCallback(nil, nil);
 }
 
 #pragma mark - TLIndexPathControllerDelegate
 
 - (void)controller:(TLIndexPathController *)controller didUpdateDataModel:(TLIndexPathUpdates *)updates
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [updates performBatchUpdatesOnTableView:self.tableView withRowAnimation:UITableViewRowAnimationFade];
-    });
+    _incomingTaskCallback(nil, updates);
+//    if(!_controllerIsVisible) {
+//        [self.tableView reloadData];
+//    } else {
+//        [updates performBatchUpdatesOnTableView:self.tableView withRowAnimation:UITableViewRowAnimationFade];
+//    }
+
 }
 
 

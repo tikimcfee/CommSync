@@ -33,6 +33,7 @@
 @property (strong, nonatomic) CSTaskRealmModel* BACKING_DATABASE_MODEL;
 
 // Temporary persistence
+- (void) getAllImagesForTaskWithCompletionBlock:(void (^)(BOOL))completion;
 - (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
 - (BOOL) removeTemporaryTaskDataFromDisk;
 

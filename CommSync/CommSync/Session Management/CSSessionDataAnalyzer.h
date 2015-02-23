@@ -15,9 +15,7 @@
 @interface CSSessionDataAnalyzer : NSObject <MCSessionDataHandlingDelegate>
 
 // Task queue for new tasks that are waiting for database writes
-@property (nonatomic, strong) NSMutableDictionary* taskPool;
 @property (nonatomic, strong) NSMutableDictionary* requestPool;
-@property (nonatomic, assign) BOOL realmAccessThreadIsRunning;
 
 @property (nonatomic, strong) CSSessionManager* globalManager;
 
@@ -26,6 +24,19 @@
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
 
+- (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID;
+- (NSString*) buildTaskRequestStringFromNewTaskID:(NSString*)taskID;
+- (NSString*) buildNewTaskStringFromNewTaskID:(NSString*)taskID;
+
+
+@end
+
+@interface CSDataAnalysisOperation : NSOperation
+
+@property (strong, nonatomic) NSData* dataToAnalyze;
+@property (strong, nonatomic) MCPeerID* peer;
+@property (nonatomic, strong) NSMutableDictionary* requestPool;
+@property (weak, nonatomic) CSSessionDataAnalyzer* parentAnalyzer;
 
 @end
 
