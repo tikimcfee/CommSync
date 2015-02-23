@@ -76,11 +76,16 @@
     // Execution blocks and callbacks
     _reloadModels = ^void(CSTaskProgressTableViewCell* sourceData)
     {
-        if(sourceData)
-            [weakSelf.incomingTasks removeObject:sourceData];
+        @synchronized (weakSelf.incomingTasks) {
+            if(sourceData)
+                [weakSelf.incomingTasks removeObject:sourceData];
+        }
         
         NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
-        [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
+        @synchronized (weakSelf.incomingTasks) {
+            [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
+        }
+
         
         TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
         weakSelf.indexPathController.dataModel = tasksDataModel;
@@ -126,7 +131,10 @@
 - (void)reloadDataModels {
     
     NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
-    [newDataModel addObjectsFromArray:_incomingTasks];
+    @synchronized (_incomingTasks) {
+        [newDataModel addObjectsFromArray:_incomingTasks];
+    }
+
     
     TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
     _indexPathController.dataModel = tasksDataModel;
@@ -284,8 +292,11 @@
     CSTaskProgressTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     [cell configureWithSourceInformation:container];
     cell.progressCompletionBlock = _incomingTaskCallback;
-    
-    [_incomingTasks addObject:cell];
+
+    @synchronized (_incomingTasks) {
+        [_incomingTasks addObject:cell];
+    }
+   
     _incomingTaskCallback(nil, nil);
     
      _willRefreshFromIncomingTask = YES;
