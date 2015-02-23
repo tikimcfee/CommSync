@@ -11,6 +11,7 @@
 
 @interface CSPictureViewController ()
 @property int activePic;
+
 @end
 
 @implementation CSPictureViewController
@@ -48,18 +49,19 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
 
         if(_activePic == indexPath.row){
             [_top setActive:NO];
             UIImage *temp = [_taskImages objectAtIndex:indexPath.row] ;
-            _containerHeight.constant = temp.size.height;
+            _containerHeight.constant = temp.size.height + 20;
             _containerWidth.constant = temp.size.width;
             _distanceEdge.constant = temp.size.width + 20;
             
             
             return temp.size.height;
         }
-    return 200;
+    return (_header.frame.size.height / 2) - 20;
     
 }
 
@@ -68,8 +70,8 @@
         if(_activePic ==  indexPath.row)
         {
             _activePic = -1;
-            _containerHeight.constant = 200;
-            _containerWidth.constant = 200;
+            _containerHeight.constant = _header.frame.size.height / 2;
+            _containerWidth.constant = _detail.frame.size.height / 3;
             _distanceEdge.constant = 8;
             [_top setActive:YES];
           

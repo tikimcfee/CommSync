@@ -18,7 +18,8 @@
 @interface CSTaskDetailViewController ()
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
-@property int activePic;
+@property float width, height;
+
 
 @end
 
@@ -32,7 +33,14 @@
     _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
     //[_top setActive:NO];
     self.navigationBar.title = self.sourceTask.taskTitle;
-
+    
+    _height = self.headerView.frame.size.height / 2;
+    _width = self.tableView.frame.size.height / 3;
+    
+    _containerWidth.constant = _width;
+    _containerHeight.constant = _height;
+    
+    
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
     _distanceEdge.constant = 8;
@@ -217,6 +225,7 @@
         [_greenButton setHidden:NO];
         [_yellowButton setHidden:NO];
         [_redButton setHidden:NO];
+        [_priorityLabel setHidden:YES];
         
     }
     
@@ -244,6 +253,7 @@
         
         
         [self.tableView reloadData];
+        [_priorityLabel setHidden:NO];
         [_greenButton setHidden:YES];
         [_yellowButton setHidden:YES];
         [_redButton setHidden:YES];
@@ -307,7 +317,8 @@
         _embed.containerWidth = _containerWidth;
         _embed.distanceEdge = _distanceEdge;
         _embed.top = _top;
-      
+        _embed.detail = self.tableView;
+        _embed.header = self.headerView;
     }
 }
 @end
