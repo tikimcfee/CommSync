@@ -148,6 +148,54 @@
                                     <outlet property="title" destination="wPL-hL-oRQ" id="qPU-GW-aH5"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CSTaskProgressTableViewCell" id="rly-q9-zW3" customClass="CSTaskProgressTableViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rly-q9-zW3" id="dqc-gW-Es4">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="D87-8d-plx" customClass="M13ProgressViewRing">
+                                            <rect key="frame" x="532" y="3" width="53" height="53"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="53" id="4Sm-AS-4Ok"/>
+                                                <constraint firstAttribute="width" secondItem="D87-8d-plx" secondAttribute="height" multiplier="1:1" id="qmk-hX-Vm4"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="qmk-hX-Vm4"/>
+                                                </mask>
+                                            </variation>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tVf-bL-tcO">
+                                            <rect key="frame" x="15" y="3" width="502" height="53"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="Receiving task from">
+                                                    <attributes>
+                                                        <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <font key="NSFont" size="17" name="HelveticaNeue-ThinItalic"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="D87-8d-plx" secondAttribute="trailing" constant="15" id="7Qr-ec-Uxh"/>
+                                        <constraint firstItem="D87-8d-plx" firstAttribute="top" secondItem="dqc-gW-Es4" secondAttribute="top" constant="3" id="BII-BV-Fdz"/>
+                                        <constraint firstItem="tVf-bL-tcO" firstAttribute="top" secondItem="dqc-gW-Es4" secondAttribute="top" constant="3" id="Po8-Hf-Rn8"/>
+                                        <constraint firstItem="tVf-bL-tcO" firstAttribute="leading" secondItem="dqc-gW-Es4" secondAttribute="leading" constant="15" id="Txv-Mu-O3S"/>
+                                        <constraint firstAttribute="bottom" secondItem="D87-8d-plx" secondAttribute="bottom" constant="3" id="VXe-29-G2V"/>
+                                        <constraint firstItem="D87-8d-plx" firstAttribute="leading" secondItem="tVf-bL-tcO" secondAttribute="trailing" constant="15" id="aV2-C7-THS"/>
+                                        <constraint firstAttribute="bottom" secondItem="tVf-bL-tcO" secondAttribute="bottom" constant="3" id="tQq-xP-lEY"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="progressRingView" destination="D87-8d-plx" id="uEE-O9-WEf"/>
+                                    <outlet property="taskStatusLabel" destination="tVf-bL-tcO" id="Hhw-tU-oYg"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="ogc-W8-25c" id="exK-Jn-vCx"/>
