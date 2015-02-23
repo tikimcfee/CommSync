@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface CSChatTableViewCell : UITableViewCell
-
+@property (strong, nonatomic) IBOutlet UILabel *createdByLabel;
+@property (strong, nonatomic) IBOutlet UILabel *messageLabel;
 @end

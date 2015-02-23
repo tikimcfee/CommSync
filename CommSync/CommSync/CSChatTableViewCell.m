@@ -8,6 +8,10 @@
 
 #import "CSChatTableViewCell.h"
 
+@interface CSChatTableViewCell ()
+
+@end
+
 @implementation CSChatTableViewCell
 
 - (void)awakeFromNib {
