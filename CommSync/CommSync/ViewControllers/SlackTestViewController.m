@@ -9,7 +9,10 @@
 #import "SlackTestViewController.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
+#import "CSChatTableViewCell.h"
 #import <Realm/Realm.h>
+
+#define kChatTableViewCellIdentifier @"ChatViewCell"
 
 @interface SlackTestViewController ()
 // use this realm object to persist data to disk
@@ -39,7 +42,7 @@
 #pragma mark - View Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     /**
      * Get a reference to the app delegate
      */
@@ -50,10 +53,22 @@
     _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
     _chatRealm.autorefresh = YES;
     
+    self.textView.placeholder = NSLocalizedString(@"Message", nil);
+    self.textView.placeholderColor = [UIColor lightGrayColor];
+//    self.textView.font = [UIFont fontWithName:@"Helvetica Neue Light" size:18.0f];
+    
     /**
      * Get a copy of the session manager
      */
     self.sessionManager = app.globalSessionManager;
+    
+    /**
+     *  Register to use custom table view cells
+     */
+//    [self.tableView registerClass:[CSChatTableViewCell class] forCellReuseIdentifier:kChatTableViewCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"CSChatTableViewCell" bundle:nil] forCellReuseIdentifier:kChatTableViewCellIdentifier];
+    self.tableView.estimatedRowHeight = 44.0f;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     /**
      *  Register for chat realm notifications
@@ -83,7 +98,7 @@
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
     
     // Fixes the cell from blinking (because of the transform, when using translucent cells)
-    // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
+    // See https: //github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [super didPressRightButton:sender];
@@ -105,24 +120,30 @@
     return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CSChatTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    static NSString *simpleTableIdentifier = @"CellIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    static NSString *cellIdentifier = @"ChatViewCell";
+    CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:simpleTableIdentifier];
+        cell = [[CSChatTableViewCell alloc] init];
     }
     
     CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", msg.createdBy, msg.messageText];
+//    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", msg.createdBy, msg.messageText];
+    cell.createdByLabel.text = msg.createdBy;
+    cell.messageLabel.text = msg.text;
     cell.transform = self.tableView.transform;
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - Helper Methods

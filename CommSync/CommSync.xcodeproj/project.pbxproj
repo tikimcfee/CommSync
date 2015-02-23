@@ -132,6 +132,8 @@
 		93EBACE01A97D8A0006BAF4A /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD71A97D8A0006BAF4A /* SLKTextViewController.m */; };
 		93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */; };
 		93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */; };
+		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
+		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 /* End PBXBuildFile section */
 
@@ -417,6 +419,9 @@
 		93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
 		93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlackTestViewController.h; path = ViewControllers/SlackTestViewController.h; sourceTree = "<group>"; };
 		93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlackTestViewController.m; path = ViewControllers/SlackTestViewController.m; sourceTree = "<group>"; };
+		93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSChatTableViewCell.xib; sourceTree = "<group>"; };
+		93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatTableViewCell.h; sourceTree = "<group>"; };
+		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -542,7 +547,10 @@
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
 				3F96AB581A86D036000A50F4 /* Main.storyboard */,
+				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
 				459D5F7619DB449900C91EFA /* Supporting Files */,
+				93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */,
+				93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */,
 			);
 			path = CommSync;
 			sourceTree = "<group>";
@@ -1150,6 +1158,7 @@
 				93EBABE91A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
 				459D5F8719DB449900C91EFA /* Images.xcassets in Resources */,
 				93EBABC51A964552006BAF4A /* JSQMessages.strings in Resources */,
+				93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */,
 				746F6AD71A892613007A83E8 /* VERSION in Resources */,
 				93EBABE21A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				93EBABE41A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.xib in Resources */,
@@ -1229,6 +1238,7 @@
 				93EBABC81A964552006BAF4A /* UIColor+JSQMessages.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
 				93EBABE71A964552006BAF4A /* JSQMessagesLabel.m in Sources */,
+				93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */,
 				741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */,
 				93EBABE31A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
 				746F6ACE1A892613007A83E8 /* EZAudioPlot.m in Sources */,
@@ -1414,7 +1424,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1427,7 +1437,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fa36e73e-0f42-45c6-892d-4f542006eb5d";
+				PROVISIONING_PROFILE = "5d75ff6b-8a22-4443-8afa-892a0f537da3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1436,7 +1446,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Westlake (36B48JX3TB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1449,7 +1459,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fa36e73e-0f42-45c6-892d-4f542006eb5d";
+				PROVISIONING_PROFILE = "5d75ff6b-8a22-4443-8afa-892a0f537da3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
