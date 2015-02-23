@@ -7,11 +7,15 @@
 //
 
 #import <Realm/Realm.h>
+#import "JSQMessageData.h"
 
-@interface CSChatMessageRealmModel : RLMObject <NSCoding>
+@interface CSChatMessageRealmModel : RLMObject <NSCoding, JSQMessageData>
 
-@property NSString *text;
-@property NSString *createdAt;
-@property NSString *createdBy;
+@property (nonatomic, strong, readonly) NSString *messageText;
+@property (nonatomic, strong, readonly) NSDate *createdAt;
+@property (nonatomic, strong, readonly) NSString *createdBy;
+
+
+- (instancetype)initWithMessage:(NSString *)message byUser:(NSString *)username;
 
 @end

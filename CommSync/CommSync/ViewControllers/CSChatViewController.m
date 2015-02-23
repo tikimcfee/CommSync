@@ -97,10 +97,7 @@
     NSString *me = [[UIDevice currentDevice] name];
     
     // create chat message object
-    CSChatMessageRealmModel *m = [[CSChatMessageRealmModel alloc] init];
-    m.text = messageContent;
-    m.createdBy = me;
-    m.createdAt = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970] * 1000];
+    CSChatMessageRealmModel *m = [[CSChatMessageRealmModel alloc] initWithMessage:messageContent byUser:me];
     
     // write message to local storage
     [_chatRealm beginWriteTransaction];

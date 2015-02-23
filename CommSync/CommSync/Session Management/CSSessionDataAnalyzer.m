@@ -197,8 +197,27 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 #pragma mark - Data analysis
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer
 {
+    id unknownData = [NSKeyedUnarchiver unarchiveObjectWithData:receivedData];
+    
+    if ([unknownData isKindOfClass:[CSChatMessageRealmModel class]])
+    {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
+        
+        RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
+        
+        [chatRealm beginWriteTransaction];
+        [chatRealm addObject:unknownData];
+        [chatRealm commitWriteTransaction];
+        
+        return;
+    }
+    
     // Determine if data is a string / command
     NSString* stringFromData = [[NSString alloc] initWithData:receivedData encoding:kCSDefaultStringEncodingMethod];
+    
+    
     
     if(stringFromData)
     {

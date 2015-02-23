@@ -117,6 +117,15 @@
 		93EBABEE1A964552006BAF4A /* JSQMessagesTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBABC31A964552006BAF4A /* JSQMessagesTypingIndicatorFooterView.xib */; };
 		93EBABF31A9645E2006BAF4A /* JSQSystemSoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBABF21A9645E2006BAF4A /* JSQSystemSoundPlayer.m */; };
 		93EBACC51A965E82006BAF4A /* ChatTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACC41A965E82006BAF4A /* ChatTestViewController.m */; };
+		93EBACDA1A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACC91A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m */; };
+		93EBACDB1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACCC1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m */; };
+		93EBACDC1A97D8A0006BAF4A /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACCE1A97D8A0006BAF4A /* UIView+SLKAdditions.m */; };
+		93EBACDD1A97D8A0006BAF4A /* SLKInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD11A97D8A0006BAF4A /* SLKInputAccessoryView.m */; };
+		93EBACDE1A97D8A0006BAF4A /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD31A97D8A0006BAF4A /* SLKTextInputbar.m */; };
+		93EBACDF1A97D8A0006BAF4A /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD51A97D8A0006BAF4A /* SLKTextView.m */; };
+		93EBACE01A97D8A0006BAF4A /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD71A97D8A0006BAF4A /* SLKTextViewController.m */; };
+		93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */; };
+		93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 /* End PBXBuildFile section */
 
@@ -373,6 +382,25 @@
 		93EBABF21A9645E2006BAF4A /* JSQSystemSoundPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQSystemSoundPlayer.m; sourceTree = "<group>"; };
 		93EBACC31A965E82006BAF4A /* ChatTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatTestViewController.h; path = ViewControllers/ChatTestViewController.h; sourceTree = "<group>"; };
 		93EBACC41A965E82006BAF4A /* ChatTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatTestViewController.m; path = ViewControllers/ChatTestViewController.m; sourceTree = "<group>"; };
+		93EBACC81A97D8A0006BAF4A /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
+		93EBACC91A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+SLKAdditions.m"; sourceTree = "<group>"; };
+		93EBACCA1A97D8A0006BAF4A /* SLKUIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKUIConstants.h; sourceTree = "<group>"; };
+		93EBACCB1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SLKAdditions.h"; sourceTree = "<group>"; };
+		93EBACCC1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SLKAdditions.m"; sourceTree = "<group>"; };
+		93EBACCD1A97D8A0006BAF4A /* UIView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SLKAdditions.h"; sourceTree = "<group>"; };
+		93EBACCE1A97D8A0006BAF4A /* UIView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SLKAdditions.m"; sourceTree = "<group>"; };
+		93EBACD01A97D8A0006BAF4A /* SLKInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKInputAccessoryView.h; sourceTree = "<group>"; };
+		93EBACD11A97D8A0006BAF4A /* SLKInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKInputAccessoryView.m; sourceTree = "<group>"; };
+		93EBACD21A97D8A0006BAF4A /* SLKTextInputbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextInputbar.h; sourceTree = "<group>"; };
+		93EBACD31A97D8A0006BAF4A /* SLKTextInputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextInputbar.m; sourceTree = "<group>"; };
+		93EBACD41A97D8A0006BAF4A /* SLKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextView.h; sourceTree = "<group>"; };
+		93EBACD51A97D8A0006BAF4A /* SLKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextView.m; sourceTree = "<group>"; };
+		93EBACD61A97D8A0006BAF4A /* SLKTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextViewController.h; sourceTree = "<group>"; };
+		93EBACD71A97D8A0006BAF4A /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
+		93EBACD81A97D8A0006BAF4A /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
+		93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
+		93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlackTestViewController.h; path = ViewControllers/SlackTestViewController.h; sourceTree = "<group>"; };
+		93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlackTestViewController.m; path = ViewControllers/SlackTestViewController.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -435,6 +463,7 @@
 		454D92061A7857AA000B74A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93EBACC61A97D8A0006BAF4A /* Slack */,
 				93EBAB571A964552006BAF4A /* JSQMessagesViewController */,
 				74C541BE1A93E67100FC29AD /* TLIndexPathTools */,
 				741DE9701A92C86800AC488F /* M13ProgressView */,
@@ -557,6 +586,8 @@
 				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
 				93EBACC31A965E82006BAF4A /* ChatTestViewController.h */,
 				93EBACC41A965E82006BAF4A /* ChatTestViewController.m */,
+				93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */,
+				93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -969,6 +1000,47 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		93EBACC61A97D8A0006BAF4A /* Slack */ = {
+			isa = PBXGroup;
+			children = (
+				93EBACC71A97D8A0006BAF4A /* Additions */,
+				93EBACCF1A97D8A0006BAF4A /* Classes */,
+			);
+			name = Slack;
+			path = ThirdParty/Slack;
+			sourceTree = "<group>";
+		};
+		93EBACC71A97D8A0006BAF4A /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				93EBACC81A97D8A0006BAF4A /* SLKTextView+SLKAdditions.h */,
+				93EBACC91A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m */,
+				93EBACCA1A97D8A0006BAF4A /* SLKUIConstants.h */,
+				93EBACCB1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.h */,
+				93EBACCC1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m */,
+				93EBACCD1A97D8A0006BAF4A /* UIView+SLKAdditions.h */,
+				93EBACCE1A97D8A0006BAF4A /* UIView+SLKAdditions.m */,
+			);
+			path = Additions;
+			sourceTree = "<group>";
+		};
+		93EBACCF1A97D8A0006BAF4A /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				93EBACD01A97D8A0006BAF4A /* SLKInputAccessoryView.h */,
+				93EBACD11A97D8A0006BAF4A /* SLKInputAccessoryView.m */,
+				93EBACD21A97D8A0006BAF4A /* SLKTextInputbar.h */,
+				93EBACD31A97D8A0006BAF4A /* SLKTextInputbar.m */,
+				93EBACD41A97D8A0006BAF4A /* SLKTextView.h */,
+				93EBACD51A97D8A0006BAF4A /* SLKTextView.m */,
+				93EBACD61A97D8A0006BAF4A /* SLKTextViewController.h */,
+				93EBACD71A97D8A0006BAF4A /* SLKTextViewController.m */,
+				93EBACD81A97D8A0006BAF4A /* SLKTypingIndicatorView.h */,
+				93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1063,11 +1135,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */,
+				93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */,
 				74C541ED1A93E67100FC29AD /* TLIndexPathItem.m in Sources */,
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
 				93EBABC71A964552006BAF4A /* NSString+JSQMessages.m in Sources */,
 				93EBABD41A964552006BAF4A /* JSQMessagesCollectionViewFlowLayout.m in Sources */,
-				74DB14EE1A7FDE4300ECBADB /* PeerBrowser.m in Sources */,
 				93EBABE01A964552006BAF4A /* JSQMessagesCollectionViewCell.m in Sources */,
 				93EBABE51A964552006BAF4A /* JSQMessagesComposerTextView.m in Sources */,
 				74C541FB1A93E67100FC29AD /* TLTableViewController.m in Sources */,
@@ -1077,7 +1150,6 @@
 				74C541F71A93E67100FC29AD /* TLTreeTableViewController.m in Sources */,
 				93EBABE81A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.m in Sources */,
 				93EBABD71A964552006BAF4A /* JSQLocationMediaItem.m in Sources */,
-				74DB14E91A7FDE4300ECBADB /* JKLocalConnection.m in Sources */,
 				746F6ACF1A892613007A83E8 /* EZAudioPlotGL.m in Sources */,
 				74C541F11A93E67100FC29AD /* TLCollapsibleHeaderView.m in Sources */,
 				93EBABEB1A964552006BAF4A /* JSQMessagesToolbarContentView.m in Sources */,
@@ -1103,19 +1175,19 @@
 				74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */,
 				93EBABC91A964552006BAF4A /* UIDevice+JSQMessages.m in Sources */,
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
-				74DB14EC1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m in Sources */,
 				93EBABC61A964552006BAF4A /* JSQSystemSoundPlayer+JSQMessages.m in Sources */,
 				45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
 				74C541F51A93E67100FC29AD /* TLIndexPathTreeItem.m in Sources */,
+				93EBACDB1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m in Sources */,
 				93EBABC81A964552006BAF4A /* UIColor+JSQMessages.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,
-				74DB14ED1A7FDE4300ECBADB /* JKRemoteConnection.m in Sources */,
 				93EBABE71A964552006BAF4A /* JSQMessagesLabel.m in Sources */,
 				741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */,
 				93EBABE31A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
 				746F6ACE1A892613007A83E8 /* EZAudioPlot.m in Sources */,
 				93EBABD91A964552006BAF4A /* JSQMessage.m in Sources */,
+				93EBACDF1A97D8A0006BAF4A /* SLKTextView.m in Sources */,
 				93EBABD11A964552006BAF4A /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */,
 				74C541EB1A93E67100FC29AD /* TLIndexPathController.m in Sources */,
 				7444522F1A0ACEDB00C87723 /* CSUserViewController.m in Sources */,
@@ -1130,7 +1202,9 @@
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,
+				93EBACDC1A97D8A0006BAF4A /* UIView+SLKAdditions.m in Sources */,
 				74C541F21A93E67100FC29AD /* TLCollapsibleTableViewController.m in Sources */,
+				93EBACDA1A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m in Sources */,
 				9313F7961A8BF14800C50736 /* CSChatViewController.m in Sources */,
 				93EBABEA1A964552006BAF4A /* JSQMessagesMediaPlaceholderView.m in Sources */,
 				7499A82A1A950078009A28B6 /* CSSessionDataAnalyzer.m in Sources */,
@@ -1138,12 +1212,13 @@
 				93EBABED1A964552006BAF4A /* JSQMessagesTypingIndicatorFooterView.m in Sources */,
 				741DE9761A92C86800AC488F /* M13ProgressViewRing.m in Sources */,
 				93EBABE11A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
+				93EBACDE1A97D8A0006BAF4A /* SLKTextInputbar.m in Sources */,
 				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
-				74DB14E71A7FDE4300ECBADB /* Connection.m in Sources */,
 				93EBABCB1A964552006BAF4A /* UIView+JSQMessages.m in Sources */,
 				93EBABCA1A964552006BAF4A /* UIImage+JSQMessages.m in Sources */,
 				74C541EF1A93E67100FC29AD /* TLIndexPathUpdates.m in Sources */,
 				74C541EC1A93E67100FC29AD /* TLIndexPathDataModel.m in Sources */,
+				93EBACDD1A97D8A0006BAF4A /* SLKInputAccessoryView.m in Sources */,
 				746F6AD11A892613007A83E8 /* EZMicrophone.m in Sources */,
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
 				93EBABF31A9645E2006BAF4A /* JSQSystemSoundPlayer.m in Sources */,
@@ -1152,12 +1227,11 @@
 				74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */,
 				93EBABD01A964552006BAF4A /* JSQMessagesBubbleImageFactory.m in Sources */,
 				93EBABD51A964552006BAF4A /* JSQMessagesCollectionViewFlowLayoutInvalidationContext.m in Sources */,
-				74DB14E81A7FDE4300ECBADB /* JKConnection.m in Sources */,
 				93EBABDD1A964552006BAF4A /* JSQVideoMediaItem.m in Sources */,
 				74C541EE1A93E67100FC29AD /* TLIndexPathSectionInfo.m in Sources */,
 				93EBABCF1A964552006BAF4A /* JSQMessagesAvatarImageFactory.m in Sources */,
-				74DB14EB1A7FDE4300ECBADB /* JKPeerConnectivity.m in Sources */,
 				93EBABDF1A964552006BAF4A /* JSQMessagesCollectionView.m in Sources */,
+				93EBACE01A97D8A0006BAF4A /* SLKTextViewController.m in Sources */,
 				3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */,
 				74C541F61A93E67100FC29AD /* TLTreeDataModel.m in Sources */,
 			);

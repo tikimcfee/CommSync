@@ -711,7 +711,7 @@
         <!--Item-->
         <scene sceneID="aiq-mD-3Xc">
             <objects>
-                <viewController id="6ZR-ay-eUY" customClass="ChatTestViewController" sceneMemberID="viewController">
+                <viewController id="6ZR-ay-eUY" customClass="SlackTestViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QAU-Wn-b67"/>
                         <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
