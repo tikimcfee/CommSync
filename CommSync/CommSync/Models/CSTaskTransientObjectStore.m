@@ -53,10 +53,20 @@
         id imageMutableArray_DATA = [aDecoder decodeObjectForKey:kTaskImages];
         if (imageMutableArray_DATA) {
             self.taskImages_NSDataArray_JPEG = imageMutableArray_DATA;
+            
+            id imageMutableArray = [NSKeyedUnarchiver unarchiveObjectWithData:self.taskImages_NSDataArray_JPEG];
+            if([imageMutableArray isKindOfClass:[NSMutableArray class]]) { // if it does ...
+                self.TRANSIENT_taskImages = [NSMutableArray new]; // ... make sure the task now has a container array
+                NSMutableArray* imgs = (NSMutableArray*)imageMutableArray; /// convenience pointer
+                for(NSData* newImageData in imgs) { // for every NSData representation of the image ...
+                    [self.TRANSIENT_taskImages addObject:[UIImage imageWithData:newImageData]]; // ... add a new UIImage to the container
+                }
+            }
         } else {
             NSMutableArray* tempArrayOfImages = [NSMutableArray new];
             NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
             self.taskImages_NSDataArray_JPEG = archivedImages;
+            
         }
         id taskAudio_DATA = [aDecoder decodeObjectForKey:kTaskAudio];
         if(taskAudio_DATA) {

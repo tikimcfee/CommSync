@@ -277,7 +277,7 @@
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qE7-Bv-l96">
                                 <rect key="frame" x="270" y="458" width="60" height="60"/>
-                                <color key="backgroundColor" red="0.85858585858585856" green="0.70286971798637143" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.98221122845418185" blue="0.37885611096078986" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="oZL-nv-hZT"/>
                                     <constraint firstAttribute="width" constant="60" id="qsc-zS-aOc"/>
@@ -296,7 +296,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ML-zM-rSt">
                                 <rect key="frame" x="188" y="458" width="60" height="60"/>
-                                <color key="backgroundColor" red="0.019696831607371568" green="0.5202217487373737" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.78436710858585856" blue="0.38092930221965782" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="BTY-Uc-OWA"/>
                                     <constraint firstAttribute="height" constant="60" id="Z4o-qS-XL5"/>
@@ -315,7 +315,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gS2-3z-ozs">
                                 <rect key="frame" x="347" y="458" width="60" height="60"/>
-                                <color key="backgroundColor" red="0.6262626262626263" green="0.081050554401072492" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.30660678669883923" blue="0.2019901069599298" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="6CM-BH-c1h"/>
                                     <constraint firstAttribute="width" constant="60" id="K6X-uS-evy"/>
@@ -826,11 +826,11 @@
                         <viewControllerLayoutGuide type="bottom" id="hP1-0m-1nj"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="k3d-m3-Efq" customClass="EZAudioPlotGL">
-                        <rect key="frame" x="0.0" y="0.0" width="330" height="65"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="60"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
-                                <rect key="frame" x="258" y="1" width="56" height="65"/>
+                                <rect key="frame" x="408" y="1" width="56" height="60"/>
                                 <state key="normal" image="Play Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -875,6 +875,6 @@
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="r3J-Hg-HkT"/>
+        <segue reference="REA-By-De3"/>
     </inferredMetricsTieBreakers>
 </document>

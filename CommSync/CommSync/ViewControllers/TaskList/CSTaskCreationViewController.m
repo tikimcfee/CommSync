@@ -30,9 +30,11 @@
 // Main view
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet SZTextView *descriptionTextField;
+
 @property (strong, nonatomic) IBOutlet UIButton *lowPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *mediumPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *highPriorityButton;
+
 @property (strong, nonatomic) IBOutlet UIButton *addTaskImageButton;
 
 // Image picker
@@ -43,7 +45,6 @@
 
 // Realm
 @property (weak, nonatomic) RLMRealm* realm;
-//@property (strong, nonatomic) CSTaskRealmModel *pendingTask;
 @property (strong, nonatomic) CSTaskTransientObjectStore* pendingTask;
 
 @end
@@ -133,18 +134,26 @@
 
 - (IBAction)priorityButtonTapped:(id)sender {
     
+    UIColor* backgroundColorToSet = nil;
     if (sender == self.lowPriorityButton)
     {
         self.pendingTask.taskPriority = CSTaskPriorityLow;
+        backgroundColorToSet = self.lowPriorityButton.backgroundColor;
     }
     else if (sender == self.mediumPriorityButton)
     {
         self.pendingTask.taskPriority = CSTaskPriorityMedium;
+        backgroundColorToSet = self.mediumPriorityButton.backgroundColor;
     }
     else
     {
         self.pendingTask.taskPriority = CSTaskPriorityHigh;
+        backgroundColorToSet = self.highPriorityButton.backgroundColor;
     }
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.view.backgroundColor = backgroundColorToSet;
+    }];
 }
 
 - (IBAction)tapGesture:(id)sender {
@@ -168,8 +177,6 @@
     } else {
         self.pendingTask.taskAudio = nil;
     }
-    
-    self.pendingTask.taskAudio = self.pendingTask.taskAudio ? self.pendingTask.taskAudio : [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
     
     CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
     [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];
