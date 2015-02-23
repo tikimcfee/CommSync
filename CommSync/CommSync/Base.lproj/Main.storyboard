@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -300,15 +300,6 @@
                                     <action selector="priorityButtonTapped:" destination="t1M-XD-1IS" eventType="touchUpInside" id="qMl-aV-oYz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MgN-B2-EiG">
-                                <rect key="frame" x="245" y="111" width="110" height="30"/>
-                                <state key="normal" title="Add Task Image">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="addImageToTask:" destination="t1M-XD-1IS" eventType="touchUpInside" id="si4-vB-hXB"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9JX-dm-Fri">
                                 <rect key="frame" x="300" y="540" width="300" height="60"/>
                                 <color key="backgroundColor" red="0.019607843831181526" green="0.5215686559677124" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
@@ -327,11 +318,21 @@
                                     <segue destination="dcw-MX-1Cl" kind="embed" identifier="CSAudioPlotViewController" id="REA-By-De3"/>
                                 </connections>
                             </containerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MgN-B2-EiG">
+                                <rect key="frame" x="430" y="115" width="110" height="30"/>
+                                <state key="normal" title="Add Task Image">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addImageToTask:" destination="t1M-XD-1IS" eventType="touchUpInside" id="si4-vB-hXB"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="lT8-sA-jLd" firstAttribute="top" secondItem="wBa-KJ-0ym" secondAttribute="bottom" constant="8" id="07A-eo-kgu"/>
+                            <constraint firstItem="wBa-KJ-0ym" firstAttribute="height" secondItem="MgN-B2-EiG" secondAttribute="height" constant="-9" id="1Ve-kP-xdU"/>
                             <constraint firstItem="gS2-3z-ozs" firstAttribute="top" secondItem="lT8-sA-jLd" secondAttribute="bottom" constant="82" id="24R-F5-gHM"/>
                             <constraint firstItem="9JX-dm-Fri" firstAttribute="height" secondItem="T9d-N1-rWE" secondAttribute="height" multiplier="0.1" id="2E2-7G-s2v"/>
                             <constraint firstAttribute="centerX" secondItem="SSy-rF-dGz" secondAttribute="centerX" id="3hQ-YX-qJm"/>
@@ -363,10 +364,11 @@
                             <constraint firstItem="wBa-KJ-0ym" firstAttribute="top" secondItem="SSy-rF-dGz" secondAttribute="bottom" constant="16" id="jm0-gd-0Pp"/>
                             <constraint firstItem="SSy-rF-dGz" firstAttribute="width" secondItem="T9d-N1-rWE" secondAttribute="width" multiplier="0.8" id="kSI-Pi-qhG"/>
                             <constraint firstAttribute="centerX" secondItem="of3-2q-Jss" secondAttribute="centerX" id="ka1-2r-4FM"/>
+                            <constraint firstItem="lT8-sA-jLd" firstAttribute="trailing" secondItem="MgN-B2-EiG" secondAttribute="trailing" id="oYF-sN-INd"/>
                             <constraint firstItem="qDN-w3-sgm" firstAttribute="leading" secondItem="T9d-N1-rWE" secondAttribute="leadingMargin" constant="-16" id="ppR-0D-ECZ"/>
                             <constraint firstItem="qDN-w3-sgm" firstAttribute="width" secondItem="T9d-N1-rWE" secondAttribute="width" multiplier="0.5" id="r7F-eZ-auh"/>
                             <constraint firstItem="of3-2q-Jss" firstAttribute="width" secondItem="lT8-sA-jLd" secondAttribute="width" id="sdZ-DM-MT9"/>
-                            <constraint firstItem="MgN-B2-EiG" firstAttribute="top" secondItem="wBa-KJ-0ym" secondAttribute="top" constant="-4" id="tbX-UG-dTY"/>
+                            <constraint firstItem="MgN-B2-EiG" firstAttribute="top" secondItem="wBa-KJ-0ym" secondAttribute="top" id="tbX-UG-dTY"/>
                             <constraint firstItem="qE7-Bv-l96" firstAttribute="leading" secondItem="0ML-zM-rSt" secondAttribute="trailing" constant="22" id="upM-hZ-UHc"/>
                             <constraint firstItem="9JX-dm-Fri" firstAttribute="width" secondItem="T9d-N1-rWE" secondAttribute="width" multiplier="0.5" id="uvn-en-iVd"/>
                             <constraint firstItem="of3-2q-Jss" firstAttribute="top" secondItem="lT8-sA-jLd" secondAttribute="bottom" constant="11" id="y2O-9E-47U"/>
@@ -378,6 +380,7 @@
                                 <exclude reference="dCh-w9-XQV"/>
                                 <exclude reference="dHe-3f-kVg"/>
                                 <exclude reference="g6M-WG-ZSu"/>
+                                <exclude reference="eij-Zs-cFu"/>
                             </mask>
                         </variation>
                         <connections>
