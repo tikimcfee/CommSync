@@ -292,6 +292,112 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 #pragma mark - Data analysis
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer
 {
+    id unknownData = [NSKeyedUnarchiver unarchiveObjectWithData:receivedData];
+    
+    if ([unknownData isKindOfClass:[CSChatMessageRealmModel class]])
+    {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
+        
+        RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
+        
+        [chatRealm beginWriteTransaction];
+        [chatRealm addObject:unknownData];
+        [chatRealm commitWriteTransaction];
+        
+        return;
+    }
+    
+    // Determine if data is a string / command
+    NSString* stringFromData = [[NSString alloc] initWithData:receivedData encoding:kCSDefaultStringEncodingMethod];
+    
+    
+    
+    if(stringFromData)
+    {
+        // -- TASK CREATION --
+        // Is the string a prompt of new task creation?
+        // Check the task realm for the task; if it does not exist, send the peer a request for the task
+        // +++!!!+++ IF IT NEEDS TO BE UPDATED, REQUEST!
+        
+        // Is the string a request for a task?
+        // Make sure you have the requested task, and initiate a resource send of task to the requesting peer
+        
+        NSLog(@"<?> Data string received : [%@]", stringFromData);
+        NSArray* stringComponents = [stringFromData componentsSeparatedByString:kCS_STRING_SEPERATOR];
+        if(!stringComponents || stringComponents.count <= 1) {
+            NSLog(@"<?> String parse failed - malformed string. [%@]", stringFromData);
+            return;
+        }
+        
+        if([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_NEW_TASK])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for NEW_TASK. [%@]", stringFromData);
+                return;
+            }
+            
+            NSString* newTaskId = [stringComponents objectAtIndex:1];
+            
+            // check to see if already made request from someone
+            if([_requestPool valueForKey:newTaskId])
+            {
+                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                return;
+            }
+            
+            // check to see if the task already exists
+            CSTaskTransientObjectStore* model = [self getTransientModelFromQueueOrDatabaseWithID:newTaskId];
+            if(model)
+            {
+                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
+                return;
+            }
+            
+            // build the request string
+            NSString* requestString = [self buildTaskRequestStringFromNewTaskID:newTaskId];
+            NSData* requestData = [requestString dataUsingEncoding:kCSDefaultStringEncodingMethod];
+            
+            // send the request
+            NSLog(@"<?> Sending request string [%@] to peer [%@]", requestString, peer.displayName);
+            [_globalManager sendSingleDataPacket:requestData toSinglePeer:peer];
+        }
+        else if ([[stringComponents objectAtIndex:0] isEqualToString:kCS_HEADER_TASK_REQUEST])
+        {
+            if(stringComponents.count > 2)
+            {
+                NSLog(@"<?> String parse failed - malformed string for TASK_REQUEST. [%@]", stringFromData);
+                return;
+            }
+            
+            NSString* requestedTaskID = [stringComponents objectAtIndex:1];
+            
+            // check to see if the task exists
+            CSTaskTransientObjectStore* model = [self getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
+            if(!model)
+            {
+                NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed string?");
+                return;
+            }
+            
+            // Send the task to the peer
+            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, peer.displayName);
+            [_globalManager sendSingleTask:model toSinglePeer:peer];
+        }
+        
+    }
+    else
+    {
+        id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:receivedData];
+        
+        if([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
+        {
+            // OP
+        }
+    }
+    
     CSDataAnalysisOperation* newOperation = [CSDataAnalysisOperation new];
     newOperation.dataToAnalyze = receivedData;
     newOperation.peer = peer;
