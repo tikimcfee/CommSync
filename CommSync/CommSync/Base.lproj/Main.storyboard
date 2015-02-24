@@ -628,8 +628,8 @@
                                     <outlet property="delegate" destination="iaN-ZE-mGm" id="U8H-MQ-0z2"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uz-sA-Zh2">
-                                <rect key="frame" x="106" y="516" width="109" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uz-sA-Zh2">
+                                <rect key="frame" x="208" y="518" width="109" height="30"/>
                                 <state key="normal" title="Send Comment">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -643,11 +643,13 @@
                             <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="BuA-Zo-fi5" secondAttribute="leadingMargin" constant="-16" id="5x9-N5-lKw"/>
                             <constraint firstItem="4Mh-NZ-J8m" firstAttribute="leading" secondItem="BuA-Zo-fi5" secondAttribute="leadingMargin" constant="-16" id="FAg-Vc-fOv"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="BuA-Zo-fi5" secondAttribute="leading" id="HnQ-wb-qj4"/>
+                            <constraint firstItem="3Uz-sA-Zh2" firstAttribute="top" secondItem="gib-tP-h9q" secondAttribute="bottom" constant="24" id="OEZ-KX-DHj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gib-tP-h9q" secondAttribute="trailing" constant="-16" id="P67-X8-seK"/>
                             <constraint firstAttribute="trailing" secondItem="gib-tP-h9q" secondAttribute="trailing" id="PpQ-u4-twT"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="4Mh-NZ-J8m" secondAttribute="trailing" constant="-600" id="Wet-F8-2So"/>
                             <constraint firstItem="1Uh-3U-vka" firstAttribute="top" secondItem="4Mh-NZ-J8m" secondAttribute="bottom" id="i1T-JN-Y16"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="top" secondItem="4JZ-01-sqh" secondAttribute="bottom" id="jmF-dZ-Nr6"/>
+                            <constraint firstItem="3Uz-sA-Zh2" firstAttribute="centerX" secondItem="gib-tP-h9q" secondAttribute="centerX" constant="-37.5" id="kC7-PJ-ALM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4Mh-NZ-J8m" secondAttribute="trailing" constant="-16" id="mGI-CK-F0h"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="top" secondItem="4JZ-01-sqh" secondAttribute="bottom" id="mHj-1X-27b"/>
                             <constraint firstItem="gib-tP-h9q" firstAttribute="leading" secondItem="4Mh-NZ-J8m" secondAttribute="trailing" constant="-600" id="pPt-Fq-Tss"/>
