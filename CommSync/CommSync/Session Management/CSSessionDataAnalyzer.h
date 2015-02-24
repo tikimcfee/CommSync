@@ -25,8 +25,8 @@
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
 
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID;
-- (NSString*) buildTaskRequestStringFromNewTaskID:(NSString*)taskID;
-- (NSString*) buildNewTaskStringFromNewTaskID:(NSString*)taskID;
+- (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
+- (NSDictionary*) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
 
 
 @end
