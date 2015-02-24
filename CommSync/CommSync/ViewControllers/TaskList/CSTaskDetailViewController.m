@@ -16,6 +16,9 @@
 #import "CSTaskCreationViewController.h"
 #import "ImageCell.h"
 #import "CSPictureViewController.h"
+#import "SlackTestViewController.h"
+
+#define kChatTableViewCellIdentifier @"ChatViewCell"
 
 @interface CSTaskDetailViewController ()
 
@@ -49,7 +52,14 @@
     
     //create delegate and receptors
     [_commentField setDelegate:self];
-
+    
+    /**
+     *  Register to use custom table view cells
+     */
+    [self.tableView registerNib:[UINib nibWithNibName:@"CSChatTableViewCell" bundle:nil] forCellReuseIdentifier:kChatTableViewCellIdentifier];
+    self.tableView.estimatedRowHeight = 44.0f;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
     _tableView.tableHeaderView = _headerView;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -83,9 +93,11 @@
     _titleLabel.text = self.sourceTask.taskTitle;
     _descriptionLabel.text = self.sourceTask.taskDescription;
     
-    if([_descriptionLabel.text  isEqual: @""]) _descriptionLabel.text = @"No Description";
-    if([_titleLabel.text  isEqual: @""]) _descriptionLabel.text = @"No Title";
-    
+    if(![_titleLabel isEnabled]){
+        if([_descriptionLabel.text  isEqual: @""]) _descriptionLabel.text = @"NO DESCRIPTION";
+        if([self.sourceTask.taskTitle  isEqual: @""]) _titleLabel.text = @"NO TITLE";
+    }
+
     _priorityLabel.text = self.sourceTask.taskTitle;
     
     
@@ -126,8 +138,8 @@
 //inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-
-    /*CSChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
+/*
+    CSChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
     CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
     if(indexPath.row % 2 == 1)cell.backgroundColor = [UIColor lightGrayColor];
@@ -140,7 +152,7 @@
     //sets the comments text
     cell.textLabel.text = [NSString stringWithFormat: @"(ID: %@) %@ time %@", comment.UID, comment.text, newDateString];
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12]; */
-    
+  
     static NSString *cellIdentifier = @"ChatViewCell";
     CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
@@ -155,20 +167,14 @@
     cell.createdByLabel.text = comment.UID;
     cell.messageLabel.text = comment.text;
     cell.transform = self.tableView.transform;
-    
     return cell;
     
-    
-    
-    
-    
-    return cell;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return UITableViewAutomaticDimension;
 }
 
 
@@ -190,7 +196,7 @@
     
 }
 
-/*
+
 - (IBAction)addComment:(id)sender {
     if([_commentField.text  isEqual: @""]) return;
     
@@ -209,7 +215,7 @@
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
     [_commentField resignFirstResponder];
 
-}*/
+}
 
 
 //dismisses keyboared when enter is hit
@@ -233,16 +239,21 @@
     [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
 }
 
+
 - (IBAction)editMode:(id)sender {
-    
+   
     if(![_titleLabel isEnabled]){
         
         [_titleLabel setEnabled:YES];
         [_titleLabel setBackgroundColor: [UIColor lightGrayColor]];
         [_descriptionLabel setEditable:YES];
         [_descriptionLabel setBackgroundColor: [UIColor lightGrayColor]];
+        
         [_editButton setTitle:@"Save"];
-
+        
+        
+        //if([_titleLabel.text  isEqual: @"No Title"]) _titleLabel.text = @"";
+        
         [self.tableView reloadData];
         [_footerView setHidden:YES];
         
@@ -252,8 +263,9 @@
         [_greenButton setHidden:NO];
         [_yellowButton setHidden:NO];
         [_redButton setHidden:NO];
-        [_priorityLabel setHidden:YES];
         
+        [_priorityLabel setHidden:YES];
+
     }
     
     else{
@@ -312,6 +324,7 @@
     [_greenButton setAlpha:1];
      _priorityColor.backgroundColor = [UIColor greenColor];
     _priorityLabel.text = @"Low Priority";
+    
 }
 
 - (IBAction)setYellow:(id)sender {
@@ -346,6 +359,11 @@
         _embed.top = _top;
         _embed.detail = self.tableView;
         _embed.header = self.headerView;
+    }
+    
+    if ([[segue identifier] isEqualToString:@"commentSegue"]) {
+        SlackTestViewController *temp = segue.destinationViewController;
+        temp.sourceTask = _sourceTask;
     }
 }
 @end

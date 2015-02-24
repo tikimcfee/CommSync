@@ -27,7 +27,6 @@
     NSString *_currentUser;
 }
 
-
 #pragma mark - Init Methods
 - (id)init
 {
@@ -50,8 +49,10 @@
     
     _currentUser = app.userDisplayName;
     
-    _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
-    _chatRealm.autorefresh = YES;
+    if(_sourceTask == nil){
+        _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+        _chatRealm.autorefresh = YES;
+    }
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
@@ -78,21 +79,36 @@
 #pragma mark - Override SlackViewController Methods
 - (void)didPressRightButton:(id)sender
 {
-    CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
     UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
     
+   
     [self.tableView beginUpdates];
-    [self.chatRealm beginWriteTransaction];
-    [self.chatRealm addObject:message];
-    [self.chatRealm commitWriteTransaction];
+    
+    if(!_sourceTask){
+        CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser];
+    
+        [self.chatRealm beginWriteTransaction];
+        [self.chatRealm addObject:message];
+        [self.chatRealm commitWriteTransaction];
+        
+        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
+        [self.sessionManager sendDataPacketToPeers:messageData];
+    }
+    
+    else{
+        //creates comment
+        CSCommentRealmModel *comment = [[CSCommentRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser];
+        //stores comment and reloads screen to show comment
+        [_sourceTask addComment:comment];
+    }
+    
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
     [self.tableView endUpdates];
 
-    NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
-    [self.sessionManager sendDataPacketToPeers:messageData];
+    
     
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
     
@@ -111,12 +127,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (!_chatRealm)
-    {
-        _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
-    }
+    if(!_sourceTask){
+        if (!_chatRealm)
+        {
+            _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+        }
     
-    return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
+        return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
+    }
+    else{
+        return [_sourceTask.comments count];
+    }
 }
 
 - (CSChatTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -130,12 +151,20 @@
         cell = [[CSChatTableViewCell alloc] init];
     }
     
-    CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+    if(!_sourceTask){
+        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
-    cell.createdByLabel.text = msg.createdBy;
-    cell.messageLabel.text = msg.text;
-    cell.transform = self.tableView.transform;
-
+        cell.createdByLabel.text = msg.createdBy;
+        cell.messageLabel.text = msg.text;
+        cell.transform = self.tableView.transform;
+    }
+    
+    else{
+        CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex: ([_sourceTask.comments count] - (indexPath.row  + 1) )];
+        cell.createdByLabel.text = comment.UID;
+        cell.messageLabel.text = comment.text;
+        cell.transform = self.tableView.transform;
+    }
     return cell;
 }
 
@@ -154,19 +183,21 @@
 
 - (void)registerForChatRealmNotifications
 {
-    __weak SlackTestViewController *weakSelf = self;
-    _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
+    if(!_sourceTask){
+        __weak SlackTestViewController *weakSelf = self;
+        _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.tableView reloadData];
             
-            // Scroll to the bottom so we focus on the latest message
-            NSUInteger numberOfRows = [weakSelf.collectionView numberOfItemsInSection:0];
-            if (numberOfRows) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-                [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-            }
-        });
-    }];
+                // Scroll to the bottom so we focus on the latest message
+                NSUInteger numberOfRows = [weakSelf.collectionView numberOfItemsInSection:0];
+                if (numberOfRows) {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                    [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                }
+            });
+        }];
+    }
 }
 
 - (CSChatMessageRealmModel *)chatObjectAtIndex:(NSUInteger)index

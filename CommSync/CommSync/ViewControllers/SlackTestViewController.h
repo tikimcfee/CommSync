@@ -7,7 +7,11 @@
 //
 
 #import "SLKTextViewController.h"
+#import "CSTaskRealmModel.h"
+#import "CSCommentRealmModel.h"
 
 @interface SlackTestViewController : SLKTextViewController
+
+@property (strong, nonatomic) CSTaskRealmModel *sourceTask;
 
 @end

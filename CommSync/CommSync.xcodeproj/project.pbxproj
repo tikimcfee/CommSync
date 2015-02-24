@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
-		3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F96AB581A86D036000A50F4 /* Main.storyboard */; };
+		3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FBBF1371A9C0887007124CD /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
 		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
@@ -140,7 +140,7 @@
 /* Begin PBXFileReference section */
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
 		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
-		3F96AB591A86D036000A50F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3FBBF1381A9C0887007124CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
 		45190C2E1A89BD360030CB05 /* SZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZTextView.h; sourceTree = "<group>"; };
@@ -548,8 +548,8 @@
 				459D5F8619DB449900C91EFA /* Images.xcassets */,
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
-				3F96AB581A86D036000A50F4 /* Main.storyboard */,
 				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
+				3FBBF1371A9C0887007124CD /* Main.storyboard */,
 				459D5F7619DB449900C91EFA /* Supporting Files */,
 				93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */,
 				93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */,
@@ -834,9 +834,9 @@
 			isa = PBXGroup;
 			children = (
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
+				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */,
 				74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */,
-				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
 				93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */,
@@ -1151,13 +1151,13 @@
 			files = (
 				459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */,
 				746F6AD61A892613007A83E8 /* CHANGELOG in Resources */,
-				3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */,
 				93EBABEE1A964552006BAF4A /* JSQMessagesTypingIndicatorFooterView.xib in Resources */,
 				93EBABCE1A964552006BAF4A /* JSQMessagesViewController.xib in Resources */,
 				93EBABC41A964552006BAF4A /* JSQMessagesAssets.bundle in Resources */,
 				93EBABE91A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
 				459D5F8719DB449900C91EFA /* Images.xcassets in Resources */,
 				93EBABC51A964552006BAF4A /* JSQMessages.strings in Resources */,
+				3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */,
 				93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */,
 				746F6AD71A892613007A83E8 /* VERSION in Resources */,
 				93EBABE21A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
@@ -1299,10 +1299,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3F96AB581A86D036000A50F4 /* Main.storyboard */ = {
+		3FBBF1371A9C0887007124CD /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3F96AB591A86D036000A50F4 /* Base */,
+				3FBBF1381A9C0887007124CD /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

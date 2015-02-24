@@ -14,6 +14,7 @@
 @property NSString* UID;
 @property NSDate* time;
 
+- (instancetype)initWithMessage:(NSString *)message byUser:(NSString *)username;
 @end
 
 RLM_ARRAY_TYPE(CSCommentRealmModel)
