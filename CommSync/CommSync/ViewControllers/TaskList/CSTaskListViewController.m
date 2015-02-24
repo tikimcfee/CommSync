@@ -52,7 +52,7 @@
     
     __weak typeof(self) weakSelf = self;
     void (^realmNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                 _incomingTaskCallback(nil, nil);
         });
     };
@@ -102,6 +102,7 @@
             newUpdate.tableviewIsVisible = weakSelf.controllerIsVisible;
             newUpdate.reloadBlock = weakSelf.reloadModels;
             newUpdate.indexPathController = weakSelf.indexPathController;
+            newUpdate.name = [NSString stringWithFormat:@"%@-%td", sourceData.sourceTask, weakSelf.tableviewUpdateQueue.operationCount];
         
             [weakSelf.tableviewUpdateQueue addOperation:newUpdate];
         });
@@ -128,19 +129,19 @@
     self.indexPathController.delegate = self;
 }
 
-- (void)reloadDataModels {
-    
-    NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
-    @synchronized (_incomingTasks) {
-        [newDataModel addObjectsFromArray:_incomingTasks];
-    }
-
-    
-    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
-    _indexPathController.dataModel = tasksDataModel;
-    if(self.willRefreshFromIncomingTask)
-        self.willRefreshFromIncomingTask = NO;
-}
+//- (void)reloadDataModels {
+//    
+//    NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+//    @synchronized (_incomingTasks) {
+//        [newDataModel addObjectsFromArray:_incomingTasks];
+//    }
+//
+//    
+//    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
+//    _indexPathController.dataModel = tasksDataModel;
+//    if(self.willRefreshFromIncomingTask)
+//        self.willRefreshFromIncomingTask = NO;
+//}
 
 - (void)registerForNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -186,7 +187,7 @@
     [super viewDidAppear:animated];
     
     _controllerIsVisible = YES;
-    _incomingTaskCallback(nil, nil);
+//    _incomingTaskCallback(nil, nil);
     
 }
 
@@ -299,7 +300,7 @@
    
     _incomingTaskCallback(nil, nil);
     
-     _willRefreshFromIncomingTask = YES;
+//     _willRefreshFromIncomingTask = YES;
 }
 
 - (void)newTaskStreamUpdated:(NSNotification*)notification {
@@ -307,20 +308,29 @@
 }
 
 - (void)newTaskStreamFinished:(NSNotification*)notification {
-    _incomingTaskCallback(nil, nil);
+//    _incomingTaskCallback(nil, nil);
 }
 
 #pragma mark - TLIndexPathControllerDelegate
 
 - (void)controller:(TLIndexPathController *)controller didUpdateDataModel:(TLIndexPathUpdates *)updates
 {
-    _incomingTaskCallback(nil, updates);
-//    if(!_controllerIsVisible) {
-//        [self.tableView reloadData];
-//    } else {
-//        [updates performBatchUpdatesOnTableView:self.tableView withRowAnimation:UITableViewRowAnimationFade];
-//    }
-
+//    _incomingTaskCallback(nil, updates);
+    __weak typeof(self) weakSelf = self;
+    if(!self.controllerIsVisible) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [updates performBatchUpdatesOnTableView:weakSelf.tableView
+                                   withRowAnimation:UITableViewRowAnimationFade
+                                         completion:^(BOOL finished) {
+//                                             weakSelf.tableviewDidFinishUpdates = YES;
+                                         }];
+            
+        });
+    }
 }
 
 
