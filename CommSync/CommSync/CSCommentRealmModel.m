@@ -10,6 +10,24 @@
 
 @implementation CSCommentRealmModel
 
+
+
+
+- (instancetype)initWithMessage:(NSString *)message byUser:(NSString *)username
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.UID = username;
+        self.text = message;
+        self.time = [NSDate date];
+    }
+    
+    return self;
+}
+
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init]) {

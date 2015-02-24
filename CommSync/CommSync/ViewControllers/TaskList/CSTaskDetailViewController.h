@@ -62,7 +62,6 @@
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;
 - (IBAction)    setGreen:(id)sender;
-- (IBAction)    addComment:(id)sender;
 - (IBAction)    setYellow:(id)sender;
 - (IBAction)    editMode:(id)sender;
 - (void)        setImagesFromTask;
