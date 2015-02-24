@@ -91,7 +91,6 @@
     _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
     
     self.descriptionTextField.placeholder = @"Enter description here...";
-
 }
 
 
@@ -138,22 +137,42 @@
     if (sender == self.lowPriorityButton)
     {
         self.pendingTask.taskPriority = CSTaskPriorityLow;
-        backgroundColorToSet = self.lowPriorityButton.backgroundColor;
+        backgroundColorToSet = [self blendColor:[UIColor whiteColor]
+                                      WithColor:self.lowPriorityButton.backgroundColor
+                                          alpha:0.5];
     }
     else if (sender == self.mediumPriorityButton)
     {
         self.pendingTask.taskPriority = CSTaskPriorityMedium;
-        backgroundColorToSet = self.mediumPriorityButton.backgroundColor;
+        backgroundColorToSet = [self blendColor:[UIColor whiteColor]
+                                      WithColor:self.mediumPriorityButton.backgroundColor
+                                          alpha:0.5];
     }
     else
     {
         self.pendingTask.taskPriority = CSTaskPriorityHigh;
-        backgroundColorToSet = self.highPriorityButton.backgroundColor;
+        backgroundColorToSet = [self blendColor:[UIColor whiteColor]
+                                      WithColor:self.highPriorityButton.backgroundColor
+                                          alpha:0.5];
     }
     
     [UIView animateWithDuration:0.3 animations:^{
         self.view.backgroundColor = backgroundColorToSet;
     }];
+}
+
+- (UIColor*)blendColor:(UIColor*)color1 WithColor:(UIColor*)color2 alpha:(CGFloat)alpha2
+{
+    alpha2 = MIN( 1.0, MAX( 0.0, alpha2 ) );
+    CGFloat beta = 1.0 - alpha2;
+    CGFloat r1, g1, b1, a1, r2, g2, b2, a2;
+    [color1 getRed:&r1 green:&g1 blue:&b1 alpha:&a1];
+    [color2 getRed:&r2 green:&g2 blue:&b2 alpha:&a2];
+    CGFloat red     = r1 * beta + r2 * alpha2;
+    CGFloat green   = g1 * beta + g2 * alpha2;
+    CGFloat blue    = b1 * beta + b2 * alpha2;
+    CGFloat alpha   = a1 * beta + a2 * alpha2;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 - (IBAction)tapGesture:(id)sender {
