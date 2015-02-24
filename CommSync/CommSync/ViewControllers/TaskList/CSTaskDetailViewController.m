@@ -12,6 +12,7 @@
 #import "CSCommentRealmModel.h"
 #import "CustomFooterCell.h"
 #import <Realm/Realm.h>
+#import "CSChatTableViewCell.h"
 #import "CSTaskCreationViewController.h"
 #import "ImageCell.h"
 #import "CSPictureViewController.h"
@@ -81,6 +82,10 @@
     //sets the items
     _titleLabel.text = self.sourceTask.taskTitle;
     _descriptionLabel.text = self.sourceTask.taskDescription;
+    
+    if([_descriptionLabel.text  isEqual: @""]) _descriptionLabel.text = @"No Description";
+    if([_titleLabel.text  isEqual: @""]) _descriptionLabel.text = @"No Title";
+    
     _priorityLabel.text = self.sourceTask.taskTitle;
     
     
@@ -122,7 +127,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
+    /*CSChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
     CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
     
     if(indexPath.row % 2 == 1)cell.backgroundColor = [UIColor lightGrayColor];
@@ -134,7 +139,28 @@
     
     //sets the comments text
     cell.textLabel.text = [NSString stringWithFormat: @"(ID: %@) %@ time %@", comment.UID, comment.text, newDateString];
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12];
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12]; */
+    
+    static NSString *cellIdentifier = @"ChatViewCell";
+    CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
+    
+    if (!cell)
+    {
+        cell = [[CSChatTableViewCell alloc] init];
+    }
+    
+    //    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", msg.createdBy, msg.messageText];
+    cell.createdByLabel.text = comment.UID;
+    cell.messageLabel.text = comment.text;
+    cell.transform = self.tableView.transform;
+    
+    return cell;
+    
+    
+    
+    
     
     return cell;
 }
@@ -164,7 +190,7 @@
     
 }
 
-
+/*
 - (IBAction)addComment:(id)sender {
     if([_commentField.text  isEqual: @""]) return;
     
@@ -183,7 +209,7 @@
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height) animated:YES];
     [_commentField resignFirstResponder];
 
-}
+}*/
 
 
 //dismisses keyboared when enter is hit

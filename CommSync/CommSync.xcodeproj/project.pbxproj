@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
 		3F96AB5A1A86D036000A50F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F96AB581A86D036000A50F4 /* Main.storyboard */; };
-		3FBBF1331A9BF5A3007124CD /* CSMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBBF1321A9BF5A3007124CD /* CSMessageViewController.m */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
 		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
@@ -142,8 +141,6 @@
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
 		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
 		3F96AB591A86D036000A50F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3FBBF1311A9BF5A3007124CD /* CSMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSMessageViewController.h; path = ../CSMessageViewController.h; sourceTree = "<group>"; };
-		3FBBF1321A9BF5A3007124CD /* CSMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSMessageViewController.m; path = ../CSMessageViewController.m; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
 		45190C2E1A89BD360030CB05 /* SZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZTextView.h; sourceTree = "<group>"; };
@@ -627,8 +624,6 @@
 				93EBACC41A965E82006BAF4A /* ChatTestViewController.m */,
 				93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */,
 				93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */,
-				3FBBF1311A9BF5A3007124CD /* CSMessageViewController.h */,
-				3FBBF1321A9BF5A3007124CD /* CSMessageViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1255,7 +1250,6 @@
 				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
 				93EBABCD1A964552006BAF4A /* JSQMessagesViewController.m in Sources */,
 				93EBABD31A964552006BAF4A /* JSQMessagesToolbarButtonFactory.m in Sources */,
-				3FBBF1331A9BF5A3007124CD /* CSMessageViewController.m in Sources */,
 				45C956491A97EE8100364555 /* CSTaskListUpdateOperation.m in Sources */,
 				746F6ACA1A892613007A83E8 /* AEFloatConverter.m in Sources */,
 				74C541F41A93E67100FC29AD /* TLDynamicHeightLabelCell.m in Sources */,
