@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -186,7 +186,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ayk-rN-MkQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2557" y="-336"/>
+            <point key="canvasLocation" x="2549" y="-319"/>
         </scene>
         <!--Task Creation View Controller-->
         <scene sceneID="Gy8-SG-2ls">
@@ -338,7 +338,6 @@
                             <constraint firstAttribute="centerX" secondItem="SSy-rF-dGz" secondAttribute="centerX" id="3hQ-YX-qJm"/>
                             <constraint firstItem="qE7-Bv-l96" firstAttribute="centerY" secondItem="gS2-3z-ozs" secondAttribute="centerY" id="4NM-0X-GQQ"/>
                             <constraint firstAttribute="centerX" secondItem="lT8-sA-jLd" secondAttribute="centerX" id="6Lw-GB-ttt"/>
-                            <constraint firstAttribute="width" secondItem="lT8-sA-jLd" secondAttribute="width" id="8Ig-TS-gyZ"/>
                             <constraint firstItem="SSy-rF-dGz" firstAttribute="leading" secondItem="D6F-EK-ZAM" secondAttribute="leading" id="CQQ-8h-czV"/>
                             <constraint firstItem="0ML-zM-rSt" firstAttribute="centerY" secondItem="qE7-Bv-l96" secondAttribute="centerY" id="JTV-G5-zBC"/>
                             <constraint firstItem="wBa-KJ-0ym" firstAttribute="leading" secondItem="lT8-sA-jLd" secondAttribute="leading" id="K7Y-D6-mlf"/>
@@ -354,10 +353,6 @@
                             <constraint firstItem="SSy-rF-dGz" firstAttribute="top" secondItem="D6F-EK-ZAM" secondAttribute="bottom" constant="8" id="c5D-2g-RHG"/>
                             <constraint firstItem="qDN-w3-sgm" firstAttribute="top" secondItem="0ML-zM-rSt" secondAttribute="bottom" constant="22" id="c9E-bo-CpP"/>
                             <constraint firstItem="9JX-dm-Fri" firstAttribute="top" secondItem="qE7-Bv-l96" secondAttribute="bottom" constant="22" id="cYF-fW-4Ym"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="lT8-sA-jLd" secondAttribute="trailing" constant="12" id="dCh-w9-XQV"/>
-                            <constraint firstAttribute="centerX" secondItem="lT8-sA-jLd" secondAttribute="centerX" id="dHe-3f-kVg"/>
-                            <constraint firstAttribute="centerX" secondItem="MgN-B2-EiG" secondAttribute="centerX" id="eij-Zs-cFu"/>
-                            <constraint firstItem="lT8-sA-jLd" firstAttribute="leading" secondItem="T9d-N1-rWE" secondAttribute="leadingMargin" constant="12" id="g6M-WG-ZSu"/>
                             <constraint firstItem="0ML-zM-rSt" firstAttribute="width" secondItem="gS2-3z-ozs" secondAttribute="height" multiplier="1:1" id="g7i-YB-iwP"/>
                             <constraint firstItem="0ML-zM-rSt" firstAttribute="width" secondItem="qE7-Bv-l96" secondAttribute="height" multiplier="1:1" id="hy6-2Y-aIe"/>
                             <constraint firstItem="D6F-EK-ZAM" firstAttribute="top" secondItem="wRT-eg-NrZ" secondAttribute="bottom" constant="12" id="iEH-y3-Ee4"/>
@@ -374,15 +369,6 @@
                             <constraint firstItem="of3-2q-Jss" firstAttribute="top" secondItem="lT8-sA-jLd" secondAttribute="bottom" constant="11" id="y2O-9E-47U"/>
                             <constraint firstItem="9JX-dm-Fri" firstAttribute="top" secondItem="gS2-3z-ozs" secondAttribute="bottom" constant="22" id="zl1-zy-Lwg"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="8Ig-TS-gyZ"/>
-                                <exclude reference="dCh-w9-XQV"/>
-                                <exclude reference="dHe-3f-kVg"/>
-                                <exclude reference="g6M-WG-ZSu"/>
-                                <exclude reference="eij-Zs-cFu"/>
-                            </mask>
-                        </variation>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="8gO-d5-b9O" appends="YES" id="ChV-UR-4zK"/>
                         </connections>
@@ -404,7 +390,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3311" y="-719"/>
+            <point key="canvasLocation" x="3415" y="-319"/>
         </scene>
         <!--Task Detail View Controller-->
         <scene sceneID="uxs-La-SWB">
@@ -690,7 +676,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZK-jE-Jr7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3251" y="-53"/>
+            <point key="canvasLocation" x="3415" y="467"/>
         </scene>
         <!--Picture View Controller-->
         <scene sceneID="8Mq-nz-MCE">
@@ -731,7 +717,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J6R-Jo-vZn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3908" y="-55"/>
+            <point key="canvasLocation" x="4317" y="466.5"/>
         </scene>
         <!--User View Controller-->
         <scene sceneID="kd6-HM-lQb">
@@ -802,27 +788,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Qy-o6-8Jp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613" y="1258"/>
-        </scene>
-        <!--Chat-->
-        <scene sceneID="qxb-5u-clp">
-            <objects>
-                <viewController title="Chat" id="c1a-qG-n9L" customClass="SlackTestViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Imn-aM-roO"/>
-                        <viewControllerLayoutGuide type="bottom" id="6mM-ME-Fl7"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="2Pt-wq-KYu">
-                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Item" id="mvN-1T-PLl"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Yad-mL-bd3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3898" y="592"/>
+            <point key="canvasLocation" x="1767" y="1264"/>
         </scene>
         <!--Audio Plot View Controller-->
         <scene sceneID="XEl-YI-oaj">
@@ -833,11 +799,11 @@
                         <viewControllerLayoutGuide type="bottom" id="hP1-0m-1nj"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="k3d-m3-Efq" customClass="EZAudioPlotGL">
-                        <rect key="frame" x="0.0" y="0.0" width="330" height="65"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="60"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
-                                <rect key="frame" x="258" y="1" width="56" height="65"/>
+                                <rect key="frame" x="408" y="1" width="56" height="60"/>
                                 <state key="normal" image="Play Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -875,14 +841,14 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3311" y="-1118"/>
+            <point key="canvasLocation" x="4317" y="-319"/>
         </scene>
     </scenes>
     <resources>
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="r3J-Hg-HkT"/>
         <segue reference="esm-L7-fWV"/>
+        <segue reference="REA-By-De3"/>
     </inferredMetricsTieBreakers>
 </document>
