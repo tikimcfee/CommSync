@@ -55,7 +55,7 @@
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
-//    self.textView.font = [UIFont fontWithName:@"Helvetica Neue Light" size:18.0f];
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
     
     /**
      * Get a copy of the session manager
@@ -65,7 +65,6 @@
     /**
      *  Register to use custom table view cells
      */
-//    [self.tableView registerClass:[CSChatTableViewCell class] forCellReuseIdentifier:kChatTableViewCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"CSChatTableViewCell" bundle:nil] forCellReuseIdentifier:kChatTableViewCellIdentifier];
     self.tableView.estimatedRowHeight = 44.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -133,7 +132,6 @@
     
     CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
-//    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", msg.createdBy, msg.messageText];
     cell.createdByLabel.text = msg.createdBy;
     cell.messageLabel.text = msg.text;
     cell.transform = self.tableView.transform;

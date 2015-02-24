@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CSTaskRealmModel.h"
 
-@interface CSTaskTransientObjectStore : NSObject
+@interface CSTaskTransientObjectStore : NSObject <NSCoding>
 
 // Realm persistence information
 @property (strong, nonatomic) NSString* UUID;
