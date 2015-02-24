@@ -238,7 +238,7 @@
         [ _sourceTask setTaskTitle:_titleLabel.text];
         [_sourceTask setTaskDescription:_descriptionLabel.text];
         [_titleLabel setBackgroundColor: [UIColor whiteColor]];
-        [_descriptionLabel setBackgroundColor: [UIColor whiteColor]];
+        [_descriptionLabel setBackgroundColor: [ UIColor colorWithRed: .8 green: .8 blue: .8 alpha:1.0]];
         
         if(_redButton.alpha == 1) [_sourceTask setTaskPriority:2];
         else if (_yellowButton.alpha == 1) [_sourceTask setTaskPriority:1];
