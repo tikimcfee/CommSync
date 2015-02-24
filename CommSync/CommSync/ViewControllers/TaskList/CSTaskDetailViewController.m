@@ -76,28 +76,16 @@
             [self setImagesFromTask];
         }
     }];
-}
-
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    self.audioPlayer = nil;
-}
-
-
-//initiate the header
--(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    //creates the header
-    CustomHeaderCell* headerCell = [[CustomHeaderCell alloc] init];
     
-    //sets the items
+    // Set table view header contents
     _titleLabel.text = self.sourceTask.taskTitle;
     _descriptionLabel.text = self.sourceTask.taskDescription;
     
     if(![_titleLabel isEnabled]){
-        if([_descriptionLabel.text  isEqual: @""]) _descriptionLabel.text = @"NO DESCRIPTION";
-        if([self.sourceTask.taskTitle  isEqual: @""]) _titleLabel.text = @"NO TITLE";
+        if([_descriptionLabel.text  isEqual: @""]) _descriptionLabel.placeholder = @"NO DESCRIPTION";
+        if([self.sourceTask.taskTitle  isEqual: @""]) _titleLabel.placeholder = @"NO TITLE";
     }
-
+    
     _priorityLabel.text = self.sourceTask.taskTitle;
     
     
@@ -108,25 +96,25 @@
             _redButton.alpha = 1;
             _priorityLabel.text = @"High Priority";
             break;
-        
+            
         case 1:
-           _priorityColor.backgroundColor = [UIColor yellowColor];
+            _priorityColor.backgroundColor = [UIColor yellowColor];
             _yellowButton.alpha = 1;
-           _priorityLabel.text = @"Med Priority";
+            _priorityLabel.text = @"Med Priority";
             break;
-        
-        //if green is selected or nothing is selected the task defaults to low priority
+            
+            //if green is selected or nothing is selected the task defaults to low priority
         default:
-           _priorityColor.backgroundColor = [UIColor greenColor];
+            _priorityColor.backgroundColor = [UIColor greenColor];
             _greenButton.alpha  = 1;
-           _priorityLabel.text = @"Low Priority";
+            _priorityLabel.text = @"Low Priority";
             break;
     }
-    
-    return headerCell;
 }
 
-
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.audioPlayer = nil;
+}
 
 //as many cells as the number of comments
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -298,7 +286,7 @@
         [_redButton setHidden:YES];
         
         [_audioButton setHidden:NO];
-        [_audioContainer setHidden:YES];
+//        [_audioContainer setHidden:YES];
     }
 }
 

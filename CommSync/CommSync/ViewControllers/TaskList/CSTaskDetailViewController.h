@@ -10,7 +10,7 @@
 #import "CSTaskRealmModel.h"
 #import "CSTaskTransientObjectStore.h"
 #import "CSPictureViewController.h"
-
+#import "SZTextView.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface CSTaskDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITextFieldDelegate>
@@ -26,7 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityLabel;
-@property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
+@property (weak, nonatomic) IBOutlet SZTextView *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priorityColor;
 
 //Footer Items
