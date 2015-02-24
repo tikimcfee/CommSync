@@ -496,7 +496,7 @@
                                         </containerView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T4L-bV-ZwS">
                                             <rect key="frame" x="29" y="288" width="330" height="65"/>
-                                            <color key="backgroundColor" red="0.0" green="0.66416114267676774" blue="0.00020331552848150189" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <state key="normal" title="Play Audio">
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -504,7 +504,7 @@
                                             </state>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                    <integer key="value" value="30"/>
+                                                    <integer key="value" value="5"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                             <connections>
@@ -807,11 +807,11 @@
                         <viewControllerLayoutGuide type="bottom" id="hP1-0m-1nj"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="k3d-m3-Efq" customClass="EZAudioPlotGL">
-                        <rect key="frame" x="0.0" y="0.0" width="560" height="40"/>
+                        <rect key="frame" x="0.0" y="0.0" width="330" height="65"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
-                                <rect key="frame" x="496" y="0.0" width="38" height="38"/>
+                                <rect key="frame" x="241" y="0.0" width="63" height="63"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="tIz-Sj-DCN" secondAttribute="height" multiplier="1:1" id="ZF7-kf-swH"/>
                                 </constraints>
@@ -860,6 +860,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="esm-L7-fWV"/>
-        <segue reference="REA-By-De3"/>
+        <segue reference="r3J-Hg-HkT"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -338,7 +338,6 @@
   [_distanceEdge setActive:YES];
     if(!_titleLabel.isEnabled)
     {
-        
         NSData* audioData = self.sourceTask.taskAudio;
         NSError* error;
         self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
