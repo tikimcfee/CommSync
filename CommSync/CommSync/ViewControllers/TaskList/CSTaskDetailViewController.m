@@ -110,6 +110,8 @@
             _priorityLabel.text = @"Low Priority";
             break;
     }
+    
+    [self configureAVAudioSession];
 }
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
@@ -328,12 +330,42 @@
     {
         NSData* audioData = self.sourceTask.taskAudio;
         NSError* error;
+        
         self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
         [self.audioPlayer play];
     }
     else{
         
     }
+}
+
+- (void) configureAVAudioSession //To play through main iPhone Speakers
+{
+    //get your app's audioSession singleton object
+    AVAudioSession* session = [AVAudioSession sharedInstance];
+    
+    //error handling
+    BOOL success;
+    NSError* error;
+    
+    //set the audioSession category.
+    //Needs to be Record or PlayAndRecord to use audioRouteOverride:
+    
+    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
+                             error:&error];
+    
+    if (!success)  NSLog(@"AVAudioSession error setting category:%@",error);
+    
+    //set the audioSession override
+    success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker
+                                         error:&error];
+    if (!success)  NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+    
+    //activate the audio session
+    success = [session setActive:YES error:&error];
+    if (!success) NSLog(@"AVAudioSession error activating: %@",error);
+    else NSLog(@"audioSession active");
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
