@@ -119,29 +119,13 @@
 }
 
 - (void)setupInitialTaskDataModels {
-    
     NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList];
     
     TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
-//    _mainTasksDataModel = tasksDataModel;
     
     self.indexPathController = [[TLIndexPathController alloc] initWithDataModel:tasksDataModel];
     self.indexPathController.delegate = self;
 }
-
-//- (void)reloadDataModels {
-//    
-//    NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
-//    @synchronized (_incomingTasks) {
-//        [newDataModel addObjectsFromArray:_incomingTasks];
-//    }
-//
-//    
-//    TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
-//    _indexPathController.dataModel = tasksDataModel;
-//    if(self.willRefreshFromIncomingTask)
-//        self.willRefreshFromIncomingTask = NO;
-//}
 
 - (void)registerForNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -187,8 +171,6 @@
     [super viewDidAppear:animated];
     
     _controllerIsVisible = YES;
-//    _incomingTaskCallback(nil, nil);
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -243,8 +225,14 @@
 #pragma mark - UITableView Delegates
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CSTaskRealmModel *task = [[CSTaskRealmModel allObjects]objectAtIndex:indexPath.row];
+    @synchronized(_indexPathController.dataModel) {
+        if([ [_indexPathController.dataModel itemAtIndexPath:indexPath]
+            isKindOfClass:[CSTaskProgressTableViewCell class]]) {
+            return;
+        }
+    }
     
+    CSTaskRealmModel *task = [[CSTaskRealmModel allObjects]objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 }
 
@@ -299,8 +287,6 @@
     }
    
     _incomingTaskCallback(nil, nil);
-    
-//     _willRefreshFromIncomingTask = YES;
 }
 
 - (void)newTaskStreamUpdated:(NSNotification*)notification {
