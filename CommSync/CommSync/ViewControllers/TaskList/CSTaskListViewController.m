@@ -223,6 +223,18 @@
 }
 
 #pragma mark - UITableView Delegates
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    @synchronized(_indexPathController.dataModel) {
+        if([ [_indexPathController.dataModel itemAtIndexPath:indexPath]
+            isKindOfClass:[CSTaskProgressTableViewCell class]]) {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     @synchronized(_indexPathController.dataModel) {
@@ -232,6 +244,7 @@
         }
     }
     
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     CSTaskRealmModel *task = [[CSTaskRealmModel allObjects]objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 }
