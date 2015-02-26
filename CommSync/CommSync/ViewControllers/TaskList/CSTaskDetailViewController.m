@@ -17,6 +17,7 @@
 #import "ImageCell.h"
 #import "CSPictureViewController.h"
 #import "SlackTestViewController.h"
+#import "CSAudioPlotViewController.h"
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 
@@ -25,7 +26,8 @@
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
 @property float width, height;
 
-
+// VC for audio recording
+@property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
 @end
 
 @implementation CSTaskDetailViewController
@@ -110,6 +112,7 @@
             _priorityLabel.text = @"Low Priority";
             break;
     }
+    
     
     [self configureAVAudioSession];
 }
@@ -250,6 +253,7 @@
         [_audioButton setHidden:YES];
         [_audioContainer setHidden:NO];
         
+       
         [_greenButton setHidden:NO];
         [_yellowButton setHidden:NO];
         [_redButton setHidden:NO];
@@ -261,7 +265,6 @@
     else{
         RLMRealm* realm = [RLMRealm defaultRealm];
     
-    
         [realm beginWriteTransaction];
         [ _sourceTask setTaskTitle:_titleLabel.text];
         [_sourceTask setTaskDescription:_descriptionLabel.text];
@@ -272,6 +275,13 @@
         else if (_yellowButton.alpha == 1) [_sourceTask setTaskPriority:1];
         else [_sourceTask setTaskPriority:0];
 
+        [_audioRecorder stopRecording];
+        
+        _transientTask.TRANSIENT_audioDataURL =   _audioRecorder.fileOutputURL;
+        if(_transientTask.TRANSIENT_audioDataURL) {
+            _sourceTask.taskAudio = [NSData dataWithContentsOfURL:_transientTask.TRANSIENT_audioDataURL];
+        }
+        
         [realm commitWriteTransaction];
         
         [_titleLabel setEnabled:NO];
@@ -288,7 +298,12 @@
         [_redButton setHidden:YES];
         
         [_audioButton setHidden:NO];
-//        [_audioContainer setHidden:YES];
+        
+        
+        
+
+        
+       // [_audioContainer setHidden:YES];
     }
 }
 
@@ -383,6 +398,14 @@
     if ([[segue identifier] isEqualToString:@"commentSegue"]) {
         SlackTestViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
+    }
+    
+    if([segue.identifier isEqualToString:@"CSAudioPlotViewController2"]) {
+        
+        //[self sharedInit];
+        
+        self.audioRecorder = (CSAudioPlotViewController*)[segue destinationViewController];
+        self.audioRecorder.fileNameSansExtension = _sourceTask.concatenatedID;
     }
 }
 @end

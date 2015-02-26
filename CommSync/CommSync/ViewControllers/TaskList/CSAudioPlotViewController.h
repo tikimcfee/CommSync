@@ -24,6 +24,9 @@
 @property (nonatomic,strong) NSURL* fileOutputURL;
 
 @property (strong, nonatomic) IBOutlet UIButton *playAudioButton;
+
+@property (nonatomic,strong) AVAudioPlayer *audioPlayer;
+
 #pragma mark - Actions
 -(IBAction)playFile:(id)sender;
 
@@ -31,5 +34,5 @@
  Toggles the microphone on and off. When the microphone is on it will send its delegate (aka this view controller) the audio data in various ways (check out the EZMicrophoneDelegate documentation for more details);
  */
 -(IBAction)toggleMicrophone:(id)sender;
-
+-(void)stopRecording;
 @end
