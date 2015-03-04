@@ -24,6 +24,7 @@
 @property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
 @property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
 @property (nonatomic, strong) RLMRealm* realm;
+@property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
 
 @end
@@ -56,6 +57,7 @@
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
         
+        
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
         self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -63,6 +65,10 @@
         // Getting default realm from disk
         _realm = [RLMRealm defaultRealm];
         _realm.autorefresh = YES;
+        
+        _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+        [_peerHistoryRealm addObject:<#(RLMObject *)#> ]
+        _peerHistoryRealm.autorefresh = YES;
     }
     
     return self;
@@ -435,9 +441,19 @@
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
+        {
             stateString = kUserConnectedNotification;
             [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
+            
+            //add the user to a the peer history if weve never met
+            if(![_peerHistory valueForKey:peerID.displayName])
+            {
+                [_peerHistoryRealm beginWriteTransaction];
+                [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
+                [_peerHistoryRealm commitWriteTransaction];
+            }
             break;
+        }
         default:
             break;
     }
@@ -551,5 +567,12 @@
     });
 }
 
+
++ (NSString *)peerHistoryRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/peers.realm"];
+}
 
 @end

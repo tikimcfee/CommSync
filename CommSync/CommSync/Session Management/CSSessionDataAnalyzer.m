@@ -102,6 +102,11 @@
         
         return;
     }
+    
+    else if([receivedObject isKindOfClass:[NSMutableDictionary class]])
+    {
+      //  NSlog(@"pushing name");
+    }
 }
 
 @end
