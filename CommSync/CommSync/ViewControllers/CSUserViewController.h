@@ -10,4 +10,5 @@
 
 @interface CSUserViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
+@property BOOL filter;
 @end

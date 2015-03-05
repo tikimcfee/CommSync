@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
+#import "CSPeerHistoryRealmModel.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -26,6 +27,7 @@
 @property (nonatomic, strong) RLMRealm* realm;
 @property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
+@property (nonatomic, strong) CSPeerHistoryRealmModel *peers;
 
 @end
 
@@ -56,7 +58,7 @@
         
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
-        
+        _peerHistory = [NSMutableDictionary new];
         
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -67,8 +69,18 @@
         _realm.autorefresh = YES;
         
         _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
-        [_peerHistoryRealm addObject:<#(RLMObject *)#> ]
+        
+        
+        //create a dictionary with all previous peers
+        if([[CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm] count] > 0){
+            RLMResults *formerPeers = [CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm];
+            for(CSPeerHistoryRealmModel *peer in formerPeers)
+            {
+                [_peerHistory setValue:(MCPeerID*)peer.peerID forKey:peer.dispalyID];
+            }
+            
         _peerHistoryRealm.autorefresh = YES;
+        }
     }
     
     return self;
@@ -444,14 +456,19 @@
         {
             stateString = kUserConnectedNotification;
             [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
-            
+            NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
+            [self sendDataPacketToPeers:historyData];
             //add the user to a the peer history if weve never met
             if(![_peerHistory valueForKey:peerID.displayName])
             {
-                [_peerHistoryRealm beginWriteTransaction];
-                [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
-                [_peerHistoryRealm commitWriteTransaction];
+               // [_realm beginWriteTransaction];
+               // [_peerHistoryRealm addObject:[[CSPeerHistoryRealmModel alloc] initWithMessage:(NSString *)peerID byUser:(NSString *)peerID.displayName]];
+                //[_realm commitWriteTransaction];
+                
+                
+                [_peerHistory setValue:peerID forKey:peerID.displayName];
             }
+
             break;
         }
         default:

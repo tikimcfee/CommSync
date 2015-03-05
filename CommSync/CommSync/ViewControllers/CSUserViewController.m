@@ -13,6 +13,7 @@
 {
     
 }
+@property NSInteger connectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
 
@@ -28,8 +29,11 @@
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
-    NSInteger connectionCount = [_sessionManager.currentConnectedPeers count];
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+
+    if(!_filter)_connectionCount = [_sessionManager.currentConnectedPeers count];
+    else _connectionCount = [_sessionManager.peerHistory count];
+    
+    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)_connectionCount];
     
     
     
@@ -53,6 +57,8 @@
 
 - (void)updateConnectionCountAndTableView:(NSNotification *)notification
 {
+    if(_filter) return;
+    
     __weak CSUserViewController *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -73,8 +79,10 @@
 //    if (cell == nil) {
 //        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
 //    }
+    NSString* userName;
     
-    NSString* userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
+    if(!_filter) userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
+    else userName = [[_sessionManager.peerHistory allKeys] objectAtIndex:indexPath.row];
     cell.textLabel.text = userName;
     return cell;
 }
@@ -82,7 +90,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_sessionManager.currentConnectedPeers count];
+    if(!_filter) return [_sessionManager.currentConnectedPeers count];
+    else return [_sessionManager.currentConnectedPeers count];
 }
 
 
@@ -96,4 +105,8 @@
 }
 */
 
+- (IBAction)FilterPeers:(id)sender {
+    _filter = !_filter;
+    [self loadView];
+}
 @end

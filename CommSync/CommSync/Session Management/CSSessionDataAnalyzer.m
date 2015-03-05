@@ -105,7 +105,8 @@
     
     else if([receivedObject isKindOfClass:[NSMutableDictionary class]])
     {
-      //  NSlog(@"pushing name");
+        NSLog(@"pushing name");
+        [_parentAnalyzer.globalManager.peerHistory addEntriesFromDictionary:receivedObject];
     }
 }
 

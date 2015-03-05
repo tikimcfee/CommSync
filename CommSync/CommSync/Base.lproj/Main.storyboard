@@ -622,8 +622,8 @@
                                     <outlet property="delegate" destination="iaN-ZE-mGm" id="U8H-MQ-0z2"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uz-sA-Zh2">
-                                <rect key="frame" x="208" y="518" width="109" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uz-sA-Zh2">
+                                <rect key="frame" x="209" y="516" width="108" height="30"/>
                                 <state key="normal" title="Send Comment">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -752,6 +752,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="GUB-ok-pez">
                         <barButtonItem key="leftBarButtonItem" title="Item" id="QQP-fv-ZeV"/>
+                        <barButtonItem key="rightBarButtonItem" title="All Peers" id="Prf-3R-QLk">
+                            <connections>
+                                <action selector="FilterPeers:" destination="v0D-Ly-N7E" id="0Pr-s2-tgE"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="userConnectionCount" destination="QQP-fv-ZeV" id="Zzv-1n-zaC"/>
