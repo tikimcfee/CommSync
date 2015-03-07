@@ -76,11 +76,12 @@
             RLMResults *formerPeers = [CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm];
             for(CSPeerHistoryRealmModel *peer in formerPeers)
             {
-                [_peerHistory setValue:(MCPeerID*)peer.peerID forKey:peer.dispalyID];
+                id realID = [NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID];
+                MCPeerID* temp = (MCPeerID*)realID;
+                [_peerHistory setValue:temp forKey:temp.displayName];
             }
-            
-        _peerHistoryRealm.autorefresh = YES;
         }
+        _peerHistoryRealm.autorefresh = YES;
     }
     
     return self;
@@ -461,12 +462,8 @@
             //add the user to a the peer history if weve never met
             if(![_peerHistory valueForKey:peerID.displayName])
             {
-               // [_realm beginWriteTransaction];
-               // [_peerHistoryRealm addObject:[[CSPeerHistoryRealmModel alloc] initWithMessage:(NSString *)peerID byUser:(NSString *)peerID.displayName]];
-                //[_realm commitWriteTransaction];
-                
-                
-                [_peerHistory setValue:peerID forKey:peerID.displayName];
+                [self updatePeerHistory:peerID ];
+
             }
 
             break;
@@ -547,6 +544,32 @@
 
 
 #pragma mark - Database actions
+- (void)updatePeerHistory:(MCPeerID *)peerID
+{
+    if([peerID isEqual:_myPeerID]) return;
+    //NSString* temp = [[(NSString *)peerID lowercaseString] stringByAppendingString:@""];
+    NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
+    CSPeerHistoryRealmModel *peerToUse = [[CSPeerHistoryRealmModel alloc] initWithMessage:historyData];
+   
+    _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+
+    [_peerHistoryRealm beginWriteTransaction];
+    [_peerHistoryRealm addObject:peerToUse];
+    [_peerHistoryRealm commitWriteTransaction];
+    [_peerHistory setValue:peerID forKey:peerID.displayName];
+}
+
+-(void)nukeHistory
+{
+    [_peerHistory removeAllObjects];
+    
+    _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+    //add all current connected peers to database
+    [_peerHistoryRealm beginWriteTransaction];
+    [_peerHistoryRealm deleteAllObjects];
+    [_peerHistoryRealm commitWriteTransaction];
+}
+
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
 {
     dispatch_async(dispatch_get_main_queue(), ^{

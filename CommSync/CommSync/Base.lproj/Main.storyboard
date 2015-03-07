@@ -759,6 +759,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="FilterButton" destination="Prf-3R-QLk" id="I4Y-B9-Wy8"/>
                         <outlet property="userConnectionCount" destination="QQP-fv-ZeV" id="Zzv-1n-zaC"/>
                     </connections>
                 </tableViewController>

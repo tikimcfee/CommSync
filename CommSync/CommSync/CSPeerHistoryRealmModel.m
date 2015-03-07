@@ -10,14 +10,14 @@
 
 @implementation CSPeerHistoryRealmModel
 
-- (instancetype)initWithMessage:(NSString *)peerID byUser:(NSString *)displayName
+- (instancetype)initWithMessage:(NSData *)peerID
 {
     self = [super init];
     
-    if (self)
+    if (self)  
     {
         self.peerID = peerID;
-        self.dispalyID = displayName;
+       // self.dispalyID = displayName;
     }
     
     return self;
@@ -29,7 +29,7 @@
     if (self = [super init])
     {
         self.peerID= [aDecoder decodeObjectForKey:@"peerID"];
-        self.dispalyID = [aDecoder decodeObjectForKey:@"displayName"];
+       // self.dispalyID = [aDecoder decodeObjectForKey:@"displayName"];
     }
     
     return self;
@@ -38,7 +38,7 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.peerID forKey:@"peerID"];
-    [aCoder encodeObject:self.dispalyID forKey:@"displayName"];
+    //[aCoder encodeObject:self.dispalyID forKey:@"displayName"];
 }
 
 

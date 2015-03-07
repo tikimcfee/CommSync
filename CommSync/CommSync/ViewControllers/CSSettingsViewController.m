@@ -18,7 +18,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Change Username", @"Populate Tasks", @"NUKE SESSION", @"NUKE DATABASE"];
+    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Remove User History", @"Populate Tasks", @"NUKE SESSION", @"NUKE DATABASE"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,6 +41,16 @@
     CSSessionManager *sessionManager = app.globalSessionManager;
     
     [sessionManager nukeRealm];
+}
+
+- (void)removeUserHistory
+{
+    //removes all former peers from the data base and replaces the peer history list with current list
+    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    CSSessionManager* sessionManager = d.globalSessionManager;
+    
+    [sessionManager nukeHistory];
+    
 }
 
 
@@ -173,7 +183,7 @@
             break;
             
         case 3:
-            [self resync];
+            [self removeUserHistory];
             break;
             
         case 4:

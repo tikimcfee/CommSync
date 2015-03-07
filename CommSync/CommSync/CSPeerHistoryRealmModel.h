@@ -7,13 +7,13 @@
 //
 
 #import <Realm/Realm.h>
+#import "JSQMessageData.h"
 
-@interface CSPeerHistoryRealmModel : RLMObject
+@interface CSPeerHistoryRealmModel : RLMObject <NSCoding, JSQMessageData>
 
 
-@property (strong, nonatomic) NSString* peerID;
-@property (strong, nonatomic) NSString* dispalyID;
+//@property (strong, nonatomic) NSString* peerID;
+@property (strong, nonatomic) NSData* peerID;
 
-- (instancetype)initWithMessage:(NSString *)peerID byUser:(NSString *)displayName;
-
+- (instancetype)initWithMessage:(NSData *)peerID;
 @end

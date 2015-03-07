@@ -65,7 +65,9 @@
 - (void) nukeSession;
 - (void) resetBrowserAndAdvertiser;
 - (void) nukeRealm;
+- (void) nukeHistory;
 
+- (void)updatePeerHistory:(MCPeerID *)peerID;
 
 + (NSString *)peerHistoryRealmDirectory;
 

@@ -29,8 +29,26 @@
 {
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
+   
+    if([receivedObject isKindOfClass:[NSMutableDictionary class]])
+    {
+        //receivedObject.
+        //NSLog(@"pushing name");
+        
+        if (![_parentAnalyzer.globalManager.peerHistory isEqualToDictionary:receivedObject]) {
+            
+            if([_parentAnalyzer.globalManager.peerHistory isEqualToDictionary:receivedObject]) return;
+            
+            for(MCPeerID *peerID in [receivedObject allValues])
+            {
+                if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName]) [_parentAnalyzer.globalManager updatePeerHistory:peerID];
+            }
+            
+            [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+        }
+    }
 
-    if ([receivedObject isKindOfClass:[NSDictionary class]])
+    else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
         // received new task request or task notification
         if ([receivedObject valueForKey:kCS_HEADER_NEW_TASK])
@@ -103,11 +121,6 @@
         return;
     }
     
-    else if([receivedObject isKindOfClass:[NSMutableDictionary class]])
-    {
-        NSLog(@"pushing name");
-        [_parentAnalyzer.globalManager.peerHistory addEntriesFromDictionary:receivedObject];
-    }
 }
 
 @end
