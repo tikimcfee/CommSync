@@ -10,7 +10,7 @@
 
 @interface CSAudioPlotViewController ()
 
-@property (nonatomic,strong) AVAudioPlayer *audioPlayer;
+
 
 @end
 
@@ -101,6 +101,35 @@
     [self.audioPlayer play];
     self.audioPlayer.delegate = self;
     
+}
+
+-(void)stopRecording
+{
+    // Update microphone state
+    [self.microphone stopFetchingAudio];
+    
+    // Update recording state
+    self.isRecording = NO;
+    
+    // Create Audio Player
+    if( self.audioPlayer )
+    {
+        if( self.audioPlayer.playing )
+        {
+            [self.audioPlayer stop];
+        }
+        self.audioPlayer = nil;
+    }
+    
+    // Close the audio file
+    if( self.recorder )
+    {
+        [self.recorder closeAudioFile];
+    }
+    
+    NSError *err;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[self testFilePathURL]
+                                                              error:&err];
 }
 
 -(void)toggleMicrophone:(id)sender {

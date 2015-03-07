@@ -13,6 +13,7 @@
 {
     
 }
+@property NSInteger connectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
 
@@ -28,8 +29,11 @@
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
-    NSInteger connectionCount = [_sessionManager.currentConnectedPeers count];
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
+
+    _connectionCount = [_sessionManager.currentConnectedPeers count];
+    
+    
+    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)_connectionCount];
     
     
     
@@ -73,16 +77,27 @@
 //    if (cell == nil) {
 //        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
 //    }
+    NSString* userName;
     
-    NSString* userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
-    cell.textLabel.text = userName;
+    
+    if(!_filter){
+        userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
+    }
+    else{
+        userName = [[_sessionManager.peerHistory allKeys] objectAtIndex:indexPath.row];
+    }
+    
+    NSString* connectionStatus = [@"--------------" stringByAppendingString:[_sessionManager.currentConnectedPeers valueForKey:userName]? @"Connected" : @"Disconnected"];
+    
+    cell.textLabel.text = [userName stringByAppendingString:connectionStatus];
     return cell;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_sessionManager.currentConnectedPeers count];
+    if(!_filter) return [_sessionManager.currentConnectedPeers count];
+    else return [_sessionManager.peerHistory count];
 }
 
 
@@ -96,4 +111,17 @@
 }
 */
 
+- (IBAction)FilterPeers:(id)sender {
+    if(!_filter){
+        _filter = YES;
+        [_filterButton setTitle:@"View Online Peers"];
+        
+    }
+    else{
+        _filter = NO;
+        [_filterButton setTitle:@"View All Peers"];
+    }
+    __weak CSUserViewController *weakSelf = self;
+    [weakSelf.tableView reloadData];
+}
 @end

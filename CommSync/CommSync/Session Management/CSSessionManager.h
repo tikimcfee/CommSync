@@ -42,6 +42,7 @@
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
+@property (strong, nonatomic) NSMutableDictionary* peerHistory;
 
 // 1-1 session objects
 @property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
@@ -64,6 +65,10 @@
 - (void) nukeSession;
 - (void) resetBrowserAndAdvertiser;
 - (void) nukeRealm;
+- (void) nukeHistory;
 
+- (void)updatePeerHistory:(MCPeerID *)peerID;
+
++ (NSString *)peerHistoryRealmDirectory;
 
 @end

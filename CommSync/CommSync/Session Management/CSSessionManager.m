@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
+#import "CSPeerHistoryRealmModel.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -24,7 +25,9 @@
 @property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
 @property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
 @property (nonatomic, strong) RLMRealm* realm;
+@property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
+@property (nonatomic, strong) CSPeerHistoryRealmModel *peers;
 
 @end
 
@@ -55,6 +58,7 @@
         
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
+        _peerHistory = [NSMutableDictionary new];
         
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -63,6 +67,21 @@
         // Getting default realm from disk
         _realm = [RLMRealm defaultRealm];
         _realm.autorefresh = YES;
+        
+        _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+        
+        
+        //create a dictionary with all previous peers
+        if([[CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm] count] > 0){
+            RLMResults *formerPeers = [CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm];
+            for(CSPeerHistoryRealmModel *peer in formerPeers)
+            {
+                id realID = [NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID];
+                MCPeerID* temp = (MCPeerID*)realID;
+                [_peerHistory setValue:temp forKey:temp.displayName];
+            }
+        }
+        _peerHistoryRealm.autorefresh = YES;
     }
     
     return self;
@@ -435,9 +454,26 @@
             stateString = kUserConnectingNotification;
             break;
         case MCSessionStateConnected:
+        {
             stateString = kUserConnectedNotification;
             [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
+            
+            //add the user to a the peer history if weve never met
+            if(![_peerHistory valueForKey:peerID.displayName])
+            {
+                [self updatePeerHistory:peerID ];
+
+            }
+            
+            //if this is a direct connection then propagate peer history of both users
+            if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
+            {
+                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
+                [self sendDataPacketToPeers:historyData];
+            }
+
             break;
+        }
         default:
             break;
     }
@@ -514,6 +550,34 @@
 
 
 #pragma mark - Database actions
+- (void)updatePeerHistory:(MCPeerID *)peerID
+{
+    if([peerID isEqual:_myPeerID]) return;
+
+    
+    NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
+    CSPeerHistoryRealmModel *peerToUse = [[CSPeerHistoryRealmModel alloc] initWithMessage:historyData];
+   
+    _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+
+    [_peerHistoryRealm beginWriteTransaction];
+    [_peerHistoryRealm addObject:peerToUse];
+    [_peerHistoryRealm commitWriteTransaction];
+    
+    [_peerHistory setValue:peerID forKey:peerID.displayName];
+}
+
+-(void)nukeHistory
+{
+    [_peerHistory removeAllObjects];
+    
+    _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+    //add all current connected peers to database
+    [_peerHistoryRealm beginWriteTransaction];
+    [_peerHistoryRealm deleteAllObjects];
+    [_peerHistoryRealm commitWriteTransaction];
+}
+
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -551,5 +615,12 @@
     });
 }
 
+
++ (NSString *)peerHistoryRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/peers.realm"];
+}
 
 @end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -491,7 +491,7 @@
                                         <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PS9-tt-UWC" userLabel="audio">
                                             <rect key="frame" x="29" y="288" width="330" height="65"/>
                                             <connections>
-                                                <segue destination="dcw-MX-1Cl" kind="embed" id="r3J-Hg-HkT"/>
+                                                <segue destination="dcw-MX-1Cl" kind="embed" identifier="CSAudioPlotViewController2" id="r3J-Hg-HkT"/>
                                             </connections>
                                         </containerView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T4L-bV-ZwS">
@@ -538,7 +538,7 @@
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="0.95137746710526316" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="tintColor" red="1" green="0.67740028782894679" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstItem="T4L-bV-ZwS" firstAttribute="bottom" secondItem="BJc-ZR-sSg" secondAttribute="bottom" constant="-16" id="1vw-Tu-TmU"/>
@@ -622,8 +622,8 @@
                                     <outlet property="delegate" destination="iaN-ZE-mGm" id="U8H-MQ-0z2"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uz-sA-Zh2">
-                                <rect key="frame" x="208" y="518" width="109" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uz-sA-Zh2">
+                                <rect key="frame" x="209" y="516" width="108" height="30"/>
                                 <state key="normal" title="Send Comment">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -700,10 +700,12 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ncM-YI-RJ5" id="Uq9-WW-E7H">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s9H-2M-Ucj">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s9H-2M-Ucj">
                                             <rect key="frame" x="15" y="8" width="170" height="144"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="0.95137746710526316" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
                                     </subviews>
+                                    <color key="backgroundColor" red="1" green="1" blue="0.95137746710526316" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="s9H-2M-Ucj" secondAttribute="bottom" id="0i4-qY-H1a"/>
                                         <constraint firstItem="s9H-2M-Ucj" firstAttribute="top" secondItem="Uq9-WW-E7H" secondAttribute="topMargin" id="ONZ-Co-da0"/>
@@ -750,8 +752,14 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="GUB-ok-pez">
                         <barButtonItem key="leftBarButtonItem" title="Item" id="QQP-fv-ZeV"/>
+                        <barButtonItem key="rightBarButtonItem" title="All Peers" id="Prf-3R-QLk">
+                            <connections>
+                                <action selector="FilterPeers:" destination="v0D-Ly-N7E" id="0Pr-s2-tgE"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="FilterButton" destination="Prf-3R-QLk" id="I4Y-B9-Wy8"/>
                         <outlet property="userConnectionCount" destination="QQP-fv-ZeV" id="Zzv-1n-zaC"/>
                     </connections>
                 </tableViewController>
@@ -859,7 +867,7 @@
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="esm-L7-fWV"/>
         <segue reference="r3J-Hg-HkT"/>
+        <segue reference="esm-L7-fWV"/>
     </inferredMetricsTieBreakers>
 </document>

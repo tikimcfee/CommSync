@@ -133,6 +133,7 @@
 		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
+		95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -418,6 +419,8 @@
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
+		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
+		95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPeerHistoryRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -831,6 +834,8 @@
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
 				93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */,
 				93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */,
+				95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */,
+				95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1232,6 +1237,7 @@
 				741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */,
 				93EBABE31A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
 				746F6ACE1A892613007A83E8 /* EZAudioPlot.m in Sources */,
+				95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */,
 				93EBABD91A964552006BAF4A /* JSQMessage.m in Sources */,
 				93EBACDF1A97D8A0006BAF4A /* SLKTextView.m in Sources */,
 				93EBABD11A964552006BAF4A /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */,

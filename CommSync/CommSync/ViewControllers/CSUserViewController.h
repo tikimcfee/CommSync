@@ -10,4 +10,6 @@
 
 @interface CSUserViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *filterButton;
+@property BOOL filter;
 @end

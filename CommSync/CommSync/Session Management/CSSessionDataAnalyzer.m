@@ -29,8 +29,24 @@
 {
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
+   
+    if([receivedObject isKindOfClass:[NSMutableDictionary class]])
+    {
+        BOOL foundDifference = NO;
+            for(MCPeerID *peerID in [receivedObject allValues])
+            {
+                if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID isEqual: _parentAnalyzer.globalManager.myPeerID]){
+                    [_parentAnalyzer.globalManager updatePeerHistory:peerID];
+                    foundDifference = YES;
+                }
+            }
+        
+            //if there were any diffrerences in the histories then send full history to all peers
+            if(foundDifference) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+        
+    }
 
-    if ([receivedObject isKindOfClass:[NSDictionary class]])
+    else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
         // received new task request or task notification
         if ([receivedObject valueForKey:kCS_HEADER_NEW_TASK])
@@ -90,18 +106,40 @@
     }
     else if ([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
     {
+        CSChatMessageRealmModel* temp = receivedObject;
+        
+        NSString* newTaskId =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
+        @synchronized (_requestPool){
+            if([_requestPool valueForKey:newTaskId] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
+            {
+                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                return;
+            }
+        }
+        @synchronized (_requestPool){
+            [_requestPool setValue:_peer forKey:newTaskId];
+        }
+        
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
         
         RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
         
+        //if the chat message already exists then exit otherwise add it and send it to all peers
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
+                             temp.createdBy, temp.createdAt];
+        
+        if([[CSChatMessageRealmModel objectsWithPredicate:pred] count] != 0) return;
+        
         [chatRealm beginWriteTransaction];
         [chatRealm addObject:receivedObject];
         [chatRealm commitWriteTransaction];
         
+        [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
         return;
     }
+    
 }
 
 @end
