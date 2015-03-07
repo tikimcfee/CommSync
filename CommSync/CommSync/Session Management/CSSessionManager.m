@@ -457,13 +457,19 @@
         {
             stateString = kUserConnectedNotification;
             [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
-            NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
-            [self sendDataPacketToPeers:historyData];
+            
             //add the user to a the peer history if weve never met
             if(![_peerHistory valueForKey:peerID.displayName])
             {
                 [self updatePeerHistory:peerID ];
 
+            }
+            
+            //if this is a direct connection then propagate peer history of both users
+            if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
+            {
+                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
+                [self sendDataPacketToPeers:historyData];
             }
 
             break;
@@ -547,7 +553,8 @@
 - (void)updatePeerHistory:(MCPeerID *)peerID
 {
     if([peerID isEqual:_myPeerID]) return;
-    //NSString* temp = [[(NSString *)peerID lowercaseString] stringByAppendingString:@""];
+
+    
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
     CSPeerHistoryRealmModel *peerToUse = [[CSPeerHistoryRealmModel alloc] initWithMessage:historyData];
    
@@ -556,6 +563,7 @@
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm addObject:peerToUse];
     [_peerHistoryRealm commitWriteTransaction];
+    
     [_peerHistory setValue:peerID forKey:peerID.displayName];
 }
 
