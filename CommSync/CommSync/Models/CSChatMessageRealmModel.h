@@ -14,8 +14,9 @@
 @property (nonatomic, strong, readonly) NSString *messageText;
 @property (nonatomic, strong, readonly) NSDate *createdAt;
 @property (nonatomic, strong, readonly) NSString *createdBy;
+@property (nonatomic, strong, readonly) NSString* recipient;
 
 
-- (instancetype)initWithMessage:(NSString *)message byUser:(NSString *)username;
+- (instancetype)initWithMessage:(NSString *)message byUser:(NSString *)username toUser: (NSString*)recipient;
 
 @end

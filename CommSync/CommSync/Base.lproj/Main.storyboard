@@ -761,6 +761,7 @@
                     <connections>
                         <outlet property="FilterButton" destination="Prf-3R-QLk" id="I4Y-B9-Wy8"/>
                         <outlet property="userConnectionCount" destination="QQP-fv-ZeV" id="Zzv-1n-zaC"/>
+                        <segue destination="FbK-pY-oQ5" kind="show" identifier="showUserDetail" id="KlC-hO-jOc"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nR9-Tf-sQ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -795,7 +796,7 @@
                         <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gE5-eO-iRi">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="227"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -862,12 +863,65 @@
             </objects>
             <point key="canvasLocation" x="4317" y="-319"/>
         </scene>
+        <!--User Detail View-->
+        <scene sceneID="4Ar-eQ-bsT">
+            <objects>
+                <viewController id="FbK-pY-oQ5" customClass="CSUserDetailView" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="IWJ-ZU-f6m"/>
+                        <viewControllerLayoutGuide type="bottom" id="1xv-7I-TYB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0Fm-Zf-Sgb">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="UdX-cv-UrV">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="217"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="217" id="Kuh-V9-ZpA"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="XSS-N2-pC2">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XSS-N2-pC2" id="aOI-U6-teg">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BLQ-cC-Hq0">
+                                <rect key="frame" x="0.0" y="324" width="600" height="227"/>
+                                <connections>
+                                    <segue destination="6ZR-ay-eUY" kind="embed" identifier="personalChatSegue" id="Fl1-Ao-tue"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="BLQ-cC-Hq0" secondAttribute="centerX" id="3p0-77-aeE"/>
+                            <constraint firstItem="UdX-cv-UrV" firstAttribute="top" secondItem="0Fm-Zf-Sgb" secondAttribute="topMargin" id="95U-kL-wmM"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="UdX-cv-UrV" secondAttribute="trailing" constant="-16" id="A2l-0f-WEh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BLQ-cC-Hq0" secondAttribute="trailing" constant="-16" id="I19-6c-DWB"/>
+                            <constraint firstItem="1xv-7I-TYB" firstAttribute="top" secondItem="BLQ-cC-Hq0" secondAttribute="bottom" id="NrX-WJ-qUV"/>
+                            <constraint firstItem="BLQ-cC-Hq0" firstAttribute="leading" secondItem="0Fm-Zf-Sgb" secondAttribute="leadingMargin" constant="-16" id="Ul2-eS-QQH"/>
+                            <constraint firstItem="UdX-cv-UrV" firstAttribute="leading" secondItem="0Fm-Zf-Sgb" secondAttribute="leadingMargin" constant="-16" id="XBF-lx-sfX"/>
+                            <constraint firstItem="BLQ-cC-Hq0" firstAttribute="top" secondItem="UdX-cv-UrV" secondAttribute="bottom" constant="107" id="jf0-Es-kPd"/>
+                            <constraint firstAttribute="centerX" secondItem="UdX-cv-UrV" secondAttribute="centerX" id="tgr-KH-Agn"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eJc-3O-6KZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2598" y="1255"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Fl1-Ao-tue"/>
         <segue reference="r3J-Hg-HkT"/>
-        <segue reference="esm-L7-fWV"/>
     </inferredMetricsTieBreakers>
 </document>

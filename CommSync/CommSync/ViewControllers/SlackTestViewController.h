@@ -9,9 +9,12 @@
 #import "SLKTextViewController.h"
 #import "CSTaskRealmModel.h"
 #import "CSCommentRealmModel.h"
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 
 @interface SlackTestViewController : SLKTextViewController
 
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+@property (strong, nonatomic) MCPeerID *peerID;
+
 
 @end
