@@ -145,6 +145,16 @@
         else{
             //if the message is meant for someone else then propagate it so they get it
             if(![temp.recipient isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName]){
+                
+                for(NSString *connectedUser in [_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions allKeys])
+                {
+                    if([temp.recipient isEqualToString: connectedUser])
+                    {
+                        //the user is connected to the target so we can send it directly
+                        [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.peerHistory valueForKey:temp.recipient]];
+                        return;
+                    }
+                }
                 [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
             }
             

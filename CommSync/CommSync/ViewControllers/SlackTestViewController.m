@@ -101,25 +101,40 @@
     
     if(!_sourceTask){
         CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser toUser:(_peerID)? _peerID.displayName : @"ALL"];
-    /*
-        RLMRealm *realmToWrite = (_peerID)? _privateMessageRealm : _chatRealm;
-        [realmToWrite beginWriteTransaction];
-        [realmToWrite addObject:message];
-        [realmToWrite commitWriteTransaction]; */
+
+        
+        
+        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
         
         if (_peerID){
             [_privateMessageRealm beginWriteTransaction];
             [_privateMessageRealm addObject:message];
             [_privateMessageRealm commitWriteTransaction];
+            
+            BOOL foundDifference = NO;
+            for(NSString *connectedUser in [_sessionManager.sessionLookupDisplayNamesToSessions allKeys])
+            {
+                if([message.recipient isEqualToString: connectedUser])
+                {
+                    //the user is connected to the target so we can send it directly
+                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.peerHistory valueForKey:message.recipient]];
+                    foundDifference = YES;
+                }
+            }
+            //if we arnt connected well find somebody who is
+            if(!foundDifference) [self.sessionManager sendDataPacketToPeers:messageData];
         }
         else{
             [_chatRealm beginWriteTransaction];
             [_chatRealm addObject:message];
             [_chatRealm commitWriteTransaction];
+            [self.sessionManager sendDataPacketToPeers:messageData];
         }
         
-        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
-        [self.sessionManager sendDataPacketToPeers:messageData];
+        
+        
+        
+       
     }
     
     else{
