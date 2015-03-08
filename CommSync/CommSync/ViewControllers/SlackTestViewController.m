@@ -17,13 +17,16 @@
 @interface SlackTestViewController ()
 // use this realm object to persist data to disk
 @property (strong, nonatomic) RLMRealm *chatRealm;
+@property (strong, nonatomic) RLMRealm *privateMessageRealm;
 // session manager to send data to connected peers
 @property (strong, nonatomic) CSSessionManager *sessionManager;
+@property (strong, nonatomic) NSPredicate *pred;
 @end
 
 @implementation SlackTestViewController
 {
     RLMNotificationToken *_chatRealmNotification;
+    RLMNotificationToken *_privateMessageRealmNotification;
     NSString *_currentUser;
 }
 
@@ -50,8 +53,17 @@
     _currentUser = app.userDisplayName;
     
     if(_sourceTask == nil){
-        _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
-        _chatRealm.autorefresh = YES;
+        if(!_peerID) {
+            _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+            _chatRealm.autorefresh = YES;
+        }
+        else{
+            _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
+            _privateMessageRealm.autorefresh = YES;
+            
+            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND recipient = %@ OR createdBy = %@ AND recipient = %@",
+                                 _currentUser, _peerID.displayName, _peerID.displayName, _currentUser ];
+        }
     }
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
@@ -88,11 +100,23 @@
     [self.tableView beginUpdates];
     
     if(!_sourceTask){
-        CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser];
-    
-        [self.chatRealm beginWriteTransaction];
-        [self.chatRealm addObject:message];
-        [self.chatRealm commitWriteTransaction];
+        CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser toUser:(_peerID)? _peerID.displayName : @"ALL"];
+    /*
+        RLMRealm *realmToWrite = (_peerID)? _privateMessageRealm : _chatRealm;
+        [realmToWrite beginWriteTransaction];
+        [realmToWrite addObject:message];
+        [realmToWrite commitWriteTransaction]; */
+        
+        if (_peerID){
+            [_privateMessageRealm beginWriteTransaction];
+            [_privateMessageRealm addObject:message];
+            [_privateMessageRealm commitWriteTransaction];
+        }
+        else{
+            [_chatRealm beginWriteTransaction];
+            [_chatRealm addObject:message];
+            [_chatRealm commitWriteTransaction];
+        }
         
         NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
         [self.sessionManager sendDataPacketToPeers:messageData];
@@ -128,12 +152,21 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(!_sourceTask){
+        
+        
         if (!_chatRealm)
         {
             _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+            
         }
+        if(!_privateMessageRealm) _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
     
-        return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
+        if(!_peerID)return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
+        
+        //if the chat message already exists then exit otherwise add it and send it to all peers
+        
+        return [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count] ;
+
     }
     else{
         return [_sourceTask.comments count];
@@ -152,11 +185,14 @@
     }
     
     if(!_sourceTask){
-        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+        
+            CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
-        cell.createdByLabel.text = msg.createdBy;
-        cell.messageLabel.text = msg.text;
-        cell.transform = self.tableView.transform;
+            cell.createdByLabel.text = msg.createdBy;
+            cell.messageLabel.text = msg.text;
+            cell.transform = self.tableView.transform;
+        
+       
     }
     
     else{
@@ -181,29 +217,56 @@
     return [basePath stringByAppendingString:@"/chat.realm"];
 }
 
++ (NSString *)privateMessageRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/privateMessage.realm"];
+}
+
 - (void)registerForChatRealmNotifications
 {
     if(!_sourceTask){
+        
         __weak SlackTestViewController *weakSelf = self;
-        _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.tableView reloadData];
+        if(!_peerID){
+            _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.tableView reloadData];
             
-                // Scroll to the bottom so we focus on the latest message
-                NSUInteger numberOfRows = [weakSelf.collectionView numberOfItemsInSection:0];
-                if (numberOfRows) {
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-                    [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-                }
-            });
-        }];
+                    // Scroll to the bottom so we focus on the latest message
+                    NSUInteger numberOfRows = [weakSelf.collectionView numberOfItemsInSection:0];
+                    if (numberOfRows) {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                        [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                    }
+                });
+            }];
+        }
+        else{
+            _privateMessageRealmNotification = [_privateMessageRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.tableView reloadData];
+                    
+                    // Scroll to the bottom so we focus on the latest message
+                    NSUInteger numberOfRows = [weakSelf.collectionView numberOfItemsInSection:0];
+                    if (numberOfRows) {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                        [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                    }
+                });
+            }];
+        }
     }
 }
 
 - (CSChatMessageRealmModel *)chatObjectAtIndex:(NSUInteger)index
 {
-    RLMResults *orderedChatMessages = [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] sortedResultsUsingProperty:@"createdAt" ascending:NO];
+    RLMResults *orderedChatMessages;
+    orderedChatMessages = (!_peerID)? [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] sortedResultsUsingProperty:@"createdAt" ascending:NO] : [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] sortedResultsUsingProperty:@"createdAt" ascending:NO];
     return [orderedChatMessages objectAtIndex:index];
 }
+
+
 
 @end

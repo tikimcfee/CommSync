@@ -35,7 +35,8 @@
         BOOL foundDifference = NO;
             for(MCPeerID *peerID in [receivedObject allValues])
             {
-                if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID isEqual: _parentAnalyzer.globalManager.myPeerID]){
+                if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                    
                     [_parentAnalyzer.globalManager updatePeerHistory:peerID];
                     foundDifference = YES;
                 }
@@ -119,25 +120,55 @@
         @synchronized (_requestPool){
             [_requestPool setValue:_peer forKey:newTaskId];
         }
+        if([temp.recipient isEqualToString:@"ALL"] )
+        {
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+            NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
         
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-        NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
+            RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
         
-        RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
-        
-        //if the chat message already exists then exit otherwise add it and send it to all peers
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
+            //if the chat message already exists then exit otherwise add it and send it to all peers
+            NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
                              temp.createdBy, temp.createdAt];
+            
+            if([[CSChatMessageRealmModel objectsInRealm:chatRealm withPredicate:pred] count] != 0) return;
         
-        if([[CSChatMessageRealmModel objectsWithPredicate:pred] count] != 0) return;
+            [chatRealm beginWriteTransaction];
+            [chatRealm addObject:receivedObject];
+            [chatRealm commitWriteTransaction];
         
-        [chatRealm beginWriteTransaction];
-        [chatRealm addObject:receivedObject];
-        [chatRealm commitWriteTransaction];
+            [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+            return;
+        }
         
-        [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
-        return;
+        else{
+            //if the message is meant for someone else then propagate it so they get it
+            if(![temp.recipient isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName]){
+                [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+            }
+            
+            else{
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+                NSString *url = [basePath stringByAppendingString:@"/privateMessage.realm"];
+                
+                //if the chat message already exists then exit otherwise add it and send it to all peers
+                NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
+                                     temp.createdBy, temp.createdAt];
+                
+                 RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
+                
+                if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
+                
+                
+                
+                
+                [privateMessageRealm beginWriteTransaction];
+                [privateMessageRealm addObject:receivedObject];
+                [privateMessageRealm commitWriteTransaction];
+            }
+        }
     }
     
 }

@@ -133,6 +133,7 @@
 		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
+		95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */; };
 		95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */; };
 /* End PBXBuildFile section */
 
@@ -419,6 +420,8 @@
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
+		95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserDetailView.h; sourceTree = "<group>"; };
+		95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserDetailView.m; sourceTree = "<group>"; };
 		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
 		95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPeerHistoryRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -606,6 +609,8 @@
 		744452291A0ACE2700C87723 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
+				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
 				45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */,
 				45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
@@ -1184,6 +1189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */,
 				93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */,
 				93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */,
 				74C541ED1A93E67100FC29AD /* TLIndexPathItem.m in Sources */,

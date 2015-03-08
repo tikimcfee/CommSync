@@ -7,6 +7,7 @@
 //
 
 #import "CSUserViewController.h"
+#import "CSUserDetailView.h"
 #import "AppDelegate.h"
 
 @interface CSUserViewController ()
@@ -93,6 +94,15 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    MCPeerID *peer;
+    
+    if(!_filter) peer = [[_sessionManager.peerHistory allValues] objectAtIndex:indexPath.row];
+    else peer = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -124,4 +134,22 @@
     __weak CSUserViewController *weakSelf = self;
     [weakSelf.tableView reloadData];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([[segue identifier] isEqualToString:@"showUserDetail"])
+    {
+        CSUserDetailView *vc = [segue destinationViewController];
+        if ([sender isKindOfClass:[MCPeerID class]])
+        {
+            [vc setPeerID:sender];
+        }
+    }
+    
+    if ([[segue identifier] isEqualToString:@"showUserDetail"])
+    {
+        
+    }
+}
+
 @end
