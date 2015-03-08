@@ -111,18 +111,14 @@
             [_privateMessageRealm addObject:message];
             [_privateMessageRealm commitWriteTransaction];
             
-            BOOL foundDifference = NO;
-            for(NSString *connectedUser in [_sessionManager.sessionLookupDisplayNamesToSessions allKeys])
+            
+            if([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
             {
-                if([message.recipient isEqualToString: connectedUser])
-                {
                     //the user is connected to the target so we can send it directly
                     [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.peerHistory valueForKey:message.recipient]];
-                    foundDifference = YES;
-                }
             }
             //if we arnt connected well find somebody who is
-            if(!foundDifference) [self.sessionManager sendDataPacketToPeers:messageData];
+            else [self.sessionManager sendDataPacketToPeers:messageData];
         }
         else{
             [_chatRealm beginWriteTransaction];

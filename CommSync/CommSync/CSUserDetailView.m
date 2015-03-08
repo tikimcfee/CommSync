@@ -16,8 +16,10 @@
 @implementation CSUserDetailView
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
         // Do any additional setup after loading the view.
+    _nameLabel.text = _peerID.displayName;
 }
 
 - (void)didReceiveMemoryWarning {
