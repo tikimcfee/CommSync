@@ -99,8 +99,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     MCPeerID *peer;
     
-    if(!_filter) peer = [[_sessionManager.peerHistory allValues] objectAtIndex:indexPath.row];
-    else peer = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
+    if(!_filter) peer = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
+    else peer = [[_sessionManager.peerHistory allValues] objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
 }
 
@@ -144,11 +144,6 @@
         {
             [vc setPeerID:sender];
         }
-    }
-    
-    if ([[segue identifier] isEqualToString:@"showUserDetail"])
-    {
-        
     }
 }
 

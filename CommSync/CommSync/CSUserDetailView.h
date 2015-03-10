@@ -12,4 +12,5 @@
 @interface CSUserDetailView : UIViewController
 @property (strong, nonatomic) MCPeerID* peerID;
 @property (strong, nonatomic) NSString* displayName;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @end

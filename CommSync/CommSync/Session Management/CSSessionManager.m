@@ -552,7 +552,7 @@
 #pragma mark - Database actions
 - (void)updatePeerHistory:(MCPeerID *)peerID
 {
-    if([peerID isEqual:_myPeerID]) return;
+    if([peerID.displayName  isEqualToString:_myPeerID.displayName]) return;
 
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
