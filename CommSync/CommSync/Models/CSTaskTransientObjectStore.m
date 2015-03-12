@@ -111,18 +111,7 @@
     model.taskPriority = self.taskPriority;
     
     // Compute task images on the fly
-    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.TRANSIENT_taskImages.count];
-    for(UIImage* image in self.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
-        
-        NSLog(@"New size after normalization only is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
-        NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
-        NSLog(@"New size after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
-        
-        [tempArrayOfImages addObject:thisImage]; // add it to our container
-    }
-    
-    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
-    model.taskImages_NSDataArray_JPEG = archivedImages;
+    [self saveImages:model];
     
     // Grab task audio on the fly
     if(self.taskAudio) {
@@ -135,6 +124,24 @@
         [realm commitWriteTransaction];
     
     self.BACKING_DATABASE_MODEL = model;
+}
+
+-(void) saveImages :(CSTaskRealmModel*)model
+{
+    
+    // Compute task images on the fly
+    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:self.TRANSIENT_taskImages.count];
+    for(UIImage* image in self.TRANSIENT_taskImages) { // for every TRANSIENT UIImage we have on this task
+        
+        NSLog(@"New size after normalization only is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
+        NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
+        NSLog(@"New size after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
+        
+        [tempArrayOfImages addObject:thisImage]; // add it to our container
+    }
+    
+    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
+    model.taskImages_NSDataArray_JPEG = archivedImages;
 }
 
 - (CSTaskRealmModel*)BACKING_DATABASE_MODEL {

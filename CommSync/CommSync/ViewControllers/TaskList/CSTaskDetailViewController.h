@@ -17,6 +17,7 @@
 {
     
 }
+@property (weak, nonatomic) IBOutlet UIView *plot;
 
 //task objects
 @property (strong, nonatomic) CSTaskRealmModel           *sourceTask;
@@ -59,11 +60,15 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *top;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *minWidth;
 
+
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;
 - (IBAction)    setGreen:(id)sender;
 - (IBAction)    setYellow:(id)sender;
 - (IBAction)    editMode:(id)sender;
+- (IBAction)    addPicture:(id)sender;
+- (IBAction)    viewPicture:(id)sender;
+- (IBAction)    completeTask:(id)sender;
 - (void)        setImagesFromTask;
 - (void)        keyboardWillHide:(NSNotification *) sender;
 - (void)        keyboardDidShow:(NSNotification *) sender;

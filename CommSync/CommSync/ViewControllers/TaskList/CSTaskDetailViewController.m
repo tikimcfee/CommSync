@@ -18,6 +18,7 @@
 #import "CSPictureViewController.h"
 #import "SlackTestViewController.h"
 #import "CSAudioPlotViewController.h"
+#import "UIImage+normalize.h"
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 
@@ -28,6 +29,10 @@
 
 // VC for audio recording
 @property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
+
+// Image picker
+@property (strong, nonatomic) UIImagePickerController* imagePicker;
+
 @end
 
 @implementation CSTaskDetailViewController
@@ -281,7 +286,7 @@
         if(_transientTask.TRANSIENT_audioDataURL) {
             _sourceTask.taskAudio = [NSData dataWithContentsOfURL:_transientTask.TRANSIENT_audioDataURL];
         }
-        
+        [_transientTask saveImages:_sourceTask];
         [realm commitWriteTransaction];
         
         [_titleLabel setEnabled:NO];
@@ -299,11 +304,7 @@
         
         [_audioButton setHidden:NO];
         
-        
-        
-
-        
-       // [_audioContainer setHidden:YES];
+    
     }
 }
 
@@ -339,6 +340,31 @@
      _priorityColor.backgroundColor = [UIColor yellowColor];
     _priorityLabel.text = @"Med Priority";
 }
+- (IBAction)addPicture:(id)sender {
+
+    
+    UIImagePickerController* newPicker = [[UIImagePickerController alloc] init];
+    
+    _imagePicker = newPicker;
+    _imagePicker.allowsEditing = YES;
+    _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    _imagePicker.delegate = self;
+    _imagePicker.showsCameraControls = YES;
+    
+    [self presentViewController:newPicker animated:YES completion:nil];
+   
+    
+    [self.tableView reloadData];
+    
+}
+
+- (IBAction)viewPicture:(id)sender {
+//    _plot.frame=CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height);
+}
+
+- (IBAction)completeTask:(id)sender {
+}
+
 - (IBAction)playAudio:(id)sender {
   [_distanceEdge setActive:YES];
     if(!_titleLabel.isEnabled)
@@ -408,4 +434,31 @@
         self.audioRecorder.fileNameSansExtension = _sourceTask.concatenatedID;
     }
 }
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
+        if(!_transientTask.TRANSIENT_taskImages) {
+            _transientTask.TRANSIENT_taskImages = [NSMutableArray new];
+        }
+        
+        [_transientTask.TRANSIENT_taskImages addObject:image];
+        
+        
+        
+        [_embed.tableView reloadData];
+    };
+    
+    [image normalizedImageWithCompletionBlock:fixImageIfNeeded];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
