@@ -82,6 +82,8 @@
             // send the request
             NSLog(@"<?> Sending request string [%@] to peer [%@]", requestDictionary, _peer.displayName);
             [_parentAnalyzer.globalManager sendSingleDataPacket:requestData toSinglePeer:_peer];
+            
+            
         }
         else if ([receivedObject valueForKey:kCS_HEADER_TASK_REQUEST])
         {
@@ -94,8 +96,9 @@
                 NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed dictionary?");
                 return;
             }
-            
-            // Send the task to the peer
+            //add to watch
+            [_parentAnalyzer.globalManager.allTasks setValue:model.taskTitle forKey:model.UUID];
+            // Send the task to the peerdre
             NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, _peer.displayName);
             [_parentAnalyzer.globalManager sendSingleTask:model toSinglePeer:_peer];
         }
@@ -348,6 +351,10 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 #pragma mark - Data transmission
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task
 {
+    
+    [_globalManager.allTasks setValue:task.taskTitle forKey:task.UUID];
+
+    
     NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
     

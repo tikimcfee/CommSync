@@ -202,7 +202,7 @@
     [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];
     
     [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:self.pendingTask];
-
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

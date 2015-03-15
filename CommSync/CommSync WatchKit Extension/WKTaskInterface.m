@@ -8,7 +8,7 @@
 
 #import "WKTaskInterface.h"
 #import "CSTaskRow.h"
-#import "CSWatchTask.h"
+
 @interface WKTaskInterface()
 @property bool refresh;
 @end
@@ -39,9 +39,9 @@
 
 - (void)configureTableWithData: (NSDictionary *) peers{
      
-    [_taskTable setNumberOfRows:[peers count] withRowType:@"default"];
+    [_taskTable setNumberOfRows:[peers count] withRowType:@"TaskRow"];
     int count = 0;
-    for(NSString* s in [peers allValues])
+    for(NSString* s in [peers allKeys])
     {
         CSTaskRow *row = [_taskTable rowControllerAtIndex:count++];
         [row.taskName setText: s];

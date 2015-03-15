@@ -59,7 +59,7 @@
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
         _peerHistory = [NSMutableDictionary new];
-        
+        _allTasks = [NSMutableDictionary new];
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
         self.devicesThatDeferredToMeDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -82,8 +82,14 @@
             }
         }
         _peerHistoryRealm.autorefresh = YES;
-    }
+        
+        
+        RLMResults *results = [CSTaskRealmModel allObjects];
+        
+        
+        for(CSTaskRealmModel* task in results) [_allTasks setValue:task.taskTitle forKey:task.UUID];
     
+    }
     return self;
 }
 
@@ -615,30 +621,6 @@
     });
 }
 
--(NSMutableArray *) getAllTasks
-{
-    NSMutableArray *tasks = [[NSArray alloc]init];
-    RLMResults *results = [CSTaskRealmModel allObjects];
-//     NSMutableDictionary *requestData = [[NSMutableDictionary alloc] init];
-//    
-//    for(CSTaskRealmModel *task in results)
-//    {
-//        CSWatchTask *temp = [[CSWatchTask alloc] init];
-//        temp.UUID = task.UUID;
-//        temp.taskTitle = task.taskTitle;
-//        temp.taskDescription = task.taskDescription;
-//        
-//        [requestData setObject:temp forKey:@"task"];
-//    }
-//    //[tasks addObjectsFromArray:results];
-    for(CSTaskRealmModel *tm in results)
-    {
-        [tasks addObject:tm.taskTitle];
-    }
-    
-    
-    return tasks;
-}
 + (NSString *)peerHistoryRealmDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

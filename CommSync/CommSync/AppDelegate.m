@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import <Realm/Realm.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "WKPeerInterface.h"
@@ -32,7 +31,6 @@
     _userDisplayName = [[UIDevice currentDevice] name];
     _globalSessionManager = [[CSSessionManager alloc] initWithID:_userDisplayName];
 
-    
     return YES;
 }
 
@@ -189,13 +187,14 @@
 //    else   reply(@{@"test": @"test"});
     
     if([userInfo valueForKey:@"task"]){
-//        NSMutableArray *temp = [_globalSessionManager getAllTasks];
-//    
-//            for(NSString *s in temp)
-//            {
-//                [requestData setValue:s forKey:@"task"];
-//            }
-        reply(@{@"task": @"task"});
+        for(NSString *wt in [_globalSessionManager.allTasks allValues])
+        {
+            [requestData setValue:[@([_globalSessionManager.allTasks count])stringValue] forKey:wt];
+        }
+        
+        
+       if(requestData) reply(requestData);
+       else reply(@{@"fail": [@([_globalSessionManager.allTasks count])stringValue]});
     }
     
     else if ([userInfo valueForKey:@"task2"])

@@ -144,7 +144,6 @@
 		95469CEB1AB4BBAE0019CD71 /* CSPeerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 95469CEA1AB4BBAE0019CD71 /* CSPeerRow.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 		95E60C521AB4F5C800F80A82 /* CSTaskRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E60C511AB4F5C800F80A82 /* CSTaskRow.m */; };
-		95E60C551AB5019500F80A82 /* CSWatchTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E60C541AB5019500F80A82 /* CSWatchTask.m */; };
 		95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */; };
 		95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */; };
 /* End PBXBuildFile section */
@@ -483,8 +482,6 @@
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
 		95E60C501AB4F5C800F80A82 /* CSTaskRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTaskRow.h; sourceTree = "<group>"; };
 		95E60C511AB4F5C800F80A82 /* CSTaskRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTaskRow.m; sourceTree = "<group>"; };
-		95E60C531AB5019500F80A82 /* CSWatchTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSWatchTask.h; sourceTree = "<group>"; };
-		95E60C541AB5019500F80A82 /* CSWatchTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSWatchTask.m; sourceTree = "<group>"; };
 		95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserDetailView.h; sourceTree = "<group>"; };
 		95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserDetailView.m; sourceTree = "<group>"; };
 		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
@@ -918,8 +915,6 @@
 				93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */,
 				95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */,
 				95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */,
-				95E60C531AB5019500F80A82 /* CSWatchTask.h */,
-				95E60C541AB5019500F80A82 /* CSWatchTask.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1450,7 +1445,6 @@
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,
 				93EBACDC1A97D8A0006BAF4A /* UIView+SLKAdditions.m in Sources */,
-				95E60C551AB5019500F80A82 /* CSWatchTask.m in Sources */,
 				74C541F21A93E67100FC29AD /* TLCollapsibleTableViewController.m in Sources */,
 				93EBACDA1A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m in Sources */,
 				74B3E32E1A9B91BC006A3B03 /* ImageCell.m in Sources */,
