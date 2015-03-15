@@ -10,7 +10,7 @@
 #import <Realm/Realm.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-
+#import "WKPeerInterface.h"
 
 @interface AppDelegate ()
 
@@ -153,4 +153,68 @@
     }
 }
 
+-(void) application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void (^)(NSDictionary *))reply{
+    NSMutableDictionary *requestData = [[NSMutableDictionary alloc] init];
+    //send task info to watch
+//    if([userInfo valueForKey:@"task"])
+//    {
+//        
+//        NSMutableArray *temp = [_globalSessionManager getAllTasks];
+//        
+//        for(NSString *s in temp)
+//        {
+//            [requestData setValue:s forKey:@"task"];
+//        }
+//        reply(requestData);
+//    }
+//   
+    
+    
+    
+//    //send peer info to watch
+//
+//    for(NSString *s in [_globalSessionManager.peerHistory allKeys])
+//    {
+//        if([_globalSessionManager.currentConnectedPeers valueForKey:s]) {
+//            [requestData setValue:@"Connected" forKey:s];
+//        }
+//       else [requestData setValue:@"Offline" forKey:s];
+//    }
+//    if([requestData count] >0 ){
+//        reply(requestData);
+//    }
+//    
+//    
+//    //reply(userInfo);
+//    else   reply(@{@"test": @"test"});
+    
+    if([userInfo valueForKey:@"task"]){
+//        NSMutableArray *temp = [_globalSessionManager getAllTasks];
+//    
+//            for(NSString *s in temp)
+//            {
+//                [requestData setValue:s forKey:@"task"];
+//            }
+        reply(@{@"task": @"task"});
+    }
+    
+    else if ([userInfo valueForKey:@"task2"])
+    {
+        for(NSString *s in [_globalSessionManager.peerHistory allKeys])
+                {
+                    if([_globalSessionManager.currentConnectedPeers valueForKey:s]) {
+                        [requestData setValue:@"Connected" forKey:s];
+                    }
+                   else [requestData setValue:@"Offline" forKey:s];
+                }
+        
+       reply(requestData);
+                
+    }
+            
+            
+    else reply(@{@"fail": @"fail"});
+                
+    
+}
 @end

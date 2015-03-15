@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
-
+#import "CSWatchTask.h"
 // Session management strings
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
 #define PULSE_STRING @"|~PULSE~|"
@@ -70,5 +70,5 @@
 - (void)updatePeerHistory:(MCPeerID *)peerID;
 
 + (NSString *)peerHistoryRealmDirectory;
-
+-(NSMutableArray *) getAllTasks;
 @end

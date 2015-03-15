@@ -615,7 +615,30 @@
     });
 }
 
-
+-(NSMutableArray *) getAllTasks
+{
+    NSMutableArray *tasks = [[NSArray alloc]init];
+    RLMResults *results = [CSTaskRealmModel allObjects];
+//     NSMutableDictionary *requestData = [[NSMutableDictionary alloc] init];
+//    
+//    for(CSTaskRealmModel *task in results)
+//    {
+//        CSWatchTask *temp = [[CSWatchTask alloc] init];
+//        temp.UUID = task.UUID;
+//        temp.taskTitle = task.taskTitle;
+//        temp.taskDescription = task.taskDescription;
+//        
+//        [requestData setObject:temp forKey:@"task"];
+//    }
+//    //[tasks addObjectsFromArray:results];
+    for(CSTaskRealmModel *tm in results)
+    {
+        [tasks addObject:tm.taskTitle];
+    }
+    
+    
+    return tasks;
+}
 + (NSString *)peerHistoryRealmDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

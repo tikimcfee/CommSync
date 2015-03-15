@@ -132,10 +132,53 @@
 		93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */; };
 		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
+		95469CC21AB4AC0F0019CD71 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95469CC11AB4AC0F0019CD71 /* InterfaceController.m */; };
+		95469CC51AB4AC0F0019CD71 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95469CC41AB4AC0F0019CD71 /* NotificationController.m */; };
+		95469CC71AB4AC0F0019CD71 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95469CC61AB4AC0F0019CD71 /* Images.xcassets */; };
+		95469CCB1AB4AC0F0019CD71 /* CommSync WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 95469CCA1AB4AC0F0019CD71 /* CommSync WatchKit App.app */; };
+		95469CD31AB4AC0F0019CD71 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95469CD11AB4AC0F0019CD71 /* Interface.storyboard */; };
+		95469CD51AB4AC0F0019CD71 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95469CD41AB4AC0F0019CD71 /* Images.xcassets */; };
+		95469CD81AB4AC0F0019CD71 /* CommSync WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 95469CBB1AB4AC0F0019CD71 /* CommSync WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		95469CE51AB4B27B0019CD71 /* WKPeerInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 95469CE41AB4B27B0019CD71 /* WKPeerInterface.m */; };
+		95469CE81AB4B29B0019CD71 /* WKTaskInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 95469CE71AB4B29B0019CD71 /* WKTaskInterface.m */; };
+		95469CEB1AB4BBAE0019CD71 /* CSPeerRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 95469CEA1AB4BBAE0019CD71 /* CSPeerRow.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
+		95E60C521AB4F5C800F80A82 /* CSTaskRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E60C511AB4F5C800F80A82 /* CSTaskRow.m */; };
+		95E60C551AB5019500F80A82 /* CSWatchTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E60C541AB5019500F80A82 /* CSWatchTask.m */; };
 		95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */; };
 		95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		95469CCC1AB4AC0F0019CD71 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 459D5F6B19DB449900C91EFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95469CC91AB4AC0F0019CD71;
+			remoteInfo = "CommSync WatchKit App";
+		};
+		95469CD61AB4AC0F0019CD71 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 459D5F6B19DB449900C91EFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95469CBA1AB4AC0F0019CD71;
+			remoteInfo = "CommSync WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		95469CDF1AB4AC0F0019CD71 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				95469CD81AB4AC0F0019CD71 /* CommSync WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
@@ -418,8 +461,30 @@
 		93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSChatTableViewCell.xib; sourceTree = "<group>"; };
 		93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatTableViewCell.h; sourceTree = "<group>"; };
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
+		95469CBB1AB4AC0F0019CD71 /* CommSync WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "CommSync WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95469CBE1AB4AC0F0019CD71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		95469CBF1AB4AC0F0019CD71 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		95469CC01AB4AC0F0019CD71 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		95469CC11AB4AC0F0019CD71 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		95469CC31AB4AC0F0019CD71 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		95469CC41AB4AC0F0019CD71 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		95469CC61AB4AC0F0019CD71 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		95469CCA1AB4AC0F0019CD71 /* CommSync WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CommSync WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95469CD01AB4AC0F0019CD71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		95469CD21AB4AC0F0019CD71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		95469CD41AB4AC0F0019CD71 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		95469CE31AB4B27B0019CD71 /* WKPeerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKPeerInterface.h; sourceTree = "<group>"; };
+		95469CE41AB4B27B0019CD71 /* WKPeerInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKPeerInterface.m; sourceTree = "<group>"; };
+		95469CE61AB4B29B0019CD71 /* WKTaskInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTaskInterface.h; sourceTree = "<group>"; };
+		95469CE71AB4B29B0019CD71 /* WKTaskInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTaskInterface.m; sourceTree = "<group>"; };
+		95469CE91AB4BBAE0019CD71 /* CSPeerRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerRow.h; sourceTree = "<group>"; };
+		95469CEA1AB4BBAE0019CD71 /* CSPeerRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPeerRow.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
+		95E60C501AB4F5C800F80A82 /* CSTaskRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTaskRow.h; sourceTree = "<group>"; };
+		95E60C511AB4F5C800F80A82 /* CSTaskRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTaskRow.m; sourceTree = "<group>"; };
+		95E60C531AB5019500F80A82 /* CSWatchTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSWatchTask.h; sourceTree = "<group>"; };
+		95E60C541AB5019500F80A82 /* CSWatchTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSWatchTask.m; sourceTree = "<group>"; };
 		95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserDetailView.h; sourceTree = "<group>"; };
 		95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserDetailView.m; sourceTree = "<group>"; };
 		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
@@ -441,6 +506,13 @@
 				746F6A7F1A891DD4007A83E8 /* CoreGraphics.framework in Frameworks */,
 				74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */,
 				746F6A811A891DDC007A83E8 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95469CB81AB4AC0F0019CD71 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +594,8 @@
 			children = (
 				454D92091A78581F000B74A8 /* libc++.dylib */,
 				459D5F7519DB449900C91EFA /* CommSync */,
+				95469CBC1AB4AC0F0019CD71 /* CommSync WatchKit Extension */,
+				95469CCE1AB4AC0F0019CD71 /* CommSync WatchKit App */,
 				459D5F7419DB449900C91EFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -530,6 +604,8 @@
 			isa = PBXGroup;
 			children = (
 				459D5F7319DB449900C91EFA /* CommSync.app */,
+				95469CBB1AB4AC0F0019CD71 /* CommSync WatchKit Extension.appex */,
+				95469CCA1AB4AC0F0019CD71 /* CommSync WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -842,6 +918,8 @@
 				93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */,
 				95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */,
 				95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */,
+				95E60C531AB5019500F80A82 /* CSWatchTask.h */,
+				95E60C541AB5019500F80A82 /* CSWatchTask.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1077,6 +1155,54 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		95469CBC1AB4AC0F0019CD71 /* CommSync WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				95469CC01AB4AC0F0019CD71 /* InterfaceController.h */,
+				95469CE31AB4B27B0019CD71 /* WKPeerInterface.h */,
+				95469CE41AB4B27B0019CD71 /* WKPeerInterface.m */,
+				95469CE61AB4B29B0019CD71 /* WKTaskInterface.h */,
+				95469CE71AB4B29B0019CD71 /* WKTaskInterface.m */,
+				95469CC11AB4AC0F0019CD71 /* InterfaceController.m */,
+				95469CE91AB4BBAE0019CD71 /* CSPeerRow.h */,
+				95469CEA1AB4BBAE0019CD71 /* CSPeerRow.m */,
+				95E60C501AB4F5C800F80A82 /* CSTaskRow.h */,
+				95E60C511AB4F5C800F80A82 /* CSTaskRow.m */,
+				95469CC31AB4AC0F0019CD71 /* NotificationController.h */,
+				95469CC41AB4AC0F0019CD71 /* NotificationController.m */,
+				95469CC61AB4AC0F0019CD71 /* Images.xcassets */,
+				95469CBD1AB4AC0F0019CD71 /* Supporting Files */,
+			);
+			path = "CommSync WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		95469CBD1AB4AC0F0019CD71 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				95469CBE1AB4AC0F0019CD71 /* Info.plist */,
+				95469CBF1AB4AC0F0019CD71 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		95469CCE1AB4AC0F0019CD71 /* CommSync WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				95469CD11AB4AC0F0019CD71 /* Interface.storyboard */,
+				95469CD41AB4AC0F0019CD71 /* Images.xcassets */,
+				95469CCF1AB4AC0F0019CD71 /* Supporting Files */,
+			);
+			path = "CommSync WatchKit App";
+			sourceTree = "<group>";
+		};
+		95469CCF1AB4AC0F0019CD71 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				95469CD01AB4AC0F0019CD71 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1088,15 +1214,50 @@
 				459D5F7019DB449900C91EFA /* Frameworks */,
 				459D5F7119DB449900C91EFA /* Resources */,
 				45C9564A1A98CEB600364555 /* ShellScript */,
+				95469CDF1AB4AC0F0019CD71 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				95469CD71AB4AC0F0019CD71 /* PBXTargetDependency */,
 			);
 			name = CommSync;
 			productName = CommSync;
 			productReference = 459D5F7319DB449900C91EFA /* CommSync.app */;
 			productType = "com.apple.product-type.application";
+		};
+		95469CBA1AB4AC0F0019CD71 /* CommSync WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95469CDE1AB4AC0F0019CD71 /* Build configuration list for PBXNativeTarget "CommSync WatchKit Extension" */;
+			buildPhases = (
+				95469CB71AB4AC0F0019CD71 /* Sources */,
+				95469CB81AB4AC0F0019CD71 /* Frameworks */,
+				95469CB91AB4AC0F0019CD71 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95469CCD1AB4AC0F0019CD71 /* PBXTargetDependency */,
+			);
+			name = "CommSync WatchKit Extension";
+			productName = "CommSync WatchKit Extension";
+			productReference = 95469CBB1AB4AC0F0019CD71 /* CommSync WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		95469CC91AB4AC0F0019CD71 /* CommSync WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95469CDD1AB4AC0F0019CD71 /* Build configuration list for PBXNativeTarget "CommSync WatchKit App" */;
+			buildPhases = (
+				95469CC81AB4AC0F0019CD71 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CommSync WatchKit App";
+			productName = "CommSync WatchKit App";
+			productReference = 95469CCA1AB4AC0F0019CD71 /* CommSync WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
 		};
 /* End PBXNativeTarget section */
 
@@ -1110,6 +1271,13 @@
 					459D5F7219DB449900C91EFA = {
 						CreatedOnToolsVersion = 6.0.1;
 						DevelopmentTeam = 8EGNUMD5CB;
+					};
+					95469CBA1AB4AC0F0019CD71 = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 8EGNUMD5CB;
+					};
+					95469CC91AB4AC0F0019CD71 = {
+						CreatedOnToolsVersion = 6.2;
 					};
 				};
 			};
@@ -1140,6 +1308,8 @@
 			projectRoot = "";
 			targets = (
 				459D5F7219DB449900C91EFA /* CommSync */,
+				95469CBA1AB4AC0F0019CD71 /* CommSync WatchKit Extension */,
+				95469CC91AB4AC0F0019CD71 /* CommSync WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -1163,6 +1333,24 @@
 				93EBABE21A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				93EBABE41A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.xib in Resources */,
 				93EBABEC1A964552006BAF4A /* JSQMessagesToolbarContentView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95469CB91AB4AC0F0019CD71 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95469CC71AB4AC0F0019CD71 /* Images.xcassets in Resources */,
+				95469CCB1AB4AC0F0019CD71 /* CommSync WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95469CC81AB4AC0F0019CD71 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95469CD31AB4AC0F0019CD71 /* Interface.storyboard in Resources */,
+				95469CD51AB4AC0F0019CD71 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1262,6 +1450,7 @@
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,
 				93EBACDC1A97D8A0006BAF4A /* UIView+SLKAdditions.m in Sources */,
+				95E60C551AB5019500F80A82 /* CSWatchTask.m in Sources */,
 				74C541F21A93E67100FC29AD /* TLCollapsibleTableViewController.m in Sources */,
 				93EBACDA1A97D8A0006BAF4A /* SLKTextView+SLKAdditions.m in Sources */,
 				74B3E32E1A9B91BC006A3B03 /* ImageCell.m in Sources */,
@@ -1296,7 +1485,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		95469CB71AB4AC0F0019CD71 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95469CC51AB4AC0F0019CD71 /* NotificationController.m in Sources */,
+				95469CC21AB4AC0F0019CD71 /* InterfaceController.m in Sources */,
+				95469CEB1AB4BBAE0019CD71 /* CSPeerRow.m in Sources */,
+				95E60C521AB4F5C800F80A82 /* CSTaskRow.m in Sources */,
+				95469CE81AB4B29B0019CD71 /* WKTaskInterface.m in Sources */,
+				95469CE51AB4B27B0019CD71 /* WKPeerInterface.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		95469CCD1AB4AC0F0019CD71 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95469CC91AB4AC0F0019CD71 /* CommSync WatchKit App */;
+			targetProxy = 95469CCC1AB4AC0F0019CD71 /* PBXContainerItemProxy */;
+		};
+		95469CD71AB4AC0F0019CD71 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95469CBA1AB4AC0F0019CD71 /* CommSync WatchKit Extension */;
+			targetProxy = 95469CD61AB4AC0F0019CD71 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3FBBF1371A9C0887007124CD /* Main.storyboard */ = {
@@ -1335,6 +1550,14 @@
 				93EBAB6A1A964552006BAF4A /* zh-Hant */,
 			);
 			name = JSQMessages.strings;
+			sourceTree = "<group>";
+		};
+		95469CD11AB4AC0F0019CD71 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				95469CD21AB4AC0F0019CD71 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1464,6 +1687,70 @@
 			};
 			name = Release;
 		};
+		95469CD91AB4AC0F0019CD71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "CommSync WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		95469CDA1AB4AC0F0019CD71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = "CommSync WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		95469CDB1AB4AC0F0019CD71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = CommSync_WatchKit_Extension;
+				INFOPLIST_FILE = "CommSync WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		95469CDC1AB4AC0F0019CD71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COPY_PHASE_STRIP = NO;
+				IBSC_MODULE = CommSync_WatchKit_Extension;
+				INFOPLIST_FILE = "CommSync WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1481,6 +1768,24 @@
 			buildConfigurations = (
 				459D5F9A19DB449A00C91EFA /* Debug */,
 				459D5F9B19DB449A00C91EFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95469CDD1AB4AC0F0019CD71 /* Build configuration list for PBXNativeTarget "CommSync WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95469CDB1AB4AC0F0019CD71 /* Debug */,
+				95469CDC1AB4AC0F0019CD71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95469CDE1AB4AC0F0019CD71 /* Build configuration list for PBXNativeTarget "CommSync WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95469CD91AB4AC0F0019CD71 /* Debug */,
+				95469CDA1AB4AC0F0019CD71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
