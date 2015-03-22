@@ -47,6 +47,7 @@
                                        inRealm:(RLMRealm*)realm
                                withTransaction:(BOOL)transcation;
 
+-(void) saveImages :(CSTaskRealmModel*)model;
 
 
 @end
