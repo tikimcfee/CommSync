@@ -493,7 +493,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LGj-9R-lLV" userLabel="Title">
-                                            <rect key="frame" x="29" y="8" width="371" height="30"/>
+                                            <rect key="frame" x="29" y="8" width="563" height="30"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <bool key="isElement" value="NO"/>
                                             </accessibility>
@@ -571,7 +571,7 @@
                                             </connections>
                                         </button>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oaU-GL-ADl" userLabel="Description" customClass="SZTextView">
-                                            <rect key="frame" x="29" y="52" width="371" height="140"/>
+                                            <rect key="frame" x="29" y="52" width="563" height="140"/>
                                             <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -642,7 +642,7 @@
                                         <constraint firstItem="1Ro-vM-Sjc" firstAttribute="trailing" secondItem="T4L-bV-ZwS" secondAttribute="trailing" constant="7" id="Yxi-YA-LbZ"/>
                                         <constraint firstItem="Mae-CW-EG8" firstAttribute="leading" secondItem="PTB-Ga-syN" secondAttribute="trailing" constant="15" id="Z9x-l5-rAn"/>
                                         <constraint firstItem="T4L-bV-ZwS" firstAttribute="height" secondItem="PS9-tt-UWC" secondAttribute="height" id="ZLP-PX-YPd"/>
-                                        <constraint firstAttribute="trailing" secondItem="LGj-9R-lLV" secondAttribute="trailing" constant="200" id="Zcl-8c-03F"/>
+                                        <constraint firstAttribute="trailing" secondItem="LGj-9R-lLV" secondAttribute="trailing" constant="8" id="Zcl-8c-03F"/>
                                         <constraint firstItem="PTB-Ga-syN" firstAttribute="firstBaseline" secondItem="Mae-CW-EG8" secondAttribute="firstBaseline" id="afa-AO-78N"/>
                                         <constraint firstItem="3JL-kq-IkE" firstAttribute="width" secondItem="Mae-CW-EG8" secondAttribute="width" id="bes-Io-24N"/>
                                         <constraint firstItem="1Ro-vM-Sjc" firstAttribute="height" secondItem="PS9-tt-UWC" secondAttribute="height" constant="1" id="cjQ-l5-tEx"/>
@@ -668,7 +668,6 @@
                                         <constraint firstItem="1Ro-vM-Sjc" firstAttribute="trailing" secondItem="PS9-tt-UWC" secondAttribute="trailing" constant="7" id="sOk-qa-pCl"/>
                                         <constraint firstItem="1Ro-vM-Sjc" firstAttribute="top" secondItem="PTB-Ga-syN" secondAttribute="top" id="seG-Ra-bsW"/>
                                         <constraint firstItem="Mae-CW-EG8" firstAttribute="top" secondItem="PTB-Ga-syN" secondAttribute="top" id="sqF-rn-tgW"/>
-                                        <constraint firstItem="BJc-ZR-sSg" firstAttribute="top" relation="greaterThanOrEqual" secondItem="v9b-bM-wf7" secondAttribute="top" id="tMJ-wS-1N2"/>
                                         <constraint firstItem="1Ro-vM-Sjc" firstAttribute="leading" secondItem="PS9-tt-UWC" secondAttribute="leading" id="tlV-V7-nr8"/>
                                         <constraint firstItem="PTB-Ga-syN" firstAttribute="top" secondItem="3JL-kq-IkE" secondAttribute="top" id="uHF-UZ-FqH"/>
                                         <constraint firstItem="T4L-bV-ZwS" firstAttribute="leading" secondItem="3JL-kq-IkE" secondAttribute="leading" id="uPi-1n-aEA"/>
@@ -719,7 +718,6 @@
                         <outlet property="containerHeight" destination="p2f-na-fGL" id="K1J-10-Y0S"/>
                         <outlet property="containerWidth" destination="4II-lq-3c9" id="9T7-cO-hHH"/>
                         <outlet property="descriptionLabel" destination="oaU-GL-ADl" id="VfN-kG-Tyw"/>
-                        <outlet property="distanceEdge" destination="Zcl-8c-03F" id="mVY-pw-Z85"/>
                         <outlet property="editButton" destination="oJe-eR-Aby" id="L8K-vH-3WH"/>
                         <outlet property="footerView" destination="4Mh-NZ-J8m" id="fST-RD-22j"/>
                         <outlet property="greenButton" destination="3JL-kq-IkE" id="AxW-ch-uD9"/>
@@ -731,7 +729,6 @@
                         <outlet property="redButton" destination="Mae-CW-EG8" id="3Ns-st-K8f"/>
                         <outlet property="tableView" destination="gib-tP-h9q" id="Xur-wC-nCM"/>
                         <outlet property="titleLabel" destination="LGj-9R-lLV" id="ZJ2-L1-fc4"/>
-                        <outlet property="top" destination="R6G-uz-k2N" id="gw0-Q4-oYA"/>
                         <outlet property="yellowButton" destination="PTB-Ga-syN" id="aBx-VR-0Q5"/>
                     </connections>
                 </viewController>
