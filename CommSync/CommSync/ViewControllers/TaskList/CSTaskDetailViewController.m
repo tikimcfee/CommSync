@@ -42,7 +42,7 @@
     
     //creates a transient task based off the current source task
     _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
-    //[_top setActive:NO];
+
     self.navigationBar.title = self.sourceTask.taskTitle;
     
 
@@ -134,20 +134,7 @@
 //inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-/*
-    CSChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell"];
-    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
-    
-    if(indexPath.row % 2 == 1)cell.backgroundColor = [UIColor lightGrayColor];
-    
-    //formates the time string
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:comment.time];
-    
-    //sets the comments text
-    cell.textLabel.text = [NSString stringWithFormat: @"(ID: %@) %@ time %@", comment.UID, comment.text, newDateString];
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12]; */
+
   
     static NSString *cellIdentifier = @"ChatViewCell";
     CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -159,7 +146,7 @@
         cell = [[CSChatTableViewCell alloc] init];
     }
     
-    //    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", msg.createdBy, msg.messageText];
+
     cell.createdByLabel.text = comment.UID;
     cell.messageLabel.text = comment.text;
     cell.transform = self.tableView.transform;
@@ -352,6 +339,8 @@
     [self presentViewController:newPicker animated:YES completion:nil];
    
     
+   
+    
     [self.tableView reloadData];
     
 }
@@ -439,7 +428,13 @@
         
         [_transientTask.TRANSIENT_taskImages addObject:image];
         
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            RLMRealm* realm = [RLMRealm defaultRealm];
+            [realm beginWriteTransaction];
+            [_transientTask saveImages:_sourceTask];
+            [realm commitWriteTransaction];
+        });
+
         
         [_embed.tableView reloadData];
     };
