@@ -25,7 +25,6 @@
 @interface CSTaskDetailViewController ()
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
-@property float width, height;
 
 // VC for audio recording
 @property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
@@ -46,11 +45,10 @@
     //[_top setActive:NO];
     self.navigationBar.title = self.sourceTask.taskTitle;
     
-    _height = self.headerView.frame.size.height / 2;
-    _width = self.tableView.frame.size.height / 3;
+
     
-    _containerWidth.constant = _width;
-    _containerHeight.constant = _height;
+    _containerWidth.constant = self.tableView.frame.size.height / 3;
+    _containerHeight.constant = self.headerView.frame.size.height / 2;
     
     
     //scroll to bottom
@@ -413,11 +411,6 @@
 {
     if ([[segue identifier] isEqualToString:@"pictureTable"]) {
         _embed = segue.destinationViewController;
-        _embed.containerHeight = _containerHeight;
-        _embed.containerWidth = _containerWidth;
-        _embed.distanceEdge = _distanceEdge;
-        _embed.top = _top;
-        _embed.detail = self.tableView;
         _embed.header = self.headerView;
     }
     

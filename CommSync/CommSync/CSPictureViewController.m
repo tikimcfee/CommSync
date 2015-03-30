@@ -7,10 +7,11 @@
 //
 
 #import "CSPictureViewController.h"
+#import "CSPictureController.h"
 #import "ImageCell.h"
 
 @interface CSPictureViewController ()
-@property int activePic;
+//@property int activePic;
 
 @end
 
@@ -18,12 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _activePic = -1;
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,51 +33,35 @@
 }
 
 //inserts the comments into the cells one comment per cell
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
-        ImageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"pictureCell"];
-        cell.pictureView.image = [_taskImages objectAtIndex:indexPath.row];
-        return cell;
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ImageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"pictureCell"];
+    cell.pictureView.image = [_taskImages objectAtIndex:indexPath.row];
+    return cell;
 
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-
-        if(_activePic == indexPath.row){
-            [_top setActive:NO];
-            _containerHeight.constant = _header.frame.size.height;
-            _containerWidth.constant = _header.frame.size.width / 2;
-            _distanceEdge.constant = _containerWidth.constant + 20;
-            
-            
-           return  _containerHeight.constant - 20;
-        }
-    
     return (_header.frame.size.height / 2) - 20;
     
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-        if(_activePic ==  indexPath.row)
-        {
-            _activePic = -1;
-            _containerHeight.constant = _header.frame.size.height / 2;
-            _containerWidth.constant = _detail.frame.size.height / 3;
-            _distanceEdge.constant = 8;
-            [_top setActive:YES];
-          
-        }
-        else _activePic = indexPath.row;
-        
-        [[self tableView] beginUpdates];
-        
-        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]withRowAnimation: UITableViewRowAnimationAutomatic];
-        [[self tableView] endUpdates];
-    
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"pictureView" sender:[_taskImages objectAtIndex:indexPath.row]];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"pictureView"]) {
+        
+        CSPictureController *temp = segue.destinationViewController;
+        temp.image = sender;
+    }
+    
+
+}
+
 
 @end
