@@ -9,13 +9,7 @@
 #import <UIKit/UIKit.h>
 @interface CSPictureViewController : UITableViewController
 
-@property (strong, nonatomic) NSMutableArray* taskImages;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *distanceEdge;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *top;
-
-@property (strong, nonatomic) UITableView *detail;
-@property (strong, nonatomic) UIView *header;
+@property (strong, nonatomic) NSMutableArray    *taskImages;
+@property (strong, nonatomic) UIView            *header;
 
 @end
