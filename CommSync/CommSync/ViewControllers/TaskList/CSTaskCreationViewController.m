@@ -87,6 +87,7 @@
     
     self.pendingTask = [[CSTaskTransientObjectStore alloc] init];
     _pendingTask.UUID = U;
+    _pendingTask.assignedID = @"";
     _pendingTask.deviceID = D;
     _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
     
@@ -192,6 +193,7 @@
     self.pendingTask.taskTitle = self.titleTextField.text;
     self.pendingTask.taskDescription = self.descriptionTextField.text;
     self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
+    self.pendingTask.assignedID = @"asdF";
     if(!self.pendingTask.taskAudio && self.pendingTask.TRANSIENT_audioDataURL) {
         self.pendingTask.taskAudio = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
     } else {

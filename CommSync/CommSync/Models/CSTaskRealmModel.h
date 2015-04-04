@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import <Realm/Realm.h>
 #import "CSCommentRealmModel.h"
 
@@ -27,6 +28,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property NSString* UUID;
 @property NSString* deviceID;
 @property NSString* concatenatedID;
+@property NSString* assignedId;
 
 // Task information
 @property NSString* taskTitle;
@@ -42,6 +44,6 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 - (CSTaskTransientObjectStore*)transientModel;
 
 - (void) addComment: (CSCommentRealmModel *) newComment;
-+ (NSMutableArray*) getTransientTaskList;
++ (NSMutableArray*) getTransientTaskList: (NSString *) user;
 
 @end

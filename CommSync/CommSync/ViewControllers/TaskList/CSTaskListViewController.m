@@ -81,7 +81,7 @@
                 [weakSelf.incomingTasks removeObject:sourceData];
         }
         
-        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:_user];
         @synchronized (weakSelf.incomingTasks) {
             [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
         }
@@ -119,7 +119,7 @@
 }
 
 - (void)setupInitialTaskDataModels {
-    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList];
+    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList:_user];
     
     TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
     
