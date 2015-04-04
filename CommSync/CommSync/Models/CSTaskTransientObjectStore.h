@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CSTaskRealmModel.h"
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 
 @interface CSTaskTransientObjectStore : NSObject <NSCoding>
 
@@ -18,6 +19,7 @@
 
 // Task information
 @property (strong, nonatomic) NSString* taskTitle;
+@property (strong, nonatomic) NSString* assignedID;
 @property (strong, nonatomic) NSString* taskDescription;
 @property (assign, nonatomic) CSTaskPriority taskPriority;
 

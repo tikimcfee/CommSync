@@ -95,6 +95,7 @@
         //populate variables
         
         _tempTask.UUID = [NSString stringWithFormat:@"%s %d", "UUID", i];
+        _tempTask.assignedId = [NSString stringWithFormat:@"%s %d", "assignedID", i];
         _tempTask.deviceID = [NSString stringWithFormat:@"%s %d", "DID", i];
         _tempTask.concatenatedID = [NSString stringWithFormat:@"%s %d", "CID", i];
         

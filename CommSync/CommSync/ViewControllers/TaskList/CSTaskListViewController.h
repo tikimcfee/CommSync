@@ -12,5 +12,5 @@
 #import "TLIndexPathTools.h"
 
 @interface CSTaskListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
-
+@property (assign, nonatomic) NSString* user;
 @end

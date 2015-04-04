@@ -134,6 +134,7 @@
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
 		953E396B1AC8CA11003FE833 /* CSPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 953E396A1AC8CA11003FE833 /* CSPictureController.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
+		95FCFD4E1AD08217000BB566 /* CSAssignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */; };
 		95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */; };
 		95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */; };
 /* End PBXBuildFile section */
@@ -423,6 +424,8 @@
 		953E396A1AC8CA11003FE833 /* CSPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPictureController.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
 		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
+		95FCFD4C1AD08217000BB566 /* CSAssignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAssignViewController.h; sourceTree = "<group>"; };
+		95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAssignViewController.m; sourceTree = "<group>"; };
 		95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserDetailView.h; sourceTree = "<group>"; };
 		95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserDetailView.m; sourceTree = "<group>"; };
 		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
@@ -463,6 +466,8 @@
 				3F416E691A86C77500EDC347 /* CustomFooterCell.m */,
 				933AA13D1A71DCF100DCC10A /* CSTaskDetailViewController.h */,
 				933AA13E1A71DCF100DCC10A /* CSTaskDetailViewController.m */,
+				95FCFD4C1AD08217000BB566 /* CSAssignViewController.h */,
+				95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */,
 			);
 			name = "Task Detail";
 			sourceTree = "<group>";
@@ -1281,6 +1286,7 @@
 				93EBACDE1A97D8A0006BAF4A /* SLKTextInputbar.m in Sources */,
 				954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */,
 				93EBABCB1A964552006BAF4A /* UIView+JSQMessages.m in Sources */,
+				95FCFD4E1AD08217000BB566 /* CSAssignViewController.m in Sources */,
 				93EBABCA1A964552006BAF4A /* UIImage+JSQMessages.m in Sources */,
 				74C541EF1A93E67100FC29AD /* TLIndexPathUpdates.m in Sources */,
 				74C541EC1A93E67100FC29AD /* TLIndexPathDataModel.m in Sources */,

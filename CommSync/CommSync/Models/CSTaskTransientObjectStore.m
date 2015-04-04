@@ -16,6 +16,7 @@
 #define kTaskDescription @"kTaskDescription"
 #define kTaskImages @"kTaskImages"
 #define kTaskAudio @"taskAudio"
+#define kAssignedID @"kAssignedID"
 
 @implementation CSTaskTransientObjectStore
 
@@ -28,6 +29,7 @@
         self.concatenatedID = model.concatenatedID;
         
         self.taskTitle = model.taskTitle;
+        self.assignedID = model.assignedId;
         self.taskDescription = model.taskDescription;
         self.taskPriority = model.taskPriority;
         
@@ -46,6 +48,7 @@
         self.concatenatedID = [aDecoder decodeObjectForKey:kConcatenatedID];
         
         self.taskTitle = [aDecoder decodeObjectForKey:kTaskTitle];
+        self.assignedID = [aDecoder decodeObjectForKey:kAssignedID];
         self.taskDescription = [aDecoder decodeObjectForKey:kTaskDescription];
         self.taskPriority = [aDecoder decodeIntForKey:kTaskPriority];
         
@@ -86,6 +89,9 @@
     [aCoder encodeObject:self.concatenatedID forKey:kConcatenatedID];
     
     [aCoder encodeObject:self.taskTitle forKey:kTaskTitle];
+    
+    [aCoder encodeObject:self.assignedID forKey:kAssignedID];
+
     [aCoder encodeObject:self.taskDescription forKey:kTaskDescription];
     [aCoder encodeInteger:self.taskPriority forKey:kTaskPriority];
 
@@ -103,6 +109,7 @@
         [realm beginWriteTransaction];
     
     model.UUID = self.UUID;
+    model.assignedId = self.assignedID ? self.assignedID : @"Unassigned";
     model.deviceID = self.deviceID;
     model.concatenatedID = self.concatenatedID;
     

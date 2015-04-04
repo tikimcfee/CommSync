@@ -8,6 +8,7 @@
 
 #import "CSUserDetailView.h"
 #import "SlackTestViewController.h"
+#import "CSTaskListViewController.h"
 
 @interface CSUserDetailView ()
 
@@ -43,10 +44,16 @@
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
         SlackTestViewController *vc = [segue destinationViewController];
-        
         [vc setPeerID:_peerID];
-    
     }
+    
+    if ([[segue identifier] isEqualToString:@"personalListSegue"])
+    {
+        CSTaskListViewController *vc = [segue destinationViewController];
+        [vc setUser:_peerID.displayName];
+    }
+    
+    
 }
 
 //the keyboard shows up

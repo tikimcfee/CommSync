@@ -308,7 +308,8 @@
         _embed.header = self.headerView;
     }
     
-    if ([[segue identifier] isEqualToString:@"commentSegue"]) {
+    //both have a sourceTask value, thus we can combine them
+    if ([[segue identifier] isEqualToString:@"commentSegue"] || [[segue identifier] isEqualToString:@"assignmentSegue"]) {
         SlackTestViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
     }

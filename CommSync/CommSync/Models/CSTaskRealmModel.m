@@ -32,7 +32,9 @@
                  
                  @"UUID":@"",
                  @"deviceID":@"",
-                 @"concatenatedID":@""};
+                 @"concatenatedID":@""
+                // @"assignedID":@""
+                 };
     
     return defaults;
 }
@@ -55,8 +57,13 @@
     return _transientModel;
 }
 
-+ (NSMutableArray*)getTransientTaskList {
-    RLMResults* allTasks = [CSTaskRealmModel allObjects];
++ (NSMutableArray*)getTransientTaskList: (NSString*) user {
+    RLMResults* allTasks;
+    if(!user)allTasks = [CSTaskRealmModel allObjects];
+    else {
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"assignedId = %@", user ];
+        allTasks = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
+    }
     NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
     for(CSTaskRealmModel* t in allTasks) {
         [taskDataStore addObject: [[CSTaskTransientObjectStore alloc] initWithRealmModel:t]];
