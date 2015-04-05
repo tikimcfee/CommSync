@@ -32,8 +32,11 @@
                  
                  @"UUID":@"",
                  @"deviceID":@"",
-                 @"concatenatedID":@""
-                // @"assignedID":@""
+                 @"concatenatedID":@"",
+                 @"assignedID":@"",
+                 @"tag":@"",
+                 @"completed":@false
+                 
                  };
     
     return defaults;
@@ -57,13 +60,20 @@
     return _transientModel;
 }
 
-+ (NSMutableArray*)getTransientTaskList: (NSString*) user {
++ (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus:(BOOL)completed{
     RLMResults* allTasks;
-    if(!user)allTasks = [CSTaskRealmModel allObjects];
-    else {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"assignedId = %@", user ];
-        allTasks = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
-    }
+    NSPredicate *pred;
+    
+    
+    
+    if(user && tag) pred = [NSPredicate predicateWithFormat:@"assignedID = %@  AND tag = %@ AND completed = %d" , user, tag, completed];
+    else if(user && !tag)pred = [NSPredicate predicateWithFormat:@"assignedID = %@ AND completed = %d", user, completed ];
+    else if(!user && tag) pred = [NSPredicate predicateWithFormat:@"tag = %@ AND completed = %d", tag, completed];
+    else pred = [NSPredicate predicateWithFormat:@"completed = %d", completed];
+    
+    
+    allTasks = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
+   
     NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
     for(CSTaskRealmModel* t in allTasks) {
         [taskDataStore addObject: [[CSTaskTransientObjectStore alloc] initWithRealmModel:t]];
