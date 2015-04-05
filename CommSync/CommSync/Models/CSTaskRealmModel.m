@@ -65,10 +65,9 @@
     NSPredicate *pred;
     
     
-    //if(!user)allTasks = [CSTaskRealmModel allObjects];
     
     if(user && tag) pred = [NSPredicate predicateWithFormat:@"assignedID = %@  AND tag = %@ AND completed = %d" , user, tag, completed];
-    else if(user && !tag) pred = [NSPredicate predicateWithFormat:@"assignedID = %@", user];
+    else if(user && !tag)pred = [NSPredicate predicateWithFormat:@"assignedID = %@ AND completed = %d", user, completed ];
     else if(!user && tag) pred = [NSPredicate predicateWithFormat:@"tag = %@ AND completed = %d", tag, completed];
     else pred = [NSPredicate predicateWithFormat:@"completed = %d", completed];
     

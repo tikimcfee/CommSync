@@ -80,7 +80,7 @@
                 [weakSelf.incomingTasks removeObject:sourceData];
         }
         
-        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:nil withTag:nil completionStatus:_completed];
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:_user withTag:_tag completionStatus:_completed];
         @synchronized (weakSelf.incomingTasks) {
             [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
         }
