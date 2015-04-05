@@ -18,6 +18,10 @@
 #define kTaskAudio @"taskAudio"
 #define kAssignedID @"kAssignedID"
 
+#define kTag @"kTag"
+#define kCompleted @"kCompleted"
+
+
 @implementation CSTaskTransientObjectStore
 
 #pragma mark - Lifecycle
@@ -29,9 +33,12 @@
         self.concatenatedID = model.concatenatedID;
         
         self.taskTitle = model.taskTitle;
-        self.assignedID = model.assignedId;
+        self.assignedID = model.assignedID;
         self.taskDescription = model.taskDescription;
         self.taskPriority = model.taskPriority;
+        
+        self.tag = model.tag;
+        self.completed = model.completed;
         
         self.taskAudio = model.taskAudio;
         self.taskImages_NSDataArray_JPEG = model.taskImages_NSDataArray_JPEG;
@@ -51,6 +58,10 @@
         self.assignedID = [aDecoder decodeObjectForKey:kAssignedID];
         self.taskDescription = [aDecoder decodeObjectForKey:kTaskDescription];
         self.taskPriority = [aDecoder decodeIntForKey:kTaskPriority];
+        
+        self.tag = [aDecoder decodeObjectForKey:kTag];
+        self.completed = [aDecoder decodeBoolForKey:kCompleted];
+        
         
         // see if the decoder gives us an image array
         id imageMutableArray_DATA = [aDecoder decodeObjectForKey:kTaskImages];
@@ -97,19 +108,25 @@
 
     [aCoder encodeObject:self.taskImages_NSDataArray_JPEG forKey:kTaskImages];
     [aCoder encodeObject:self.taskAudio forKey:kTaskAudio];
+    
+    [aCoder encodeObject:self.tag forKey:kTag];
+    [aCoder encodeBool:self.completed forKey:kCompleted];
+    
 }
 
 
 #pragma mark - Persistence indirection layer
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
                                        inRealm:(RLMRealm*)realm
-                               withTransaction:(BOOL)transcation
+                               withTransaction:(bool)transcation
 {
     if(transcation)
         [realm beginWriteTransaction];
     
     model.UUID = self.UUID;
-    model.assignedId = self.assignedID ? self.assignedID : @"Unassigned";
+    model.assignedID = self.assignedID ? self.assignedID : @"Unassigned";
+    model.tag = self.tag ? self.tag : @"untagged";
+    model.completed = false;
     model.deviceID = self.deviceID;
     model.concatenatedID = self.concatenatedID;
     

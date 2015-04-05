@@ -57,8 +57,10 @@
         });
     };
     
-    _updateUIToken = [[RLMRealm defaultRealm] addNotificationBlock:realmNotificationBlock];
+    _tags = [[NSMutableArray alloc] init];
+    [_tags addObject:@"All Tasks"];
     
+    _updateUIToken = [[RLMRealm defaultRealm] addNotificationBlock:realmNotificationBlock];
     [super viewDidLoad];
     
     // get global managers
@@ -81,7 +83,7 @@
                 [weakSelf.incomingTasks removeObject:sourceData];
         }
         
-        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:_user];
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:_user withTag:_tag completionStatus:_completed];
         @synchronized (weakSelf.incomingTasks) {
             [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
         }
@@ -119,7 +121,7 @@
 }
 
 - (void)setupInitialTaskDataModels {
-    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList:_user];
+    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList:_user withTag:_tag completionStatus:_completed];
     
     TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
     
@@ -350,4 +352,36 @@
 }
 
 
+// The number of columns of data
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// The number of rows of data
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return _tags.count;
+}
+
+// The data to return for the row and component (column) that's being passed in
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return _tags[row];
+}
+
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    
+}
+
+- (IBAction)completionFilter:(id)sender {
+    _completed = !_completed;
+    
+    if(_completed) [_completedLabel setText:@"Completed Tasks"];
+    else [_completedLabel setText:@"In Progress Tasks"];
+    [self setupInitialTaskDataModels];
+    [self.tableView reloadData];
+}
 @end

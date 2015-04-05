@@ -29,7 +29,7 @@ NSMutableArray* pickerData;
     [pickerData addObject:@"Unassigned"];
     [pickerData addObject:@"Assign to self"];
      
-    [_assignmentLabel setText:_sourceTask.assignedId];
+    [_assignmentLabel setText:_sourceTask.assignedID];
     [pickerData addObjectsFromArray: sessionManager.peerHistory.allKeys];
     
     
@@ -84,7 +84,7 @@ NSMutableArray* pickerData;
     
     //assign to the user and save, if assigning to self user own display name
     [[RLMRealm defaultRealm] beginWriteTransaction];
-    _sourceTask.assignedId = _tempAssignment;
+    _sourceTask.assignedID = _tempAssignment;
     [[RLMRealm defaultRealm] commitWriteTransaction];
     
     [self dismissViewControllerAnimated:YES completion:nil];

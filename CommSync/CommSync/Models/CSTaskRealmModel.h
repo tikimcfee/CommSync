@@ -28,7 +28,11 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property NSString* UUID;
 @property NSString* deviceID;
 @property NSString* concatenatedID;
-@property NSString* assignedId;
+@property NSString* assignedID;
+
+@property NSString* tag;
+@property BOOL completed;
+
 
 // Task information
 @property NSString* taskTitle;
@@ -44,6 +48,6 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 - (CSTaskTransientObjectStore*)transientModel;
 
 - (void) addComment: (CSCommentRealmModel *) newComment;
-+ (NSMutableArray*) getTransientTaskList: (NSString *) user;
++ (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus: (BOOL) completed ;
 
 @end

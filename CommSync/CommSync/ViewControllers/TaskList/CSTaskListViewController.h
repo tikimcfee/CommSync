@@ -13,4 +13,12 @@
 
 @interface CSTaskListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 @property (assign, nonatomic) NSString* user;
+@property (assign, nonatomic) NSString* tag;
+@property BOOL completed;
+@property (strong, nonatomic) IBOutlet UITableView *table;
+@property (weak, nonatomic) IBOutlet UILabel *completedLabel;
+@property (weak, nonatomic) IBOutlet UIPickerView *tagFilter;
+@property (strong, nonatomic) IBOutlet NSMutableArray *tags;
+- (IBAction)completionFilter:(id)sender;
+
 @end
