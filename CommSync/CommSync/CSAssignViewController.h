@@ -20,4 +20,8 @@
 @property (weak, nonatomic) IBOutlet CSTaskRealmModel *sourceTask;
 - (IBAction)cancel:(id)sender;
 - (IBAction)assign:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *tagLabel;
+@property (weak, nonatomic) IBOutlet UITextField *tagText;
+
+@property bool taging;
 @end

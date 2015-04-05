@@ -26,12 +26,23 @@ NSMutableArray* pickerData;
     // Do any additional setup after loading the view.
     
     pickerData = [[NSMutableArray alloc] init];
-    [pickerData addObject:@"Unassigned"];
-    [pickerData addObject:@"Assign to self"];
-     
-    [_assignmentLabel setText:_sourceTask.assignedID];
-    [pickerData addObjectsFromArray: sessionManager.peerHistory.allKeys];
     
+    if(!_taging){
+        [_tagLabel setHidden:true];
+        [_tagText setHidden:true];
+        
+        [pickerData addObject:@"Unassigned"];
+        [pickerData addObject:@"Assign to self"];
+
+        [_assignmentLabel setText:_sourceTask.assignedID];
+        [pickerData addObjectsFromArray: sessionManager.peerHistory.allKeys];
+    }
+    else{
+        [pickerData addObject:@"None"];
+        if([_sourceTask.tag isEqualToString:@""] ) [_assignmentLabel setText:@"No Tags"];
+        else [_assignmentLabel setText:_sourceTask.tag];
+        [pickerData addObjectsFromArray:sessionManager.allTags.allKeys];
+    }
     
 }
 
@@ -84,7 +95,16 @@ NSMutableArray* pickerData;
     
     //assign to the user and save, if assigning to self user own display name
     [[RLMRealm defaultRealm] beginWriteTransaction];
-    _sourceTask.assignedID = _tempAssignment;
+    if(!_taging) _sourceTask.assignedID = _tempAssignment;
+    
+    
+    else if(![_tempAssignment isEqualToString:@"None"] && ([[_tagText text] isEqualToString:@""] || [[_tagText text] isEqualToString:@"Create New Tag"])) _sourceTask.tag = _tempAssignment;
+    
+    else{
+        [sessionManager addTag:_tagText.text];
+        _sourceTask.tag = _tagText.text;
+    }
+    
     [[RLMRealm defaultRealm] commitWriteTransaction];
     
     [self dismissViewControllerAnimated:YES completion:nil];

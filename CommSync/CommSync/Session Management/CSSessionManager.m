@@ -59,6 +59,7 @@
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
         _peerHistory = [NSMutableDictionary new];
+        _allTags = [NSMutableDictionary new];
         
         // Connection deferrement
         self.deferredConnectionsDisplayNamesToPeerIDs = [NSMutableDictionary new];
@@ -552,7 +553,7 @@
 #pragma mark - Database actions
 - (void)updatePeerHistory:(MCPeerID *)peerID
 {
-    if([peerID.displayName  isEqualToString:_myPeerID.displayName]) return;
+    if([peerID.displayName isEqualToString:_myPeerID.displayName]) return;
 
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
@@ -603,7 +604,7 @@
         {
             NSPredicate *uniqueTaskPredicate = [NSPredicate predicateWithFormat:@"concatenatedID == %@", task.concatenatedID];
             if([results objectsWithPredicate:uniqueTaskPredicate].count == 0) {
-                
+                [self addTag:task.tag];
                 CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
                 [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
                 
@@ -621,6 +622,12 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     return [basePath stringByAppendingString:@"/peers.realm"];
+}
+
+-(void) addTag:(NSString*) tag
+{
+    if ([tag isEqualToString:@""]) return;
+    if(![_allTags valueForKey:tag]) [_allTags setValue:tag forKey:tag];
 }
 
 @end

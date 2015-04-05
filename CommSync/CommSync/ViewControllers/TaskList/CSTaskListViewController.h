@@ -17,8 +17,9 @@
 @property BOOL completed;
 @property (strong, nonatomic) IBOutlet UITableView *table;
 @property (weak, nonatomic) IBOutlet UILabel *completedLabel;
-@property (weak, nonatomic) IBOutlet UIPickerView *tagFilter;
+@property (strong, nonatomic) IBOutlet UIPickerView *tagFilter;
 @property (strong, nonatomic) IBOutlet NSMutableArray *tags;
 - (IBAction)completionFilter:(id)sender;
 
+-(void) setTagFilter;
 @end

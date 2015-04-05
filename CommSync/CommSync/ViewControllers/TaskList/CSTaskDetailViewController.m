@@ -19,6 +19,7 @@
 #import "SlackTestViewController.h"
 #import "CSAudioPlotViewController.h"
 #import "UIImage+normalize.h"
+#import "CSAssignViewController.h"
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 
@@ -309,9 +310,23 @@
     }
     
     //both have a sourceTask value, thus we can combine them
-    if ([[segue identifier] isEqualToString:@"commentSegue"] || [[segue identifier] isEqualToString:@"assignmentSegue"]) {
+    if ([[segue identifier] isEqualToString:@"commentSegue"]) {
         SlackTestViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
+    }
+    
+    if([[segue identifier] isEqualToString:@"tagPickerSegue"])
+    {
+        CSAssignViewController *temp = segue.destinationViewController;
+        temp.sourceTask = _sourceTask;
+        temp.taging = true;
+    }
+    
+    if([[segue identifier] isEqualToString:@"assignmentSegue"])
+    {
+        CSAssignViewController *temp = segue.destinationViewController;
+        temp.sourceTask = _sourceTask;
+        temp.taging = false;
     }
     
     if([segue.identifier isEqualToString:@"CSAudioPlotViewController2"]) {

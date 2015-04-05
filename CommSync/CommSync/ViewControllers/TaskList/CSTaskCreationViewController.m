@@ -14,6 +14,8 @@
 #import "CSTaskTransientObjectStore.h"
 #import "CSTaskRealmModel.h"
 #import "CSCommentRealmModel.h"
+#import "AppDelegate.h"
+#import "CSSessionManager.h"
 
 // Categories
 #import "UIImage+normalize.h"
@@ -47,6 +49,9 @@
 @property (weak, nonatomic) RLMRealm* realm;
 @property (strong, nonatomic) CSTaskTransientObjectStore* pendingTask;
 
+//manager
+@property (strong, nonatomic) CSSessionManager *sessionManager;
+
 @end
 
 
@@ -56,6 +61,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _sessionManager = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).globalSessionManager;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -193,12 +200,16 @@
     self.pendingTask.taskTitle = self.titleTextField.text;
     self.pendingTask.taskDescription = self.descriptionTextField.text;
     self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
-    self.pendingTask.assignedID = @"asdF";
+    self.pendingTask.assignedID = @"Unassigned";
+    self.pendingTask.tag = @"";
+    self.pendingTask.completed = false;
     if(!self.pendingTask.taskAudio && self.pendingTask.TRANSIENT_audioDataURL) {
         self.pendingTask.taskAudio = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
     } else {
         self.pendingTask.taskAudio = nil;
     }
+    
+    [_sessionManager addTag:self.pendingTask.tag];
     
     CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
     [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];

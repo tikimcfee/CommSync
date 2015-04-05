@@ -126,7 +126,7 @@
     model.UUID = self.UUID;
     model.assignedID = self.assignedID ? self.assignedID : @"Unassigned";
     model.tag = self.tag ? self.tag : @"untagged";
-    model.completed = false;
+    model.completed = self.completed;
     model.deviceID = self.deviceID;
     model.concatenatedID = self.concatenatedID;
     
