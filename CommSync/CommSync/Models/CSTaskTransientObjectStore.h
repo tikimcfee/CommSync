@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CSTaskRealmModel.h"
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 
 @interface CSTaskTransientObjectStore : NSObject <NSCoding>
 
@@ -18,8 +19,12 @@
 
 // Task information
 @property (strong, nonatomic) NSString* taskTitle;
+@property (strong, nonatomic) NSString* assignedID;
 @property (strong, nonatomic) NSString* taskDescription;
 @property (assign, nonatomic) CSTaskPriority taskPriority;
+
+@property (strong, nonatomic) NSString* tag;
+@property  BOOL completed;
 
 @property (strong, nonatomic) NSMutableArray* TRANSIENT_taskImages;
 @property (strong, nonatomic) NSURL* TRANSIENT_audioDataURL;
@@ -45,7 +50,7 @@
 
 - (void)setAndPersistPropertiesOfNewTaskObject:(CSTaskRealmModel*)model
                                        inRealm:(RLMRealm*)realm
-                               withTransaction:(BOOL)transcation;
+                               withTransaction:(bool)transcation;
 
 -(void) saveImages :(CSTaskRealmModel*)model;
 

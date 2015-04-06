@@ -58,7 +58,6 @@
     };
     
     _updateUIToken = [[RLMRealm defaultRealm] addNotificationBlock:realmNotificationBlock];
-    
     [super viewDidLoad];
     
     // get global managers
@@ -81,11 +80,13 @@
                 [weakSelf.incomingTasks removeObject:sourceData];
         }
         
-        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList];
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:_user withTag:_tag completionStatus:_completed];
         @synchronized (weakSelf.incomingTasks) {
             [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
         }
 
+        [self setTagFilter];
+    
         
         TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
         weakSelf.indexPathController.dataModel = tasksDataModel;
@@ -116,12 +117,17 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    
+    
+    [self setTagFilter];
 }
 
 - (void)setupInitialTaskDataModels {
-    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList];
+    NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList:_user withTag:_tag completionStatus:_completed];
     
     TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
+
     
     self.indexPathController = [[TLIndexPathController alloc] initWithDataModel:tasksDataModel];
     self.indexPathController.delegate = self;
@@ -245,7 +251,12 @@
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    CSTaskRealmModel *task = [[CSTaskRealmModel allObjects]objectAtIndex:indexPath.row];
+    CSTaskRealmModel *task;
+    
+    if(!_tag && !_user) task = [[CSTaskRealmModel objectsWhere:@"completed = %d",_completed]objectAtIndex:indexPath.row];
+    else if(!_user) task = [[CSTaskRealmModel objectsWhere:@"tag = %@ AND completed = %d", _tag, _completed]objectAtIndex:indexPath.row];
+    else task = [[CSTaskRealmModel objectsWhere:@"assignedID = %@ AND completed = %d", _user, _completed]objectAtIndex:indexPath.row];
+
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 }
 
@@ -350,4 +361,58 @@
 }
 
 
+// The number of columns of data
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// The number of rows of data
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [_tags count];
+}
+
+// The data to return for the row and component (column) that's being passed in
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return _tags[row];
+}
+
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if(row == 0) _tag = nil;
+    else if (row == 1) _tag = @"";
+    else _tag = _tags[row];
+    
+    [self setupInitialTaskDataModels];
+    [self.tableView reloadData];
+}
+
+- (IBAction)completionFilter:(id)sender {
+    _completed = !_completed;
+    
+    if(_completed) [_completedLabel setText:@"Completed"];
+    else [_completedLabel setText:@"In Progress"];
+    [self setupInitialTaskDataModels];
+    [self.tableView reloadData];
+}
+
+-(void) setTagFilter{
+    
+    if(!_tags){
+        NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList:_user withTag:nil completionStatus:_completed];
+        [tasks addObjectsFromArray:[CSTaskRealmModel getTransientTaskList:_user withTag:nil completionStatus:!_completed]];
+        for(CSTaskTransientObjectStore* task in tasks)
+        {
+            [_sessionManager addTag: task.tag];
+        }
+    }
+        _tags = [[NSMutableArray alloc] init];
+        
+        [_tags addObject:@"All Tasks"];
+        [_tags addObject:@"Untagged Tasks"];
+        [_tags addObjectsFromArray:_sessionManager.allTags.allKeys];
+}
 @end
