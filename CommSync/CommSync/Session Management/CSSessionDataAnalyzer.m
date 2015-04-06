@@ -30,6 +30,16 @@
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
    
+    
+    
+    if([receivedObject isKindOfClass:[NSArray class]])
+    {
+        
+        [_parentAnalyzer.globalManager batchUpdateRealmWithTasks: receivedObject];
+        
+        
+    }
+    
     if([receivedObject isKindOfClass:[NSMutableDictionary class]])
     {
         BOOL foundDifference = NO;
@@ -44,7 +54,6 @@
         
             //if there were any diffrerences in the histories then send full history to all peers
             if(foundDifference) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
-        
     }
 
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
@@ -83,7 +92,7 @@
             NSLog(@"<?> Sending request string [%@] to peer [%@]", requestDictionary, _peer.displayName);
             [_parentAnalyzer.globalManager sendSingleDataPacket:requestData toSinglePeer:_peer];
         }
-        else if ([receivedObject valueForKey:kCS_HEADER_TASK_REQUEST])
+        else if ([receivedObject valueForKey:kCS_HEADER_TASK_REQUEST])                                          //first hit
         {
             NSString* requestedTaskID = [receivedObject valueForKey:kCS_HEADER_TASK_REQUEST];
             
@@ -109,16 +118,19 @@
     {
         CSChatMessageRealmModel* temp = receivedObject;
         
-        NSString* newTaskId =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
+        
+        /** NEED TO FIX **/
+        
+        NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
         @synchronized (_requestPool){
-            if([_requestPool valueForKey:newTaskId] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
+            if([_requestPool valueForKey:messageID] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
             {
-                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                NSLog(@"<.> message %@ already requested; no action to be taken.",messageID);
                 return;
             }
         }
         @synchronized (_requestPool){
-            [_requestPool setValue:_peer forKey:newTaskId];
+            [_requestPool setValue:_peer forKey:messageID];
         }
         
         //if the message is a public message
