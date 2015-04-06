@@ -253,8 +253,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     CSTaskRealmModel *task;
     
-    if(!_tag) task = [[CSTaskRealmModel objectsWhere:@"completed = %d",_completed]objectAtIndex:indexPath.row];
-    else task = [[CSTaskRealmModel objectsWhere:@"tag = %@ AND completed = %d", _tag, _completed]objectAtIndex:indexPath.row];
+    if(!_tag && !_user) task = [[CSTaskRealmModel objectsWhere:@"completed = %d",_completed]objectAtIndex:indexPath.row];
+    else if(!_user) task = [[CSTaskRealmModel objectsWhere:@"tag = %@ AND completed = %d", _tag, _completed]objectAtIndex:indexPath.row];
+    else task = [[CSTaskRealmModel objectsWhere:@"assignedID = %@ AND completed = %d", _user, _completed]objectAtIndex:indexPath.row];
 
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 }

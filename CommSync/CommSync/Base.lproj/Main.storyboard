@@ -486,7 +486,9 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="completeTask:" destination="iaN-ZE-mGm" eventType="touchUpInside" id="Xsk-Lc-FSz"/>
+                                            <segue destination="XxV-1h-e1a" kind="popoverPresentation" popoverAnchorView="2Ct-Db-FXm" id="8nV-bw-P48">
+                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                            </segue>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zye-NX-Z8k">
@@ -1250,7 +1252,6 @@
         <!--Task List View Controller-->
         <scene sceneID="3IN-nb-AvK">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YVX-kB-Gmu" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="t1p-M8-0bP" customClass="CSTaskListViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="PRu-y6-Rtk">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="107"/>
@@ -1355,6 +1356,7 @@
                         <outlet property="userConnectionCount" destination="6J2-Lk-L7O" id="jzH-zA-tqk"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YVX-kB-Gmu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3353" y="1105.5"/>
         </scene>
@@ -1381,8 +1383,8 @@
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="b5M-pZ-5fR"/>
-        <segue reference="r3J-Hg-HkT"/>
         <segue reference="esm-L7-fWV"/>
+        <segue reference="8nV-bw-P48"/>
+        <segue reference="r3J-Hg-HkT"/>
     </inferredMetricsTieBreakers>
 </document>
