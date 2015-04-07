@@ -83,12 +83,7 @@
             }
         }
         _peerHistoryRealm.autorefresh = YES;
-        
-        
-        for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
-        {
-            [_allTaskID setValue:temp.concatenatedID forKey:temp.concatenatedID];
-        }
+
     }
     
     return self;
@@ -116,6 +111,11 @@
 //                         withMode:MCSessionSendDataReliable
 //                            error:&error];
 //    }
+    
+    for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+    {
+        [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+    }
 }
 
 #pragma mark - Data transmission helpers
@@ -471,18 +471,17 @@
                 [self updatePeerHistory:peerID ];
             }
             
-            //lets send all tasks to eachother
-          //  NSData *allTasks = [NSKeyedArchiver archivedDataWithRootObject:[_allTaskID allValues]];
-          //  [self sendDataPacketToPeers:allTasks];
-            for(CSTaskRealmModel *task in )
-            NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
+            
+            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+            {
+               [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+            }
+            
             //if this is a direct connection then propagate peer history and tasks of both users
             if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
             {
-                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
+                 NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
                 [self sendDataPacketToPeers:historyData];
-                
-
             }
 
             break;

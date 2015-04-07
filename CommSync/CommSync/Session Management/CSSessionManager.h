@@ -74,6 +74,6 @@
 + (NSString *)peerHistoryRealmDirectory;
 
 @property (strong, nonatomic) NSMutableDictionary* allTags;
-@property (strong, nonatomic) NSMutableDictionary* allTaskID;
+
 -(void) addTag:(NSString*) tag;
 @end

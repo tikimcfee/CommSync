@@ -34,10 +34,7 @@
     
     if([receivedObject isKindOfClass:[NSArray class]])
     {
-        
-        [_parentAnalyzer.globalManager batchUpdateRealmWithTasks: receivedObject];
-        
-        
+        //if(receivedObject isEqualToArray:<#(NSArray *)#>)
     }
     
     if([receivedObject isKindOfClass:[NSMutableDictionary class]])
@@ -58,62 +55,9 @@
 
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
-        // received new task request or task notification
-        if ([receivedObject valueForKey:kCS_HEADER_NEW_TASK])
-        {
-            NSString* newTaskId = [receivedObject valueForKey:kCS_HEADER_NEW_TASK];
-            
-            // check to see if already made request from someone
-            @synchronized (_requestPool){
-                if([_requestPool valueForKey:newTaskId])
-                {
-                    NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
-                    return;
-                }
-            }
-            
-            // check to see if the task already exists
-            CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:newTaskId];
-            if(model)
-            {
-                NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
-                return;
-            }
-            
-            @synchronized (_requestPool){
-                [_requestPool setValue:_peer forKey:newTaskId];
-            }
-            
-            // build the request string
-            NSDictionary* requestDictionary = [_parentAnalyzer buildTaskRequestFromTaskID:newTaskId];
-            NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:requestDictionary];
-            
-            // send the request
-            NSLog(@"<?> Sending request string [%@] to peer [%@]", requestDictionary, _peer.displayName);
-            [_parentAnalyzer.globalManager sendSingleDataPacket:requestData toSinglePeer:_peer];
-        }
-        else if ([receivedObject valueForKey:kCS_HEADER_TASK_REQUEST])                                          //first hit
-        {
-            NSString* requestedTaskID = [receivedObject valueForKey:kCS_HEADER_TASK_REQUEST];
-            
-            // check to see if the task exists
-            CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
-            if(!model)
-            {
-                NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed dictionary?");
-                return;
-            }
-            
-            // Send the task to the peer
-            NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, _peer.displayName);
-            [_parentAnalyzer.globalManager sendSingleTask:model toSinglePeer:_peer];
-        }
-        else // unknown key sent in dictionary
-        {
-            // log some error here
-        }
-        
+        [self propagateTasks:receivedObject];
     }
+    
     else if ([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
     {
         CSChatMessageRealmModel* temp = receivedObject;
@@ -193,6 +137,66 @@
         }
     }
     
+}
+
+-(void) propagateTasks:(NSDictionary *) taskData
+{
+    // received new task request or task notification
+    if ([taskData valueForKey:kCS_HEADER_NEW_TASK])
+    {
+        NSString* newTaskId = [taskData valueForKey:kCS_HEADER_NEW_TASK];
+        
+        // check to see if already made request from someone
+        @synchronized (_requestPool){
+            if([_requestPool valueForKey:newTaskId])
+            {
+                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+                return;
+            }
+        }
+        
+        // check to see if the task already exists
+        CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:newTaskId];
+        if(model)
+        {
+            NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
+            return;
+        }
+        
+        @synchronized (_requestPool){
+            [_requestPool setValue:_peer forKey:newTaskId];
+        }
+        
+        // build the request string
+        NSDictionary* requestDictionary = [_parentAnalyzer buildTaskRequestFromTaskID:newTaskId];
+        NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:requestDictionary];
+        
+        // send the request
+        NSLog(@"<?> Sending request string [%@] to peer [%@]", requestDictionary, _peer.displayName);
+        [_parentAnalyzer.globalManager sendSingleDataPacket:requestData toSinglePeer:_peer];
+    }
+    else if ([taskData valueForKey:kCS_HEADER_TASK_REQUEST])
+    {
+        NSString* requestedTaskID = [taskData valueForKey:kCS_HEADER_TASK_REQUEST];
+        
+        // check to see if the task exists
+        CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
+        if(!model)
+        {
+            NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed dictionary?");
+            return;
+        }
+        
+        // Send the task to the peer
+        NSLog(@"<?> Sending requested task with ID [%@] to peer [%@]", requestedTaskID, _peer.displayName);
+        [_parentAnalyzer.globalManager sendSingleTask:model toSinglePeer:_peer];
+    }
+    else // unknown key sent in dictionary
+    {
+        // log some error here
+    }
+    
+
 }
 
 @end

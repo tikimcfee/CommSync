@@ -210,7 +210,6 @@
     }
     
     [_sessionManager addTag:self.pendingTask.tag];
-    [_sessionManager setValue:self.pendingTask.concatenatedID forKey:self.pendingTask.concatenatedID];
     
     CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
     [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];
