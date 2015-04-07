@@ -27,7 +27,7 @@
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
 - (NSDictionary*) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
-
+-(void) propagateTasks:(NSDictionary *) taskData;
 
 @end
 

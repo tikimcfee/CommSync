@@ -83,6 +83,7 @@
             }
         }
         _peerHistoryRealm.autorefresh = YES;
+
     }
     
     return self;
@@ -110,6 +111,11 @@
 //                         withMode:MCSessionSendDataReliable
 //                            error:&error];
 //    }
+    
+    for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+    {
+        [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+    }
 }
 
 #pragma mark - Data transmission helpers
@@ -463,13 +469,18 @@
             if(![_peerHistory valueForKey:peerID.displayName])
             {
                 [self updatePeerHistory:peerID ];
-
             }
             
-            //if this is a direct connection then propagate peer history of both users
+            
+            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+            {
+               [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+            }
+            
+            //if this is a direct connection then propagate peer history and tasks of both users
             if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
             {
-                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
+                 NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
                 [self sendDataPacketToPeers:historyData];
             }
 
@@ -568,6 +579,7 @@
     [_peerHistory setValue:peerID forKey:peerID.displayName];
 }
 
+
 -(void)nukeHistory
 {
     [_peerHistory removeAllObjects];
@@ -597,13 +609,15 @@
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        RLMResults *results = [CSTaskRealmModel allObjects];
+        RLMResults *currentTasks = [CSTaskRealmModel allObjects];
+        
         [_realm beginWriteTransaction];
         
         for(CSTaskTransientObjectStore* task in tasks)
         {
-            NSPredicate *uniqueTaskPredicate = [NSPredicate predicateWithFormat:@"concatenatedID == %@", task.concatenatedID];
-            if([results objectsWithPredicate:uniqueTaskPredicate].count == 0) {
+            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
+            
+            if(!foundTask) {
                 [self addTag:task.tag];
                 CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
                 [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
