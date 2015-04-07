@@ -83,7 +83,7 @@
             }
         }
         _peerHistoryRealm.autorefresh = YES;
-
+        [NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(sendPulseToPeers) userInfo:nil repeats:YES];
     }
     
     return self;
@@ -112,9 +112,13 @@
 //                            error:&error];
 //    }
     
+    if([_currentConnectedPeers count] < 1) return;
+    
+    NSLog(@"validating data");
+    
     for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
     {
-        [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+        [[CSSessionDataAnalyzer sharedInstance:nil] validateDataWithRandomPeer:temp.transientModel];
     }
 }
 
@@ -214,6 +218,7 @@
 
 - (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer
 {
+
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
         CSTaskTransientObjectStore* strongTask = task;

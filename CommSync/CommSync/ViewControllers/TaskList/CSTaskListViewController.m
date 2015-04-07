@@ -293,7 +293,7 @@
 #pragma mark - Task creation view refresh
 - (void)didReceiveNewTask:(NSNotification*)notification
 {
-
+    [_tagFilter reloadAllComponents];
 }
 
 - (void)newTaskStreamStarted:(NSNotification*)notification {
@@ -402,11 +402,10 @@
 -(void) setTagFilter{
     
     if(!_tags){
-        NSMutableArray* tasks = [CSTaskRealmModel getTransientTaskList:_user withTag:nil completionStatus:_completed];
-        [tasks addObjectsFromArray:[CSTaskRealmModel getTransientTaskList:_user withTag:nil completionStatus:!_completed]];
-        for(CSTaskTransientObjectStore* task in tasks)
+        
+         for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
         {
-            [_sessionManager addTag: task.tag];
+            [_sessionManager addTag: temp.tag];
         }
     }
         _tags = [[NSMutableArray alloc] init];

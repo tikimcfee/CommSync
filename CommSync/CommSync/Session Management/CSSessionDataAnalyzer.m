@@ -29,7 +29,7 @@
 {
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
-   
+    
     
     
     if([receivedObject isKindOfClass:[NSArray class]])
@@ -40,19 +40,19 @@
     if([receivedObject isKindOfClass:[NSMutableDictionary class]])
     {
         BOOL foundDifference = NO;
-            for(MCPeerID *peerID in [receivedObject allValues])
-            {
-                if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
-                    
-                    [_parentAnalyzer.globalManager updatePeerHistory:peerID];
-                    foundDifference = YES;
-                }
+        for(MCPeerID *peerID in [receivedObject allValues])
+        {
+            if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                
+                [_parentAnalyzer.globalManager updatePeerHistory:peerID];
+                foundDifference = YES;
             }
+        }
         
-            //if there were any diffrerences in the histories then send full history to all peers
-            if(foundDifference) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+        //if there were any diffrerences in the histories then send full history to all peers
+        if(foundDifference) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
     }
-
+    
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
         [self propagateTasks:receivedObject];
@@ -63,18 +63,19 @@
         CSChatMessageRealmModel* temp = receivedObject;
         
         
-        /** NEED TO FIX **/
+     
         
         NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
-        @synchronized (_requestPool){
-            if([_requestPool valueForKey:messageID] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
+        @synchronized (_messagePool){
+            if([_messagePool valueForKey:messageID] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
             {
                 NSLog(@"<.> message %@ already requested; no action to be taken.",messageID);
                 return;
             }
         }
-        @synchronized (_requestPool){
-            [_requestPool setValue:_peer forKey:messageID];
+        @synchronized (_messagePool){
+            [_messagePool setValue:_peer forKey:messageID];
+            [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(removeMessageRequest:) userInfo:messageID repeats:NO];
         }
         
         //if the message is a public message
@@ -83,19 +84,19 @@
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
             NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
-        
+            
             RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
-        
+            
             //if the chat message already exists then exit otherwise add it and send it to all peers
             NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
-                             temp.createdBy, temp.createdAt];
+                                 temp.createdBy, temp.createdAt];
             
             if([[CSChatMessageRealmModel objectsInRealm:chatRealm withPredicate:pred] count] != 0) return;
-        
+            
             [chatRealm beginWriteTransaction];
             [chatRealm addObject:receivedObject];
             [chatRealm commitWriteTransaction];
-        
+            
             [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
             return;
         }
@@ -104,12 +105,12 @@
             //if the message is meant for someone else then propagate it so they get it
             if(![temp.recipient isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName]){
                 
-                    if([_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions valueForKey:temp.recipient])
-                    {
-                        //the user is connected to the target so we can send it directly
-                        [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.peerHistory valueForKey:temp.recipient]];
-                        return;
-                    }
+                if([_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions valueForKey:temp.recipient])
+                {
+                    //the user is connected to the target so we can send it directly
+                    [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.peerHistory valueForKey:temp.recipient]];
+                    return;
+                }
                 
                 [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
             }
@@ -123,7 +124,7 @@
                 NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
                                      temp.createdBy, temp.createdAt];
                 
-                 RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
+                RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
                 
                 if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
                 
@@ -137,6 +138,11 @@
         }
     }
     
+}
+
+-(void) removeMessageRequest:(NSString*) message
+{
+    [_messagePool removeObjectForKey:message];
 }
 
 -(void) propagateTasks:(NSDictionary *) taskData
@@ -196,7 +202,7 @@
         // log some error here
     }
     
-
+    
 }
 
 @end
@@ -291,7 +297,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
         NSLog(@"%@",error);
         return;
     }
- 
+    
     // Create a notification dictionary for final location and name
     NSDictionary *dict = @{@"resourceName"  :   resourceName,
                            @"peerID"        :   peerID,
@@ -312,6 +318,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     
     if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
     {
+        
         [self addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:resourceName];
         [self sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
     }
@@ -325,6 +332,9 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 
 #pragma mark - Data persistence
 - (void) addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:(NSString*)identifier{
+    NSLog(@"I recieved a new task");
+    
+    [_globalManager addTag:newTask.tag];
     
     CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
     newWriteOperation.pendingTransientTask = newTask;
@@ -340,11 +350,11 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
             return operation.pendingTransientTask;
         }
     }
-
+    
     CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
     if(model)
         return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
-
+    
     return nil;
 }
 
@@ -368,6 +378,14 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
     
     [_globalManager sendDataPacketToPeers:newTaskData];
+}
+
+- (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task
+{
+    NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
+    NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
+    
+    [_globalManager sendSingleDataPacket:newTaskData toSinglePeer: _globalManager.currentConnectedPeers.allValues[arc4random_uniform([_globalManager.currentConnectedPeers.allKeys count])]];
 }
 
 #pragma mark - Data analysis

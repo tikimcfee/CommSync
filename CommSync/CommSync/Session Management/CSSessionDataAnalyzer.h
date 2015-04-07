@@ -23,6 +23,7 @@
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
+- (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task;
 
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
@@ -36,7 +37,10 @@
 @property (strong, nonatomic) NSData* dataToAnalyze;
 @property (strong, nonatomic) MCPeerID* peer;
 @property (nonatomic, strong) NSMutableDictionary* requestPool;
+@property (nonatomic, strong) NSMutableDictionary* messagePool;
 @property (weak, nonatomic) CSSessionDataAnalyzer* parentAnalyzer;
+
+-(void) removeMessageRequest:(NSString*) message;
 
 @end
 
