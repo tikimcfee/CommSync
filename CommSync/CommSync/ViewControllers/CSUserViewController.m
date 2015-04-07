@@ -30,7 +30,10 @@
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
+    
 
+
+    _navBar.title = ([_sessionManager.unreadMessages count] > 0)? @"Unread Messages" : @"No Unread Messages";
     _connectionCount = [_sessionManager.currentConnectedPeers count];
     
     
@@ -42,6 +45,8 @@
                                              selector:@selector(updateConnectionCountAndTableView:)
                                                  name:@"PEER_CHANGED_STATE"
                                                object:nil];
+    
+    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(checkMessages) userInfo:nil repeats:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,7 +72,6 @@
     });
 }
 
-
 #pragma mark - UITableViewDataSource Delegates
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -88,9 +92,17 @@
         userName = [[_sessionManager.peerHistory allKeys] objectAtIndex:indexPath.row];
     }
     
-    NSString* connectionStatus = [@"--------------" stringByAppendingString:[_sessionManager.currentConnectedPeers valueForKey:userName]? @"Connected" : @"Disconnected"];
+    NSString* connectionStatus = [@"---------" stringByAppendingString:[_sessionManager.currentConnectedPeers valueForKey:userName]? @"Connected" : @"Disconnected"];
     
-    cell.textLabel.text = [userName stringByAppendingString:connectionStatus];
+    
+    
+    NSString* text =   _filter ? [userName stringByAppendingString:connectionStatus]: userName;
+    
+    id counter = [_sessionManager.unreadMessages valueForKey:userName];
+    
+    NSString *string = [NSString stringWithFormat:@"  (%d unread)", [(NSNumber*) counter intValue]];
+    
+    cell.text = counter ? [text stringByAppendingString:string]: text ;
     return cell;
 }
 
@@ -102,6 +114,7 @@
     if(!_filter) peer = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
     else peer = [[_sessionManager.peerHistory allValues] objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
+    [self.tableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -145,6 +158,12 @@
             [vc setPeerID:sender];
         }
     }
+}
+
+-(void) checkMessages
+{
+     _navBar.title = ([_sessionManager.unreadMessages count] > 0)? @"Unread Messages" : @"No Unread Messages";
+    [self.tableView reloadData];
 }
 
 @end

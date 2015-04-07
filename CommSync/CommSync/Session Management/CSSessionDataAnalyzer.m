@@ -128,9 +128,9 @@
                 
                 if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
                 
-                
-                
-                
+             
+                [_parentAnalyzer.globalManager addMessage:temp.senderDisplayName];
+              
                 [privateMessageRealm beginWriteTransaction];
                 [privateMessageRealm addObject:receivedObject];
                 [privateMessageRealm commitWriteTransaction];

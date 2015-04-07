@@ -43,6 +43,8 @@
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
 @property (strong, nonatomic) NSMutableDictionary* peerHistory;
+@property (strong, nonatomic) NSMutableDictionary* unreadMessages;
+
 
 // 1-1 session objects
 @property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
@@ -76,4 +78,6 @@
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 
 -(void) addTag:(NSString*) tag;
+-(void) addMessage:(NSString*) peer;
+-(void) removeMessage:(NSString*) peer;
 @end

@@ -9,9 +9,10 @@
 #import "CSUserDetailView.h"
 #import "SlackTestViewController.h"
 #import "CSTaskListViewController.h"
+#import "AppDelegate.h"
 
 @interface CSUserDetailView ()
-
+@property (strong, nonatomic) CSSessionManager* sessionManager;
 @end
 
 @implementation CSUserDetailView
@@ -23,6 +24,12 @@
     [super viewDidLoad];
         // Do any additional setup after loading the view.
     _nameLabel.text = _peerID.displayName;
+    
+    
+    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    self.sessionManager = d.globalSessionManager;
+    
+    if([self.sessionManager.unreadMessages valueForKey:_peerID.displayName]) [self.sessionManager.unreadMessages removeObjectForKey:_peerID.displayName];
 }
 
 - (void)didReceiveMemoryWarning {

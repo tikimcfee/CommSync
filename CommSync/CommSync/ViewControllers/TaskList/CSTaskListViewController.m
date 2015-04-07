@@ -258,6 +258,7 @@
     else task = [[CSTaskRealmModel objectsWhere:@"assignedID = %@ AND completed = %d", _user, _completed]objectAtIndex:indexPath.row];
 
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
+
 }
 
 #pragma mark - UITableViewDataSource Delegates

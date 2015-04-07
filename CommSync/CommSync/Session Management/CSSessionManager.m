@@ -58,6 +58,7 @@
         
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
+        _unreadMessages = [NSMutableDictionary new];
         _peerHistory = [NSMutableDictionary new];
         _allTags = [NSMutableDictionary new];
         
@@ -647,6 +648,25 @@
 {
     if ([tag isEqualToString:@""]) return;
     if(![_allTags valueForKey:tag]) [_allTags setValue:tag forKey:tag];
+}
+
+-(void) addMessage:(NSString *)peer
+{
+    //if we dont have any messages create one
+    if(![_unreadMessages valueForKey:peer]){
+        [_unreadMessages setValue :[NSNumber numberWithInt:1] forKey:peer];
+        return;
+    }
+    //otherwise increase the number of them
+    NSNumber *temp = [_unreadMessages valueForKey:peer];
+    NSNumber *num = [NSNumber numberWithInt:temp.intValue + 1];
+    [_unreadMessages setValue: num forKey:peer];
+    
+}
+
+-(void) removeMessage:(NSString *)peer
+{
+    if([_unreadMessages objectForKey:peer]) [_unreadMessages removeObjectForKey:peer];
 }
 
 @end
