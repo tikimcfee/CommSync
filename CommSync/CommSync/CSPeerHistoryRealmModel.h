@@ -9,7 +9,7 @@
 #import <Realm/Realm.h>
 #import "JSQMessageData.h"
 
-@interface CSPeerHistoryRealmModel : RLMObject <NSCoding, JSQMessageData>
+@interface CSPeerHistoryRealmModel : RLMObject <NSCoding>
 
 
 //@property (strong, nonatomic) NSString* peerID;

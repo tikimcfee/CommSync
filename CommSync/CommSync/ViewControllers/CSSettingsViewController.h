@@ -12,17 +12,10 @@
 #import "AppDelegate.h"
 #import "CSSessionManager.h"
 
-@interface CSSettingsViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
-
-@property (copy, nonatomic) NSArray *settingsList;
-@property (copy, nonatomic) NSArray *test;
-@property (weak, nonatomic) IBOutlet UITableView *myView;
+@interface CSSettingsViewController : UITableViewController
 
 @property (strong, nonatomic) CSTaskRealmModel *tempTask;
 //@property (strong, nonatomic) CSCommentRealmModel *tempComment;
 @property (weak, nonatomic) RLMRealm* realm;
-
-- (IBAction)resync;
--(void) populate;
 
 @end
