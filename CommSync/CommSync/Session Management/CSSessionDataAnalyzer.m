@@ -36,7 +36,7 @@
     {
         //if(receivedObject isEqualToArray:<#(NSArray *)#>)
     }
-    
+    //*FIX THIS **********************************************
     if([receivedObject isKindOfClass:[NSMutableDictionary class]])
     {
         BOOL foundDifference = NO;
@@ -52,6 +52,8 @@
         //if there were any diffrerences in the histories then send full history to all peers
         if(foundDifference) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
     }
+    
+     //*FIX THIS **********************************************
     
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
@@ -128,9 +130,11 @@
                 
                 if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
                 
-             
+                dispatch_async(dispatch_get_main_queue(), ^{
+
                 [_parentAnalyzer.globalManager addMessage:temp.senderDisplayName];
-              
+                });
+                               
                 [privateMessageRealm beginWriteTransaction];
                 [privateMessageRealm addObject:receivedObject];
                 [privateMessageRealm commitWriteTransaction];
