@@ -7,7 +7,6 @@
 //
 
 #import <Realm/Realm.h>
-#import "JSQMessageData.h"
 
 @interface CSPeerHistoryRealmModel : RLMObject <NSCoding>
 
