@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
 #import "CSPictureViewController.h"
 #import "SZTextView.h"
 #import <AVFoundation/AVFoundation.h>
@@ -21,7 +20,6 @@
 
 //task objects
 @property (strong, nonatomic) CSTaskRealmModel               *sourceTask;
-@property (strong, nonatomic) CSTaskTransientObjectStore     *transientTask;
 @property (weak, nonatomic) IBOutlet CSPictureViewController *embed;
 //Header Items
 

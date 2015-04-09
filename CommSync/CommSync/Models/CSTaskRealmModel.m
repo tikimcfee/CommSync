@@ -7,7 +7,6 @@
 //
 
 #import "CSTaskRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
 
 @implementation CSTaskRealmModel
 
@@ -18,14 +17,8 @@
     NSDictionary* defaults = nil;
     
     NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
-    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
     
-    NSData* emptyAudio = [NSKeyedArchiver archivedDataWithRootObject:[NSNull null]];
-    
-    defaults = @{@"taskImages_NSDataArray_JPEG": archivedImages,
-                 @"taskAudio":emptyAudio,
-                 
-                 @"taskDescription":@"",
+    defaults = @{@"taskDescription":@"",
                  @"taskTitle":@"",
                  @"taskPriority":[NSNumber numberWithInt:0],
                  
@@ -42,28 +35,70 @@
 }
 
 + (NSArray*)ignoredProperties {
-    return @[@"transientModel"];
+    return @[@"TRANSIENT_audioDataURL"];
 }
 
 + (NSString*)primaryKey {
     return @"concatenatedID";
 }
 
-#pragma mark - Accessors and Helpers
-- (CSTaskTransientObjectStore*)transientModel {
-    if(_transientModel)
-        return _transientModel;
+#pragma mark - Add media to tasks 
+- (void) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction {
+
+    if(transaction) {
+        [realm beginWriteTransaction];
+    }
     
-    _transientModel = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self];
+    CSTaskMediaRealmModel* newMedia = [CSTaskMediaRealmModel new];
+    newMedia.mediaType = type;
+    newMedia.mediaData = data;
     
-    return _transientModel;
+    [self.taskMedia addObject:newMedia];
+    
+    if(transaction) {
+        [realm commitWriteTransaction];
+    }
 }
 
+
+#pragma mark - Temporary resource on disk for task streaming
+- (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData {
+    
+    // We don't need complex unique identifiers; we will clean up immediately when finished sending
+    // This is time inefficient, but safe and manageable
+    NSString* temporaryUniqueID = [[NSUUID UUID] UUIDString];
+    
+    // Generate the file name from the above AND this task's concat_id. Unique much?
+    NSString *fileName = [NSString stringWithFormat:@"%@_%@",
+                          temporaryUniqueID, self.concatenatedID];
+    NSURL *fileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+    
+    NSError* error;
+    [thisTasksData writeToURL:fileURL options:NSDataWritingAtomic error:&error];
+    
+    return fileURL;
+}
+
+#pragma mark - ASYNC callbacks
+- (void) getAllImagesForTaskWithCompletionBlock:(void (^)(NSMutableArray*))completion {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray* taskImages = [NSMutableArray new];
+        
+        for(CSTaskMediaRealmModel* rev in self.taskMedia) {
+            if (rev.mediaType == CSTaskMediaType_Photo) {
+                [taskImages addObject: [UIImage imageWithData:rev.mediaData]];
+            }
+        }
+        
+        completion(taskImages);
+    });
+}
+
+#pragma mark - Accessors and Helpers
 + (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus:(BOOL)completed{
     RLMResults* allTasks;
     NSPredicate *pred;
-    
-    
     
     if(user && tag) pred = [NSPredicate predicateWithFormat:@"assignedID = %@  AND tag = %@ AND completed = %d" , user, tag, completed];
     else if(user && !tag)pred = [NSPredicate predicateWithFormat:@"assignedID = %@ AND completed = %d", user, completed ];
@@ -72,13 +107,23 @@
     
     
     allTasks = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
-   
+    
     NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
     for(CSTaskRealmModel* t in allTasks) {
-        [taskDataStore addObject: [[CSTaskTransientObjectStore alloc] initWithRealmModel:t]];
+        [taskDataStore addObject: t];
     }
     
     return taskDataStore;
+}
+
+- (NSData*) getTaskAudio {
+    for (CSTaskMediaRealmModel* media in self.taskMedia) {
+        if(media.mediaType == CSTaskMediaType_Audio) {
+            return media.mediaData;
+        }
+    }
+    
+    return nil;
 }
 
 - (void) addComment: (CSCommentRealmModel *) newComment{
@@ -158,15 +203,15 @@
         case CSTaskProperty_tag:
             return self.tag;
             break;
-        case CSTaskProperty_taskAudio:
-            return self.taskAudio;
-            break;
+//        case CSTaskProperty_taskAudio:
+//            return self.taskAudio;
+//            break;
         case CSTaskProperty_taskDescription:
             return self.taskDescription;
             break;
-        case CSTaskProperty_taskImages_NSDataArray_JPEG:
-            return self.taskImages_NSDataArray_JPEG;
-            break;
+//        case CSTaskProperty_taskImages_NSDataArray_JPEG:
+//            return self.taskImages_NSDataArray_JPEG;
+//            break;
         case CSTaskProperty_taskPriority:
             return [NSNumber numberWithInteger:self.taskPriority];
             break;

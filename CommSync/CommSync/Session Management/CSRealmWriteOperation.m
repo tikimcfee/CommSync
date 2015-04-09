@@ -7,8 +7,7 @@
 //
 
 #import "CSRealmWriteOperation.h"
-#import "CSTaskRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
+
 #import <Realm/Realm.h>
 
 @implementation CSRealmWriteOperation
@@ -16,10 +15,7 @@
 - (void) main {
     [[RLMRealm defaultRealm] beginWriteTransaction];
     
-    CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
-    [self.pendingTransientTask setAndPersistPropertiesOfNewTaskObject:newTask
-                                                              inRealm:[RLMRealm defaultRealm]
-                                                      withTransaction:NO];
+    [[RLMRealm defaultRealm] addObject:self.pendingTask];
     
     [[RLMRealm defaultRealm] commitWriteTransaction];
 }

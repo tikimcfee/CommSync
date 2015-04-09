@@ -20,6 +20,8 @@
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
 
+@class CSTaskRealmModel;
+
 @protocol MCSessionDataHandlingDelegate <NSObject>
 
 @required
@@ -30,8 +32,6 @@
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID;
 
 @end
-
-@class CSTaskTransientObjectStore;
 
 @interface CSSessionManager : NSObject <MCNearbyServiceBrowserDelegate,
                                         MCNearbyServiceAdvertiserDelegate,
@@ -57,8 +57,8 @@
 - (void) sendPulseToPeers;
 
 // Task transmission
-- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
-- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer;
+- (void) sendNewTaskToPeers:(CSTaskRealmModel*)newTask;
+- (void) sendSingleTask:(CSTaskRealmModel*)task toSinglePeer:(MCPeerID*)peer;
 
 - (void) sendDataPacketToPeers: (NSData*)dataPacket;
 - (void) sendSingleDataPacket:  (NSData*)dataPacket toSinglePeer:(MCPeerID*)peer;

@@ -11,7 +11,6 @@
 
 // Data models
 #import <Realm/Realm.h>
-#import "CSTaskTransientObjectStore.h"
 #import "CSTaskRealmModel.h"
 #import "CSCommentRealmModel.h"
 #import "AppDelegate.h"
@@ -47,7 +46,7 @@
 
 // Realm
 @property (weak, nonatomic) RLMRealm* realm;
-@property (strong, nonatomic) CSTaskTransientObjectStore* pendingTask;
+@property (strong, nonatomic) CSTaskRealmModel* pendingTask;
 
 //manager
 @property (strong, nonatomic) CSSessionManager *sessionManager;
@@ -92,7 +91,7 @@
     
     _realm = [RLMRealm defaultRealm];
     
-    self.pendingTask = [[CSTaskTransientObjectStore alloc] init];
+    self.pendingTask = [[CSTaskRealmModel alloc] init];
     _pendingTask.UUID = U;
     _pendingTask.assignedID = @"";
     _pendingTask.deviceID = D;
@@ -121,11 +120,16 @@
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
     void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
-        if(!self.pendingTask.TRANSIENT_taskImages) {
-            self.pendingTask.TRANSIENT_taskImages = [NSMutableArray new];
-        }
+        CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];
+        newMedia.mediaType = CSTaskMediaType_Photo;
         
-        [self.pendingTask.TRANSIENT_taskImages addObject:image];
+        NSLog(@"New size after normalization only is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
+        NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
+        NSLog(@"New size after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
+        newMedia.mediaData = thisImage;
+        
+        
+        [self.pendingTask.taskMedia addObject: newMedia];
     };
     
     [image normalizedImageWithCompletionBlock:fixImageIfNeeded];
@@ -203,16 +207,18 @@
     self.pendingTask.assignedID = @"Unassigned";
     self.pendingTask.tag = @"";
     self.pendingTask.completed = false;
-    if(!self.pendingTask.taskAudio && self.pendingTask.TRANSIENT_audioDataURL) {
-        self.pendingTask.taskAudio = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
-    } else {
-        self.pendingTask.taskAudio = nil;
+    if(self.pendingTask.TRANSIENT_audioDataURL) {
+        CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];
+        newMedia.mediaType = CSTaskMediaType_Audio;
+        newMedia.mediaData = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
+        [self.pendingTask.taskMedia addObject: newMedia];
     }
     
     [_sessionManager addTag:self.pendingTask.tag];
     
-    CSTaskRealmModel* newTask = [[CSTaskRealmModel alloc] init];
-    [self.pendingTask setAndPersistPropertiesOfNewTaskObject:newTask inRealm:_realm];
+    [_realm beginWriteTransaction];
+    [_realm addObject:self.pendingTask];
+    [_realm commitWriteTransaction];
     
     [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:self.pendingTask];
     [self dismissViewControllerAnimated:YES completion:nil];

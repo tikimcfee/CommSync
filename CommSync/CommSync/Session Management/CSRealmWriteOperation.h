@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CSTaskRealmModel.h"
 
-@class CSTaskTransientObjectStore;
 @interface CSRealmWriteOperation : NSOperation
 
-@property CSTaskTransientObjectStore* pendingTransientTask;
+@property CSTaskRealmModel* pendingTask;
 
 @end

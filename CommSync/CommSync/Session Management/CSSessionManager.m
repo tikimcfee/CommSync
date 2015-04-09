@@ -10,7 +10,6 @@
 #import <Realm/Realm.h>
 
 #import "CSTaskRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
@@ -119,7 +118,7 @@
     
     for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
     {
-        [[CSSessionDataAnalyzer sharedInstance:nil] validateDataWithRandomPeer:temp.transientModel];
+        [[CSSessionDataAnalyzer sharedInstance:nil] validateDataWithRandomPeer:temp];
     }
 }
 
@@ -174,7 +173,7 @@
     }
 }
 
-- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
+- (void) sendNewTaskToPeers:(CSTaskRealmModel*)newTask;
 {
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
@@ -217,12 +216,12 @@
 //    }
 }
 
-- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer
+- (void) sendSingleTask:(CSTaskRealmModel*)task toSinglePeer:(MCPeerID*)peer
 {
 
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
-        CSTaskTransientObjectStore* strongTask = task;
+        CSTaskRealmModel* strongTask = task;
         MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
         if(!sessionToSendOn) {
             NSLog(@"! No active session found for peer [%@]", peer.displayName);
@@ -480,7 +479,7 @@
             
             for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
             {
-               [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+               [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp];
             }
             
             //if this is a direct connection then propagate peer history and tasks of both users
@@ -615,18 +614,15 @@
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        RLMResults *currentTasks = [CSTaskRealmModel allObjects];
-        
         [_realm beginWriteTransaction];
         
-        for(CSTaskTransientObjectStore* task in tasks)
+        for(CSTaskRealmModel* task in tasks)
         {
             CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
             
             if(!foundTask) {
                 [self addTag:task.tag];
-                CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
-                [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
+                [_realm addObject:task];
                 
             } else {
                 NSLog(@"Duplicate task not being stored");

@@ -10,7 +10,6 @@
 #import "CSTaskDetailViewController.h"
 #import "CSTaskTableViewCell.h"
 #import "CSTaskProgressTableViewCell.h"
-#import "CSTaskTransientObjectStore.h"
 #import "CSSessionDataAnalyzer.h"
 #import "CSTaskListUpdateOperation.h"
 #import "AppDelegate.h"
@@ -80,12 +79,12 @@
                 [weakSelf.incomingTasks removeObject:sourceData];
         }
         
-        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:_user withTag:_tag completionStatus:_completed];
+        NSMutableArray* newDataModel = [CSTaskRealmModel getTransientTaskList:weakSelf.user withTag:weakSelf.tag completionStatus:weakSelf.completed];
         @synchronized (weakSelf.incomingTasks) {
             [newDataModel addObjectsFromArray:weakSelf.incomingTasks];
         }
 
-        [self setTagFilter];
+        [weakSelf setTagFilter];
     
         
         TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: newDataModel];
@@ -266,13 +265,13 @@
 {
     id dataSource = [self.indexPathController.dataModel itemAtIndexPath:indexPath];
     
-    if ([dataSource isKindOfClass:[CSTaskTransientObjectStore class]]) {
-        CSTaskTransientObjectStore* ref = (CSTaskTransientObjectStore*)dataSource;
+    if ([dataSource isKindOfClass:[CSTaskRealmModel class]]) {
+        CSTaskRealmModel* ref = (CSTaskRealmModel*)dataSource;
         
         static NSString *simpleTableIdentifier = @"CSTaskTableItem";
         CSTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         
-        [cell configureWithSourceTask:ref.BACKING_DATABASE_MODEL];
+        [cell configureWithSourceTask:ref];
         
         return cell;
     }
@@ -369,7 +368,7 @@
 }
 
 // The number of rows of data
-- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     return [_tags count];
 }

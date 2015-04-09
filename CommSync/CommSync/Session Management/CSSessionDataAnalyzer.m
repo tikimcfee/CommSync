@@ -8,7 +8,6 @@
 
 #import "CSSessionDataAnalyzer.h"
 #import "CSChatMessageRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
 #import "CSTaskRealmModel.h"
 #import "CSRealmWriteOperation.h"
 
@@ -145,7 +144,7 @@
     [_messagePool removeObjectForKey:message];
 }
 
--(void) propagateTasks:(NSDictionary *) taskData
+- (void) propagateTasks:(NSDictionary *)taskData;
 {
     // received new task request or task notification
     if ([taskData valueForKey:kCS_HEADER_NEW_TASK])
@@ -162,7 +161,7 @@
         }
         
         // check to see if the task already exists
-        CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:newTaskId];
+        CSTaskRealmModel* model = [_parentAnalyzer getModelFromQueueOrDatabaseWithID:newTaskId];
         if(model)
         {
             NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
@@ -186,7 +185,7 @@
         NSString* requestedTaskID = [taskData valueForKey:kCS_HEADER_TASK_REQUEST];
         
         // check to see if the task exists
-        CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
+        CSTaskRealmModel* model = [_parentAnalyzer getModelFromQueueOrDatabaseWithID:requestedTaskID];
         if(!model)
         {
             NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed dictionary?");
@@ -316,11 +315,11 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     NSData* taskData = [NSData dataWithContentsOfURL:localURL];
     id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
     
-    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+    if([newTask isKindOfClass:[CSTaskRealmModel class]])
     {
         
-        [self addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:resourceName];
-        [self sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
+        [self addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:resourceName];
+        [self sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)newTask];
     }
     
     // Post notification globally
@@ -331,29 +330,29 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 }
 
 #pragma mark - Data persistence
-- (void) addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:(NSString*)identifier{
+- (void) addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:(NSString*)identifier{
     NSLog(@"I recieved a new task");
     
     [_globalManager addTag:newTask.tag];
     
     CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
-    newWriteOperation.pendingTransientTask = newTask;
+    newWriteOperation.pendingTask = newTask;
     [self.realmWriteQueue addOperation:newWriteOperation];
     
 }
 
-- (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
+- (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
     NSArray* currentWriteQueue = _realmWriteQueue.operations;
     for(CSRealmWriteOperation* operation in currentWriteQueue) {
-        if([operation.pendingTransientTask.concatenatedID isEqualToString:taskID]) {
-            return operation.pendingTransientTask;
+        if([operation.pendingTask.concatenatedID isEqualToString:taskID]) {
+            return operation.pendingTask;
         }
     }
     
     CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
     if(model)
-        return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
+        return [CSTaskRealmModel objectForPrimaryKey:taskID];
     
     return nil;
 }
@@ -372,7 +371,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
  **/
 
 #pragma mark - Data transmission
-- (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task
+- (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task
 {
     NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
@@ -380,12 +379,15 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     [_globalManager sendDataPacketToPeers:newTaskData];
 }
 
-- (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task
+- (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task
 {
     NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
     
-    [_globalManager sendSingleDataPacket:newTaskData toSinglePeer: _globalManager.currentConnectedPeers.allValues[arc4random_uniform([_globalManager.currentConnectedPeers.allKeys count])]];
+    NSNumber* t = [NSNumber numberWithInteger:[_globalManager.currentConnectedPeers.allKeys count]];
+    NSUInteger random = arc4random_uniform([t unsignedIntValue]);
+    [_globalManager sendSingleDataPacket:newTaskData
+                            toSinglePeer: _globalManager.currentConnectedPeers.allValues[random]];
 }
 
 #pragma mark - Data analysis
