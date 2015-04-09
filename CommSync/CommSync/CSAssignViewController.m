@@ -35,7 +35,12 @@ NSMutableArray* pickerData;
         [pickerData addObject:@"Assign to self"];
 
         [_assignmentLabel setText:_sourceTask.assignedID];
-        [pickerData addObjectsFromArray: sessionManager.peerHistory.allKeys];
+        
+        RLMResults *peerHistory = [CSUserRealmModel allObjectsInRealm:sessionManager.peerHistoryRealm];
+        for(CSUserRealmModel *peer in peerHistory)
+        {
+            [pickerData addObject:peer.displayName];
+        }
     }
     else{
         [pickerData addObject:@"None"];

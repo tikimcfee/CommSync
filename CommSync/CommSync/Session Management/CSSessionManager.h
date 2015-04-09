@@ -43,7 +43,6 @@
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
-@property (strong, nonatomic) NSMutableDictionary* peerHistory;
 @property (strong, nonatomic) NSMutableDictionary* unreadMessages;
 
 
@@ -70,7 +69,7 @@
 - (void) nukeRealm;
 - (void) nukeHistory;
 
-- (void)updatePeerHistory:(MCPeerID *)peerID;
+- (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
 
 

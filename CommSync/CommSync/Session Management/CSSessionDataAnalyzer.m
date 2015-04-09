@@ -32,25 +32,29 @@
     
     
     
-    if([receivedObject isKindOfClass:[NSArray class]])
+    if([receivedObject isKindOfClass:[NSMutableArray class]])
     {
-        //if(receivedObject isEqualToArray:<#(NSArray *)#>)
-    }
-    
-    if([receivedObject isKindOfClass:[NSMutableDictionary class]])
-    {
-        BOOL foundDifference = NO;
-        for(MCPeerID *peerID in [receivedObject allValues])
-        {
-            if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
-                
-                [_parentAnalyzer.globalManager updatePeerHistory:peerID];
-                foundDifference = YES;
-            }
-        }
         
-        //if there were any diffrerences in the histories then send full history to all peers
-        if(foundDifference) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+           
+            NSMutableArray* differences = [[NSMutableArray alloc]init];
+            
+            for(CSUserRealmModel *peer in receivedObject)
+            {
+                if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                
+                    [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
+                    [differences addObject:peer];
+                }
+            }
+            
+            
+            //if there were any diffrerences in the histories then send full history to all peers
+              if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
+       
+        });
+      
     }
     
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
@@ -108,7 +112,7 @@
                 if([_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions valueForKey:temp.recipient])
                 {
                     //the user is connected to the target so we can send it directly
-                    [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.peerHistory valueForKey:temp.recipient]];
+                    [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.currentConnectedPeers valueForKey:temp.recipient]];
                     return;
                 }
                 

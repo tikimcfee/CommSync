@@ -22,6 +22,21 @@
         self.peerID = peerID;
         self.displayName = display;
         self.unreadMessages = 0;
+        
+        
+        
+        self.UUID  = [NSString stringWithFormat:@"%c%c%c%c%cc%c%c%c%c",
+                       arc4random_uniform(25)+65,
+                       arc4random_uniform(25)+65,
+                       arc4random_uniform(25)+65,
+                       arc4random_uniform(25)+65,
+                       arc4random_uniform(25)+65,
+                       arc4random_uniform(25)+97,
+                       arc4random_uniform(25)+97,
+                       arc4random_uniform(25)+97,
+                       arc4random_uniform(25)+97,
+                       arc4random_uniform(25)+97];
+       
     }
     
     return self;
@@ -34,6 +49,7 @@
     {
         self.peerID= [aDecoder decodeObjectForKey:@"peerID"];
         self.displayName= [aDecoder decodeObjectForKey:@"displayName"];
+        self.UUID= [aDecoder decodeObjectForKey:@"UUID"];
         self.unreadMessages = [aDecoder decodeIntForKey:@"unreadMessages"];
     }
     
@@ -44,6 +60,7 @@
 {
     [aCoder encodeObject:self.displayName forKey:@"displayName"];
     [aCoder encodeObject:self.peerID forKey:@"peerID"];
+    [aCoder encodeObject:self.UUID forKey:@"UUID"];
     [aCoder encodeInt:self.unreadMessages forKey:@"unreadMessages"];
 }
 
@@ -62,6 +79,10 @@
 {
    // if(!_stringNum) _stringNum = @"0";
     return [NSString stringWithFormat:@"( %d unread)", self.unreadMessages];
+}
+
++ (NSString*)primaryKey {
+    return @"UUID";
 }
 
 @end

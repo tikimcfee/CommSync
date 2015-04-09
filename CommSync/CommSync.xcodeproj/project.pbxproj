@@ -619,7 +619,7 @@
 		744452291A0ACE2700C87723 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				95E8593E1AD610EF00A2BA76 /* UserDetail */,
+				95E8593E1AD610EF00A2BA76 /* UserViews */,
 				45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */,
 				45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
@@ -1084,7 +1084,7 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		95E8593E1AD610EF00A2BA76 /* UserDetail */ = {
+		95E8593E1AD610EF00A2BA76 /* UserViews */ = {
 			isa = PBXGroup;
 			children = (
 				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
@@ -1092,7 +1092,7 @@
 				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 			);
-			name = UserDetail;
+			name = UserViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

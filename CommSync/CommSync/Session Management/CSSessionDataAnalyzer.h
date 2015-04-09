@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CSSessionManager.h"
+#import "CSUserRealmModel.h"
 
 #define kCSNewTaskResourceInformationContainer @"resourceInformationContainer"
 

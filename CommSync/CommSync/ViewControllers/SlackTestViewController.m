@@ -115,7 +115,7 @@
             if([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
             {
                     //the user is connected to the target so we can send it directly
-                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.peerHistory valueForKey:message.recipient]];
+                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:message.recipient]];
             }
             //if we arnt connected well find somebody who is
             else [self.sessionManager sendDataPacketToPeers:messageData];

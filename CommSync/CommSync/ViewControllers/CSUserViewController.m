@@ -79,9 +79,6 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
-//    if (cell == nil) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-//    }
     NSString* userName;
     
     
@@ -98,7 +95,7 @@
     
     CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", userName][0];
     
-    cell.text =   _filter ? [userName stringByAppendingString:connectionStatus]: [userName stringByAppendingString: user.getMessageNumber];
+    cell.text =  _filter ? [userName stringByAppendingString:connectionStatus]: [userName stringByAppendingString: user.getMessageNumber];
 
     return cell;
 }
@@ -114,7 +111,6 @@
     }
     else peer = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row];
     
-   // CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
     [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
     [self.tableView reloadData];
 }

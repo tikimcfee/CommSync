@@ -59,7 +59,7 @@
         _sessionLookupDisplayNamesToSessions = [NSMutableDictionary new];
         _currentConnectedPeers = [NSMutableDictionary new];
         _unreadMessages = [NSMutableDictionary new];
-        _peerHistory = [NSMutableDictionary new];
+    
         _allTags = [NSMutableDictionary new];
         
         // Connection deferrement
@@ -73,16 +73,6 @@
         _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
         
         
-        //create a dictionary with all previous peers
-        if([[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm] count] > 0){
-            RLMResults *formerPeers = [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm];
-            for(CSUserRealmModel *peer in formerPeers)
-            {
-                id realID = [NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID];
-                MCPeerID* temp = (MCPeerID*)realID;
-                [_peerHistory setValue:temp forKey:temp.displayName];
-            }
-        }
         _peerHistoryRealm.autorefresh = YES;
         [NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(sendPulseToPeers) userInfo:nil repeats:YES];
     }
@@ -471,25 +461,38 @@
             stateString = kUserConnectedNotification;
             [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
             
-            //add the user to a the peer history if weve never met
-            if(![_peerHistory valueForKey:peerID.displayName])
-            {
-                [self updatePeerHistory:peerID ];
-            }
             
             
-            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
-            {
-               [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
-            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                //add the user to a the peer history if weve never met
+                if([[CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName] count] == 0)
+                {
+                    [self updatePeerHistory:peerID withID:nil];
+                }
+            
             
             //if this is a direct connection then propagate peer history and tasks of both users
             if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
             {
-                 NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:_peerHistory];
-                [self sendDataPacketToPeers:historyData];
+                
+           
+                
+                NSMutableArray *peers = [[NSMutableArray alloc]init];
+                
+               
+                [peers addObjectsFromArray:[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm]];
+    
+               NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peers];
+               [self sendDataPacketToPeers:historyData];
             }
-
+            });
+            
+            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+            {
+                [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+            }
             break;
         }
         default:
@@ -568,28 +571,29 @@
 
 
 #pragma mark - Database actions
-- (void)updatePeerHistory:(MCPeerID *)peerID
+- (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString *)UUID
 {
+    
+    
+        
     if([peerID.displayName isEqualToString:_myPeerID.displayName]) return;
 
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
     CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:peerID.displayName];
    
-    _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
-
+    //if we are getting this from somewhere else then set the UUID to the same
+    if(UUID) peerToUse.UUID = UUID;
+    
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm addObject:peerToUse];
     [_peerHistoryRealm commitWriteTransaction];
     
-    [_peerHistory setValue:peerID forKey:peerID.displayName];
 }
 
 
 -(void)nukeHistory
 {
-    [_peerHistory removeAllObjects];
-    
     _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
     //add all current connected peers to database
     [_peerHistoryRealm beginWriteTransaction];
@@ -615,7 +619,6 @@
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        RLMResults *currentTasks = [CSTaskRealmModel allObjects];
         
         [_realm beginWriteTransaction];
         
