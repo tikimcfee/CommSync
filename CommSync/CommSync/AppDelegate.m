@@ -24,16 +24,15 @@
     // Initialize Crashlytics
     [Fabric with:@[CrashlyticsKit]];
     
-    NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"];
-    if (!uuid) {
-        [[NSUserDefaults standardUserDefaults] setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"];
-    }
+    // init the application's session manager
+    NSString* name = [NSString stringWithFormat:@"%c%c%c%c%c", arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65, arc4random_uniform(25)+65];
+    NSLog(@"[[[[[ Initializing Application with name -- {%@} ]]]]]", name);
     
     // Multipeer initialization
-    _globalSessionManager = [[CSSessionManager alloc] initWithID:self.userDisplayName];
+    _userDisplayName = [[UIDevice currentDevice] name];
+    _globalSessionManager = [[CSSessionManager alloc] initWithID:_userDisplayName];
 
+    
     return YES;
 }
 
@@ -72,20 +71,6 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
-}
-
-#pragma mark - Override Getter 
-- (NSString*)userDisplayName {
-    
-    NSString *name = [[NSUserDefaults standardUserDefaults] stringForKey:@"userDisplayName"];
-    
-    if (!name) {
-        name = [[UIDevice currentDevice] name];
-        [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"userDisplayName"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
-    return name;
 }
 
 #pragma mark - Core Data stack
