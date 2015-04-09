@@ -7,14 +7,14 @@
 //
 
 #import "CSSessionManager.h"
-#import <Realm/Realm.h>
+
 
 #import "CSTaskRealmModel.h"
 #import "CSTaskTransientObjectStore.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
-#import "CSPeerHistoryRealmModel.h"
+#import "CSUserRealmModel.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -25,9 +25,9 @@
 @property (nonatomic, strong) NSMutableDictionary* deferredConnectionsDisplayNamesToPeerIDs;
 @property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
 @property (nonatomic, strong) RLMRealm* realm;
-@property (strong, nonatomic) RLMRealm *peerHistoryRealm;
+
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
-@property (nonatomic, strong) CSPeerHistoryRealmModel *peers;
+@property (nonatomic, strong) CSUserRealmModel *peers;
 
 @end
 
@@ -74,9 +74,9 @@
         
         
         //create a dictionary with all previous peers
-        if([[CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm] count] > 0){
-            RLMResults *formerPeers = [CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm];
-            for(CSPeerHistoryRealmModel *peer in formerPeers)
+        if([[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm] count] > 0){
+            RLMResults *formerPeers = [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm];
+            for(CSUserRealmModel *peer in formerPeers)
             {
                 id realID = [NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID];
                 MCPeerID* temp = (MCPeerID*)realID;
@@ -574,7 +574,7 @@
 
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
-    CSPeerHistoryRealmModel *peerToUse = [[CSPeerHistoryRealmModel alloc] initWithMessage:historyData];
+    CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:peerID.displayName];
    
     _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
 
@@ -652,16 +652,23 @@
 
 -(void) addMessage:(NSString *)peer
 {
-    //if we dont have any messages create one
-    if(![_unreadMessages valueForKey:peer]){
-        [_unreadMessages setValue :[NSNumber numberWithInt:1] forKey:peer];
-        return;
-    }
-    //otherwise increase the number of them
-    NSNumber *temp = [_unreadMessages valueForKey:peer];
-    NSNumber *num = [NSNumber numberWithInt:temp.intValue + 1];
-    [_unreadMessages setValue: num forKey:peer];
+//    //if we dont have any messages create one
+//    if(![_unreadMessages valueForKey:peer]){
+//        [_unreadMessages setValue :[NSNumber numberWithInt:1] forKey:peer];
+//        return;
+//    }
+//    //otherwise increase the number of them
+//    NSNumber *temp = [_unreadMessages valueForKey:peer];
+//    NSNumber *num = [NSNumber numberWithInt:temp.intValue + 1];
+//    [_unreadMessages setValue: num forKey:peer];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+     CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
+        NSLog(user.displayName);
+        [_peerHistoryRealm beginWriteTransaction];
+        user.addMessage;
+        [_peerHistoryRealm commitWriteTransaction];
+     });
 }
 
 -(void) removeMessage:(NSString *)peer

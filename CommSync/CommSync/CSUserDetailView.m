@@ -21,6 +21,8 @@
     _topHeight = _topConstraint.constant;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    
+ 
     [super viewDidLoad];
         // Do any additional setup after loading the view.
     _nameLabel.text = _peerID.displayName;
@@ -29,8 +31,16 @@
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
     
-    if([self.sessionManager.unreadMessages valueForKey:_peerID.displayName]) [self.sessionManager.unreadMessages removeObjectForKey:_peerID.displayName];
+    
+    
+    [_sessionManager.peerHistoryRealm beginWriteTransaction];
+    [_peer removeMessages];
+    [_sessionManager.peerHistoryRealm commitWriteTransaction];
+    
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -50,6 +60,7 @@
 {
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
+        _peerID = [NSKeyedUnarchiver unarchiveObjectWithData:_peer.peerID];
         SlackTestViewController *vc = [segue destinationViewController];
         [vc setPeerID:_peerID];
     }
@@ -57,6 +68,7 @@
     if ([[segue identifier] isEqualToString:@"personalListSegue"])
     {
         CSTaskListViewController *vc = [segue destinationViewController];
+        
         [vc setUser:_peerID.displayName];
     }
     

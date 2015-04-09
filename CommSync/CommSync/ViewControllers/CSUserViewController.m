@@ -89,30 +89,32 @@
         userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
     }
     else{
-        userName = [[_sessionManager.peerHistory allKeys] objectAtIndex:indexPath.row];
+        CSUserRealmModel* user = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row];
+        userName = user.displayName;
     }
     
     NSString* connectionStatus = [@"---------" stringByAppendingString:[_sessionManager.currentConnectedPeers valueForKey:userName]? @"Connected" : @"Disconnected"];
     
     
+    CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", userName][0];
     
-    NSString* text =   _filter ? [userName stringByAppendingString:connectionStatus]: userName;
-    
-    id counter = [_sessionManager.unreadMessages valueForKey:userName];
-    
-    NSString *string = [NSString stringWithFormat:@"  (%d unread)", [(NSNumber*) counter intValue]];
-    
-    cell.text = counter ? [text stringByAppendingString:string]: text ;
+    cell.text =   _filter ? [userName stringByAppendingString:connectionStatus]: [userName stringByAppendingString: user.getMessageNumber];
+
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    MCPeerID *peer;
+    CSUserRealmModel *peer;
     
-    if(!_filter) peer = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
-    else peer = [[_sessionManager.peerHistory allValues] objectAtIndex:indexPath.row];
+    if(!_filter){
+      MCPeerID *peerName = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
+        peer = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", peerName.displayName][0];
+    }
+    else peer = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row];
+    
+   // CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
     [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
     [self.tableView reloadData];
 }
@@ -120,7 +122,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(!_filter) return [_sessionManager.currentConnectedPeers count];
-    else return [_sessionManager.peerHistory count];
+    return [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count];
 }
 
 
@@ -149,20 +151,21 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
     if ([[segue identifier] isEqualToString:@"showUserDetail"])
     {
         CSUserDetailView *vc = [segue destinationViewController];
-        if ([sender isKindOfClass:[MCPeerID class]])
+        if ([sender isKindOfClass:[CSUserRealmModel class]])
         {
-            [vc setPeerID:sender];
+            [vc setPeer:sender];
         }
     }
 }
 
 -(void) checkMessages
 {
-     _navBar.title = ([_sessionManager.unreadMessages count] > 0)? @"Unread Messages" : @"No Unread Messages";
+    dispatch_async(dispatch_get_main_queue(), ^{
+    _navBar.title = ([[CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"unreadMessages > %d",0 ] count] > 0)?  @"Unread Messages" : @"No Unread Messages";
+        });
     [self.tableView reloadData];
 }
 

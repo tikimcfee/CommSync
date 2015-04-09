@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CSUserRealmModel.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 
 @interface CSUserDetailView : UIViewController
+@property (strong, nonatomic) CSUserRealmModel* peer;
 @property (strong, nonatomic) MCPeerID* peerID;
 @property (strong, nonatomic) NSString* displayName;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;

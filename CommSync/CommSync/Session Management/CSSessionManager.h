@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 
 // Session management strings
@@ -74,6 +75,7 @@
 
 
 + (NSString *)peerHistoryRealmDirectory;
+@property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 

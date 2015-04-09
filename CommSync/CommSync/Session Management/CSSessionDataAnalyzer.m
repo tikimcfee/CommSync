@@ -113,6 +113,8 @@
                 }
                 
                 [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+                [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+
             }
             
             else{
@@ -130,7 +132,8 @@
                 
              
                 [_parentAnalyzer.globalManager addMessage:temp.senderDisplayName];
-              
+
+            
                 [privateMessageRealm beginWriteTransaction];
                 [privateMessageRealm addObject:receivedObject];
                 [privateMessageRealm commitWriteTransaction];
