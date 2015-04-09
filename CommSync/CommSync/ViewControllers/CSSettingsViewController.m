@@ -9,200 +9,148 @@
 #import "CSSettingsViewController.h"
 
 @interface CSSettingsViewController ()
-
+@property (copy, nonatomic) void (^nukeSessionHandler)(UIAlertAction *);
+@property (copy, nonatomic) void (^nukeDatabaseHandler)(UIAlertAction *);
+@property (copy, nonatomic) void (^nukePeerHistoryHandler)(UIAlertAction *);
 @end
 
 @implementation CSSettingsViewController
+{
+    CSSessionManager *_sessionManager;
+    AppDelegate *_app;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
-    self.settingsList = @[@"Send Pulse", @"Tear Down", @"Rebuild", @"Remove User History", @"Populate Tasks", @"NUKE SESSION", @"NUKE DATABASE"];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-- (void)nukeSession
-{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    CSSessionManager *sessionManager = app.globalSessionManager;
+    _app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    _sessionManager = _app.globalSessionManager;
     
-    [sessionManager nukeSession];
-}
-
-- (void)nukeRealm
-{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    CSSessionManager *sessionManager = app.globalSessionManager;
+    __weak CSSettingsViewController *weakSelf = self;
     
-    [sessionManager nukeRealm];
+    self.nukeSessionHandler = ^(UIAlertAction *action){
+        [weakSelf nukeSession];
+    };
+    
+    self.nukeDatabaseHandler = ^(UIAlertAction *action){
+        [weakSelf nukeDatabase];
+    };
+    
+    self.nukePeerHistoryHandler = ^(UIAlertAction *action){
+        [weakSelf nukePeerHistory];
+    };
 }
 
-- (void)removeUserHistory
-{
+- (void)showAlertWithHandler:(void (^)(UIAlertAction *))actionHandler {
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Are you sure?"
+                                                                   message:@"This is a destructive action."
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    NSString *title = @"Yes";
+    if (actionHandler == self.nukeDatabaseHandler)
+        title = @"Clear Database";
+    else if (actionHandler == self.nukeSessionHandler)
+        title = @"Restart Session";
+    else if (actionHandler == self.nukePeerHistoryHandler)
+        title = @"Clear Peer History";
+        
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:title
+                                                            style:UIAlertActionStyleDestructive
+                                                          handler:actionHandler];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    
+    [alert addAction:defaultAction];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)nukeSession {
+    [_sessionManager nukeSession];
+}
+
+- (void)nukeDatabase {
+    [_sessionManager nukeRealm];
+}
+
+- (void)nukePeerHistory {
     //removes all former peers from the data base and replaces the peer history list with current list
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    CSSessionManager* sessionManager = d.globalSessionManager;
-    
-    [sessionManager nukeHistory];
-    
+    [_sessionManager nukeHistory];
 }
 
-
-
-- (IBAction)sendGlobalPulse {
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    CSSessionManager* sessionManager = d.globalSessionManager;
+- (void)changeUsernameTo:(NSString*)name {
     
-    [sessionManager sendPulseToPeers];
+    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"userDisplayName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (IBAction)tearDown {
-    //    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    //    CSSessionManager* sessionManager = d.globalSessionManager;
+- (void)promptForNewUsername {
     
-}
-
-- (IBAction)rebuild {
+    __weak CSSettingsViewController *weakSelf = self;
     
-//    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-//    CSSessionManager* sessionManager = d.globalSessionManager;
-//    
-//    MCSession* s =[[MCSession alloc] initWithPeer:sessionManager.myPeerID];
-//    s.delegate = sessionManager;
-////    sessionManager.currentSession = s;
-    
-}
-
--(void) populate
-{
-    
-    NSLog(@"test");
-    //get the database object
-     _realm = [RLMRealm defaultRealm];
-
-    for(int i = 0; i < 5; i++){
-        
-        
-        //allocate space for the task object and initialize the object
-        self.tempTask = [[CSTaskRealmModel alloc] init];
-        
-        //populate variables
-        
-        _tempTask.UUID = [NSString stringWithFormat:@"%s %d", "UUID", i];
-        _tempTask.assignedID = [NSString stringWithFormat:@"%s %d", "assignedID", i];
-        _tempTask.deviceID = [NSString stringWithFormat:@"%s %d", "DID", i];
-        _tempTask.concatenatedID = [NSString stringWithFormat:@"%s %d", "CID", i];
-        
-        _tempTask.taskPriority = CSTaskPriorityLow;
-        
-        _tempTask.taskTitle = [NSString stringWithFormat:@"%s %d", "Title", i];
-        _tempTask.taskDescription = [NSString stringWithFormat:@"%s %d", "Description", i];
-        
-        //start write
-        [_realm beginWriteTransaction];
-        //add the object to the list of tasks
-        [_realm addObject:_tempTask];
-        
-        //write to the database
-        [_realm commitWriteTransaction];
-        
-    }
-    
-    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Enter Username"
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+//        textField.placeholder = NSLocalizedString(@"Username", @"UsernamePlaceholder");
+        textField.placeholder = _app.userDisplayName;
+    }];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *action) {
+                                                              UITextField *username = alert.textFields.firstObject;
+                                                              [weakSelf changeUsernameTo:username.text];
+                                                          }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:nil];
+    [alert addAction:okAction];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
-
-
-- (IBAction)resync {
-    
-     //need to redo after fixing realm tasks
-    /*
-    //If something bad happens this will catch the error and give a printout reading of the issue
-    NSError* error;
-    
-    //get the session manager
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    CSSessionManager* sessionManager = d.globalSessionManager;
-    
-    //grab the task list and pack it into a data packet that can be sent
-    NSMutableArray* taskList = [d.globalSessionManager currentTaskList];
-    NSData* packedTaskList = [NSKeyedArchiver archivedDataWithRootObject: taskList];
-    
-    
-    //take the packed task list and send it to every connected peer. This should cause the delegate to automatically call the didReceiveInvitationFromPeer method where all other users will upack it and add it to their task list
-    [sessionManager.currentSession sendData:packedTaskList
-                                    toPeers:sessionManager.currentSession.connectedPeers
-                                   withMode:MCSessionSendDataReliable
-                                      error:&error];
-    
-    NSLog(@"test"); */
-    
-}
-
-
-#pragma Mark - Table Population
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.settingsList count];
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSString *SimpleIdentifier = @"SimpleIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SimpleIdentifier];
-    
-    if (cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SimpleIdentifier];
-    }
-    
-    cell.textLabel.text = self.settingsList[indexPath.row];
-    
-    return cell;
-}
-
+#pragma mark - Tableview Delegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+  
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    switch (indexPath.row) {
-        case 0:
-            [self sendGlobalPulse];
-            break;
-            
-        case 1:
-            [self tearDown];
-            break;
-            
-        case 2:
-            [self rebuild];
-            break;
-            
-        case 3:
-            [self removeUserHistory];
-            break;
-            
-        case 4:
-            [self populate];
-            break;
-
-        case 5:
-            [self nukeSession];
-            break;
-            
-        case 6:
-            [self nukeRealm];
-            break;
+    if (indexPath.section == 0) {
+        
+        switch (indexPath.row) {
+            case 0:
+                [self promptForNewUsername];
+                break;
+        }
+        
+    }
+    
+    if (indexPath.section == 1) {
+        switch (indexPath.row) {
+            case 0:
+                [self showAlertWithHandler:_nukeSessionHandler];
+                break;
+                
+            case 1:
+                [self showAlertWithHandler:_nukeDatabaseHandler];
+                break;
+                
+            case 2:
+                [self showAlertWithHandler:_nukePeerHistoryHandler];
+                break;
+                
+            default:
+                NSLog(@"Settings ERROR: This selection has no action");
+                break;
+        }
     }
     
 }
-
-
 
 
 @end
