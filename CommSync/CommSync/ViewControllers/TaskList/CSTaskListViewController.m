@@ -267,13 +267,13 @@
     
     if ([dataSource isKindOfClass:[CSTaskRealmModel class]]) {
         CSTaskRealmModel* ref = (CSTaskRealmModel*)dataSource;
+        
         NSLog(@"%@", [NSThread currentThread]);
         
         static NSString *simpleTableIdentifier = @"CSTaskTableItem";
         CSTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         
         [cell configureWithSourceTask:ref];
-
         
         return cell;
     }

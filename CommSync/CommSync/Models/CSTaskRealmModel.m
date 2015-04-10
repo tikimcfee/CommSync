@@ -178,11 +178,11 @@
     newModel.taskPriority = model.taskPriority;
     
     for (CSTaskRevisionRealmModel* rev in model.revisions) {
-        [newModel.revisions addObject:rev];
+        [newModel.revisions addObject:[CSTaskRevisionRealmModel revisionModelWithModel:rev]];
     }
     
     for (CSTaskMediaRealmModel* media in model.taskMedia) {
-        [newModel.taskMedia addObject:media];
+        [newModel.taskMedia addObject:[CSTaskMediaRealmModel mediaModelWithModel:media]];
     }
     
     return newModel;

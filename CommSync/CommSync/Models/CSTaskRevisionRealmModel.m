@@ -32,6 +32,16 @@
     [aCoder encodeObject:self.changesDictionary forKey:kChangesDictionary];
 }
 
++(CSTaskRevisionRealmModel*)revisionModelWithModel:(CSTaskRevisionRealmModel*)model {
+    CSTaskRevisionRealmModel* newModel = [CSTaskRevisionRealmModel new];
+    newModel.revisionID = model.revisionID;
+    newModel.revisionDate = model.revisionDate;
+    
+    newModel.changesDictionary = [NSData dataWithData:model.changesDictionary];
+    
+    return newModel;
+}
+
 + (NSDictionary *)defaultPropertyValues {
     NSMutableDictionary* defaults = [NSMutableDictionary new];
     

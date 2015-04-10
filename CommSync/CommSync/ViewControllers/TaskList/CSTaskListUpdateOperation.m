@@ -23,7 +23,9 @@
     if(_updatesToPerform)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_updatesToPerform performBatchUpdatesOnTableView:weakSelf.tableviewToUpdate withRowAnimation:UITableViewRowAnimationFade completion:^(BOOL finished) {
+            [_updatesToPerform performBatchUpdatesOnTableView:weakSelf.tableviewToUpdate
+                                             withRowAnimation:UITableViewRowAnimationFade
+                                                   completion:^(BOOL finished) {
                     weakSelf.tableviewDidFinishUpdates = YES;
             }];
         });
