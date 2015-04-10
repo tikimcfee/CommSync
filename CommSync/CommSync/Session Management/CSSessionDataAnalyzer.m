@@ -29,8 +29,6 @@
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
     
-    
-    
     if([receivedObject isKindOfClass:[NSArray class]])
     {
         //if(receivedObject isEqualToArray:<#(NSArray *)#>)
@@ -60,9 +58,6 @@
     else if ([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
     {
         CSChatMessageRealmModel* temp = receivedObject;
-        
-        
-     
         
         NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
         @synchronized (_messagePool){
@@ -317,7 +312,6 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     
     if([newTask isKindOfClass:[CSTaskRealmModel class]])
     {
-        
         [self addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:resourceName];
         [self sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)newTask];
     }

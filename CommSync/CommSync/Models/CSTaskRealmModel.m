@@ -36,9 +36,9 @@
     return @[@"TRANSIENT_audioDataURL"];
 }
 
-//+ (NSString*)primaryKey {
-//    return @"concatenatedID";
-//}
++ (NSString*)primaryKey {
+    return @"concatenatedID";
+}
 
 #pragma mark - NSCoding Compliance
 
@@ -163,6 +163,31 @@
 }
 
 #pragma mark - Accessors and Helpers
++ (CSTaskRealmModel*)taskModelWithModel:(CSTaskRealmModel*)model {
+    CSTaskRealmModel* newModel = [CSTaskRealmModel new];
+    
+    newModel.UUID = model.UUID;
+    newModel.concatenatedID = model.concatenatedID;
+    newModel.deviceID = model.deviceID;
+    newModel.assignedID = model.assignedID;
+    newModel.tag = model.tag;
+    newModel.completed = model.completed;
+    
+    newModel.taskTitle = model.taskTitle;
+    newModel.taskDescription = model.taskDescription;
+    newModel.taskPriority = model.taskPriority;
+    
+    for (CSTaskRevisionRealmModel* rev in model.revisions) {
+        [newModel.revisions addObject:rev];
+    }
+    
+    for (CSTaskMediaRealmModel* media in model.taskMedia) {
+        [newModel.taskMedia addObject:media];
+    }
+    
+    return newModel;
+}
+
 + (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus:(BOOL)completed{
     RLMResults* allTasks;
     NSPredicate *pred;

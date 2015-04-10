@@ -177,7 +177,10 @@
 {
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
-        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
+        // fixing models?
+        CSTaskRealmModel* inMemoryModel = [CSTaskRealmModel taskModelWithModel:newTask];
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:inMemoryModel];
+        
         NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
         NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
@@ -221,7 +224,7 @@
 
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
-        CSTaskRealmModel* strongTask = task;
+        CSTaskRealmModel* inMemoryModel = [CSTaskRealmModel taskModelWithModel:task];
         MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
         if(!sessionToSendOn) {
             NSLog(@"! No active session found for peer [%@]", peer.displayName);
@@ -235,15 +238,15 @@
             return;
         }
         
-        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:strongTask];
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:inMemoryModel];
         
         NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
-        NSURL* URLOfNewTask = [strongTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+        NSURL* URLOfNewTask = [inMemoryModel temporarilyPersistTaskDataToDisk:newTaskDataBlob];
         
         MCPeerID* thisPeer = [sessionToSendOn.connectedPeers objectAtIndex:0];
         [sessionToSendOn sendResourceAtURL:URLOfNewTask
-                                  withName:strongTask.concatenatedID
+                                  withName:inMemoryModel.concatenatedID
                                     toPeer:thisPeer
                      withCompletionHandler:
          ^(NSError *error) {

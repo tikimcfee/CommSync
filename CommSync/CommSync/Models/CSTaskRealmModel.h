@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 + (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus:(BOOL)completed;
 - (void) getAllImagesForTaskWithCompletionBlock:(void (^)(NSMutableArray*))completion;
 - (NSData*) getTaskAudio;
++ (CSTaskRealmModel*)taskModelWithModel:(CSTaskRealmModel*)model;
 
 - (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
 
