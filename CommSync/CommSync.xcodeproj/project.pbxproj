@@ -10,6 +10,8 @@
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
 		3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FBBF1371A9C0887007124CD /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
+		3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */; };
+		3FE492091AD741D40089E518 /* CSTaskRevisionRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */; };
 		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
@@ -145,6 +147,10 @@
 		3FBBF1381A9C0887007124CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
+		3FE492041AD741D40089E518 /* CSTaskMediaRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskMediaRealmModel.h; path = Models/CSTaskMediaRealmModel.h; sourceTree = "<group>"; };
+		3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaRealmModel.m; path = Models/CSTaskMediaRealmModel.m; sourceTree = "<group>"; };
+		3FE492061AD741D40089E518 /* CSTaskRevisionRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRevisionRealmModel.h; path = Models/CSTaskRevisionRealmModel.h; sourceTree = "<group>"; };
+		3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRevisionRealmModel.m; path = Models/CSTaskRevisionRealmModel.m; sourceTree = "<group>"; };
 		45190C2E1A89BD360030CB05 /* SZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZTextView.h; sourceTree = "<group>"; };
 		45190C2F1A89BD360030CB05 /* SZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SZTextView.m; sourceTree = "<group>"; };
 		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
@@ -422,14 +428,14 @@
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
 		953E39691AC8CA11003FE833 /* CSPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPictureController.h; sourceTree = "<group>"; };
 		953E396A1AC8CA11003FE833 /* CSPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPictureController.m; sourceTree = "<group>"; };
-		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCommentRealmModel.h; sourceTree = "<group>"; };
-		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCommentRealmModel.m; sourceTree = "<group>"; };
+		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCommentRealmModel.h; path = Models/CSCommentRealmModel.h; sourceTree = "<group>"; };
+		954A459C1A806C4C00854726 /* CSCommentRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSCommentRealmModel.m; path = Models/CSCommentRealmModel.m; sourceTree = "<group>"; };
 		95FCFD4C1AD08217000BB566 /* CSAssignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAssignViewController.h; sourceTree = "<group>"; };
 		95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAssignViewController.m; sourceTree = "<group>"; };
 		95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserDetailView.h; sourceTree = "<group>"; };
 		95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserDetailView.m; sourceTree = "<group>"; };
-		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
-		95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPeerHistoryRealmModel.m; sourceTree = "<group>"; };
+		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPeerHistoryRealmModel.h; path = Models/CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
+		95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSPeerHistoryRealmModel.m; path = Models/CSPeerHistoryRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -842,6 +848,10 @@
 		933AA1331A71DA7200DCC10A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3FE492041AD741D40089E518 /* CSTaskMediaRealmModel.h */,
+				3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */,
+				3FE492061AD741D40089E518 /* CSTaskRevisionRealmModel.h */,
+				3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */,
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
 				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
 				74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */,
@@ -1200,11 +1210,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */,
+				3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */,
 				93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */,
 				93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */,
 				74C541ED1A93E67100FC29AD /* TLIndexPathItem.m in Sources */,
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
 				93EBABC71A964552006BAF4A /* NSString+JSQMessages.m in Sources */,
+				3FE492091AD741D40089E518 /* CSTaskRevisionRealmModel.m in Sources */,
 				93EBABD41A964552006BAF4A /* JSQMessagesCollectionViewFlowLayout.m in Sources */,
 				93EBABE01A964552006BAF4A /* JSQMessagesCollectionViewCell.m in Sources */,
 				74B3E32B1A9B9113006A3B03 /* CSPictureViewController.m in Sources */,

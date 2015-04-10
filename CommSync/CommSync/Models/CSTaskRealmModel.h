@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 AppsByDLI. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import <Realm/Realm.h>
 #import "CSCommentRealmModel.h"
+#import "CSTaskRevisionRealmModel.h"
 
 @class CSTaskTransientObjectStore;
 
@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @interface CSTaskRealmModel : RLMObject
 
 @property RLMArray<CSCommentRealmModel> *comments;
+@property RLMArray<CSTaskRevisionRealmModel> *revisions;
 
 // Task persistence properties
 @property NSString* UUID;
@@ -48,6 +49,11 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 - (CSTaskTransientObjectStore*)transientModel;
 
 - (void) addComment: (CSCommentRealmModel *) newComment;
-+ (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus: (BOOL) completed ;
+- (void) addRevision:(CSTaskRevisionRealmModel*)revision;
+
++ (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus: (BOOL) completed;
+
++ (NSString*)stringForProperty:(CSTaskProperty)property;
+- (id)valueForProperty:(CSTaskProperty)property;
 
 @end
