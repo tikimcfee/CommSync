@@ -655,6 +655,15 @@
 
 -(void) addMessage:(NSString *)peer
 {
+//    //if we dont have any messages create one
+//    if(![_unreadMessages valueForKey:peer]){
+//        [_unreadMessages setValue :[NSNumber numberWithInt:1] forKey:peer];
+//        return;
+//    }
+//    //otherwise increase the number of them
+//    NSNumber *temp = [_unreadMessages valueForKey:peer];
+//    NSNumber *num = [NSNumber numberWithInt:temp.intValue + 1];
+//    [_unreadMessages setValue: num forKey:peer];
     
     dispatch_async(dispatch_get_main_queue(), ^{
      CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
