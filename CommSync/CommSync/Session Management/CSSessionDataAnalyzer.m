@@ -34,16 +34,16 @@
     
     if([receivedObject isKindOfClass:[NSMutableArray class]])
     {
-        //if(receivedObject isEqualToArray:<#(NSArray *)#>)
-    }
-    //*FIX THIS **********************************************
-    if([receivedObject isKindOfClass:[NSMutableDictionary class]])
-    {
-        BOOL foundDifference = NO;
-        for(MCPeerID *peerID in [receivedObject allValues])
-        {
-            if(![_parentAnalyzer.globalManager.peerHistory valueForKey:peerID.displayName] && ![peerID.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
-                
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSMutableArray* differences = [[NSMutableArray alloc]init];
+            
+            for(CSUserRealmModel *peer in receivedObject)
+            {
+                if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                    
                     [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
                     [differences addObject:peer];
                 }
@@ -51,13 +51,11 @@
             
             
             //if there were any diffrerences in the histories then send full history to all peers
-              if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
-       
+            if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
+            
         });
-      
+        
     }
-    
-     //*FIX THIS **********************************************
     
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
@@ -69,7 +67,7 @@
         CSChatMessageRealmModel* temp = receivedObject;
         
         
-     
+        
         
         NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
         @synchronized (_messagePool){
@@ -120,7 +118,7 @@
                 
                 [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
                 [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
-
+                
             }
             
             else{
@@ -136,10 +134,10 @@
                 
                 if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
                 
-             
+                
                 [_parentAnalyzer.globalManager addMessage:temp.senderDisplayName];
-
-            
+                
+                
                 [privateMessageRealm beginWriteTransaction];
                 [privateMessageRealm addObject:receivedObject];
                 [privateMessageRealm commitWriteTransaction];
