@@ -7,7 +7,6 @@
 //
 
 #import "CSSessionDataAnalyzer.h"
-#import "CSChatMessageRealmModel.h"
 #import "CSTaskTransientObjectStore.h"
 #import "CSTaskRealmModel.h"
 #import "CSRealmWriteOperation.h"
@@ -30,7 +29,32 @@
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
     
-    
+    if([receivedObject isKindOfClass:[NSNumber class]])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+            NSString *url = [basePath stringByAppendingString:@"/privateMessage.realm"];
+        
+            NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", _peer.displayName, _peer.displayName];
+        
+            RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
+        
+            RLMArray* messages = [CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred];
+        
+          //  if( [(NSNumber*)receivedObject integerValue] <= [messages count]) return;
+        
+        
+            NSMutableArray *message = [[NSMutableArray alloc]init];
+        
+        
+            [message addObjectsFromArray:messages];
+            NSLog(_peer.displayName);
+            NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:message];
+            [_parentAnalyzer.globalManager sendSingleDataPacket:historyData toSinglePeer:_peer];
+        });
+        
+    }
     
     if([receivedObject isKindOfClass:[NSMutableArray class]])
     {
@@ -40,19 +64,29 @@
             
             NSMutableArray* differences = [[NSMutableArray alloc]init];
             
-            for(CSUserRealmModel *peer in receivedObject)
+            if([receivedObject[0]isKindOfClass:[CSUserRealmModel class]])
             {
-                if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                for(CSUserRealmModel *peer in receivedObject)
+                {
+                    if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
                     
-                    [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
-                    [differences addObject:peer];
+                        [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
+                        [differences addObject:peer];
+                    }
                 }
-            }
-            
             
             //if there were any diffrerences in the histories then send full history to all peers
             if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
+            }
+            else{
             
+                
+                for(CSChatMessageRealmModel* message in receivedObject)
+                {
+                    [self addPrivateMessage:message];
+                }
+            }
+        
         });
         
     }
@@ -117,34 +151,37 @@
                 }
                 
                 [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
-                [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
-                
             }
             
             else{
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-                NSString *url = [basePath stringByAppendingString:@"/privateMessage.realm"];
-                
-                //if the chat message already exists then exit otherwise add it and send it to all peers
-                NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
-                                     temp.createdBy, temp.createdAt];
-                
-                RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
-                
-                if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
-                
-                
-                [_parentAnalyzer.globalManager addMessage:temp.senderDisplayName];
-                
-                
-                [privateMessageRealm beginWriteTransaction];
-                [privateMessageRealm addObject:receivedObject];
-                [privateMessageRealm commitWriteTransaction];
+                [self addPrivateMessage:temp];
             }
         }
     }
     
+}
+
+-(void) addPrivateMessage:(CSChatMessageRealmModel*) message
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    NSString *url = [basePath stringByAppendingString:@"/privateMessage.realm"];
+    
+    //if the chat message already exists then exit otherwise add it and send it to all peers
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
+                         message.createdBy, message.createdAt];
+    
+    RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
+    
+    if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
+    
+    
+    [_parentAnalyzer.globalManager addMessage:message.senderDisplayName];
+    
+    
+    [privateMessageRealm beginWriteTransaction];
+    [privateMessageRealm addObject:message];
+    [privateMessageRealm commitWriteTransaction];
 }
 
 -(void) removeMessageRequest:(NSString*) message

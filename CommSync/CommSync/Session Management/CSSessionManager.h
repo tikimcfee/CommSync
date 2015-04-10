@@ -72,7 +72,6 @@
 - (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
 
-
 + (NSString *)peerHistoryRealmDirectory;
 @property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 

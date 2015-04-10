@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CSSessionManager.h"
 #import "CSUserRealmModel.h"
+#import "CSChatMessageRealmModel.h"
 
 #define kCSNewTaskResourceInformationContainer @"resourceInformationContainer"
 
@@ -24,6 +25,7 @@
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 - (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
+-(void) addPrivateMessage:(CSChatMessageRealmModel*) message;
 - (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task;
 
 - (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID;

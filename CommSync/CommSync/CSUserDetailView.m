@@ -31,11 +31,11 @@
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
     
-    
-    
     [_sessionManager.peerHistoryRealm beginWriteTransaction];
     [_peer removeMessages];
     [_sessionManager.peerHistoryRealm commitWriteTransaction];
+    
+
     
     
 }

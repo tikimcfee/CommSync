@@ -61,8 +61,20 @@
             _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSNumber* number = [NSNumber numberWithInt:[[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count]] ;
+                NSData* data = [NSKeyedArchiver archivedDataWithRootObject:number];
+                [_sessionManager sendSingleDataPacket:data toSinglePeer:_peerID];
+            });
+            
             _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND recipient = %@ OR createdBy = %@ AND recipient = %@",
                                  _currentUser, _peerID.displayName, _peerID.displayName, _currentUser ];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSNumber* number = [NSNumber numberWithInt:[[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count]] ;
+                NSData* data = [NSKeyedArchiver archivedDataWithRootObject:number];
+                [_sessionManager sendSingleDataPacket:data toSinglePeer:_peerID];
+            });
         }
     }
     
@@ -174,8 +186,7 @@
     
         if(!_peerID)return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
         
-        //if the chat message already exists then exit otherwise add it and send it to all peers
-        
+       
         return [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count] ;
 
     }
