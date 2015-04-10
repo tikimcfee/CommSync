@@ -292,7 +292,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
           atURL:(NSURL *)localURL
       withError:(NSError *)error
 {
-    if (error) {
+    if (error || localURL == nil) {
         NSLog(@"%@",error);
         return;
     }
@@ -350,9 +350,16 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
         }
     }
     
-    CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
-    if(model)
-        return [CSTaskRealmModel objectForPrimaryKey:taskID];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"concatenatedID = %@", taskID];
+    
+    RLMResults* results = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
+    if (results.count == 1) {
+        return [results objectAtIndex:0];
+    }
+    
+//    CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
+//    if(model)
+//        return [CSTaskRealmModel objectForPrimaryKey:taskID];
     
     return nil;
 }

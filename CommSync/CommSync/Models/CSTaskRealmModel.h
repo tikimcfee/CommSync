@@ -12,6 +12,22 @@
 #import "CSTaskRevisionRealmModel.h"
 #import "CSTaskMediaRealmModel.h"
 
+
+#define kUUID @"UUID"
+#define kDeviceId @"deviceID"
+#define kConcatenatedID @"concatenatedID"
+#define kAssignedID @"assignedID"
+#define kTag @"tag"
+#define kCompleted @"completed"
+#define kTaskTitle @"taskTitle"
+#define kTaskDescription @"taskDescription"
+#define kTaskPriority @"taskPriority"
+
+#define kRevisionDataArray @"revisionDataArray"
+#define kMediaDataArray @"mediaDataArray"
+#define kCommentsDataArray @"commentsDataArray"
+
+
 typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
     CSTaskPriorityLow = 0,
@@ -19,7 +35,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
     CSTaskPriorityHigh
 };
 
-@interface CSTaskRealmModel : RLMObject
+@interface CSTaskRealmModel : RLMObject <NSCoding>
 
 @property RLMArray<CSCommentRealmModel> *comments;
 @property RLMArray<CSTaskRevisionRealmModel> *revisions;

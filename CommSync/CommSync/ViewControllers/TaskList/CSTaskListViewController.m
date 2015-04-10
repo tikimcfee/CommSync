@@ -52,7 +52,7 @@
     __weak typeof(self) weakSelf = self;
     void (^realmNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                _incomingTaskCallback(nil, nil);
+            _incomingTaskCallback(nil, nil);
         });
     };
     
@@ -267,11 +267,13 @@
     
     if ([dataSource isKindOfClass:[CSTaskRealmModel class]]) {
         CSTaskRealmModel* ref = (CSTaskRealmModel*)dataSource;
+        NSLog(@"%@", [NSThread currentThread]);
         
         static NSString *simpleTableIdentifier = @"CSTaskTableItem";
         CSTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         
         [cell configureWithSourceTask:ref];
+
         
         return cell;
     }

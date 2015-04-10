@@ -199,8 +199,10 @@
 }
 
 - (IBAction)closeViewAndSave:(id)sender {
-
-    [_audioRecorder stopRecording];
+    if(_audioRecorder.isRecording) {
+        [_audioRecorder stopRecording];
+    }
+    
     self.pendingTask.taskTitle = self.titleTextField.text;
     self.pendingTask.taskDescription = self.descriptionTextField.text;
     self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;

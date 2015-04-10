@@ -44,21 +44,23 @@
 
 - (void)controller:(TLIndexPathController *)controller didUpdateDataModel:(TLIndexPathUpdates *)updates
 {
+    _tableviewToUpdate.delegate = nil;
+    
     __weak typeof(self) weakSelf = self;
     if(!weakSelf.tableviewIsVisible) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+//        dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableviewToUpdate reloadData];
             weakSelf.tableviewDidFinishUpdates = YES;
-        });
+//        });
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
+//        dispatch_async(dispatch_get_main_queue(), ^{
             [updates performBatchUpdatesOnTableView:weakSelf.tableviewToUpdate
                                    withRowAnimation:UITableViewRowAnimationFade
                                          completion:^(BOOL finished) {
                                                  weakSelf.tableviewDidFinishUpdates = YES;
                                          }];
 
-        });
+//        });
     }
 }
 

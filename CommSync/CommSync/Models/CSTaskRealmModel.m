@@ -16,8 +16,6 @@
     
     NSDictionary* defaults = nil;
     
-    NSMutableArray* tempArrayOfImages = [NSMutableArray arrayWithCapacity:0];
-    
     defaults = @{@"taskDescription":@"",
                  @"taskTitle":@"",
                  @"taskPriority":[NSNumber numberWithInt:0],
@@ -38,8 +36,77 @@
     return @[@"TRANSIENT_audioDataURL"];
 }
 
-+ (NSString*)primaryKey {
-    return @"concatenatedID";
+//+ (NSString*)primaryKey {
+//    return @"concatenatedID";
+//}
+
+#pragma mark - NSCoding Compliance
+
+- (id) initWithCoder:(NSCoder *)aDecoder {
+//    if((self = [CSTaskRealmModel new])){
+    if(self = [super init]) {
+        self.UUID = [aDecoder decodeObjectForKey:kUUID];
+        self.deviceID = [aDecoder decodeObjectForKey:kDeviceId];
+        self.concatenatedID = [aDecoder decodeObjectForKey:kConcatenatedID];
+        self.assignedID = [aDecoder decodeObjectForKey:kAssignedID];
+        self.tag = [aDecoder decodeObjectForKey:kTag];
+        
+        self.taskTitle = [aDecoder decodeObjectForKey:kTaskTitle];
+        self.taskDescription = [aDecoder decodeObjectForKey:kTaskDescription];
+        
+        NSNumber* num = [aDecoder decodeObjectForKey:kCompleted];
+        self.completed = [num boolValue];
+        num = [aDecoder decodeObjectForKey:kTaskPriority];
+        self.taskPriority = [num integerValue];
+        
+        NSMutableArray* dataArray = [aDecoder decodeObjectForKey:kRevisionDataArray];
+        for(CSTaskRevisionRealmModel* rev in dataArray) {
+            [self.revisions addObject:rev];
+        }
+        
+        dataArray = [aDecoder decodeObjectForKey:kMediaDataArray];
+        for(CSTaskMediaRealmModel* media in dataArray) {
+            [self.taskMedia addObject:media];
+        }
+        
+        dataArray = [aDecoder decodeObjectForKey:kCommentsDataArray];
+        for (CSCommentRealmModel* comment in dataArray) {
+            [self.comments addObject:comment];
+        }
+    }
+    
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)aCoder {
+    
+    [aCoder encodeObject:_UUID forKey:kUUID];
+    [aCoder encodeObject:_deviceID forKey:kDeviceId];
+    [aCoder encodeObject:_concatenatedID forKey:kConcatenatedID];
+    [aCoder encodeObject:_assignedID forKey:kAssignedID];
+    [aCoder encodeObject:_tag forKey:kTag];
+    [aCoder encodeObject: [NSNumber numberWithBool:_completed] forKey:kCompleted];
+    [aCoder encodeObject: _taskTitle forKey:kTaskTitle];
+    [aCoder encodeObject:_taskDescription forKey:kTaskDescription];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_taskPriority] forKey:kTaskPriority];
+    
+    NSMutableArray* revArray = [NSMutableArray arrayWithCapacity:_revisions.count];
+    for (CSTaskRevisionRealmModel* rev in self.revisions) {
+        [revArray addObject:rev];
+    }
+    [aCoder encodeObject:revArray forKey:kRevisionDataArray];
+    
+    NSMutableArray* mediaArray = [NSMutableArray arrayWithCapacity:_taskMedia.count];
+    for (CSTaskMediaRealmModel* media in self.taskMedia) {
+        [mediaArray addObject:media];
+    }
+    [aCoder encodeObject:mediaArray forKey:kMediaDataArray];
+    
+    NSMutableArray* commentsArray = [NSMutableArray arrayWithCapacity:_comments.count];
+    for (CSCommentRealmModel* comment in self.comments) {
+        [commentsArray addObject:comment];
+    }
+    [aCoder encodeObject:commentsArray forKey:kCommentsDataArray];
 }
 
 #pragma mark - Add media to tasks 

@@ -251,7 +251,7 @@
                  NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
              }
              else {
-                 NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", strongTask.taskTitle, thisPeer.displayName);
+                 NSLog(@"Task sending COMPLETE with name to peer: %@", thisPeer.displayName);
              }
          }];
         
@@ -618,15 +618,15 @@
         
         for(CSTaskRealmModel* task in tasks)
         {
-            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
+//            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
             
-            if(!foundTask) {
-                [self addTag:task.tag];
-                [_realm addObject:task];
-                
-            } else {
-                NSLog(@"Duplicate task not being stored");
-            }
+//            if(!foundTask) {
+//                [self addTag:task.tag];
+//                [_realm addObject:task];
+//
+//            } else {
+//                NSLog(@"Duplicate task not being stored");
+//            }
         }
         [_realm commitWriteTransaction];
     });
@@ -642,7 +642,7 @@
 
 -(void) addTag:(NSString*) tag
 {
-    if ([tag isEqualToString:@""]) return;
+    if ([tag isEqualToString:@""] || tag == nil) return;
     if(![_allTags valueForKey:tag]) [_allTags setValue:tag forKey:tag];
 }
 
