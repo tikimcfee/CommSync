@@ -36,18 +36,18 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            
+            
             if([receivedObject[0] isKindOfClass:[NSString class]])
             {
                 for(NSString* task in receivedObject)
                 {
-                    [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task] ];
+                     [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task] ];
                 }
                 
             }
             
-          
-            
-            if([receivedObject[0]isKindOfClass:[CSUserRealmModel class]])
+            else if([receivedObject[0]isKindOfClass:[CSUserRealmModel class]])
             {
                   NSMutableArray* differences = [[NSMutableArray alloc]init];
                 for(CSUserRealmModel *peer in receivedObject)
@@ -59,10 +59,11 @@
                     }
                 }
             
-            //if there were any diffrerences in the histories then send full history to all peers
-            if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
+                //if there were any diffrerences in the histories then send full history to all peers
+                if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
             }
-            else{
+            
+            else if([receivedObject[0] isKindOfClass:[CSChatMessageRealmModel class]]){
             
                 for(CSChatMessageRealmModel* message in receivedObject)
                 {

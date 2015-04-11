@@ -484,15 +484,16 @@
                     [self sendDataPacketToPeers:historyData];
                 }
                 
-                CSUserRealmModel* peer = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName][0];
+                NSArray* peers = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName];
+               
                 //add the user to a the peer history if weve never met
-                if(!peer)
+                if([peers count] == 0)
                 {
                     [self updatePeerHistory:peerID withID:nil];
                 }
                 
                 else{
-                    
+                     CSUserRealmModel *peer = peers[0];
                     NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
                                          peerID.displayName, peerID.displayName];
                     
@@ -528,7 +529,9 @@
             }
             NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
             
-            if([send count] > 0) [self sendSingleDataPacket:data toSinglePeer:peerID];
+            if([send count] > 0) {
+                [self sendSingleDataPacket:data toSinglePeer:peerID];
+            }
 
 //            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
 //            {
