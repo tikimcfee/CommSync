@@ -22,8 +22,7 @@
         self.peerID = peerID;
         self.displayName = display;
         self.unreadMessages = 0;
-        
-        
+        self.unsetMessages = 0;
         
         self.UUID  = [NSString stringWithFormat:@"%c%c%c%c%cc%c%c%c%c",
                        arc4random_uniform(25)+65,
@@ -73,6 +72,17 @@
 {
    // self.stringNum = @"0";
     self.unreadMessages = 0;
+}
+
+
+-(void)addUnsent
+{
+    self.unsetMessages = self.unsetMessages + 1;
+}
+
+-(void)removeUnsent
+{
+    self.unsetMessages = 0;
 }
 
 -(NSString*)getMessageNumber

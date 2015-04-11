@@ -29,32 +29,6 @@
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
     
-    if([receivedObject isKindOfClass:[NSNumber class]])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-            NSString *url = [basePath stringByAppendingString:@"/privateMessage.realm"];
-        
-            NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", _peer.displayName, _peer.displayName];
-        
-            RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
-        
-            RLMArray* messages = [CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred];
-        
-          //  if( [(NSNumber*)receivedObject integerValue] <= [messages count]) return;
-        
-        
-            NSMutableArray *message = [[NSMutableArray alloc]init];
-        
-        
-            [message addObjectsFromArray:messages];
-            NSLog(_peer.displayName);
-            NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:message];
-            [_parentAnalyzer.globalManager sendSingleDataPacket:historyData toSinglePeer:_peer];
-        });
-        
-    }
     
     if([receivedObject isKindOfClass:[NSMutableArray class]])
     {
@@ -62,10 +36,20 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSMutableArray* differences = [[NSMutableArray alloc]init];
+            if([receivedObject[0] isKindOfClass:[NSString class]])
+            {
+                for(NSString* task in receivedObject)
+                {
+                    [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task] ];
+                }
+                
+            }
+            
+          
             
             if([receivedObject[0]isKindOfClass:[CSUserRealmModel class]])
             {
+                  NSMutableArray* differences = [[NSMutableArray alloc]init];
                 for(CSUserRealmModel *peer in receivedObject)
                 {
                     if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
@@ -80,7 +64,6 @@
             }
             else{
             
-                
                 for(CSChatMessageRealmModel* message in receivedObject)
                 {
                     [self addPrivateMessage:message];
@@ -424,6 +407,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     [_globalManager sendDataPacketToPeers:newTaskData];
 }
 
+
 - (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task
 {
     NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
@@ -468,5 +452,10 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 
 
 
-
++ (NSString *)chatMessageRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/chat.realm"];
+}
 @end

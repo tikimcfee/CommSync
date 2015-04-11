@@ -73,7 +73,11 @@
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
 
 + (NSString *)peerHistoryRealmDirectory;
++ (NSString *)privateMessageRealmDirectory;
++ (NSString *)chatMessageRealmDirectory;
 @property (strong, nonatomic) RLMRealm *peerHistoryRealm;
+@property (strong, nonatomic) RLMRealm *chatMessageRealm;
+@property (strong, nonatomic) RLMRealm *privateMessageRealm;
 
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 

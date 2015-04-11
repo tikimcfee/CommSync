@@ -15,6 +15,7 @@
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
 #import "CSUserRealmModel.h"
+#import "SlackTestViewController.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -71,9 +72,13 @@
         _realm.autorefresh = YES;
         
         _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
-        
+        _chatMessageRealm = [RLMRealm realmWithPath :[CSSessionManager chatMessageRealmDirectory]];
+        _privateMessageRealm = [RLMRealm realmWithPath :[CSSessionManager privateMessageRealmDirectory]];
         
         _peerHistoryRealm.autorefresh = YES;
+        _chatMessageRealm.autorefresh = YES;
+        _chatMessageRealm.autorefresh = YES;
+        
         [NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(sendPulseToPeers) userInfo:nil repeats:YES];
     }
     
@@ -466,33 +471,69 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                //add the user to a the peer history if weve never met
-                if([[CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName] count] == 0)
-                {
-                    [self updatePeerHistory:peerID withID:nil];
-                }
-                
                 
                 //if this is a direct connection then propagate peer history and tasks of both users
                 if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
                 {
                     
-                    
-                    
                     NSMutableArray *peers = [[NSMutableArray alloc]init];
-                    
                     
                     [peers addObjectsFromArray:[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm]];
                     
                     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peers];
                     [self sendDataPacketToPeers:historyData];
                 }
+                
+                CSUserRealmModel* peer = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName][0];
+                //add the user to a the peer history if weve never met
+                if(!peer)
+                {
+                    [self updatePeerHistory:peerID withID:nil];
+                }
+                
+                else{
+                    
+                    NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
+                                         peerID.displayName, peerID.displayName];
+                    
+                    int number = peer.unsetMessages;
+                    if(number > 0)
+                    {
+                    
+                        RLMArray* messages = [CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:pred];
+                    
+                        NSMutableArray* send = [[NSMutableArray alloc]init];
+                    
+
+
+                        //add unsent messages
+                        for(int i = 0; i < number; i++ )
+                        {
+                            [send addObject: messages[[messages count] - 1 - i]];
+                        }
+                        NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
+                        [self sendSingleDataPacket:data toSinglePeer:peerID];
+                    
+                    }
+                }
+                
+                
             });
             
-            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+            NSMutableArray* send = [[NSMutableArray alloc]init];
+            
+            for(CSTaskRealmModel* task in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
             {
-                [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+                [send addObject:task.concatenatedID];
             }
+            NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
+            
+            if([send count] > 0) [self sendSingleDataPacket:data toSinglePeer:peerID];
+
+//            for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+//            {
+//                [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:temp.transientModel];
+//            }
             break;
         }
         default:
@@ -654,15 +695,6 @@
 
 -(void) addMessage:(NSString *)peer
 {
-    //    //if we dont have any messages create one
-    //    if(![_unreadMessages valueForKey:peer]){
-    //        [_unreadMessages setValue :[NSNumber numberWithInt:1] forKey:peer];
-    //        return;
-    //    }
-    //    //otherwise increase the number of them
-    //    NSNumber *temp = [_unreadMessages valueForKey:peer];
-    //    NSNumber *num = [NSNumber numberWithInt:temp.intValue + 1];
-    //    [_unreadMessages setValue: num forKey:peer];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
@@ -678,4 +710,18 @@
     if([_unreadMessages objectForKey:peer]) [_unreadMessages removeObjectForKey:peer];
 }
 
+
++ (NSString *)chatMessageRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/chat.realm"];
+}
+
++ (NSString *)privateMessageRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/privateMessage.realm"];
+}
 @end
