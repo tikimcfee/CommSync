@@ -24,7 +24,7 @@
 @property (strong, nonatomic) CSSessionManager* globalSessionManager;
 @property (strong, nonatomic) NSString* userDisplayName;
 
-@property (strong, nonatomic) dispatch_queue_t realmQueue;
+
 
 
 

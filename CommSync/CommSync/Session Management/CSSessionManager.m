@@ -74,17 +74,30 @@
         // Getting default realm from disk
         _realm = [RLMRealm defaultRealm];
         _realm.autorefresh = YES;
+       
+
+        self.realmQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+      
+            _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+            _chatMessageRealm = [RLMRealm realmWithPath :[CSSessionManager chatMessageRealmDirectory]];
+            _privateMessageRealm = [RLMRealm realmWithPath :[CSSessionManager privateMessageRealmDirectory]];
+           
+            
+            _peerHistoryRealm.autorefresh = YES;
+            _chatMessageRealm.autorefresh = YES;
+            _chatMessageRealm.autorefresh = YES;
+           
+      
         
-        _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
-        _chatMessageRealm = [RLMRealm realmWithPath :[CSSessionManager chatMessageRealmDirectory]];
-        _privateMessageRealm = [RLMRealm realmWithPath :[CSSessionManager privateMessageRealmDirectory]];
+        dispatch_sync(self.realmQueue, ^
+                       {
         
-        _peerHistoryRealm.autorefresh = YES;
-        _chatMessageRealm.autorefresh = YES;
-        _chatMessageRealm.autorefresh = YES;
+                           NSMutableArray *peers = [[NSMutableArray alloc]init];
+                           [peers addObjectsFromArray:[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm]];
+
         
-        [NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(sendPulseToPeers) userInfo:nil repeats:YES];
-    }
+                       });
+           }
     
     return self;
 }
@@ -473,7 +486,7 @@
             
             
             
-            dispatch_async(_app.realmQueue, ^{
+            dispatch_async(_realmQueue, ^{
                 
                 
                 //if this is a direct connection then propagate peer history and tasks of both users
@@ -650,7 +663,7 @@
 
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
 {
-    dispatch_async(_app.realmQueue, ^{
+    dispatch_async(_realmQueue, ^{
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSString *chatRealmPath = [basePath stringByAppendingString:@"/chat.realm"];
@@ -665,7 +678,7 @@
 
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
     
-    dispatch_async(_app.realmQueue, ^{
+    dispatch_async(_realmQueue, ^{
         
         [_realm beginWriteTransaction];
         
@@ -703,7 +716,7 @@
 -(void) addMessage:(NSString *)peer
 {
     
-    dispatch_async(_app.realmQueue, ^{
+    dispatch_async(_realmQueue, ^{
         CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
         NSLog(user.displayName);
         [_peerHistoryRealm beginWriteTransaction];

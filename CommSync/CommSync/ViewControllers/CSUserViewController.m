@@ -158,10 +158,17 @@
 
 -(void) checkMessages
 {
-    dispatch_async(_app.realmQueue, ^{
+    
+    dispatch_queue_t realmQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    if(!self)
+    {
+        return;
+    }
+    dispatch_async(realmQueue, ^{
     _navBar.title = ([[CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"unreadMessages > %d",0 ] count] > 0)?  @"Unread Messages" : @"No Unread Messages";
         });
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
 }
 
 @end

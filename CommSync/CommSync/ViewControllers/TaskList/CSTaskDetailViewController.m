@@ -144,7 +144,7 @@
 
 # pragma mark - Callbacks and UI State
 - (void)setImagesFromTask {
-    dispatch_async(_app.realmQueue, ^{
+    dispatch_async(_app.globalSessionManager.realmQueue, ^{
         if (_transientTask.TRANSIENT_taskImages.count > 0) {
             _embed.taskImages = _transientTask.TRANSIENT_taskImages;
             [_embed.tableView reloadData];
@@ -352,7 +352,7 @@
         
         [_transientTask.TRANSIENT_taskImages addObject:image];
         
-        dispatch_async(_app.realmQueue, ^{
+        dispatch_async(_app.globalSessionManager.realmQueue, ^{
             RLMRealm* realm = [RLMRealm defaultRealm];
             [realm beginWriteTransaction];
             [_transientTask saveImages:_sourceTask];
