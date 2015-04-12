@@ -32,46 +32,41 @@
     
     if([receivedObject isKindOfClass:[NSMutableArray class]])
     {
+        if([receivedObject count] == 0) return;
         
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            
-            
             if([receivedObject[0] isKindOfClass:[NSString class]])
             {
-                for(NSString* task in receivedObject)
-                {
-                     [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task] ];
-                }
-                
+                dispatch_sync(_parentAnalyzer.globalManager.taskRealmQueue,^{
+                    for(NSString* task in receivedObject) [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task] ];
+                });
             }
             
             else if([receivedObject[0]isKindOfClass:[CSUserRealmModel class]])
             {
-                  NSMutableArray* differences = [[NSMutableArray alloc]init];
-                for(CSUserRealmModel *peer in receivedObject)
-                {
-                    if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    NSMutableArray* differences = [[NSMutableArray alloc]init];
+                    for(CSUserRealmModel *peer in receivedObject)
+                    {
+                        if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
                     
-                        [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
-                        [differences addObject:peer];
+                            [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
+                            [differences addObject:peer];
+                        }
                     }
-                }
-            
-                //if there were any diffrerences in the histories then send full history to all peers
-                if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
+                     //if there were any diffrerences in the histories then send full history to all peers
+                    if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
+                    
+                });
+               
             }
             
             else if([receivedObject[0] isKindOfClass:[CSChatMessageRealmModel class]]){
-            
-                for(CSChatMessageRealmModel* message in receivedObject)
-                {
-                    [self addPrivateMessage:message];
-                }
+                dispatch_sync(_parentAnalyzer.globalManager.peerHistoryQueue,^{
+                for(CSChatMessageRealmModel* message in receivedObject) [self addPrivateMessage:message];
+                });
             }
         
-        });
+        
         
     }
     
@@ -83,8 +78,6 @@
     else if ([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
     {
         CSChatMessageRealmModel* temp = receivedObject;
-        
-        
         
         
         NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];

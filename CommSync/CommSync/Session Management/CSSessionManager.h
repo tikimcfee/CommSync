@@ -77,7 +77,12 @@
 @property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 @property (strong, nonatomic) RLMRealm *chatMessageRealm;
 @property (strong, nonatomic) RLMRealm *privateMessageRealm;
-@property (strong, nonatomic) dispatch_queue_t realmQueue;
+
+@property (strong, nonatomic) dispatch_queue_t taskRealmQueue;
+@property (strong, nonatomic) dispatch_queue_t privateMessageQueue;
+@property (strong, nonatomic) dispatch_queue_t chatMessageQueue;
+@property (strong, nonatomic) dispatch_queue_t peerHistoryQueue;
+
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 
 -(void) addTag:(NSString*) tag;
