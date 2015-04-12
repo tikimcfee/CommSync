@@ -12,6 +12,7 @@
 #import "CSPictureViewController.h"
 #import "SZTextView.h"
 #import <AVFoundation/AVFoundation.h>
+#import "AppDelegate.h"
 
 @interface CSTaskDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITextFieldDelegate>
 {
@@ -46,7 +47,7 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
-
+@property (strong, nonatomic) AppDelegate* app;
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;
 - (IBAction)    setGreen:(id)sender;

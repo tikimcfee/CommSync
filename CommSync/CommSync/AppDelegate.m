@@ -32,7 +32,7 @@
     _userDisplayName = [[UIDevice currentDevice] name];
     _globalSessionManager = [[CSSessionManager alloc] initWithID:_userDisplayName];
 
-    
+    self.realmQueue = dispatch_queue_create("realmQueue", NULL);
     return YES;
 }
 

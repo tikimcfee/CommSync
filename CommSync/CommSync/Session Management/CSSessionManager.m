@@ -30,6 +30,8 @@
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
 @property (nonatomic, strong) CSUserRealmModel *peers;
 
+@property (strong, nonatomic) AppDelegate *app;
+
 @end
 
 
@@ -42,6 +44,8 @@
     //
     if(self = [super init])
     {
+        
+        _app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
         _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
         _dataHandlingDelegate = _dataAnalyzer;
@@ -469,7 +473,7 @@
             
             
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(_app.realmQueue, ^{
                 
                 
                 //if this is a direct connection then propagate peer history and tasks of both users
@@ -646,7 +650,7 @@
 
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(_app.realmQueue, ^{
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSString *chatRealmPath = [basePath stringByAppendingString:@"/chat.realm"];
@@ -661,7 +665,7 @@
 
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(_app.realmQueue, ^{
         
         [_realm beginWriteTransaction];
         
@@ -699,7 +703,7 @@
 -(void) addMessage:(NSString *)peer
 {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(_app.realmQueue, ^{
         CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
         NSLog(user.displayName);
         [_peerHistoryRealm beginWriteTransaction];

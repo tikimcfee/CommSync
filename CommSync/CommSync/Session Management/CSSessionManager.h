@@ -45,7 +45,6 @@
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
 @property (strong, nonatomic) NSMutableDictionary* unreadMessages;
 
-
 // 1-1 session objects
 @property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
 

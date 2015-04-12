@@ -39,10 +39,13 @@
 #pragma mark - Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     //creates a transient task based off the current source task
     _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
-
+    
+    //grap app delegate
+    self.app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     self.navigationBar.title = self.sourceTask.taskTitle;
     
     //sets size of the container based on screen
@@ -141,7 +144,7 @@
 
 # pragma mark - Callbacks and UI State
 - (void)setImagesFromTask {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(_app.realmQueue, ^{
         if (_transientTask.TRANSIENT_taskImages.count > 0) {
             _embed.taskImages = _transientTask.TRANSIENT_taskImages;
             [_embed.tableView reloadData];
@@ -349,7 +352,7 @@
         
         [_transientTask.TRANSIENT_taskImages addObject:image];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(_app.realmQueue, ^{
             RLMRealm* realm = [RLMRealm defaultRealm];
             [realm beginWriteTransaction];
             [_transientTask saveImages:_sourceTask];

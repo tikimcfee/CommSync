@@ -8,7 +8,6 @@
 
 #import "CSUserViewController.h"
 #import "CSUserDetailView.h"
-#import "AppDelegate.h"
 
 @interface CSUserViewController ()
 {
@@ -28,8 +27,8 @@
     
     NSLog(@"Loaded user view!");
     
-    AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    self.sessionManager = d.globalSessionManager;
+    self.app= (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    self.sessionManager = _app.globalSessionManager;
     
 
 
@@ -159,7 +158,7 @@
 
 -(void) checkMessages
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(_app.realmQueue, ^{
     _navBar.title = ([[CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"unreadMessages > %d",0 ] count] > 0)?  @"Unread Messages" : @"No Unread Messages";
         });
     [self.tableView reloadData];
