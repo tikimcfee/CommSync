@@ -33,7 +33,6 @@
                        arc4random_uniform(25)+97,
                        arc4random_uniform(25)+97,
                        arc4random_uniform(25)+97,
-                       arc4random_uniform(25)+97,
                        arc4random_uniform(25)+97];
        
     }
@@ -60,7 +59,7 @@
     [aCoder encodeObject:self.displayName forKey:@"displayName"];
     [aCoder encodeObject:self.peerID forKey:@"peerID"];
     [aCoder encodeObject:self.UUID forKey:@"UUID"];
-    [aCoder encodeInt:self.unreadMessages forKey:@"unreadMessages"];
+    [aCoder encodeInteger:self.unreadMessages forKey:@"unreadMessages"];
 }
 
 -(void)addMessage
@@ -88,7 +87,7 @@
 -(NSString*)getMessageNumber
 {
    // if(!_stringNum) _stringNum = @"0";
-    return [NSString stringWithFormat:@"( %d unread)", self.unreadMessages];
+    return [NSString stringWithFormat:@"( %ld unread)", self.unreadMessages];
 }
 
 + (NSString*)primaryKey {

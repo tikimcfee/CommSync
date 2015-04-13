@@ -1361,24 +1361,6 @@
             </objects>
             <point key="canvasLocation" x="3353" y="1105.5"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="e6t-8w-vch">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Bv9-yd-aeg" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Jbv-Fv-kkI"/>
-                        <viewControllerLayoutGuide type="bottom" id="KXG-yl-tAk"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="mmK-og-fey">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Wbi-6C-bqN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
     </scenes>
     <resources>
         <image name="Play Button" width="56" height="56"/>

@@ -497,14 +497,15 @@
                 //if this is a direct connection then propagate peer history and tasks of both users
                 if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
                 {
-                    
                     NSMutableArray *peers = [[NSMutableArray alloc]init];
-                    [peers addObjectsFromArray:[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm]];
+                    for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm]) {
+                        [peers addObject:user];
+                    }
                     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peers];
                     [self sendDataPacketToPeers:historyData];
                 }
                 
-                NSArray* peers = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName];
+                RLMResults* peers = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName];
                
                 //add the user to a the peer history if weve never met
                 if([peers count] == 0)
@@ -517,28 +518,22 @@
                     NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
                                          peerID.displayName, peerID.displayName];
                     
-                    int number = peer.unsetMessages;
+                    NSInteger number = peer.unsetMessages;
                     if(number > 0)
                     {
-                    
-                        RLMArray* messages = [CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:pred];
-                    
-                        NSMutableArray* send = [[NSMutableArray alloc]init];
-                    
-
-
+                        RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:pred];
+                        NSMutableArray* send = [[NSMutableArray alloc] init];
+                        
                         //add unsent messages
                         for(int i = 0; i < number; i++ )
                         {
                             [send addObject: messages[[messages count] - 1 - i]];
                         }
+                        
                         NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
                         [self sendSingleDataPacket:data toSinglePeer:peerID];
-                    
                     }
                 }
-                
-                
             });
             
             dispatch_async(_taskRealmQueue, ^{
@@ -634,11 +629,8 @@
 #pragma mark - Database actions
 - (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString *)UUID
 {
-    
-    
-    
-    if([peerID.displayName isEqualToString:_myPeerID.displayName]) return;
-    
+    if([peerID.displayName isEqualToString:_myPeerID.displayName])
+        return;
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
     CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:peerID.displayName];
@@ -677,27 +669,27 @@
     });
 }
 
-- (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
-    
-    dispatch_sync(_taskRealmQueue, ^{
-        
-        [_realm beginWriteTransaction];
-        
-        for(CSTaskRealmModel* task in tasks)
-        {
-//            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
-            
-//            if(!foundTask) {
-//                [self addTag:task.tag];
-//                [_realm addObject:task];
-//
-//            } else {
-//                NSLog(@"Duplicate task not being stored");
-//            }
-        }
-        [_realm commitWriteTransaction];
-    });
-}
+//- (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
+//    
+//    dispatch_sync(_taskRealmQueue, ^{
+//        
+//        [_realm beginWriteTransaction];
+//        
+//        for(CSTaskRealmModel* task in tasks)
+//        {
+////            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
+//            
+////            if(!foundTask) {
+////                [self addTag:task.tag];
+////                [_realm addObject:task];
+////
+////            } else {
+////                NSLog(@"Duplicate task not being stored");
+////            }
+//        }
+//        [_realm commitWriteTransaction];
+//    });
+//}
 
 
 + (NSString *)peerHistoryRealmDirectory
@@ -725,7 +717,7 @@
     
     dispatch_sync(_peerHistoryQueue, ^{
         CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
-        NSLog(user.displayName);
+        NSLog(@"%@", user.displayName);
         [_peerHistoryRealm beginWriteTransaction];
         [user addMessage];
         [_peerHistoryRealm commitWriteTransaction];

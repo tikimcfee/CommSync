@@ -22,7 +22,4 @@
 //@property (strong, nonatomic) CSCommentRealmModel *tempComment;
 @property (weak, nonatomic) RLMRealm* realm;
 
-- (IBAction)resync;
--(void) populate;
-
 @end

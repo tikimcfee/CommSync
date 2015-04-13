@@ -52,7 +52,6 @@
 - (IBAction)    setYellow:(id)sender;
 - (IBAction)    editMode:(id)sender;
 - (IBAction)    addPicture:(id)sender;
-- (IBAction)    completeTask:(id)sender;
 - (void)        setImagesFromTask;
 
 @end

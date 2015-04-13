@@ -75,7 +75,6 @@
 - (void) nukeHistory;
 
 - (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
-- (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
 
 + (NSString *)incomingTaskRealmDirectory;
 + (NSString *)peerHistoryRealmDirectory;
