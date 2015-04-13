@@ -7,17 +7,30 @@
 //
 
 #import "CSRealmWriteOperation.h"
+#import "CSSessionManager.h"
+#import "CSIncomingTaskRealmModel.h"
 
 #import <Realm/Realm.h>
 
 @implementation CSRealmWriteOperation
 
 - (void) main {
-    [[RLMRealm defaultRealm] beginWriteTransaction];
+    RLMRealm* taskRealm = [RLMRealm defaultRealm];
+    RLMRealm* incomingTaskRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+//    if(_remove == NO) {
+        [taskRealm beginWriteTransaction];
+        [taskRealm addObject:self.pendingTask];
+        [taskRealm commitWriteTransaction];
+//    } else {
     
-    [[RLMRealm defaultRealm] addObject:self.pendingTask];
+    NSString* string = [NSString stringWithFormat:@"%@_INCOMING", _pendingTask.concatenatedID];
+        CSIncomingTaskRealmModel* toDelete = [CSIncomingTaskRealmModel objectInRealm:incomingTaskRealm
+                                                                       forPrimaryKey:string];
+        [incomingTaskRealm beginWriteTransaction];
+        [incomingTaskRealm deleteObject:toDelete];
+        [incomingTaskRealm commitWriteTransaction];
+//    }
     
-    [[RLMRealm defaultRealm] commitWriteTransaction];
 }
 
 @end

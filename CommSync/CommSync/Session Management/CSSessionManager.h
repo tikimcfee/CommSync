@@ -16,6 +16,7 @@
 #define MANUAL_DISCONNECT_STRING @"|~DISCONNECT~|"
 
 // Notification names
+#define kCSTaskObservationID @"kCSTaskObservationID"
 #define kCSDidStartReceivingResourceWithName @"kCSDidStartReceivingResourceWithName"
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
@@ -72,8 +73,8 @@
 - (void)updatePeerHistory:(MCPeerID *)peerID;
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
 
-
-+ (NSString *)peerHistoryRealmDirectory;
++ (NSString*)incomingTaskRealmDirectory;
++ (NSString*)peerHistoryRealmDirectory;
 
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 

@@ -185,27 +185,11 @@
         [newModel.taskMedia addObject:[CSTaskMediaRealmModel mediaModelWithModel:media]];
     }
     
-    return newModel;
-}
-
-+ (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus:(BOOL)completed{
-    RLMResults* allTasks;
-    NSPredicate *pred;
-    
-    if(user && tag) pred = [NSPredicate predicateWithFormat:@"assignedID = %@  AND tag = %@ AND completed = %d" , user, tag, completed];
-    else if(user && !tag)pred = [NSPredicate predicateWithFormat:@"assignedID = %@ AND completed = %d", user, completed ];
-    else if(!user && tag) pred = [NSPredicate predicateWithFormat:@"tag = %@ AND completed = %d", tag, completed];
-    else pred = [NSPredicate predicateWithFormat:@"completed = %d", completed];
-    
-    
-    allTasks = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
-    
-    NSMutableArray* taskDataStore = [NSMutableArray arrayWithCapacity:allTasks.count];
-    for(CSTaskRealmModel* t in allTasks) {
-        [taskDataStore addObject: t];
+    for (CSCommentRealmModel* comment in model.comments) {
+        [newModel.comments addObject:comment];
     }
     
-    return taskDataStore;
+    return newModel;
 }
 
 - (NSData*) getTaskAudio {

@@ -46,7 +46,8 @@
 @interface CSNewTaskResourceInformationContainer : NSObject
 
 @property (strong, nonatomic) NSString* resourceName;
-@property (strong, nonatomic) MCPeerID* peerID;
-@property (strong, nonatomic) NSProgress* progressObject;
+@property (strong, nonatomic) NSString* peerDisplayName;
+//@property (strong, nonatomic) NSProgress* progressObject;
+@property (strong, nonatomic) NSString* taskObservationString;
 
 @end

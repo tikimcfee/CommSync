@@ -9,6 +9,7 @@
 #import "CSSessionDataAnalyzer.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSTaskRealmModel.h"
+#import "CSIncomingTaskRealmModel.h"
 #import "CSRealmWriteOperation.h"
 
 // Critical constants for building data transmission strings
@@ -248,35 +249,42 @@ didStartReceivingResourceWithName:(NSString *)resourceName
        fromPeer:(MCPeerID *)peerID
    withProgress:(NSProgress *)progress
 {
-    // Create a notification dictionary for resource progress tracking
-    CSNewTaskResourceInformationContainer* container = [CSNewTaskResourceInformationContainer new];
-    container.resourceName = resourceName;
-    container.peerID = peerID;
-    container.progressObject = progress;
+    NSString* taskObservationName = [NSString stringWithFormat:@"%@_INCOMING", resourceName];
+    [progress setUserInfoObject:taskObservationName forKey:kCSTaskObservationID];
     
-    NSDictionary *containerDictionary = @{kCSNewTaskResourceInformationContainer:container};
+    RLMRealm* incomingTaskRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+    CSIncomingTaskRealmModel* newIncomingTask = [CSIncomingTaskRealmModel new];
+    
+    
+    newIncomingTask.taskObservationString = taskObservationName;
+    newIncomingTask.trueTaskName = resourceName;
+    newIncomingTask.peerDisplayName = peerID.displayName;
+    
+    [incomingTaskRealm beginWriteTransaction];
+    [incomingTaskRealm addObject:newIncomingTask];
+    [incomingTaskRealm commitWriteTransaction];
     
     // Post notification globally
     // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
-                                                        object:nil
-                                                      userInfo:containerDictionary];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
+//                                                        object:nil
+//                                                      userInfo:containerDictionary];
+    
+    
     
     // we have made a request and been served - add it to our pool
     @synchronized (_requestPool){
         [_requestPool setValue:peerID forKey:resourceName];
     }
     
-    /**
-     Use this code if you want to observe the progress of a data transfer from the
-     data analyzer and then send notifications out as progress changes
-     //    dispatch_async(dispatch_get_main_queue(), ^{
-     //        [progress addObserver:self
-     //                   forKeyPath:@"fractionCompleted"
-     //                      options:NSKeyValueObservingOptionNew
-     //                      context:nil];
-     //    });
-     **/
+//     Use this code if you want to observe the progress of a data transfer from the
+//     data analyzer and then send notifications out as progress changes
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [progress addObserver:self
+                   forKeyPath:@"fractionCompleted"
+                      options:NSKeyValueObservingOptionNew
+                      context:nil];
+    });
 }
 
 
@@ -291,12 +299,6 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
         NSLog(@"%@",error);
         return;
     }
-    
-    // Create a notification dictionary for final location and name
-    NSDictionary *dict = @{@"resourceName"  :   resourceName,
-                           @"peerID"        :   peerID,
-                           @"localURL"      :   localURL
-                           };
     
     // We have finished our request - get rid out of it
     // TODO
@@ -314,25 +316,29 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     {
         [self addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:resourceName];
         [self sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)newTask];
+        
+        // Create a notification dictionary for final location and name
+        NSDictionary *dict = @{@"resourceName"  :   resourceName,
+                               @"peerID"        :   peerID,
+                               @"localURL"      :   localURL
+                               };
+        
+        // Post notification globally
+        // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+        [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
+                                                            object:nil
+                                                          userInfo:dict];
     }
-    
-    // Post notification globally
-    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
-                                                        object:nil
-                                                      userInfo:dict];
 }
 
 #pragma mark - Data persistence
 - (void) addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:(NSString*)identifier{
     NSLog(@"I recieved a new task");
     
-    [_globalManager addTag:newTask.tag];
-    
     CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
     newWriteOperation.pendingTask = newTask;
-    [self.realmWriteQueue addOperation:newWriteOperation];
     
+    [self.realmWriteQueue addOperation:newWriteOperation];
 }
 
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID
@@ -345,31 +351,23 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     }
     
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"concatenatedID = %@", taskID];
-    
     RLMResults* results = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
     if (results.count == 1) {
         return [results objectAtIndex:0];
     }
     
-//    CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
-//    if(model)
-//        return [CSTaskRealmModel objectForPrimaryKey:taskID];
-    
     return nil;
 }
 
 #pragma mark - OBSERVATION CALLBACK
-/**
  -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
- // Post global notification that the progress of a resource stream has changed.
- // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
- NSLog(@"Task progress: %f", ((NSProgress *)object).fractionCompleted);
+//  Post global notification that the progress of a resource stream has changed.
+//  NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
  
  [[NSNotificationCenter defaultCenter] postNotificationName:kCSReceivingProgressNotification
- object:nil
- userInfo:@{@"progress": (NSProgress *)object}];
+                                                     object:nil
+                                                   userInfo:@{@"progress": (NSProgress *)object}];
  }
- **/
 
 #pragma mark - Data transmission
 - (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task

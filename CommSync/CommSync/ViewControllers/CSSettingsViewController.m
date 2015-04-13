@@ -48,13 +48,25 @@
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
     NSString *title = @"Yes";
-    if (actionHandler == self.nukeDatabaseHandler)
+    NSIndexPath* path;
+    if (actionHandler == self.nukeDatabaseHandler) {
+        path = [NSIndexPath indexPathForRow:1 inSection:1];
         title = @"Clear Database";
-    else if (actionHandler == self.nukeSessionHandler)
+    }
+    else if (actionHandler == self.nukeSessionHandler) {
+        path = [NSIndexPath indexPathForRow:0 inSection:1];
         title = @"Restart Session";
-    else if (actionHandler == self.nukePeerHistoryHandler)
+    }
+    else if (actionHandler == self.nukePeerHistoryHandler) {
+        path = [NSIndexPath indexPathForRow:2 inSection:1];
         title = @"Clear Peer History";
-        
+    }
+    
+    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:path];
+    CGRect rectOfCellInSuperview = [self.tableView convertRect:rectOfCellInTableView toView:[self.tableView superview]];
+    alert.popoverPresentationController.sourceView = self.view;
+    alert.popoverPresentationController.sourceRect = rectOfCellInSuperview;
+    
     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:title
                                                             style:UIAlertActionStyleDestructive
                                                           handler:actionHandler];

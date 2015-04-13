@@ -10,6 +10,7 @@
 #import "CSSessionDataAnalyzer.h"
 #import "CSSessionManager.h"
 #import "CSSessionDataAnalyzer.h"
+#import "CSIncomingTaskRealmModel.h"
 
 @implementation CSTaskProgressTableViewCell
 
@@ -23,13 +24,15 @@
     // Configure the view for the selected state
 }
 
-- (void)configureWithSourceInformation:(CSNewTaskResourceInformationContainer *)container {
+- (void)configureWithIdentifier:(NSString*)identifier {
 
+    CSIncomingTaskRealmModel* incoming = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]]
+                                                                   forPrimaryKey:identifier];
+    
     // Set label view traits
     self.taskStatusLabel.layer.borderWidth = 0.5f;
     self.taskStatusLabel.layer.borderColor = [[UIColor blueColor] colorWithAlphaComponent:0.5].CGColor;
     self.taskStatusLabel.layer.cornerRadius = self.frame.size.height/4.f;
-    
     self.taskStatusLabel.layer.masksToBounds = NO;
     self.taskStatusLabel.layer.shouldRasterize = YES;
     
@@ -37,23 +40,11 @@
     NSMutableAttributedString* label = [self.taskStatusLabel.attributedText mutableCopy];
     NSDictionary* attributes = [label attributesAtIndex:0 effectiveRange:nil];
     
-    NSString* peerName = [NSString stringWithFormat:@"\n%@..", container.peerID.displayName];
+    NSString* peerName = [NSString stringWithFormat:@"\n%@..", incoming.peerDisplayName];
     NSMutableAttributedString* sourceName = [[NSMutableAttributedString alloc] initWithString:peerName attributes:attributes];
-    
     [label appendAttributedString:sourceName];
-    
     [self.taskStatusLabel setAttributedText:label];
-    
-    // Set progress ring state and observations
-    _loadProgress = container.progressObject;
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.loadProgress addObserver:self
-                   forKeyPath:@"fractionCompleted"
-                      options:NSKeyValueObservingOptionNew
-                      context:nil];
-    });
-    
+
     [_progressRingView setProgressRingWidth:4];
     [_progressRingView setBackgroundRingWidth:4];
     _progressRingView.layer.cornerRadius = 30;
@@ -65,8 +56,7 @@
     _progressRingView.showPercentage = YES;
     
     // Set completion block and state information
-    _resourceName = container.resourceName;
-    _sourceTask = container;
+    _resourceName = incoming.taskObservationString;
     
     [self registerForNotifications];
 }
@@ -74,17 +64,13 @@
 - (void)registerForNotifications {
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(newTaskStreamFinished:)
-                                                 name:kCSDidFinishReceivingResourceWithName
+                                             selector:@selector(observeProgressChanges:)
+                                                 name:kCSReceivingProgressNotification
                                                object:nil];
-    
 }
+
 - (void)deregisterNotifications {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                  name:kCSDidFinishReceivingResourceWithName
-                                                object:nil];
-    
-    [_loadProgress removeObserver:self forKeyPath:@"fractionCompleted" context:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) cleanup {
@@ -92,8 +78,6 @@
     
     self.progressRingView = nil;
     self.taskStatusLabel = nil;
-    self.loadProgress = nil;
-    self.sourceTask = nil;
     self.resourceName = nil;
     self.progressCompletionBlock = nil;
 }
@@ -102,29 +86,24 @@
     NSLog(@"Task progress cell deallocated.");
 }
 
-- (void) newTaskStreamFinished:(NSNotification*)notification {
-    NSDictionary* info = notification.userInfo;
-    NSString* resourceName = [info valueForKey:@"resourceName"];
-    if( ![resourceName isEqualToString:_resourceName] ) {
-        return;
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        CSTaskProgressTableViewCell* strSelf = weakSelf;
-        strSelf.progressRingView.showPercentage = NO;
-        [strSelf.progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
-        
-        if(strSelf.progressCompletionBlock)
-        {
-            strSelf.progressCompletionBlock(self, nil);
-            [strSelf cleanup];
+- (void)observeProgressChanges:(NSNotification*)notification {
+    NSProgress* progress = [notification.userInfo valueForKey:@"progress"];
+    if([[progress.userInfo valueForKey:kCSTaskObservationID] isEqualToString:_resourceName]) {
+        if(progress.fractionCompleted == 1.0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _progressRingView.showPercentage = NO;
+                [_progressRingView performAction:M13ProgressViewActionSuccess animated:YES];
+                [_progressRingView setProgress:progress.fractionCompleted animated:YES];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _progressRingView.showPercentage = YES;
+                [_progressRingView performAction:M13ProgressViewActionNone animated:YES];
+                [_progressRingView setProgress:progress.fractionCompleted animated:YES];
+            });
         }
-    });
-}
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [_progressRingView setProgress:_loadProgress.fractionCompleted animated:YES];
+    }
 }
 
 @end

@@ -14,6 +14,7 @@
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
 		4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4562F2051A78927200090005 /* CSTaskRealmModel.m */; };
+		457832EB1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */; };
 		4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4595391D19E38F1F00744747 /* CSSessionManager.m */; };
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
@@ -152,6 +153,8 @@
 		454D92091A78581F000B74A8 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4562F2041A78927200090005 /* CSTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRealmModel.h; path = Models/CSTaskRealmModel.h; sourceTree = "<group>"; };
 		4562F2051A78927200090005 /* CSTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRealmModel.m; path = Models/CSTaskRealmModel.m; sourceTree = "<group>"; };
+		457832E91ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIncomingTaskRealmModel.h; path = Models/CSIncomingTaskRealmModel.h; sourceTree = "<group>"; };
+		457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIncomingTaskRealmModel.m; path = Models/CSIncomingTaskRealmModel.m; sourceTree = "<group>"; };
 		4595391C19E38F1F00744747 /* CSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionManager.h; path = "Session Management/CSSessionManager.h"; sourceTree = "<group>"; };
 		4595391D19E38F1F00744747 /* CSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionManager.m; path = "Session Management/CSSessionManager.m"; sourceTree = "<group>"; };
 		459D5F7319DB449900C91EFA /* CommSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -851,6 +854,8 @@
 				74098E7A1AD70CEC0081C69C /* CSTaskRevisionRealmModel.m */,
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
 				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
+				457832E91ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.h */,
+				457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */,
 				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
 				93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */,
@@ -1296,6 +1301,7 @@
 				93EBABCA1A964552006BAF4A /* UIImage+JSQMessages.m in Sources */,
 				74C541EF1A93E67100FC29AD /* TLIndexPathUpdates.m in Sources */,
 				74C541EC1A93E67100FC29AD /* TLIndexPathDataModel.m in Sources */,
+				457832EB1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m in Sources */,
 				93EBACDD1A97D8A0006BAF4A /* SLKInputAccessoryView.m in Sources */,
 				746F6AD11A892613007A83E8 /* EZMicrophone.m in Sources */,
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
@@ -1456,7 +1462,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1478,7 +1484,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
