@@ -7,10 +7,10 @@
 //
 
 #import "CSSessionManager.h"
+#import <Realm/Realm.h>
 
 
 #import "CSTaskRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
@@ -30,8 +30,6 @@
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
 @property (nonatomic, strong) CSUserRealmModel *peers;
 
-@property (strong, nonatomic) AppDelegate *app;
-
 @end
 
 
@@ -44,8 +42,6 @@
     //
     if(self = [super init])
     {
-        
-        _app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
         _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
         _dataHandlingDelegate = _dataAnalyzer;
@@ -90,13 +86,20 @@
             _privateMessageRealm = [RLMRealm realmWithPath :[CSSessionManager privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
         });
+
         
         dispatch_sync(self.chatMessageQueue,^{
             _chatMessageRealm = [RLMRealm realmWithPath :[CSSessionManager chatMessageRealmDirectory]];
             _chatMessageRealm.autorefresh = YES;
         });
+
+		// Setting up concurrent send operations
+        _mainTaskSendQueue = [NSOperationQueue new];
+        _mainTaskSendQueue.maxConcurrentOperationCount = 3;
+
+		[NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(sendPulseToPeers) userInfo:nil repeats:YES];
     }
-    
+       
     return self;
 }
 
@@ -129,7 +132,7 @@
     
     for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
     {
-        [[CSSessionDataAnalyzer sharedInstance:nil] validateDataWithRandomPeer:temp.transientModel];
+        [[CSSessionDataAnalyzer sharedInstance:nil] validateDataWithRandomPeer:temp];
     }
 }
 
@@ -184,11 +187,14 @@
     }
 }
 
-- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
+- (void) sendNewTaskToPeers:(CSTaskRealmModel*)newTask;
 {
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
-        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:newTask];
+        // fixing models?
+        CSTaskRealmModel* inMemoryModel = [CSTaskRealmModel taskModelWithModel:newTask];
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:inMemoryModel];
+        
         NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
         
         NSURL* URLOfNewTask = [newTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
@@ -227,18 +233,18 @@
     //    }
 }
 
-- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer
+- (void) sendSingleTask:(CSTaskRealmModel*)task toSinglePeer:(MCPeerID*)peer
 {
     
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
-        CSTaskTransientObjectStore* strongTask = task;
+        CSTaskRealmModel* inMemoryModel = [CSTaskRealmModel taskModelWithModel:task];
         MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
         if(!sessionToSendOn) {
             NSLog(@"! No active session found for peer [%@]", peer.displayName);
             return;
         }
-        
+          
         if(sessionToSendOn.connectedPeers.count > 1) {
             NSLog(@"! WARNING ! - Session with multiple users (%@)", sessionToSendOn.connectedPeers);
         } else if (sessionToSendOn.connectedPeers.count <= 0) {
@@ -246,15 +252,22 @@
             return;
         }
         
-        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:strongTask];
+//        CSTaskResourceSendOperation* newOperation = [CSTaskResourceSendOperation new];
+//        [newOperation configureWithModel:inMemoryModel
+//                               recipient:peer
+//                               inSession:sessionToSendOn];
         
+//        [_mainTaskSendQueue addOperation:newOperation];
+        
+        NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:inMemoryModel];
+
         NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
-        
-        NSURL* URLOfNewTask = [strongTask temporarilyPersistTaskDataToDisk:newTaskDataBlob];
+
+        NSURL* URLOfNewTask = [inMemoryModel temporarilyPersistTaskDataToDisk:newTaskDataBlob];
         
         MCPeerID* thisPeer = [sessionToSendOn.connectedPeers objectAtIndex:0];
         [sessionToSendOn sendResourceAtURL:URLOfNewTask
-                                  withName:strongTask.concatenatedID
+                                  withName:inMemoryModel.concatenatedID
                                     toPeer:thisPeer
                      withCompletionHandler:
          ^(NSError *error) {
@@ -262,15 +275,9 @@
                  NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
              }
              else {
-                 NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", strongTask.taskTitle, thisPeer.displayName);
+                 NSLog(@"Task sending COMPLETE with name to peer: %@", thisPeer.displayName);
              }
          }];
-        
-        //        NSLog(@"Removing file from disk...");
-        //        if([task removeTemporaryTaskDataFromDisk])
-        //        {
-        //            NSLog(@"Task %@ still exists on disk!", task);
-        //        }
     }
 }
 
@@ -676,18 +683,17 @@
         
         [_realm beginWriteTransaction];
         
-        for(CSTaskTransientObjectStore* task in tasks)
+        for(CSTaskRealmModel* task in tasks)
         {
-            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
+//            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
             
-            if(!foundTask) {
-                [self addTag:task.tag];
-                CSTaskRealmModel* newModel = [[CSTaskRealmModel alloc] init];
-                [task setAndPersistPropertiesOfNewTaskObject:newModel inRealm:_realm withTransaction:NO];
-                
-            } else {
-                NSLog(@"Duplicate task not being stored");
-            }
+//            if(!foundTask) {
+//                [self addTag:task.tag];
+//                [_realm addObject:task];
+//
+//            } else {
+//                NSLog(@"Duplicate task not being stored");
+//            }
         }
         [_realm commitWriteTransaction];
     });
@@ -701,9 +707,16 @@
     return [basePath stringByAppendingString:@"/peers.realm"];
 }
 
++ (NSString*)incomingTaskRealmDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return [basePath stringByAppendingString:@"/incomingTasks.realm"];
+}
+
 -(void) addTag:(NSString*) tag
 {
-    if ([tag isEqualToString:@""]) return;
+    if ([tag isEqualToString:@""] || tag == nil) return;
     if(![_allTags valueForKey:tag]) [_allTags setValue:tag forKey:tag];
 }
 
@@ -714,7 +727,7 @@
         CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
         NSLog(user.displayName);
         [_peerHistoryRealm beginWriteTransaction];
-        user.addMessage;
+        [user addMessage];
         [_peerHistoryRealm commitWriteTransaction];
     });
 }

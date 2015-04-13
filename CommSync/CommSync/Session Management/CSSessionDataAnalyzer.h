@@ -24,14 +24,14 @@
 + (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager;
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
-- (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task;
--(void) addPrivateMessage:(CSChatMessageRealmModel*) message;
-- (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task;
+- (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task;
+- (void) addPrivateMessage:(CSChatMessageRealmModel*) message;
+- (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task;
 
-- (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID;
+- (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
 - (NSDictionary*) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
--(void) propagateTasks:(NSDictionary *) taskData;
+- (void) propagateTasks:(NSDictionary *) taskData;
 
 @end
 
@@ -50,7 +50,8 @@
 @interface CSNewTaskResourceInformationContainer : NSObject
 
 @property (strong, nonatomic) NSString* resourceName;
-@property (strong, nonatomic) MCPeerID* peerID;
-@property (strong, nonatomic) NSProgress* progressObject;
+@property (strong, nonatomic) NSString* peerDisplayName;
+//@property (strong, nonatomic) NSProgress* progressObject;
+@property (strong, nonatomic) NSString* taskObservationString;
 
 @end

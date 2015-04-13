@@ -19,22 +19,10 @@
     if(!_tableviewToUpdate)
         return;
     
-    __weak typeof(self) weakSelf = self;
-    if(_updatesToPerform)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_updatesToPerform performBatchUpdatesOnTableView:weakSelf.tableviewToUpdate withRowAnimation:UITableViewRowAnimationFade completion:^(BOOL finished) {
-                    weakSelf.tableviewDidFinishUpdates = YES;
-            }];
-        });
-        
-    } else {
-        _indexPathController.delegate = self;
-        _tableviewDidFinishUpdates = NO;
-        
-        if(_reloadBlock)
-            _reloadBlock(_sourceDataToRemove);
-    }
+    _indexPathController.delegate = self;
+    _tableviewDidFinishUpdates = NO;
+    
+    _reloadBlock();
 
     while(!_tableviewDidFinishUpdates)
     {
@@ -47,15 +35,17 @@
     __weak typeof(self) weakSelf = self;
     if(!weakSelf.tableviewIsVisible) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableviewToUpdate reloadData];
-            weakSelf.tableviewDidFinishUpdates = YES;
+            CSTaskListUpdateOperation* strSelf = weakSelf;
+            [strSelf.tableviewToUpdate reloadData];
+            strSelf.tableviewDidFinishUpdates = YES;
         });
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
+            CSTaskListUpdateOperation* strSelf = weakSelf;
             [updates performBatchUpdatesOnTableView:weakSelf.tableviewToUpdate
                                    withRowAnimation:UITableViewRowAnimationFade
                                          completion:^(BOOL finished) {
-                                                 weakSelf.tableviewDidFinishUpdates = YES;
+                                                 strSelf.tableviewDidFinishUpdates = YES;
                                          }];
 
         });

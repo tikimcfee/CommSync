@@ -7,8 +7,9 @@
 //
 
 #import "CSSessionDataAnalyzer.h"
-#import "CSTaskTransientObjectStore.h"
+#import "CSChatMessageRealmModel.h"
 #import "CSTaskRealmModel.h"
+#import "CSIncomingTaskRealmModel.h"
 #import "CSRealmWriteOperation.h"
 
 // Critical constants for building data transmission strings
@@ -78,7 +79,6 @@
     else if ([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])
     {
         CSChatMessageRealmModel* temp = receivedObject;
-        
         
         NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
         @synchronized (_messagePool){
@@ -166,7 +166,7 @@
     [_messagePool removeObjectForKey:message];
 }
 
--(void) propagateTasks:(NSDictionary *) taskData
+- (void) propagateTasks:(NSDictionary *)taskData
 {
     // received new task request or task notification
     if ([taskData valueForKey:kCS_HEADER_NEW_TASK])
@@ -183,7 +183,7 @@
         }
         
         // check to see if the task already exists
-        CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:newTaskId];
+        CSTaskRealmModel* model = [_parentAnalyzer getModelFromQueueOrDatabaseWithID:newTaskId];
         if(model)
         {
             NSLog(@"<.> Task ID %@ already exists; no action to be taken.",newTaskId);
@@ -207,7 +207,7 @@
         NSString* requestedTaskID = [taskData valueForKey:kCS_HEADER_TASK_REQUEST];
         
         // check to see if the task exists
-        CSTaskTransientObjectStore* model = [_parentAnalyzer getTransientModelFromQueueOrDatabaseWithID:requestedTaskID];
+        CSTaskRealmModel* model = [_parentAnalyzer getModelFromQueueOrDatabaseWithID:requestedTaskID];
         if(!model)
         {
             NSLog(@"<?> Task request received, but not found in default database. Possibly a malformed dictionary?");
@@ -275,35 +275,42 @@ didStartReceivingResourceWithName:(NSString *)resourceName
        fromPeer:(MCPeerID *)peerID
    withProgress:(NSProgress *)progress
 {
-    // Create a notification dictionary for resource progress tracking
-    CSNewTaskResourceInformationContainer* container = [CSNewTaskResourceInformationContainer new];
-    container.resourceName = resourceName;
-    container.peerID = peerID;
-    container.progressObject = progress;
+    NSString* taskObservationName = [NSString stringWithFormat:@"%@_INCOMING", resourceName];
+    [progress setUserInfoObject:taskObservationName forKey:kCSTaskObservationID];
     
-    NSDictionary *containerDictionary = @{kCSNewTaskResourceInformationContainer:container};
+    RLMRealm* incomingTaskRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+    CSIncomingTaskRealmModel* newIncomingTask = [CSIncomingTaskRealmModel new];
+    
+    
+    newIncomingTask.taskObservationString = taskObservationName;
+    newIncomingTask.trueTaskName = resourceName;
+    newIncomingTask.peerDisplayName = peerID.displayName;
+    
+    [incomingTaskRealm beginWriteTransaction];
+    [incomingTaskRealm addObject:newIncomingTask];
+    [incomingTaskRealm commitWriteTransaction];
     
     // Post notification globally
     // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
-                                                        object:nil
-                                                      userInfo:containerDictionary];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidStartReceivingResourceWithName
+//                                                        object:nil
+//                                                      userInfo:containerDictionary];
+    
+    
     
     // we have made a request and been served - add it to our pool
     @synchronized (_requestPool){
         [_requestPool setValue:peerID forKey:resourceName];
     }
     
-    /**
-     Use this code if you want to observe the progress of a data transfer from the
-     data analyzer and then send notifications out as progress changes
-     //    dispatch_async(dispatch_get_main_queue(), ^{
-     //        [progress addObserver:self
-     //                   forKeyPath:@"fractionCompleted"
-     //                      options:NSKeyValueObservingOptionNew
-     //                      context:nil];
-     //    });
-     **/
+//     Use this code if you want to observe the progress of a data transfer from the
+//     data analyzer and then send notifications out as progress changes
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [progress addObserver:self
+                   forKeyPath:@"fractionCompleted"
+                      options:NSKeyValueObservingOptionNew
+                      context:nil];
+    });
 }
 
 
@@ -314,16 +321,10 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
           atURL:(NSURL *)localURL
       withError:(NSError *)error
 {
-    if (error) {
+    if (error || localURL == nil) {
         NSLog(@"%@",error);
         return;
     }
-    
-    // Create a notification dictionary for final location and name
-    NSDictionary *dict = @{@"resourceName"  :   resourceName,
-                           @"peerID"        :   peerID,
-                           @"localURL"      :   localURL
-                           };
     
     // We have finished our request - get rid out of it
     // TODO
@@ -337,63 +338,67 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     NSData* taskData = [NSData dataWithContentsOfURL:localURL];
     id newTask = [NSKeyedUnarchiver unarchiveObjectWithData:taskData];
     
-    if([newTask isKindOfClass:[CSTaskTransientObjectStore class]])
+    if([newTask isKindOfClass:[CSTaskRealmModel class]])
     {
+        CSTaskRealmModel* untouchedModel = [CSTaskRealmModel taskModelWithModel:newTask];
+        [self addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:resourceName];
+        [self sendMessageToAllPeersForNewTask:untouchedModel];
         
-        [self addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:resourceName];
-        [self sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)newTask];
+        // Create a notification dictionary for final location and name
+        NSDictionary *dict = @{@"resourceName"  :   resourceName,
+                               @"peerID"        :   peerID,
+                               @"localURL"      :   localURL
+                               };
+        
+        // Post notification globally
+        // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
+        [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
+                                                            object:nil
+                                                          userInfo:dict];
     }
-    
-    // Post notification globally
-    // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSDidFinishReceivingResourceWithName
-                                                        object:nil
-                                                      userInfo:dict];
 }
 
 #pragma mark - Data persistence
-- (void) addTaskToWriteQueue:(CSTaskTransientObjectStore*)newTask withID:(NSString*)identifier{
+- (void) addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:(NSString*)identifier{
     NSLog(@"I recieved a new task");
     
-    [_globalManager addTag:newTask.tag];
-    
     CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
-    newWriteOperation.pendingTransientTask = newTask;
-    [self.realmWriteQueue addOperation:newWriteOperation];
+    newWriteOperation.pendingTask = newTask;
+    newWriteOperation.untouchedPendingTask = [CSTaskRealmModel taskModelWithModel:newTask];
     
+    [self.realmWriteQueue addOperation:newWriteOperation];
 }
 
-- (CSTaskTransientObjectStore*) getTransientModelFromQueueOrDatabaseWithID:(NSString*)taskID
+- (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
     NSArray* currentWriteQueue = _realmWriteQueue.operations;
     for(CSRealmWriteOperation* operation in currentWriteQueue) {
-        if([operation.pendingTransientTask.concatenatedID isEqualToString:taskID]) {
-            return operation.pendingTransientTask;
+        if([operation.untouchedPendingTask.concatenatedID isEqualToString:taskID]) {
+            return operation.untouchedPendingTask;
         }
     }
     
-    CSTaskRealmModel* model = [CSTaskRealmModel objectForPrimaryKey:taskID];
-    if(model)
-        return [CSTaskRealmModel objectForPrimaryKey:taskID].transientModel;
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"concatenatedID = %@", taskID];
+    RLMResults* results = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
+    if (results.count == 1) {
+        return [CSTaskRealmModel taskModelWithModel:[results objectAtIndex:0]];
+    }
     
     return nil;
 }
 
 #pragma mark - OBSERVATION CALLBACK
-/**
  -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
- // Post global notification that the progress of a resource stream has changed.
- // NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
- NSLog(@"Task progress: %f", ((NSProgress *)object).fractionCompleted);
+//  Post global notification that the progress of a resource stream has changed.
+//  NOTE! Receivers of this notification must be intelligent in determining WHAT object has progressed!
  
  [[NSNotificationCenter defaultCenter] postNotificationName:kCSReceivingProgressNotification
- object:nil
- userInfo:@{@"progress": (NSProgress *)object}];
+                                                     object:nil
+                                                   userInfo:@{@"progress": (NSProgress *)object}];
  }
- **/
 
 #pragma mark - Data transmission
-- (void) sendMessageToAllPeersForNewTask:(CSTaskTransientObjectStore*)task
+- (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task
 {
     NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
@@ -401,13 +406,15 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     [_globalManager sendDataPacketToPeers:newTaskData];
 }
 
-
-- (void) validateDataWithRandomPeer:(CSTaskTransientObjectStore*)task
+- (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task
 {
     NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
     
-    [_globalManager sendSingleDataPacket:newTaskData toSinglePeer: _globalManager.currentConnectedPeers.allValues[arc4random_uniform([_globalManager.currentConnectedPeers.allKeys count])]];
+    NSNumber* t = [NSNumber numberWithInteger:[_globalManager.currentConnectedPeers.allKeys count]];
+    NSUInteger random = arc4random_uniform([t unsignedIntValue]);
+    [_globalManager sendSingleDataPacket:newTaskData
+                            toSinglePeer: _globalManager.currentConnectedPeers.allValues[random]];
 }
 
 #pragma mark - Data analysis

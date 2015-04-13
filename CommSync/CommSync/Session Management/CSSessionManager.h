@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import "CSTaskResourceSendOperation.h"
 
 // Session management strings
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
@@ -17,9 +18,12 @@
 #define MANUAL_DISCONNECT_STRING @"|~DISCONNECT~|"
 
 // Notification names
+#define kCSTaskObservationID @"kCSTaskObservationID"
 #define kCSDidStartReceivingResourceWithName @"kCSDidStartReceivingResourceWithName"
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
+
+@class CSTaskRealmModel, RLMRealm;
 
 @protocol MCSessionDataHandlingDelegate <NSObject>
 
@@ -32,8 +36,6 @@
 
 @end
 
-@class CSTaskTransientObjectStore;
-
 @interface CSSessionManager : NSObject <MCNearbyServiceBrowserDelegate,
                                         MCNearbyServiceAdvertiserDelegate,
                                         MCSessionDelegate>
@@ -44,6 +46,10 @@
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
 @property (strong, nonatomic) NSMutableDictionary* unreadMessages;
+
+// Data queue
+@property (strong, nonatomic) NSOperationQueue* mainTaskSendQueue;
+
 
 // 1-1 session objects
 @property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
@@ -56,8 +62,8 @@
 - (void) sendPulseToPeers;
 
 // Task transmission
-- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
-- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer;
+- (void) sendNewTaskToPeers:(CSTaskRealmModel*)newTask;
+- (void) sendSingleTask:(CSTaskRealmModel*)task toSinglePeer:(MCPeerID*)peer;
 
 - (void) sendDataPacketToPeers: (NSData*)dataPacket;
 - (void) sendSingleDataPacket:  (NSData*)dataPacket toSinglePeer:(MCPeerID*)peer;
@@ -71,6 +77,7 @@
 - (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
 - (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
 
++ (NSString *)incomingTaskRealmDirectory;
 + (NSString *)peerHistoryRealmDirectory;
 + (NSString *)privateMessageRealmDirectory;
 + (NSString *)chatMessageRealmDirectory;
