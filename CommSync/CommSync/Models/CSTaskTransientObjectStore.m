@@ -40,8 +40,8 @@
         self.tag = model.tag;
         self.completed = model.completed;
         
-        self.taskAudio = model.taskAudio;
-        self.taskImages_NSDataArray_JPEG = model.taskImages_NSDataArray_JPEG;
+//        self.taskAudio = model.taskAudio;
+//        self.taskImages_NSDataArray_JPEG = model.taskImages_NSDataArray_JPEG;
     }
     
     return self;
@@ -138,9 +138,9 @@
     [self saveImages:model];
     
     // Grab task audio on the fly
-    if(self.taskAudio) {
-        model.taskAudio = self.taskAudio;
-    }
+//    if(self.taskAudio) {
+//        model.taskAudio = self.taskAudio;
+//    }
     
     [realm addObject:model];
     
@@ -164,8 +164,8 @@
         [tempArrayOfImages addObject:thisImage]; // add it to our container
     }
     
-    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
-    model.taskImages_NSDataArray_JPEG = archivedImages;
+//    NSData* archivedImages = [NSKeyedArchiver archivedDataWithRootObject:tempArrayOfImages];
+//    model.taskImages_NSDataArray_JPEG = archivedImages;
 }
 
 - (CSTaskRealmModel*)BACKING_DATABASE_MODEL {

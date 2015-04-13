@@ -26,13 +26,14 @@
 @property (strong, nonatomic) NSString* tag;
 @property  BOOL completed;
 
-@property (strong, nonatomic) NSMutableArray* TRANSIENT_taskImages;
-@property (strong, nonatomic) NSURL* TRANSIENT_audioDataURL;
+//@property (strong, nonatomic) NSMutableArray* TRANSIENT_taskImages;
+//@property (strong, nonatomic) NSURL* TRANSIENT_audioDataURL;
 
-@property (strong, nonatomic) NSData* taskAudio;
-@property (strong, nonatomic) NSData* taskImages_NSDataArray_JPEG;
+//@property (strong, nonatomic) NSData* taskAudio;
+//@property (strong, nonatomic) NSData* taskImages_NSDataArray_JPEG;
 
 // URL for accessing data from disk
+
 @property (strong, nonatomic) NSURL* temporaryFileURL;
 @property (strong, nonatomic) NSError* temporaryWriteError;
 @property (strong, nonatomic) CSTaskRealmModel* BACKING_DATABASE_MODEL;

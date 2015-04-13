@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, CSTaskProperty)
 
 - (void)forTask:(CSTaskRealmModel*)task reviseProperty:(CSTaskProperty)property to:(id)newData;
 - (void)save:(CSTaskRealmModel*)sourceTask;
++(CSTaskRevisionRealmModel*)revisionModelWithModel:(CSTaskRevisionRealmModel*)model;
 
 @end
 

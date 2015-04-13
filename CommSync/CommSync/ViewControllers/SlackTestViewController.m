@@ -9,6 +9,7 @@
 #import "SlackTestViewController.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
+#import "CSUserRealmModel.h"
 #import "CSChatTableViewCell.h"
 #import <Realm/Realm.h>
 
@@ -49,7 +50,7 @@
      * Get a reference to the app delegate
      */
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
+    self.sessionManager = app.globalSessionManager;
     _currentUser = app.userDisplayName;
     
     if(_sourceTask == nil){
@@ -61,20 +62,18 @@
             _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
             
-            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND recipient = %@ OR createdBy = %@ AND recipient = %@",
-                                 _currentUser, _peerID.displayName, _peerID.displayName, _currentUser ];
+            
+            
+            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
+                                 _peerID.displayName, _peerID.displayName ];
+            
         }
     }
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
-    
-    /**
-     * Get a copy of the session manager
-     */
-    self.sessionManager = app.globalSessionManager;
-    
+   
     /**
      *  Register to use custom table view cells
      */
@@ -111,11 +110,17 @@
             [_privateMessageRealm addObject:message];
             [_privateMessageRealm commitWriteTransaction];
             
-            
+            if(![_sessionManager.currentConnectedPeers valueForKey:message.recipient])
+            {
+                CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", message.recipient][0];
+                [_sessionManager.peerHistoryRealm beginWriteTransaction];
+                [user addUnsent];
+                [_sessionManager.peerHistoryRealm commitWriteTransaction];
+            }
             if([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
             {
                     //the user is connected to the target so we can send it directly
-                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.peerHistory valueForKey:message.recipient]];
+                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:message.recipient]];
             }
             //if we arnt connected well find somebody who is
             else [self.sessionManager sendDataPacketToPeers:messageData];
@@ -174,8 +179,7 @@
     
         if(!_peerID)return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
         
-        //if the chat message already exists then exit otherwise add it and send it to all peers
-        
+       
         return [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count] ;
 
     }

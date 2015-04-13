@@ -32,6 +32,16 @@
     [aCoder encodeObject:self.changesDictionary forKey:kChangesDictionary];
 }
 
++(CSTaskRevisionRealmModel*)revisionModelWithModel:(CSTaskRevisionRealmModel*)model {
+    CSTaskRevisionRealmModel* newModel = [CSTaskRevisionRealmModel new];
+    newModel.revisionID = model.revisionID;
+    newModel.revisionDate = model.revisionDate;
+    
+    newModel.changesDictionary = [NSData dataWithData:model.changesDictionary];
+    
+    return newModel;
+}
+
 + (NSDictionary *)defaultPropertyValues {
     NSMutableDictionary* defaults = [NSMutableDictionary new];
     
@@ -146,7 +156,7 @@
                    arc4random_uniform(25)+65,
                    arc4random_uniform(25)+65];
     
-    _revisionID = [NSString stringWithFormat:@"%@_%ld", U, sourceTask.revisions.count];
+    _revisionID = [NSString stringWithFormat:@"%@_%ld", U, (unsigned long)sourceTask.revisions.count];
     _revisionDate = [NSDate new];
 }
 

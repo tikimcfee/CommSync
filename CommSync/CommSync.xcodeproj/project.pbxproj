@@ -16,6 +16,7 @@
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
 		4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4562F2051A78927200090005 /* CSTaskRealmModel.m */; };
+		457832EB1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */; };
 		4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4595391D19E38F1F00744747 /* CSSessionManager.m */; };
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
@@ -52,6 +53,7 @@
 		746F6AD61A892613007A83E8 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC81A892613007A83E8 /* CHANGELOG */; };
 		746F6AD71A892613007A83E8 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC91A892613007A83E8 /* VERSION */; };
 		746F6ADA1A8926AA007A83E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746F6A7C1A891DCC007A83E8 /* AVFoundation.framework */; };
+		74720BB51ADC300E00F22E39 /* CSTaskResourceSendOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 74720BB41ADC300E00F22E39 /* CSTaskResourceSendOperation.m */; };
 		7499A82A1A950078009A28B6 /* CSSessionDataAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */; };
 		74B3E32B1A9B9113006A3B03 /* CSPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3E32A1A9B9113006A3B03 /* CSPictureViewController.m */; };
 		74B3E32E1A9B91BC006A3B03 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3E32D1A9B91BC006A3B03 /* ImageCell.m */; };
@@ -72,7 +74,6 @@
 		74C541F91A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541E21A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m */; };
 		74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541E71A93E67100FC29AD /* TLCollectionViewController.m */; };
 		74C541FB1A93E67100FC29AD /* TLTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541EA1A93E67100FC29AD /* TLTableViewController.m */; };
-		74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */; };
 		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
 		933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */; };
@@ -138,7 +139,7 @@
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 		95FCFD4E1AD08217000BB566 /* CSAssignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */; };
 		95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */; };
-		95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */; };
+		95FF5EEE1AA7C61500F00521 /* CSUserRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FF5EED1AA7C61500F00521 /* CSUserRealmModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -157,6 +158,8 @@
 		454D92091A78581F000B74A8 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4562F2041A78927200090005 /* CSTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRealmModel.h; path = Models/CSTaskRealmModel.h; sourceTree = "<group>"; };
 		4562F2051A78927200090005 /* CSTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRealmModel.m; path = Models/CSTaskRealmModel.m; sourceTree = "<group>"; };
+		457832E91ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIncomingTaskRealmModel.h; path = Models/CSIncomingTaskRealmModel.h; sourceTree = "<group>"; };
+		457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIncomingTaskRealmModel.m; path = Models/CSIncomingTaskRealmModel.m; sourceTree = "<group>"; };
 		4595391C19E38F1F00744747 /* CSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionManager.h; path = "Session Management/CSSessionManager.h"; sourceTree = "<group>"; };
 		4595391D19E38F1F00744747 /* CSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionManager.m; path = "Session Management/CSSessionManager.m"; sourceTree = "<group>"; };
 		459D5F7319DB449900C91EFA /* CommSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +178,10 @@
 		45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListUpdateOperation.m; path = ViewControllers/TaskList/CSTaskListUpdateOperation.m; sourceTree = "<group>"; };
 		45C9564B1A98CEF800364555 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		45C9564C1A98CEF800364555 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		74098E771AD70CEC0081C69C /* CSTaskMediaRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskMediaRealmModel.h; path = Models/CSTaskMediaRealmModel.h; sourceTree = "<group>"; };
+		74098E781AD70CEC0081C69C /* CSTaskMediaRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaRealmModel.m; path = Models/CSTaskMediaRealmModel.m; sourceTree = "<group>"; };
+		74098E791AD70CEC0081C69C /* CSTaskRevisionRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRevisionRealmModel.h; path = Models/CSTaskRevisionRealmModel.h; sourceTree = "<group>"; };
+		74098E7A1AD70CEC0081C69C /* CSTaskRevisionRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRevisionRealmModel.m; path = Models/CSTaskRevisionRealmModel.m; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
@@ -219,6 +226,8 @@
 		746F6AC81A892613007A83E8 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		746F6AC91A892613007A83E8 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		746F6ADB1A8927EE007A83E8 /* CommSync-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommSync-Prefix.pch"; sourceTree = "<group>"; };
+		74720BB31ADC300E00F22E39 /* CSTaskResourceSendOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskResourceSendOperation.h; path = "Session Management/CSTaskResourceSendOperation.h"; sourceTree = "<group>"; };
+		74720BB41ADC300E00F22E39 /* CSTaskResourceSendOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskResourceSendOperation.m; path = "Session Management/CSTaskResourceSendOperation.m"; sourceTree = "<group>"; };
 		7499A8281A950078009A28B6 /* CSSessionDataAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionDataAnalyzer.h; path = "Session Management/CSSessionDataAnalyzer.h"; sourceTree = "<group>"; };
 		7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionDataAnalyzer.m; path = "Session Management/CSSessionDataAnalyzer.m"; sourceTree = "<group>"; };
 		74B3E3291A9B9113006A3B03 /* CSPictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPictureViewController.h; sourceTree = "<group>"; };
@@ -262,8 +271,6 @@
 		74C541E81A93E67100FC29AD /* TLDynamicSizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLDynamicSizeView.h; sourceTree = "<group>"; };
 		74C541E91A93E67100FC29AD /* TLTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTableViewController.h; sourceTree = "<group>"; };
 		74C541EA1A93E67100FC29AD /* TLTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTableViewController.m; sourceTree = "<group>"; };
-		74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskTransientObjectStore.h; path = Models/CSTaskTransientObjectStore.h; sourceTree = "<group>"; };
-		74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskTransientObjectStore.m; path = Models/CSTaskTransientObjectStore.m; sourceTree = "<group>"; };
 		74DB14CD1A7FDDE500ECBADB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		74DB14D01A7FDE4300ECBADB /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
 		74DB14D11A7FDE4300ECBADB /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
@@ -434,8 +441,8 @@
 		95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAssignViewController.m; sourceTree = "<group>"; };
 		95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserDetailView.h; sourceTree = "<group>"; };
 		95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserDetailView.m; sourceTree = "<group>"; };
-		95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPeerHistoryRealmModel.h; path = Models/CSPeerHistoryRealmModel.h; sourceTree = "<group>"; };
-		95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSPeerHistoryRealmModel.m; path = Models/CSPeerHistoryRealmModel.m; sourceTree = "<group>"; };
+		95FF5EEC1AA7C61500F00521 /* CSUserRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserRealmModel.h; sourceTree = "<group>"; };
+		95FF5EED1AA7C61500F00521 /* CSUserRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserRealmModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -476,6 +483,17 @@
 				95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */,
 			);
 			name = "Task Detail";
+			sourceTree = "<group>";
+		};
+		3F972BB91AD5B9430066407C /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
+				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
+				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
+				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+			);
+			name = Users;
 			sourceTree = "<group>";
 		};
 		45190C2C1A89BD130030CB05 /* iOS Frameworks */ = {
@@ -529,6 +547,8 @@
 				7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */,
 				45C956441A97CF0C00364555 /* CSRealmWriteOperation.h */,
 				45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */,
+				74720BB31ADC300E00F22E39 /* CSTaskResourceSendOperation.h */,
+				74720BB41ADC300E00F22E39 /* CSTaskResourceSendOperation.m */,
 			);
 			name = "Session Management";
 			sourceTree = "<group>";
@@ -625,16 +645,14 @@
 		744452291A0ACE2700C87723 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
-				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
+				95E8593E1AD610EF00A2BA76 /* UserViews */,
 				45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */,
 				45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */,
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
+				3F972BB91AD5B9430066407C /* Users */,
 				3F416E641A86A6EC00EDC347 /* Task Detail */,
 				933AA13A1A71DCA800DCC10A /* TaskList */,
-				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
-				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
 				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
 				93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */,
@@ -854,14 +872,14 @@
 				3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */,
 				4562F2041A78927200090005 /* CSTaskRealmModel.h */,
 				4562F2051A78927200090005 /* CSTaskRealmModel.m */,
-				74DA4FCD1A8BE795000A193A /* CSTaskTransientObjectStore.h */,
-				74DA4FCE1A8BE795000A193A /* CSTaskTransientObjectStore.m */,
+				457832E91ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.h */,
+				457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */,
 				954A459B1A806C4C00854726 /* CSCommentRealmModel.h */,
 				954A459C1A806C4C00854726 /* CSCommentRealmModel.m */,
 				93CA13CC1A92C8BE00402BE4 /* CSChatMessageRealmModel.h */,
 				93CA13CD1A92C8BE00402BE4 /* CSChatMessageRealmModel.m */,
-				95FF5EEC1AA7C61500F00521 /* CSPeerHistoryRealmModel.h */,
-				95FF5EED1AA7C61500F00521 /* CSPeerHistoryRealmModel.m */,
+				95FF5EEC1AA7C61500F00521 /* CSUserRealmModel.h */,
+				95FF5EED1AA7C61500F00521 /* CSUserRealmModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1097,6 +1115,17 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		95E8593E1AD610EF00A2BA76 /* UserViews */ = {
+			isa = PBXGroup;
+			children = (
+				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
+				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
+				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
+				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+			);
+			name = UserViews;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1248,9 +1277,9 @@
 				93EBABCC1A964552006BAF4A /* JSQMessagesKeyboardController.m in Sources */,
 				93EBABD61A964552006BAF4A /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
 				746F6ACC1A892613007A83E8 /* EZAudioFile.m in Sources */,
+				74720BB51ADC300E00F22E39 /* CSTaskResourceSendOperation.m in Sources */,
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
 				93EBABDC1A964552006BAF4A /* JSQPhotoMediaItem.m in Sources */,
-				74DA4FCF1A8BE795000A193A /* CSTaskTransientObjectStore.m in Sources */,
 				93EBABC91A964552006BAF4A /* UIDevice+JSQMessages.m in Sources */,
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
 				93EBABC61A964552006BAF4A /* JSQSystemSoundPlayer+JSQMessages.m in Sources */,
@@ -1266,7 +1295,7 @@
 				741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */,
 				93EBABE31A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
 				746F6ACE1A892613007A83E8 /* EZAudioPlot.m in Sources */,
-				95FF5EEE1AA7C61500F00521 /* CSPeerHistoryRealmModel.m in Sources */,
+				95FF5EEE1AA7C61500F00521 /* CSUserRealmModel.m in Sources */,
 				93EBABD91A964552006BAF4A /* JSQMessage.m in Sources */,
 				93EBACDF1A97D8A0006BAF4A /* SLKTextView.m in Sources */,
 				93EBABD11A964552006BAF4A /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */,
@@ -1302,6 +1331,7 @@
 				93EBABCA1A964552006BAF4A /* UIImage+JSQMessages.m in Sources */,
 				74C541EF1A93E67100FC29AD /* TLIndexPathUpdates.m in Sources */,
 				74C541EC1A93E67100FC29AD /* TLIndexPathDataModel.m in Sources */,
+				457832EB1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m in Sources */,
 				93EBACDD1A97D8A0006BAF4A /* SLKInputAccessoryView.m in Sources */,
 				746F6AD11A892613007A83E8 /* EZMicrophone.m in Sources */,
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
@@ -1462,7 +1492,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1484,7 +1514,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

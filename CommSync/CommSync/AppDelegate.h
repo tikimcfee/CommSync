@@ -24,6 +24,10 @@
 @property (strong, nonatomic) CSSessionManager* globalSessionManager;
 @property (strong, nonatomic) NSString* userDisplayName;
 
+
+
+
+
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 

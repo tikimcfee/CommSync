@@ -10,8 +10,23 @@
 #import <Realm/Realm.h>
 #import "CSCommentRealmModel.h"
 #import "CSTaskRevisionRealmModel.h"
+#import "CSTaskMediaRealmModel.h"
 
-@class CSTaskTransientObjectStore;
+
+#define kUUID @"UUID"
+#define kDeviceId @"deviceID"
+#define kConcatenatedID @"concatenatedID"
+#define kAssignedID @"assignedID"
+#define kTag @"tag"
+#define kCompleted @"completed"
+#define kTaskTitle @"taskTitle"
+#define kTaskDescription @"taskDescription"
+#define kTaskPriority @"taskPriority"
+
+#define kRevisionDataArray @"revisionDataArray"
+#define kMediaDataArray @"mediaDataArray"
+#define kCommentsDataArray @"commentsDataArray"
+
 
 typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
@@ -20,19 +35,22 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
     CSTaskPriorityHigh
 };
 
-@interface CSTaskRealmModel : RLMObject
+@interface CSTaskRealmModel : RLMObject <NSCoding>
 
 @property RLMArray<CSCommentRealmModel> *comments;
 @property RLMArray<CSTaskRevisionRealmModel> *revisions;
+@property RLMArray<CSTaskMediaRealmModel> *taskMedia;
 
 // Task persistence properties
 @property NSString* UUID;
 @property NSString* deviceID;
 @property NSString* concatenatedID;
 @property NSString* assignedID;
-
 @property NSString* tag;
 @property BOOL completed;
+
+// Transient properties
+@property (strong, nonatomic) NSURL* TRANSIENT_audioDataURL;
 
 
 // Task information
@@ -40,18 +58,15 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property NSString* taskDescription;
 @property CSTaskPriority taskPriority;
 
-// Task media
-@property NSData* taskImages_NSDataArray_JPEG;
-@property NSData* taskAudio;
+- (void) getAllImagesForTaskWithCompletionBlock:(void (^)(NSMutableArray*))completion;
+- (NSData*) getTaskAudio;
++ (CSTaskRealmModel*)taskModelWithModel:(CSTaskRealmModel*)model;
 
-// Transient backing model
-@property (strong, nonatomic) CSTaskTransientObjectStore* transientModel;
-- (CSTaskTransientObjectStore*)transientModel;
+- (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
 
+- (void) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction;
 - (void) addComment: (CSCommentRealmModel *) newComment;
 - (void) addRevision:(CSTaskRevisionRealmModel*)revision;
-
-+ (NSMutableArray*)getTransientTaskList: (NSString*)user withTag: (NSString*)tag completionStatus: (BOOL) completed;
 
 + (NSString*)stringForProperty:(CSTaskProperty)property;
 - (id)valueForProperty:(CSTaskProperty)property;
