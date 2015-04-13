@@ -53,6 +53,7 @@
 		746F6AD61A892613007A83E8 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC81A892613007A83E8 /* CHANGELOG */; };
 		746F6AD71A892613007A83E8 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 746F6AC91A892613007A83E8 /* VERSION */; };
 		746F6ADA1A8926AA007A83E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746F6A7C1A891DCC007A83E8 /* AVFoundation.framework */; };
+		74720BB51ADC300E00F22E39 /* CSTaskResourceSendOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 74720BB41ADC300E00F22E39 /* CSTaskResourceSendOperation.m */; };
 		7499A82A1A950078009A28B6 /* CSSessionDataAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */; };
 		74B3E32B1A9B9113006A3B03 /* CSPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3E32A1A9B9113006A3B03 /* CSPictureViewController.m */; };
 		74B3E32E1A9B91BC006A3B03 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3E32D1A9B91BC006A3B03 /* ImageCell.m */; };
@@ -221,6 +222,8 @@
 		746F6AC81A892613007A83E8 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		746F6AC91A892613007A83E8 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		746F6ADB1A8927EE007A83E8 /* CommSync-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommSync-Prefix.pch"; sourceTree = "<group>"; };
+		74720BB31ADC300E00F22E39 /* CSTaskResourceSendOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskResourceSendOperation.h; path = "Session Management/CSTaskResourceSendOperation.h"; sourceTree = "<group>"; };
+		74720BB41ADC300E00F22E39 /* CSTaskResourceSendOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskResourceSendOperation.m; path = "Session Management/CSTaskResourceSendOperation.m"; sourceTree = "<group>"; };
 		7499A8281A950078009A28B6 /* CSSessionDataAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionDataAnalyzer.h; path = "Session Management/CSSessionDataAnalyzer.h"; sourceTree = "<group>"; };
 		7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionDataAnalyzer.m; path = "Session Management/CSSessionDataAnalyzer.m"; sourceTree = "<group>"; };
 		74B3E3291A9B9113006A3B03 /* CSPictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPictureViewController.h; sourceTree = "<group>"; };
@@ -529,6 +532,8 @@
 				7499A8291A950078009A28B6 /* CSSessionDataAnalyzer.m */,
 				45C956441A97CF0C00364555 /* CSRealmWriteOperation.h */,
 				45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */,
+				74720BB31ADC300E00F22E39 /* CSTaskResourceSendOperation.h */,
+				74720BB41ADC300E00F22E39 /* CSTaskResourceSendOperation.m */,
 			);
 			name = "Session Management";
 			sourceTree = "<group>";
@@ -1248,6 +1253,7 @@
 				93EBABCC1A964552006BAF4A /* JSQMessagesKeyboardController.m in Sources */,
 				93EBABD61A964552006BAF4A /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
 				746F6ACC1A892613007A83E8 /* EZAudioFile.m in Sources */,
+				74720BB51ADC300E00F22E39 /* CSTaskResourceSendOperation.m in Sources */,
 				933AA1431A71DCF100DCC10A /* CSTaskListViewController.m in Sources */,
 				93EBABDC1A964552006BAF4A /* JSQPhotoMediaItem.m in Sources */,
 				93EBABC91A964552006BAF4A /* UIDevice+JSQMessages.m in Sources */,

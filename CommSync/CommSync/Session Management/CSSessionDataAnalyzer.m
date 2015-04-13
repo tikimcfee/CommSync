@@ -314,8 +314,9 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     
     if([newTask isKindOfClass:[CSTaskRealmModel class]])
     {
+        CSTaskRealmModel* untouchedModel = [CSTaskRealmModel taskModelWithModel:newTask];
         [self addTaskToWriteQueue:(CSTaskRealmModel*)newTask withID:resourceName];
-        [self sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)newTask];
+        [self sendMessageToAllPeersForNewTask:untouchedModel];
         
         // Create a notification dictionary for final location and name
         NSDictionary *dict = @{@"resourceName"  :   resourceName,
@@ -337,6 +338,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     
     CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
     newWriteOperation.pendingTask = newTask;
+    newWriteOperation.untouchedPendingTask = [CSTaskRealmModel taskModelWithModel:newTask];
     
     [self.realmWriteQueue addOperation:newWriteOperation];
 }
@@ -345,15 +347,15 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 {
     NSArray* currentWriteQueue = _realmWriteQueue.operations;
     for(CSRealmWriteOperation* operation in currentWriteQueue) {
-        if([operation.pendingTask.concatenatedID isEqualToString:taskID]) {
-            return operation.pendingTask;
+        if([operation.untouchedPendingTask.concatenatedID isEqualToString:taskID]) {
+            return operation.untouchedPendingTask;
         }
     }
     
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"concatenatedID = %@", taskID];
     RLMResults* results = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
     if (results.count == 1) {
-        return [results objectAtIndex:0];
+        return [CSTaskRealmModel taskModelWithModel:[results objectAtIndex:0]];
     }
     
     return nil;

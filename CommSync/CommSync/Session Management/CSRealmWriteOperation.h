@@ -12,5 +12,6 @@
 @interface CSRealmWriteOperation : NSOperation
 
 @property CSTaskRealmModel* pendingTask;
+@property CSTaskRealmModel* untouchedPendingTask;
 
 @end

@@ -71,6 +71,9 @@
         
         _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
         
+        // Setting up concurrent send operations
+        _mainTaskSendQueue = [NSOperationQueue new];
+        _mainTaskSendQueue.maxConcurrentOperationCount = 3;
         
         //create a dictionary with all previous peers
         if([[CSPeerHistoryRealmModel allObjectsInRealm:_peerHistoryRealm] count] > 0){
@@ -230,7 +233,7 @@
             NSLog(@"! No active session found for peer [%@]", peer.displayName);
             return;
         }
-        
+          
         if(sessionToSendOn.connectedPeers.count > 1) {
             NSLog(@"! WARNING ! - Session with multiple users (%@)", sessionToSendOn.connectedPeers);
         } else if (sessionToSendOn.connectedPeers.count <= 0) {
@@ -238,10 +241,17 @@
             return;
         }
         
+//        CSTaskResourceSendOperation* newOperation = [CSTaskResourceSendOperation new];
+//        [newOperation configureWithModel:inMemoryModel
+//                               recipient:peer
+//                               inSession:sessionToSendOn];
+        
+//        [_mainTaskSendQueue addOperation:newOperation];
+        
         NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:inMemoryModel];
-        
+
         NSLog(@"Total size going out: %.2fkB (%tu Bytes)", newTaskDataBlob.length / 1024.0, newTaskDataBlob.length);
-        
+
         NSURL* URLOfNewTask = [inMemoryModel temporarilyPersistTaskDataToDisk:newTaskDataBlob];
         
         MCPeerID* thisPeer = [sessionToSendOn.connectedPeers objectAtIndex:0];
@@ -257,12 +267,6 @@
                  NSLog(@"Task sending COMPLETE with name to peer: %@", thisPeer.displayName);
              }
          }];
-        
-//        NSLog(@"Removing file from disk...");
-//        if([task removeTemporaryTaskDataFromDisk])
-//        {
-//            NSLog(@"Task %@ still exists on disk!", task);
-//        }
     }
 }
 

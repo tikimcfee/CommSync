@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import "CSTaskResourceSendOperation.h"
 
 // Session management strings
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
@@ -45,6 +46,9 @@
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
 @property (strong, nonatomic) NSMutableDictionary* peerHistory;
 @property (strong, nonatomic) NSMutableDictionary* unreadMessages;
+
+// Data queue
+@property (strong, nonatomic) NSOperationQueue* mainTaskSendQueue;
 
 
 // 1-1 session objects
