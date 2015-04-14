@@ -26,9 +26,9 @@
 - (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task;
 - (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task;
 
+
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
-- (NSDictionary*) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
 
 @end
 

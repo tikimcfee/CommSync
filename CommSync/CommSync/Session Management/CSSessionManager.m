@@ -80,6 +80,11 @@
         dispatch_sync(self.peerHistoryQueue,^{
             _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
             _peerHistoryRealm.autorefresh = YES;
+            
+            if(![CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName])
+            {
+                [self createNewPeer:_myPeerID];
+            }
         });
         
         dispatch_sync(self.privateMessageQueue,^{
@@ -490,50 +495,38 @@
             
             
             
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                
-                //if this is a direct connection then propagate peer history and tasks of both users
-                if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
-                {
-                    NSMutableArray *peers = [[NSMutableArray alloc]init];
-                    for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm]) {
-                        [peers addObject:user];
-                    }
-                    NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peers];
-                    [self sendDataPacketToPeers:historyData];
-                }
-                
-                RLMResults* peers = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerID.displayName];
-               
-                //add the user to a the peer history if weve never met
-                if([peers count] == 0)
-                {
-                    [self updatePeerHistory:peerID withID:nil];
-                }
-                
-                else{
-                     CSUserRealmModel *peer = peers[0];
-                    NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
-                                         peerID.displayName, peerID.displayName];
+                //send all peer data to eachother
+                NSMutableArray *peers = [[NSMutableArray alloc]init];
+                for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm])
+                    [peers addObject:user];
                     
-                    NSInteger number = peer.unsetMessages;
-                    if(number > 0)
-                    {
-                        RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:pred];
-                        NSMutableArray* send = [[NSMutableArray alloc] init];
-                        
-                        //add unsent messages
-                        for(int i = 0; i < number; i++ )
-                        {
-                            [send addObject: messages[[messages count] - 1 - i]];
-                        }
-                        
-                        NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
-                        [self sendSingleDataPacket:data toSinglePeer:peerID];
-                    }
+                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peers];
+                [self sendSingleDataPacket:historyData toSinglePeer:peerID];
+                
+
+                CSUserRealmModel *peer = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:peerID.displayName];
+                
+                //RLMResults results = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerId.
+                
+                
+                //if there are any unsent messages then send them
+                NSInteger number = peer.unsentMessages;
+                if(number > 0)
+                {
+                    NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", peerID.displayName, peerID.displayName];
+                    RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:pred];
+                    NSMutableArray* send = [[NSMutableArray alloc] init];
+                   
+                    //add unsent messages
+                    for(int i = 0; i < number; i++ )
+                        [send addObject: messages[[messages count] - 1 - i]];
+                    
+                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
+                    [self sendSingleDataPacket:data toSinglePeer:peerID];
                 }
+                
             });
             
             dispatch_async(_taskRealmQueue, ^{
@@ -627,16 +620,15 @@
 
 
 #pragma mark - Database actions
-- (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString *)UUID
+
+
+- (void)createNewPeer:(MCPeerID *)peerID
 {
-    if([peerID.displayName isEqualToString:_myPeerID.displayName])
-        return;
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
     CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:peerID.displayName];
     
-    //if we are getting this from somewhere else then set the UUID to the same
-    if(UUID) peerToUse.UUID = UUID;
+    peerToUse.avatar = -1;
     
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm addObject:peerToUse];

@@ -23,7 +23,7 @@
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
 
-@class CSTaskRealmModel, RLMRealm;
+@class CSTaskRealmModel, RLMRealm, CSUserRealmModel;
 
 @protocol MCSessionDataHandlingDelegate <NSObject>
 
@@ -74,7 +74,8 @@
 - (void) nukeRealm;
 - (void) nukeHistory;
 
-- (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
+- (void)updatePeerHistory:  (CSUserRealmModel *) peer;
+- (void)createNewPeer:      (MCPeerID *)        peerID;
 
 + (NSString *)incomingTaskRealmDirectory;
 + (NSString *)peerHistoryRealmDirectory;

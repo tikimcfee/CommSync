@@ -1,46 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatViewCell" rowHeight="102" id="Pxy-Zz-01Z" customClass="CSChatTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="335" height="102"/>
+            <rect key="frame" x="-2" y="0.0" width="484" height="102"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pxy-Zz-01Z" id="89H-Vf-SWX">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="CreatedBy" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtW-1W-D2l">
-                        <rect key="frame" x="8" y="8" width="319" height="14"/>
+                        <rect key="frame" x="88" y="8" width="388" height="14"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="MessageLabel" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sbw-0l-4Wo">
-                        <rect key="frame" x="8" y="30" width="319" height="55"/>
+                        <rect key="frame" x="88" y="30" width="388" height="55"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                         <color key="textColor" red="0.098039217293262482" green="0.098039217293262482" blue="0.098039217293262482" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar2" translatesAutoresizingMaskIntoConstraints="NO" id="QOq-S0-4O0">
+                        <rect key="frame" x="8" y="8" width="72" height="77"/>
+                        <color key="backgroundColor" red="0.17254901959999999" green="0.24313725489999999" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="72" id="514-wv-r5T"/>
+                            <constraint firstAttribute="width" secondItem="QOq-S0-4O0" secondAttribute="height" multiplier="72:77" id="vHD-JQ-CrQ"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="HtW-1W-D2l" firstAttribute="leading" secondItem="89H-Vf-SWX" secondAttribute="leadingMargin" id="2KX-TE-Wth"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Sbw-0l-4Wo" secondAttribute="bottom" constant="8" id="JiD-hG-SpV"/>
-                    <constraint firstItem="HtW-1W-D2l" firstAttribute="top" secondItem="89H-Vf-SWX" secondAttribute="topMargin" id="Lg7-2N-8VN"/>
-                    <constraint firstItem="Sbw-0l-4Wo" firstAttribute="leading" secondItem="89H-Vf-SWX" secondAttribute="leadingMargin" id="MPd-MI-N52"/>
-                    <constraint firstItem="Sbw-0l-4Wo" firstAttribute="trailing" secondItem="89H-Vf-SWX" secondAttribute="trailingMargin" id="O3b-jo-at8"/>
-                    <constraint firstItem="HtW-1W-D2l" firstAttribute="trailing" secondItem="89H-Vf-SWX" secondAttribute="trailingMargin" id="hLW-PU-jIu"/>
+                    <constraint firstItem="Sbw-0l-4Wo" firstAttribute="top" secondItem="HtW-1W-D2l" secondAttribute="bottom" constant="8" symbolic="YES" id="5fa-gM-eaf"/>
+                    <constraint firstItem="Sbw-0l-4Wo" firstAttribute="bottom" secondItem="QOq-S0-4O0" secondAttribute="bottom" id="E1a-b0-3tG"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="HtW-1W-D2l" secondAttribute="trailing" id="MGL-rz-wxZ"/>
+                    <constraint firstItem="HtW-1W-D2l" firstAttribute="leading" secondItem="Sbw-0l-4Wo" secondAttribute="leading" id="Vex-T3-Dmh"/>
+                    <constraint firstItem="HtW-1W-D2l" firstAttribute="top" secondItem="QOq-S0-4O0" secondAttribute="top" id="bQ6-0x-er5"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="QOq-S0-4O0" secondAttribute="bottom" constant="8" id="ed0-lj-FJO"/>
+                    <constraint firstItem="HtW-1W-D2l" firstAttribute="trailing" secondItem="Sbw-0l-4Wo" secondAttribute="trailing" id="f1C-mr-mju"/>
+                    <constraint firstItem="QOq-S0-4O0" firstAttribute="leading" secondItem="89H-Vf-SWX" secondAttribute="leadingMargin" id="jJx-87-N8W"/>
+                    <constraint firstItem="HtW-1W-D2l" firstAttribute="leading" secondItem="QOq-S0-4O0" secondAttribute="trailing" constant="8" symbolic="YES" id="olg-dQ-zZV"/>
                     <constraint firstItem="Sbw-0l-4Wo" firstAttribute="top" secondItem="HtW-1W-D2l" secondAttribute="bottom" constant="8" id="uao-V5-EeM"/>
+                    <constraint firstItem="HtW-1W-D2l" firstAttribute="top" secondItem="89H-Vf-SWX" secondAttribute="topMargin" id="yVB-6e-sRW"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="uao-V5-EeM"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="avatarImage" destination="QOq-S0-4O0" id="3ki-4y-c0i"/>
                 <outlet property="createdByLabel" destination="HtW-1W-D2l" id="Kom-LO-BRK"/>
                 <outlet property="messageLabel" destination="Sbw-0l-4Wo" id="kEI-Ff-hsW"/>
             </connections>
-            <point key="canvasLocation" x="215.5" y="336"/>
+            <point key="canvasLocation" x="527" y="282"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="Avatar2" width="600" height="448"/>
+    </resources>
 </document>

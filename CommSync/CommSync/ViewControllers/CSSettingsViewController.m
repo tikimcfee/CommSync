@@ -27,6 +27,9 @@
     _app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     _sessionManager = _app.globalSessionManager;
     
+    
+    [_avatarPic setImage: [UIImage imageNamed:@"Avatar1"]];
+    
     __weak CSSettingsViewController *weakSelf = self;
     
     self.nukeSessionHandler = ^(UIAlertAction *action){

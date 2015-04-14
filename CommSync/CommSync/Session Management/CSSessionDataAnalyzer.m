@@ -17,6 +17,7 @@
 #define kCS_HEADER_NEW_TASK     @"NEW_TASK"
 #define kCS_HEADER_TASK_REQUEST @"TASK_REQUEST"
 #define kCS_STRING_SEPERATOR    @":"
+#define kCS_User_UpdateAvatar   @"Avatar"
 
 // Implementation of task information container
 @implementation CSNewTaskResourceInformationContainer
@@ -38,7 +39,7 @@
             if([receivedObject[0] isKindOfClass:[NSString class]])
             {
                 dispatch_sync(_parentAnalyzer.globalManager.taskRealmQueue,^{
-                    for(NSString* task in receivedObject) [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task] ];
+                    for(NSString* task in receivedObject) [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildTaskRequestFromTaskID:task] ];
                 });
             }
             
@@ -48,9 +49,9 @@
                     NSMutableArray* differences = [[NSMutableArray alloc]init];
                     for(CSUserRealmModel *peer in receivedObject)
                     {
-                        if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.UUID] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                        if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.displayName] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
                     
-                            [_parentAnalyzer.globalManager updatePeerHistory:[NSKeyedUnarchiver unarchiveObjectWithData:peer.peerID] withID:peer.UUID];
+                            [self updatePeerHistory:peer];
                             [differences addObject:peer];
                         }
                     }
@@ -73,6 +74,19 @@
     
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
     {
+        
+        if([receivedObject valueForKey:kCS_User_UpdateAvatar] )
+        {
+            //number to change avatar
+            NSNumber* test = [receivedObject valueForKey:@"number"];
+            
+            if([self updatePeerAvatar: [receivedObject valueForKey:kCS_HEADER_NEW_TASK] withNumber:test])
+            {
+                [_parentAnalyzer.globalManager sendDataPacketToPeers:receivedObject];
+            }
+        }
+        
+        
         [self propagateTasks:receivedObject];
     }
     
@@ -136,6 +150,31 @@
         }
     }
     
+}
+
+- (void) updatePeerHistory:(CSUserRealmModel *) peer
+{
+    if([peer.displayName isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName])
+        return;
+    [peer removeUnsent];
+    [peer removeMessages];
+    
+    [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
+    if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.displayName])
+        [_parentAnalyzer.globalManager.peerHistoryRealm addObject:peer];
+    [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
+    
+}
+
+- (bool) updatePeerAvatar:(NSString*) displayName withNumber: (NSNumber*) number
+{
+    CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:displayName];
+    if(peer.avatar == [number integerValue]) return false;
+    
+    [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
+    peer.avatar = [number integerValue];
+    [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
+    return true;
 }
 
 -(void) addPrivateMessage:(CSChatMessageRealmModel*) message
@@ -400,15 +439,15 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
 #pragma mark - Data transmission
 - (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task
 {
-    NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
+    NSDictionary* newTaskDictionary = [self buildTaskRequestFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
-    
+
     [_globalManager sendDataPacketToPeers:newTaskData];
 }
 
 - (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task
 {
-    NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
+    NSDictionary* newTaskDictionary = [self buildTaskRequestFromTaskID:task.concatenatedID];
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
     
     NSNumber* t = [NSNumber numberWithInteger:[_globalManager.currentConnectedPeers.allKeys count]];
@@ -440,17 +479,6 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     
     return @{ kCS_HEADER_TASK_REQUEST: taskID };
 }
-
-- (NSDictionary*) buildNewTaskNotificationFromTaskID:(NSString*)taskID
-{
-    if(!taskID) {
-        NSLog(@"DataAnalyzer(ERROR): String build failed - no taskID.");
-        return nil;
-    }
-    
-    return @{ kCS_HEADER_NEW_TASK: taskID };
-}
-
 
 
 + (NSString *)chatMessageRealmDirectory

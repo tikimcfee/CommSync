@@ -206,8 +206,7 @@
             cell.createdByLabel.text = msg.createdBy;
             cell.messageLabel.text = msg.text;
             cell.transform = self.tableView.transform;
-        
-       
+            [cell.avatarImage setImage: [UIImage imageNamed:@"Avatar1"]];
     }
     
     else{
