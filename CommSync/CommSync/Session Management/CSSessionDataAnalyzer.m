@@ -39,7 +39,8 @@
             if([receivedObject[0] isKindOfClass:[NSString class]])
             {
                 dispatch_sync(_parentAnalyzer.globalManager.taskRealmQueue,^{
-                    for(NSString* task in receivedObject) [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildTaskRequestFromTaskID:task] ];
+                    for(NSString* task in receivedObject)
+                        [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildTaskRequestFromTaskID:task]];
                 });
             }
             
@@ -56,10 +57,9 @@
                         }
                     }
                      //if there were any diffrerences in the histories then send full history to all peers
-                    if([differences count] > 0) [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
-                    
+                    if([differences count] > 0)
+                        [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:differences]];
                 });
-               
             }
             
             else if([receivedObject[0] isKindOfClass:[CSChatMessageRealmModel class]]){
@@ -67,9 +67,6 @@
                 for(CSChatMessageRealmModel* message in receivedObject) [self addPrivateMessage:message];
                 });
             }
-        
-        
-        
     }
     
     else if ([receivedObject isKindOfClass:[NSDictionary class]])
@@ -80,14 +77,16 @@
             //number to change avatar
             NSNumber* test = [receivedObject valueForKey:@"number"];
             
-            if([self updatePeerAvatar: [receivedObject valueForKey:kCS_HEADER_NEW_TASK] withNumber:test])
-            {
-                [_parentAnalyzer.globalManager sendDataPacketToPeers:receivedObject];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if([self updatePeerAvatar: [receivedObject valueForKey:kCS_User_UpdateAvatar] withNumber:test])
+                {
+                    [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+                }
+            });
+            
         }
         
-        
-        [self propagateTasks:receivedObject];
+        else [self propagateTasks:receivedObject];
     }
     
     else if ([receivedObject isKindOfClass:[CSChatMessageRealmModel class]])

@@ -37,7 +37,7 @@
         self.peerID= [aDecoder decodeObjectForKey:@"peerID"];
         self.displayName= [aDecoder decodeObjectForKey:@"displayName"];
         self.unreadMessages = [aDecoder decodeIntForKey:@"unreadMessages"];
-        self.avatar = [aDecoder decodeIntForKey:@"avatar"];
+        self.avatar = [aDecoder decodeIntegerForKey:@"Avatar"];
     }
     
     return self;
@@ -48,7 +48,7 @@
     [aCoder encodeObject:self.displayName forKey:@"displayName"];
     [aCoder encodeObject:self.peerID forKey:@"peerID"];
     [aCoder encodeInteger:self.unreadMessages forKey:@"unreadMessages"];
-    [aCoder encodeInt:self.avatar forKey:@"avatar"];
+    [aCoder encodeInteger:self.avatar forKey:@"Avatar"];
 }
 
 -(void)addMessage
@@ -74,12 +74,18 @@
 
 -(NSString*)getMessageNumber
 {
-   // if(!_stringNum) _stringNum = @"0";
     return [NSString stringWithFormat:@"( %d unread)", self.unreadMessages];
 }
 
 + (NSString*)primaryKey {
     return @"displayName";
+}
+
+-(NSString *) getPicture
+{
+    if(!self.avatar) return @"Avatar-1";
+    else NSLog(@"Avatar%ld", (long)self.avatar);
+    return [NSString stringWithFormat:@"Avatar%d", self.avatar];
 }
 
 @end

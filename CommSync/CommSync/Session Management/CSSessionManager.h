@@ -41,7 +41,9 @@
                                         MCSessionDelegate>
 
 // MCMultiPeer objects
-@property (strong, nonatomic) MCPeerID* myPeerID;
+@property (strong, nonatomic) MCPeerID*         myPeerID;
+@property (strong, nonatomic) CSUserRealmModel* myUserModel;
+
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
@@ -74,8 +76,9 @@
 - (void) nukeRealm;
 - (void) nukeHistory;
 
-- (void)updatePeerHistory:  (CSUserRealmModel *) peer;
-- (void)createNewPeer:      (MCPeerID *)        peerID;
+- (void)updatePeerHistory:  (CSUserRealmModel *)    peer;
+- (void)createNewPeer:      (MCPeerID *)            peerID;
+- (void)updateAvatar:       (NSInteger)            number;
 
 + (NSString *)incomingTaskRealmDirectory;
 + (NSString *)peerHistoryRealmDirectory;

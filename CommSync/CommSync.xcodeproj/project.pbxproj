@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
+		3F9132E01ADD9D26002D45B0 /* CSAvatarSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9132DF1ADD9D26002D45B0 /* CSAvatarSelectionView.m */; };
+		3F9132E61ADDA5C4002D45B0 /* CSAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9132E51ADDA5C4002D45B0 /* CSAvatarCell.m */; };
 		3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FBBF1371A9C0887007124CD /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
 		3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */; };
@@ -145,6 +147,10 @@
 /* Begin PBXFileReference section */
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
 		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
+		3F9132DE1ADD9D26002D45B0 /* CSAvatarSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAvatarSelectionView.h; sourceTree = "<group>"; };
+		3F9132DF1ADD9D26002D45B0 /* CSAvatarSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAvatarSelectionView.m; sourceTree = "<group>"; };
+		3F9132E41ADDA5C4002D45B0 /* CSAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAvatarCell.h; path = ../CSAvatarCell.h; sourceTree = "<group>"; };
+		3F9132E51ADDA5C4002D45B0 /* CSAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAvatarCell.m; path = ../CSAvatarCell.m; sourceTree = "<group>"; };
 		3FBBF1381A9C0887007124CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
@@ -178,10 +184,6 @@
 		45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListUpdateOperation.m; path = ViewControllers/TaskList/CSTaskListUpdateOperation.m; sourceTree = "<group>"; };
 		45C9564B1A98CEF800364555 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		45C9564C1A98CEF800364555 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		74098E771AD70CEC0081C69C /* CSTaskMediaRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskMediaRealmModel.h; path = Models/CSTaskMediaRealmModel.h; sourceTree = "<group>"; };
-		74098E781AD70CEC0081C69C /* CSTaskMediaRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaRealmModel.m; path = Models/CSTaskMediaRealmModel.m; sourceTree = "<group>"; };
-		74098E791AD70CEC0081C69C /* CSTaskRevisionRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRevisionRealmModel.h; path = Models/CSTaskRevisionRealmModel.h; sourceTree = "<group>"; };
-		74098E7A1AD70CEC0081C69C /* CSTaskRevisionRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRevisionRealmModel.m; path = Models/CSTaskRevisionRealmModel.m; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
@@ -586,6 +588,10 @@
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
 				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
 				3FBBF1371A9C0887007124CD /* Main.storyboard */,
+				3F9132DE1ADD9D26002D45B0 /* CSAvatarSelectionView.h */,
+				3F9132DF1ADD9D26002D45B0 /* CSAvatarSelectionView.m */,
+				3F9132E41ADDA5C4002D45B0 /* CSAvatarCell.h */,
+				3F9132E51ADDA5C4002D45B0 /* CSAvatarCell.m */,
 				459D5F7619DB449900C91EFA /* Supporting Files */,
 				93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */,
 				93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */,
@@ -1118,10 +1124,6 @@
 		95E8593E1AD610EF00A2BA76 /* UserViews */ = {
 			isa = PBXGroup;
 			children = (
-				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
-				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
-				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
-				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 			);
 			name = UserViews;
 			sourceTree = "<group>";
@@ -1262,6 +1264,7 @@
 				93EBABEB1A964552006BAF4A /* JSQMessagesToolbarContentView.m in Sources */,
 				746F6AD51A892613007A83E8 /* TPCircularBuffer.c in Sources */,
 				74C541F01A93E67100FC29AD /* TLCollapsibleDataModel.m in Sources */,
+				3F9132E61ADDA5C4002D45B0 /* CSAvatarCell.m in Sources */,
 				746F6ACB1A892613007A83E8 /* EZAudio.m in Sources */,
 				74C541F91A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m in Sources */,
 				93EBABD21A964552006BAF4A /* JSQMessagesTimestampFormatter.m in Sources */,
@@ -1304,6 +1307,7 @@
 				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
 				93EBABCD1A964552006BAF4A /* JSQMessagesViewController.m in Sources */,
 				93EBABD31A964552006BAF4A /* JSQMessagesToolbarButtonFactory.m in Sources */,
+				3F9132E01ADD9D26002D45B0 /* CSAvatarSelectionView.m in Sources */,
 				45C956491A97EE8100364555 /* CSTaskListUpdateOperation.m in Sources */,
 				746F6ACA1A892613007A83E8 /* AEFloatConverter.m in Sources */,
 				74C541F41A93E67100FC29AD /* TLDynamicHeightLabelCell.m in Sources */,

@@ -43,6 +43,7 @@
     if(self = [super init])
     {
         _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
+
         _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
         _dataHandlingDelegate = _dataAnalyzer;
         
@@ -81,7 +82,9 @@
             _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
             _peerHistoryRealm.autorefresh = YES;
             
-            if(![CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName])
+            self.myUserModel = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName];
+           
+            if(!_myUserModel)
             {
                 [self createNewPeer:_myPeerID];
             }
@@ -629,11 +632,35 @@
     CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:peerID.displayName];
     
     peerToUse.avatar = -1;
+    _myUserModel = peerToUse;
     
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm addObject:peerToUse];
     [_peerHistoryRealm commitWriteTransaction];
     
+}
+
+-(void)updateAvatar: (NSInteger) number
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CSUserRealmModel *myself = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName];
+        
+        [_peerHistoryRealm beginWriteTransaction];
+        myself.avatar = number;
+        
+        [_peerHistoryRealm commitWriteTransaction];
+        
+        self.myUserModel= myself;
+        
+        
+        NSDictionary *dict = @{@"Avatar"  :   _myPeerID.displayName,
+                               @"number"        :   [NSNumber numberWithInteger:number],
+                               };
+        
+        NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:dict];
+        [self sendDataPacketToPeers:requestData];
+    });
 }
 
 

@@ -24,4 +24,6 @@
 - (NSString*) getMessageNumber;
 -(void)addUnsent;
 -(void)removeUnsent;
+
+-(NSString*) getPicture;
 @end

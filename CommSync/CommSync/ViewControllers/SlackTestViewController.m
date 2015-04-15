@@ -41,6 +41,14 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
 
 #pragma mark - View Lifecycle
 - (void)viewDidLoad {
@@ -112,7 +120,7 @@
             
             if(![_sessionManager.currentConnectedPeers valueForKey:message.recipient])
             {
-                CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", message.recipient][0];
+                CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:message.recipient];
                 [_sessionManager.peerHistoryRealm beginWriteTransaction];
                 [user addUnsent];
                 [_sessionManager.peerHistoryRealm commitWriteTransaction];
@@ -206,7 +214,12 @@
             cell.createdByLabel.text = msg.createdBy;
             cell.messageLabel.text = msg.text;
             cell.transform = self.tableView.transform;
-            [cell.avatarImage setImage: [UIImage imageNamed:@"Avatar1"]];
+            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
+        
+        
+            NSString *image = [person getPicture];
+            [cell.avatarImage setImage:[UIImage imageNamed:image]];
+        
     }
     
     else{
@@ -214,6 +227,7 @@
         cell.createdByLabel.text = comment.UID;
         cell.messageLabel.text = comment.text;
         cell.transform = self.tableView.transform;
+        
     }
     return cell;
 }
