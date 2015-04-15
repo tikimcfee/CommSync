@@ -9,6 +9,7 @@
 #import "CSAvatarSelectionView.h"
 #import "CSAvatarCell.h"
 #import "AppDelegate.h"
+#import "CSUserRealmModel.h"
 #import "CSSessionManager.h"
 
 @implementation CSAvatarSelectionView {
@@ -23,7 +24,7 @@
     
     _app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     _sessionManager = _app.globalSessionManager;
-    array = @[ @"Avatar1", @"Avatar2", @"Avatar3", @"Avatar1", @"Avatar2", @"Avatar3" ];
+    array = @[ @"Avatar0", @"Avatar1", @"Avatar2" ];
 }
 
 
@@ -59,11 +60,8 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%ld", indexPath.row);
     NSInteger temp = indexPath.row;
-    
     [_sessionManager updateAvatar:temp];
-    
     [self.navigationController popViewControllerAnimated:YES];
 
 }

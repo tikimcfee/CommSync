@@ -29,6 +29,7 @@
 
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
+- (NSDictionary *) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
 
 @end
 

@@ -504,15 +504,13 @@
                 NSMutableArray *peers = [[NSMutableArray alloc]init];
                 for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm])
                     [peers addObject:user];
-                    
-                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peers];
+                
+                NSDictionary *dataToSend = @{@"UserArray"  :   peers};
+                
+                NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                 [self sendSingleDataPacket:historyData toSinglePeer:peerID];
                 
-
                 CSUserRealmModel *peer = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:peerID.displayName];
-                
-                //RLMResults results = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peerId.
-                
                 
                 //if there are any unsent messages then send them
                 NSInteger number = peer.unsentMessages;
@@ -526,7 +524,8 @@
                     for(int i = 0; i < number; i++ )
                         [send addObject: messages[[messages count] - 1 - i]];
                     
-                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
+                    NSDictionary *dataToSend = @{@"PMArray"  :   send};
+                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                     [self sendSingleDataPacket:data toSinglePeer:peerID];
                 }
                 
@@ -539,9 +538,10 @@
                 {
                     [send addObject:task.concatenatedID];
                 }
-                NSData* data = [NSKeyedArchiver archivedDataWithRootObject:send];
             
                 if([send count] > 0) {
+                    NSDictionary *dataToSend = @{@"TaskArray"  :   send};
+                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                     [self sendSingleDataPacket:data toSinglePeer:peerID];
                 }
             });
@@ -648,14 +648,11 @@
         
         [_peerHistoryRealm beginWriteTransaction];
         myself.avatar = number;
-        
+        self.myUserModel = myself;
         [_peerHistoryRealm commitWriteTransaction];
         
-        self.myUserModel= myself;
-        
-        
         NSDictionary *dict = @{@"Avatar"  :   _myPeerID.displayName,
-                               @"number"        :   [NSNumber numberWithInteger:number],
+                               @"Number"        :   [NSNumber numberWithInteger:number],
                                };
         
         NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:dict];
