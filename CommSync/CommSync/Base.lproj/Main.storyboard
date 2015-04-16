@@ -638,8 +638,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Mh-NZ-J8m" userLabel="Footer">
-                                <rect key="frame" x="0.0" y="517" width="600" height="39"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Mh-NZ-J8m" userLabel="Footer">
+                                <rect key="frame" x="0.0" y="58" width="600" height="5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Ct-Db-FXm">
                                         <rect key="frame" x="482" y="8" width="110" height="23"/>
@@ -1323,7 +1323,7 @@
                         <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gE5-eO-iRi">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="44" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1609,6 +1609,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="userConnectionCount" destination="6J2-Lk-L7O" id="jzH-zA-tqk"/>
+                        <segue destination="iaN-ZE-mGm" kind="show" identifier="showTaskDetail" id="JUZ-dn-nyw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YVX-kB-Gmu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1639,8 +1640,9 @@
         <image name="Play Button" width="56" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="eqI-g4-aMU"/>
         <segue reference="r3J-Hg-HkT"/>
-        <segue reference="8nV-bw-P48"/>
         <segue reference="esm-L7-fWV"/>
+        <segue reference="8nV-bw-P48"/>
     </inferredMetricsTieBreakers>
 </document>
