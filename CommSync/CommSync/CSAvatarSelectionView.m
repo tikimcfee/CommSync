@@ -9,6 +9,7 @@
 #import "CSAvatarSelectionView.h"
 #import "CSAvatarCell.h"
 #import "AppDelegate.h"
+#import "CSUserRealmModel.h"
 #import "CSSessionManager.h"
 
 @implementation CSAvatarSelectionView {

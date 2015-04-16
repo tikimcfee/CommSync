@@ -108,16 +108,13 @@
     
     if(!_sourceTask){
         CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser toUser:(_peerID)? _peerID.displayName : @"ALL"];
-
-        
-        
-        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
         
         if (_peerID){
             [_privateMessageRealm beginWriteTransaction];
             [_privateMessageRealm addObject:message];
             [_privateMessageRealm commitWriteTransaction];
             
+            //the user is not currently connected so add it to unsent message
             if(![_sessionManager.currentConnectedPeers valueForKey:message.recipient])
             {
                 CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:message.recipient];
@@ -125,25 +122,28 @@
                 [user addUnsent];
                 [_sessionManager.peerHistoryRealm commitWriteTransaction];
             }
-            if([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
-            {
+            else {
+                NSDictionary *dataToSend = @{@"PrivateMessage"  :   message};
+                NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                //If we are directly connected send them the message
+                if ([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
+                {
                     //the user is connected to the target so we can send it directly
                     [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:message.recipient]];
+                }
+                //otherwise send it to everyone in hopes it finds the recipient
+                else [self.sessionManager sendDataPacketToPeers:messageData];
             }
-            //if we arnt connected well find somebody who is
-            else [self.sessionManager sendDataPacketToPeers:messageData];
         }
+            
         else{
             [_chatRealm beginWriteTransaction];
             [_chatRealm addObject:message];
             [_chatRealm commitWriteTransaction];
+            NSDictionary *dataToSend = @{@"ChatMessage"  :   message};
+            NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
             [self.sessionManager sendDataPacketToPeers:messageData];
         }
-        
-        
-        
-        
-       
     }
     
     else{
@@ -198,7 +198,7 @@
 
 - (CSChatTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+
     static NSString *cellIdentifier = @"ChatViewCell";
     CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
