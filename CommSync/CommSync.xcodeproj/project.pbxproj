@@ -30,6 +30,10 @@
 		45C956491A97EE8100364555 /* CSTaskListUpdateOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */; };
 		45C9564D1A98CEF800364555 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C9564B1A98CEF800364555 /* Crashlytics.framework */; };
 		45C9564E1A98CEF800364555 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C9564C1A98CEF800364555 /* Fabric.framework */; };
+		45CD64CC1AE0444300E8410A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 45CD64C81AE0444300E8410A /* README.md */; };
+		45CD64CD1AE0444300E8410A /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 45CD64C91AE0444300E8410A /* IonIcons.m */; };
+		45CD64CE1AE0444300E8410A /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45CD64CA1AE0444300E8410A /* ionicons.ttf */; };
+		45CD64CF1AE0444300E8410A /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 45CD64CB1AE0444300E8410A /* LICENSE */; };
 		740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7409982F1A0C395A00229AFC /* CSSettingsViewController.m */; };
 		741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE96C1A92C47300AC488F /* CSTaskProgressTableViewCell.m */; };
 		741DE9751A92C86800AC488F /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 741DE9721A92C86800AC488F /* M13ProgressView.m */; };
@@ -187,6 +191,12 @@
 		45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListUpdateOperation.m; path = ViewControllers/TaskList/CSTaskListUpdateOperation.m; sourceTree = "<group>"; };
 		45C9564B1A98CEF800364555 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		45C9564C1A98CEF800364555 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		45CD64C61AE0444300E8410A /* ionicons-codes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ionicons-codes.h"; path = "ThirdParty/ionicons/ionicons-codes.h"; sourceTree = "<group>"; };
+		45CD64C71AE0444300E8410A /* IonIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IonIcons.h; path = ThirdParty/ionicons/IonIcons.h; sourceTree = "<group>"; };
+		45CD64C81AE0444300E8410A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ThirdParty/ionicons/README.md; sourceTree = "<group>"; };
+		45CD64C91AE0444300E8410A /* IonIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IonIcons.m; path = ThirdParty/ionicons/IonIcons.m; sourceTree = "<group>"; };
+		45CD64CA1AE0444300E8410A /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ionicons.ttf; path = ThirdParty/ionicons/ionicons.ttf; sourceTree = "<group>"; };
+		45CD64CB1AE0444300E8410A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ThirdParty/ionicons/LICENSE; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
@@ -533,6 +543,7 @@
 		454D92061A7857AA000B74A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				45CD64C51AE0443600E8410A /* IonIcons */,
 				93EBACC61A97D8A0006BAF4A /* Slack */,
 				45C9564B1A98CEF800364555 /* Crashlytics.framework */,
 				45C9564C1A98CEF800364555 /* Fabric.framework */,
@@ -623,6 +634,19 @@
 				746F6ADB1A8927EE007A83E8 /* CommSync-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		45CD64C51AE0443600E8410A /* IonIcons */ = {
+			isa = PBXGroup;
+			children = (
+				45CD64C61AE0444300E8410A /* ionicons-codes.h */,
+				45CD64C71AE0444300E8410A /* IonIcons.h */,
+				45CD64C81AE0444300E8410A /* README.md */,
+				45CD64C91AE0444300E8410A /* IonIcons.m */,
+				45CD64CA1AE0444300E8410A /* ionicons.ttf */,
+				45CD64CB1AE0444300E8410A /* LICENSE */,
+			);
+			name = IonIcons;
 			sourceTree = "<group>";
 		};
 		7409982D1A0C178000229AFC /* Task Management */ = {
@@ -1229,9 +1253,11 @@
 				93EBABCE1A964552006BAF4A /* JSQMessagesViewController.xib in Resources */,
 				93EBABC41A964552006BAF4A /* JSQMessagesAssets.bundle in Resources */,
 				93EBABE91A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
+				45CD64CE1AE0444300E8410A /* ionicons.ttf in Resources */,
 				93EBABC51A964552006BAF4A /* JSQMessages.strings in Resources */,
 				3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */,
 				93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */,
+				45CD64CF1AE0444300E8410A /* LICENSE in Resources */,
 				4547AC331ADEC07A007623FA /* Images.xcassets in Resources */,
 				746F6AD71A892613007A83E8 /* VERSION in Resources */,
 				93EBABE21A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
@@ -1294,6 +1320,7 @@
 				74C541F01A93E67100FC29AD /* TLCollapsibleDataModel.m in Sources */,
 				746F6ACB1A892613007A83E8 /* EZAudio.m in Sources */,
 				74C541F91A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m in Sources */,
+				45CD64CD1AE0444300E8410A /* IonIcons.m in Sources */,
 				93EBABD21A964552006BAF4A /* JSQMessagesTimestampFormatter.m in Sources */,
 				93EBABE61A964552006BAF4A /* JSQMessagesInputToolbar.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
@@ -1340,6 +1367,7 @@
 				746F6AD01A892613007A83E8 /* EZAudioPlotGLKViewController.m in Sources */,
 				746F6AD21A892613007A83E8 /* EZOutput.m in Sources */,
 				93CA13CE1A92C8BE00402BE4 /* CSChatMessageRealmModel.m in Sources */,
+				45CD64CC1AE0444300E8410A /* README.md in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,

@@ -253,7 +253,7 @@
                                        @"from": self.sourceTask.taskTitle,
                                        @"to": self.titleLabel.text
                                        };
-        [self.unsavedChanges setObject:titleChanges forKey:@"taskTitle"];
+        [self.unsavedChanges setObject:titleChanges forKey:[NSNumber numberWithInteger:CSTaskProperty_taskTitle]];
     }
     
     // description changed
@@ -262,7 +262,7 @@
                                              @"from": self.sourceTask.taskDescription,
                                              @"to": self.descriptionLabel.text
                                              };
-        [self.unsavedChanges setObject:descriptionChanges forKey:@"taskDescription"];
+        [self.unsavedChanges setObject:descriptionChanges forKey:[NSNumber numberWithInteger:CSTaskProperty_taskDescription]];
     }
     
     // get priority
@@ -282,7 +282,7 @@
                                              @"from": [NSNumber numberWithInt:self.sourceTask.taskPriority],
                                              @"to": [NSNumber numberWithInt:newPriority]
                                              };
-        [self.unsavedChanges setObject:descriptionChanges forKey:@"taskPriority"];
+        [self.unsavedChanges setObject:descriptionChanges forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
     }
 }
 
