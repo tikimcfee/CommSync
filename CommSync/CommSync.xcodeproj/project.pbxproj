@@ -13,15 +13,17 @@
 		3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */; };
 		3FE492091AD741D40089E518 /* CSTaskRevisionRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */; };
 		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
+		4547AC331ADEC07A007623FA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4547AC321ADEC07A007623FA /* Images.xcassets */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
 		4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4562F2051A78927200090005 /* CSTaskRealmModel.m */; };
 		457832EB1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */; };
+		458B243C1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 458B243B1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.m */; };
+		458B24401ADCB91700A30FAA /* CSTaskImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 458B243F1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.m */; };
 		4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4595391D19E38F1F00744747 /* CSSessionManager.m */; };
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
 		459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */; };
-		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
 		45C956461A97CF0C00364555 /* CSRealmWriteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */; };
@@ -157,12 +159,17 @@
 		3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRevisionRealmModel.m; path = Models/CSTaskRevisionRealmModel.m; sourceTree = "<group>"; };
 		45190C2E1A89BD360030CB05 /* SZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZTextView.h; sourceTree = "<group>"; };
 		45190C2F1A89BD360030CB05 /* SZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SZTextView.m; sourceTree = "<group>"; };
+		4547AC321ADEC07A007623FA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
 		454D92091A78581F000B74A8 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4562F2041A78927200090005 /* CSTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRealmModel.h; path = Models/CSTaskRealmModel.h; sourceTree = "<group>"; };
 		4562F2051A78927200090005 /* CSTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRealmModel.m; path = Models/CSTaskRealmModel.m; sourceTree = "<group>"; };
 		457832E91ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIncomingTaskRealmModel.h; path = Models/CSIncomingTaskRealmModel.h; sourceTree = "<group>"; };
 		457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIncomingTaskRealmModel.m; path = Models/CSIncomingTaskRealmModel.m; sourceTree = "<group>"; };
+		458B243A1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSimpleTaskDetailViewController.h; path = ViewControllers/SimpleTaskDetail/CSSimpleTaskDetailViewController.h; sourceTree = "<group>"; };
+		458B243B1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSimpleTaskDetailViewController.m; path = ViewControllers/SimpleTaskDetail/CSSimpleTaskDetailViewController.m; sourceTree = "<group>"; };
+		458B243E1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskImageCollectionViewCell.h; path = ViewControllers/SimpleTaskDetail/CSTaskImageCollectionViewCell.h; sourceTree = "<group>"; };
+		458B243F1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskImageCollectionViewCell.m; path = ViewControllers/SimpleTaskDetail/CSTaskImageCollectionViewCell.m; sourceTree = "<group>"; };
 		4595391C19E38F1F00744747 /* CSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionManager.h; path = "Session Management/CSSessionManager.h"; sourceTree = "<group>"; };
 		4595391D19E38F1F00744747 /* CSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSessionManager.m; path = "Session Management/CSSessionManager.m"; sourceTree = "<group>"; };
 		459D5F7319DB449900C91EFA /* CommSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,7 +178,6 @@
 		459D5F7A19DB449900C91EFA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		459D5F7B19DB449900C91EFA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		459D5F7E19DB449900C91EFA /* CommSync.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CommSync.xcdatamodel; sourceTree = "<group>"; };
-		459D5F8619DB449900C91EFA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioPlotViewController.h; path = ViewControllers/TaskList/CSAudioPlotViewController.h; sourceTree = "<group>"; };
 		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
@@ -181,10 +187,6 @@
 		45C956481A97EE8100364555 /* CSTaskListUpdateOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskListUpdateOperation.m; path = ViewControllers/TaskList/CSTaskListUpdateOperation.m; sourceTree = "<group>"; };
 		45C9564B1A98CEF800364555 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		45C9564C1A98CEF800364555 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		74098E771AD70CEC0081C69C /* CSTaskMediaRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskMediaRealmModel.h; path = Models/CSTaskMediaRealmModel.h; sourceTree = "<group>"; };
-		74098E781AD70CEC0081C69C /* CSTaskMediaRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaRealmModel.m; path = Models/CSTaskMediaRealmModel.m; sourceTree = "<group>"; };
-		74098E791AD70CEC0081C69C /* CSTaskRevisionRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRevisionRealmModel.h; path = Models/CSTaskRevisionRealmModel.h; sourceTree = "<group>"; };
-		74098E7A1AD70CEC0081C69C /* CSTaskRevisionRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRevisionRealmModel.m; path = Models/CSTaskRevisionRealmModel.m; sourceTree = "<group>"; };
 		7409982E1A0C395A00229AFC /* CSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettingsViewController.h; path = ViewControllers/CSSettingsViewController.h; sourceTree = "<group>"; };
 		7409982F1A0C395A00229AFC /* CSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSettingsViewController.m; path = ViewControllers/CSSettingsViewController.m; sourceTree = "<group>"; };
 		741DE96B1A92C47300AC488F /* CSTaskProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskProgressTableViewCell.h; path = ViewControllers/TaskList/CSTaskProgressTableViewCell.h; sourceTree = "<group>"; };
@@ -546,6 +548,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		458B243D1ADCB8EB00A30FAA /* Simple Task Detail */ = {
+			isa = PBXGroup;
+			children = (
+				458B243A1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.h */,
+				458B243B1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.m */,
+				458B243E1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.h */,
+				458B243F1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.m */,
+			);
+			name = "Simple Task Detail";
+			sourceTree = "<group>";
+		};
 		4595391F19E38F2F00744747 /* Session Management */ = {
 			isa = PBXGroup;
 			children = (
@@ -590,13 +603,13 @@
 				459D5F7B19DB449900C91EFA /* AppDelegate.m */,
 				744452291A0ACE2700C87723 /* ViewControllers */,
 				4595391F19E38F2F00744747 /* Session Management */,
-				459D5F8619DB449900C91EFA /* Images.xcassets */,
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
 				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
 				3FBBF1371A9C0887007124CD /* Main.storyboard */,
 				459D5F7619DB449900C91EFA /* Supporting Files */,
 				93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */,
+				4547AC321ADEC07A007623FA /* Images.xcassets */,
 				93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */,
 			);
 			path = CommSync;
@@ -666,6 +679,7 @@
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
 				3F972BB91AD5B9430066407C /* Users */,
+				458B243D1ADCB8EB00A30FAA /* Simple Task Detail */,
 				3F416E641A86A6EC00EDC347 /* Task Detail */,
 				933AA13A1A71DCA800DCC10A /* TaskList */,
 				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
@@ -1133,10 +1147,6 @@
 		95E8593E1AD610EF00A2BA76 /* UserViews */ = {
 			isa = PBXGroup;
 			children = (
-				95FE62FE1AABC9F300EE9A19 /* CSUserDetailView.h */,
-				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
-				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
-				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 			);
 			name = UserViews;
 			sourceTree = "<group>";
@@ -1219,10 +1229,10 @@
 				93EBABCE1A964552006BAF4A /* JSQMessagesViewController.xib in Resources */,
 				93EBABC41A964552006BAF4A /* JSQMessagesAssets.bundle in Resources */,
 				93EBABE91A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
-				459D5F8719DB449900C91EFA /* Images.xcassets in Resources */,
 				93EBABC51A964552006BAF4A /* JSQMessages.strings in Resources */,
 				3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */,
 				93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */,
+				4547AC331ADEC07A007623FA /* Images.xcassets in Resources */,
 				746F6AD71A892613007A83E8 /* VERSION in Resources */,
 				93EBABE21A964552006BAF4A /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				93EBABE41A964552006BAF4A /* JSQMessagesCollectionViewCellOutgoing.xib in Resources */,
@@ -1276,9 +1286,11 @@
 				93EBABE81A964552006BAF4A /* JSQMessagesLoadEarlierHeaderView.m in Sources */,
 				93EBABD71A964552006BAF4A /* JSQLocationMediaItem.m in Sources */,
 				746F6ACF1A892613007A83E8 /* EZAudioPlotGL.m in Sources */,
+				458B243C1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.m in Sources */,
 				74C541F11A93E67100FC29AD /* TLCollapsibleHeaderView.m in Sources */,
 				93EBABEB1A964552006BAF4A /* JSQMessagesToolbarContentView.m in Sources */,
 				746F6AD51A892613007A83E8 /* TPCircularBuffer.c in Sources */,
+				458B24401ADCB91700A30FAA /* CSTaskImageCollectionViewCell.m in Sources */,
 				74C541F01A93E67100FC29AD /* TLCollapsibleDataModel.m in Sources */,
 				746F6ACB1A892613007A83E8 /* EZAudio.m in Sources */,
 				74C541F91A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m in Sources */,

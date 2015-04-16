@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+=======
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4kC-93-5y9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+>>>>>>> UpdatedTaskDetails
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -263,7 +269,14 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="ITi-gD-sJd" kind="show" identifier="showTaskDetail" id="NWk-jO-0jw"/>
+<<<<<<< HEAD
+                        <segue destination="iaN-ZE-mGm" kind="show" identifier="showTaskDetail" id="eqI-g4-aMU"/>
+=======
+                        <outlet property="completedLabel" destination="Pfz-BC-hrX" id="Whd-jh-R63"/>
+                        <outlet property="tagFilter" destination="i7J-qS-ULS" id="KhT-QD-E3v"/>
+                        <outlet property="userConnectionCount" destination="gsx-IR-oN4" id="PYN-dO-rcf"/>
+                        <segue destination="ITi-gD-sJd" kind="show" identifier="showTaskDetail" id="EBC-uj-Ydx"/>
+>>>>>>> UpdatedTaskDetails
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ayk-rN-MkQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
