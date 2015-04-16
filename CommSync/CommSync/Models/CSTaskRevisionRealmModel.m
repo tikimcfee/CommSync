@@ -146,7 +146,7 @@
                    arc4random_uniform(25)+65,
                    arc4random_uniform(25)+65];
     
-    _revisionID = [NSString stringWithFormat:@"%@_%ld", U, sourceTask.revisions.count];
+    _revisionID = [NSString stringWithFormat:@"%@_%ld", U, (long)sourceTask.revisions.count];
     _revisionDate = [NSDate new];
 }
 

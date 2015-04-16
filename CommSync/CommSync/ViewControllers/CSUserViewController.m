@@ -9,6 +9,7 @@
 #import "CSUserViewController.h"
 #import "CSUserDetailView.h"
 #import "AppDelegate.h"
+#import "UINavigationBar+CommSyncStyle.h"
 
 @interface CSUserViewController ()
 {
@@ -47,6 +48,9 @@
                                                object:nil];
     
     [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(checkMessages) userInfo:nil repeats:YES];
+    
+    // setup navigation controller style
+    [self.navigationController.navigationBar setupCommSyncStyle];
 }
 
 - (void)didReceiveMemoryWarning {

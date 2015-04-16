@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSChatTableViewCell.h"
+#import "UINavigationBar+CommSyncStyle.h"
 #import <Realm/Realm.h>
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
@@ -68,7 +69,7 @@
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0f];
     
     /**
      * Get a copy of the session manager
@@ -86,6 +87,23 @@
      *  Register for chat realm notifications
      */
     [self registerForChatRealmNotifications];
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    /*
+     *  Add navigation bar
+     */
+    UINavigationBar *bar = [UINavigationBar new];
+    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 60.0)];
+    [bar setupCommSyncStyle];
+
+    UILabel *barLabel = [UILabel new];
+    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2)-45.0, 30.0, 90.0, 20.0)];
+    [barLabel setText:@"Group Chat"];
+    [barLabel setTextColor:[UIColor whiteColor]];
+    
+    [bar addSubview:barLabel];
+    [self.view addSubview:bar];
 }
 
 #pragma mark - Override SlackViewController Methods
@@ -126,10 +144,7 @@
             [_chatRealm commitWriteTransaction];
             [self.sessionManager sendDataPacketToPeers:messageData];
         }
-        
-        
-        
-        
+
        
     }
     
@@ -196,14 +211,17 @@
     }
     
     if(!_sourceTask){
-        
-            CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
-            cell.createdByLabel.text = msg.createdBy;
-            cell.messageLabel.text = msg.text;
-            cell.transform = self.tableView.transform;
+        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+    
+        cell.createdByLabel.text = msg.createdBy;
+        cell.messageLabel.text = msg.text;
+        cell.transform = self.tableView.transform;
         
-       
+        if ([msg.createdBy isEqualToString:_currentUser]) {
+            cell.createdByLabel.textAlignment = NSTextAlignmentRight;
+            cell.messageLabel.textAlignment = NSTextAlignmentRight;
+        }
     }
     
     else{
@@ -212,6 +230,8 @@
         cell.messageLabel.text = comment.text;
         cell.transform = self.tableView.transform;
     }
+    
+    
     return cell;
 }
 
@@ -278,6 +298,8 @@
     return [orderedChatMessages objectAtIndex:index];
 }
 
-
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
 @end
