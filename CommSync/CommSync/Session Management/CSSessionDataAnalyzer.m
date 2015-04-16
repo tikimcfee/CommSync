@@ -56,22 +56,14 @@
         
         else if( [receivedObject valueForKey:kcs_CHAT_MESSAGE] )
         {
-            CSChatMessageRealmModel* temp = [receivedObject valueForKey:kcs_CHAT_MESSAGE];
+            CSChatMessageRealmModel* message = [receivedObject valueForKey:kcs_CHAT_MESSAGE];
             
-            NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
-            @synchronized (_messagePool){
-                if([_messagePool valueForKey:messageID] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
-                {
-                    NSLog(@"<.> message %@ already requested; no action to be taken.",messageID);
-                    return;
-                }
-            }
-            @synchronized (_messagePool){
-                [_messagePool setValue:_peer forKey:messageID];
-                [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(removeMessageRequest:) userInfo:messageID repeats:NO];
-            }
+            if(![self queueMessages:message]) return;
             //add the message and if we dont have it then propagate it
-            if([self addPublicMessage:temp]) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if([self addPublicMessage:message]) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+            });
         }
     
         else if( [receivedObject valueForKey:kcs_CHAT_ARRAY])
@@ -80,7 +72,9 @@
                 NSMutableArray *differences = [[NSMutableArray alloc]init];
                 
                 for(CSChatMessageRealmModel* message in [receivedObject valueForKey:kcs_CHAT_ARRAY]){
-                    if([self addPublicMessage:message]) [differences addObject:message];
+                    if([self queueMessages:message] && [self addPublicMessage:message] ) {
+                        [differences addObject:message];
+                    }
                 }
                 //if there are any difference propagate them
                 if([differences count] > 0){
@@ -93,28 +87,18 @@
         
         else if( [receivedObject valueForKey:kCS_PRIVATE_MESSAGE] )
         {
-            CSChatMessageRealmModel* temp = [receivedObject valueForKey:kCS_PRIVATE_MESSAGE];
+            CSChatMessageRealmModel* message = [receivedObject valueForKey:kCS_PRIVATE_MESSAGE];
             
-            NSString* messageID =[temp.createdBy stringByAppendingString:(NSString*)temp.messageText];
-            @synchronized (_messagePool){
-                if([_messagePool valueForKey:messageID] || [temp.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
-                {
-                    NSLog(@"<.> message %@ already requested; no action to be taken.",messageID);
-                    return;
-                }
-            }
-            @synchronized (_messagePool){
-                [_messagePool setValue:_peer forKey:messageID];
-                [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(removeMessageRequest:) userInfo:messageID repeats:NO];
-            }
             
-            //if the message is meant for someone else then propagate it so they get it
-            if(![temp.recipient isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName]){
+            if(![self queueMessages:message]) return;
+            
+            //if the message is meant for so meone else then propagate it so they get it
+            if(![message.recipient isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName]){
                 
-                if([_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions valueForKey:temp.recipient])
+                if([_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
                 {
                     //the user is connected to the target so we can send it directly
-                    [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.currentConnectedPeers valueForKey:temp.recipient]];
+                    [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.currentConnectedPeers valueForKey:message.recipient]];
                     return;
                 }
                 
@@ -122,7 +106,7 @@
             }
             
             else{
-                [self addPrivateMessage:temp];
+                [self addPrivateMessage:message];
             }
         }
 
@@ -130,9 +114,10 @@
         
         else if( [receivedObject valueForKey:kcs_PM_ARRAY])
         {
-            dispatch_sync(_parentAnalyzer.globalManager.privateMessageQueue,^{
-                for(CSChatMessageRealmModel* message in [receivedObject valueForKey:kcs_PM_ARRAY]) [self addPrivateMessage:message];
-            });
+            for(CSChatMessageRealmModel* message in [receivedObject valueForKey:kcs_PM_ARRAY])
+            {
+                if([self queueMessages:message]) [self addPrivateMessage:message];
+            }
         }
         
         else if ([receivedObject valueForKey:kcs_USER_ARRAY])
@@ -194,47 +179,50 @@
     return true;
 }
 
+-(bool) queueMessages:(CSChatMessageRealmModel*) message
+{
+    NSString* messageID =[message.createdBy stringByAppendingString:(NSString*)message.text];
+    @synchronized (_messagePool){
+        if([_messagePool valueForKey:messageID] || [message.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
+        {
+            NSLog(@"<.> message %@ already requested; no action to be taken.",messageID);
+            return false;
+        }
+    }
+    @synchronized (_messagePool){
+        [_messagePool setValue:_peer forKey:messageID];
+        [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(removeMessageRequest:) userInfo:messageID repeats:NO];
+    }
+    return true;
+}
+
 -(void) addPrivateMessage:(CSChatMessageRealmModel*) message
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    NSString *url = [basePath stringByAppendingString:@"/privateMessage.realm"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",message.createdBy, message.createdAt];
     
-    //if the chat message already exists then exit otherwise add it and send it to all peers
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
-                         message.createdBy, message.createdAt];
+        if([[CSChatMessageRealmModel objectsInRealm:_parentAnalyzer.globalManager.privateMessageRealm withPredicate:pred] count] != 0) return;
     
-    RLMRealm *privateMessageRealm = [RLMRealm realmWithPath:url];
+        [_parentAnalyzer.globalManager addMessage:message.senderDisplayName];
     
-    if([[CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred] count] != 0) return;
-    
-    
-    [_parentAnalyzer.globalManager addMessage:message.senderDisplayName];
-    
-    
-    [privateMessageRealm beginWriteTransaction];
-    [privateMessageRealm addObject:message];
-    [privateMessageRealm commitWriteTransaction];
+        [_parentAnalyzer.globalManager.privateMessageRealm beginWriteTransaction];
+        [_parentAnalyzer.globalManager.privateMessageRealm addObject:message];
+        [_parentAnalyzer.globalManager.privateMessageRealm commitWriteTransaction];
+    });
 }
 
 -(bool) addPublicMessage:(CSChatMessageRealmModel*) message
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
-    
-    RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
-    
-    //if the chat message already exists then exit otherwise add it and send it to all peers
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
+        //if the chat message already exists then exit otherwise add it and send it to all peers
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
                          message.createdBy, message.createdAt];
     
-    if([[CSChatMessageRealmModel objectsInRealm:chatRealm withPredicate:pred] count] != 0) return false;
+        if([[CSChatMessageRealmModel objectsInRealm:_parentAnalyzer.globalManager.chatMessageRealm withPredicate:pred] count] != 0) return false;
     
-    [chatRealm beginWriteTransaction];
-    [chatRealm addObject:message];
-    [chatRealm commitWriteTransaction];
-    
+        [_parentAnalyzer.globalManager.chatMessageRealm beginWriteTransaction];
+        [_parentAnalyzer.globalManager.chatMessageRealm addObject:message];
+        [_parentAnalyzer.globalManager.chatMessageRealm commitWriteTransaction];
     return true;
 }
 
