@@ -20,6 +20,7 @@
 #define kCS_USER_UPDATE_AVATAR  @"Avatar"
 #define kCS_PRIVATE_MESSAGE     @"PrivateMessage"
 #define kcs_CHAT_MESSAGE        @"ChatMessage"
+#define kcs_CHAT_ARRAY          @"ChatArray"
 #define kcs_TASK_ARRAY          @"TaskArray"
 #define kcs_PM_ARRAY            @"PMArray"
 #define kcs_USER_ARRAY          @"UserArray"
@@ -69,30 +70,25 @@
                 [_messagePool setValue:_peer forKey:messageID];
                 [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(removeMessageRequest:) userInfo:messageID repeats:NO];
             }
-            
-            //if the message is a public message
-            if([temp.recipient isEqualToString:@"ALL"] )
-            {
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-                NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
+            //add the message and if we dont have it then propagate it
+            if([self addPublicMessage:temp]) [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
+        }
+    
+        else if( [receivedObject valueForKey:kcs_CHAT_ARRAY])
+        {
+            dispatch_async(dispatch_get_main_queue(),^{
+                NSMutableArray *differences = [[NSMutableArray alloc]init];
                 
-                RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
-                
-                //if the chat message already exists then exit otherwise add it and send it to all peers
-                NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
-                                     temp.createdBy, temp.createdAt];
-                
-                if([[CSChatMessageRealmModel objectsInRealm:chatRealm withPredicate:pred] count] != 0) return;
-                
-                [chatRealm beginWriteTransaction];
-                [chatRealm addObject:temp];
-                [chatRealm commitWriteTransaction];
-                
-                [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
-                return;
-            }
-
+                for(CSChatMessageRealmModel* message in [receivedObject valueForKey:kcs_CHAT_ARRAY]){
+                    if([self addPublicMessage:message]) [differences addObject:message];
+                }
+                //if there are any difference propagate them
+                if([differences count] > 0){
+                    NSDictionary *dataToSend = @{@"ChatArray"  :   differences};
+                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                    [_parentAnalyzer.globalManager sendDataPacketToPeers:data];
+                }
+            });
         }
         
         else if( [receivedObject valueForKey:kCS_PRIVATE_MESSAGE] )
@@ -134,7 +130,7 @@
         
         else if( [receivedObject valueForKey:kcs_PM_ARRAY])
         {
-            dispatch_sync(_parentAnalyzer.globalManager.peerHistoryQueue,^{
+            dispatch_sync(_parentAnalyzer.globalManager.privateMessageQueue,^{
                 for(CSChatMessageRealmModel* message in [receivedObject valueForKey:kcs_PM_ARRAY]) [self addPrivateMessage:message];
             });
         }
@@ -219,6 +215,27 @@
     [privateMessageRealm beginWriteTransaction];
     [privateMessageRealm addObject:message];
     [privateMessageRealm commitWriteTransaction];
+}
+
+-(bool) addPublicMessage:(CSChatMessageRealmModel*) message
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    NSString *url = [basePath stringByAppendingString:@"/chat.realm"];
+    
+    RLMRealm *chatRealm = [RLMRealm realmWithPath:url];
+    
+    //if the chat message already exists then exit otherwise add it and send it to all peers
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND createdAt = %@",
+                         message.createdBy, message.createdAt];
+    
+    if([[CSChatMessageRealmModel objectsInRealm:chatRealm withPredicate:pred] count] != 0) return false;
+    
+    [chatRealm beginWriteTransaction];
+    [chatRealm addObject:message];
+    [chatRealm commitWriteTransaction];
+    
+    return true;
 }
 
 -(void) removeMessageRequest:(NSString*) message

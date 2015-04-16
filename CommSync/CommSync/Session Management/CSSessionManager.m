@@ -76,7 +76,7 @@
         _chatMessageQueue =  dispatch_queue_create("chatMessageQueue", NULL);
         _privateMessageQueue = dispatch_queue_create("privateMessageQueue", NULL);
         _taskRealmQueue =  dispatch_queue_create("taskRealmQueue", NULL);
-       _peerHistoryQueue = dispatch_queue_create("peerHistoryQueue", NULL);
+        _peerHistoryQueue = dispatch_queue_create("peerHistoryQueue", NULL);
         
         dispatch_sync(self.peerHistoryQueue,^{
             _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
@@ -529,6 +529,19 @@
                     [self sendSingleDataPacket:data toSinglePeer:peerID];
                 }
                 
+            });
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray* send = [[NSMutableArray alloc]init];
+                for(CSChatMessageRealmModel* message in [CSChatMessageRealmModel allObjectsInRealm:_chatMessageRealm])
+                {
+                    [send addObject:message];
+                }
+                if([send count] > 0) {
+                    NSDictionary *dataToSend = @{@"ChatArray"  :   send};
+                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                    [self sendSingleDataPacket:data toSinglePeer:peerID];
+                }
             });
             
             dispatch_async(_taskRealmQueue, ^{
