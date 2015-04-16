@@ -1001,30 +1001,6 @@
                                         <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8gf-MJ-wYQ">
                                             <rect key="frame" x="287" y="206" width="39" height="37"/>
                                         </pageControl>
-                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hgA-bh-Jze">
-                                            <rect key="frame" x="580" y="138" width="10" height="10"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="10" id="0BC-kJ-tNL"/>
-                                                <constraint firstAttribute="width" constant="10" id="1F9-df-W23"/>
-                                            </constraints>
-                                            <color key="tintColor" red="0.6942209005355835" green="0.73005121946334839" blue="0.75357025861740112" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <state key="normal" image="rightArrow">
-                                                <attributedString key="attributedTitle"/>
-                                            </state>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6no-Ef-Lwd">
-                                            <rect key="frame" x="22" y="138" width="10" height="10"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="10" id="120-jK-BPN"/>
-                                                <constraint firstAttribute="width" constant="10" id="pm7-Qs-6pD"/>
-                                            </constraints>
-                                            <color key="tintColor" red="0.6942209005355835" green="0.73005121946334839" blue="0.75357025861740112" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <state key="normal" image="leftArrow">
-                                                <attributedString key="attributedTitle"/>
-                                            </state>
-                                        </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HwR-MQ-K1n" userLabel="priority bar">
                                             <rect key="frame" x="0.0" y="0.0" width="12" height="336"/>
                                             <color key="backgroundColor" red="0.46274513010000001" green="0.74509805439999999" blue="0.231372565" alpha="1" colorSpace="deviceRGB"/>
@@ -1128,45 +1104,31 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="8gf-MJ-wYQ" firstAttribute="centerX" secondItem="BdU-t9-SRE" secondAttribute="centerX" id="12S-5u-r7z"/>
-                                        <constraint firstItem="hgA-bh-Jze" firstAttribute="centerY" secondItem="BdU-t9-SRE" secondAttribute="centerY" id="3CX-dQ-tYO"/>
                                         <constraint firstItem="Iio-0x-p2a" firstAttribute="leading" secondItem="PcE-gW-NH6" secondAttribute="leading" constant="20" id="57j-md-IA1"/>
                                         <constraint firstItem="HwR-MQ-K1n" firstAttribute="top" secondItem="PcE-gW-NH6" secondAttribute="top" id="7c4-Rz-xGz"/>
-                                        <constraint firstItem="hgA-bh-Jze" firstAttribute="trailing" secondItem="BdU-t9-SRE" secondAttribute="trailing" constant="6" id="8Rp-O4-k7Y"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="top" secondItem="HwR-MQ-K1n" secondAttribute="bottom" id="95M-tf-ja9"/>
                                         <constraint firstItem="8gf-MJ-wYQ" firstAttribute="bottom" secondItem="BdU-t9-SRE" secondAttribute="bottom" id="BZ5-z7-Dlf"/>
-                                        <constraint firstItem="6no-Ef-Lwd" firstAttribute="leading" secondItem="BdU-t9-SRE" secondAttribute="leading" constant="2" id="BrZ-7Y-V4P"/>
                                         <constraint firstItem="s1O-2G-uHK" firstAttribute="top" secondItem="BdU-t9-SRE" secondAttribute="bottom" constant="8" id="DsT-YL-iEt"/>
                                         <constraint firstItem="BdU-t9-SRE" firstAttribute="top" secondItem="Iio-0x-p2a" secondAttribute="bottom" constant="8" id="FVh-TF-qla"/>
                                         <constraint firstItem="HwR-MQ-K1n" firstAttribute="top" secondItem="BdU-t9-SRE" secondAttribute="bottom" constant="8" id="Feg-4L-jqX"/>
                                         <constraint firstAttribute="trailing" secondItem="6bA-oB-Kmv" secondAttribute="trailing" id="IH5-by-h76"/>
                                         <constraint firstItem="HwR-MQ-K1n" firstAttribute="leading" secondItem="PcE-gW-NH6" secondAttribute="leading" id="LUB-7t-KpC"/>
                                         <constraint firstItem="BdU-t9-SRE" firstAttribute="leading" secondItem="HwR-MQ-K1n" secondAttribute="trailing" constant="8" id="N5i-fV-i8e"/>
-                                        <constraint firstItem="hgA-bh-Jze" firstAttribute="leading" secondItem="BdU-t9-SRE" secondAttribute="trailing" constant="-20" id="Pvr-IJ-7vU"/>
-                                        <constraint firstItem="BdU-t9-SRE" firstAttribute="leading" secondItem="6no-Ef-Lwd" secondAttribute="leading" constant="6" id="SSy-k4-wOI"/>
                                         <constraint firstItem="s1O-2G-uHK" firstAttribute="leading" secondItem="HwR-MQ-K1n" secondAttribute="trailing" constant="8" id="VFb-Pf-DIK"/>
                                         <constraint firstItem="Iio-0x-p2a" firstAttribute="top" secondItem="PcE-gW-NH6" secondAttribute="top" constant="8" id="XR1-sD-z3C"/>
                                         <constraint firstItem="s1O-2G-uHK" firstAttribute="leading" secondItem="6bA-oB-Kmv" secondAttribute="leading" id="aov-Gh-Ga1"/>
                                         <constraint firstItem="6bA-oB-Kmv" firstAttribute="top" secondItem="s1O-2G-uHK" secondAttribute="bottom" constant="8" id="bHT-K0-56u"/>
-                                        <constraint firstItem="hgA-bh-Jze" firstAttribute="trailing" secondItem="BdU-t9-SRE" secondAttribute="trailing" id="bfQ-Mn-UTy"/>
                                         <constraint firstAttribute="trailing" secondItem="g6C-4q-W1L" secondAttribute="trailing" id="dPL-mR-wsm"/>
-                                        <constraint firstItem="BdU-t9-SRE" firstAttribute="centerY" secondItem="6no-Ef-Lwd" secondAttribute="centerY" id="djM-Yg-BZp"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="top" secondItem="6bA-oB-Kmv" secondAttribute="bottom" constant="8" id="eCM-PI-tH6"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="leading" secondItem="PcE-gW-NH6" secondAttribute="leading" id="eTJ-jQ-hNj"/>
                                         <constraint firstItem="BdU-t9-SRE" firstAttribute="leading" secondItem="PcE-gW-NH6" secondAttribute="leading" id="jJI-0I-awW"/>
                                         <constraint firstAttribute="bottom" secondItem="g6C-4q-W1L" secondAttribute="bottom" id="nYa-E3-vnP"/>
                                         <constraint firstAttribute="trailing" secondItem="BdU-t9-SRE" secondAttribute="trailing" constant="8" id="oaf-8T-aCd"/>
-                                        <constraint firstItem="hgA-bh-Jze" firstAttribute="leading" secondItem="BdU-t9-SRE" secondAttribute="trailing" constant="-29" id="qko-dh-j38"/>
-                                        <constraint firstItem="hgA-bh-Jze" firstAttribute="trailing" secondItem="BdU-t9-SRE" secondAttribute="trailing" constant="-2" id="yVI-dA-V1L"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
                                             <exclude reference="Feg-4L-jqX"/>
-                                            <exclude reference="SSy-k4-wOI"/>
                                             <exclude reference="jJI-0I-awW"/>
-                                            <exclude reference="8Rp-O4-k7Y"/>
-                                            <exclude reference="Pvr-IJ-7vU"/>
-                                            <exclude reference="bfQ-Mn-UTy"/>
-                                            <exclude reference="qko-dh-j38"/>
                                         </mask>
                                     </variation>
                                 </view>
@@ -1182,8 +1144,6 @@
                     </view>
                     <connections>
                         <outlet property="dottedPageControl" destination="8gf-MJ-wYQ" id="zUs-F8-fia"/>
-                        <outlet property="moreLeftButton" destination="6no-Ef-Lwd" id="eYA-dL-Gfd"/>
-                        <outlet property="moreRightButton" destination="hgA-bh-Jze" id="61R-a2-kMX"/>
                         <outlet property="objectTextView" destination="6bA-oB-Kmv" id="QH0-fM-Ihx"/>
                         <outlet property="taskImageCollectionView" destination="BdU-t9-SRE" id="Zku-M5-DGg"/>
                         <outlet property="taskTitleTextField" destination="Iio-0x-p2a" id="Npd-0w-dLv"/>
@@ -1686,8 +1646,6 @@
     </scenes>
     <resources>
         <image name="Play Button" width="56" height="56"/>
-        <image name="leftArrow" width="140" height="157"/>
-        <image name="rightArrow" width="140" height="157"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="esm-L7-fWV"/>

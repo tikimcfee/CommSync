@@ -33,9 +33,6 @@
     }];
     
     [self setupCollectionView];
-    
-    _moreLeftButton.layer.cornerRadius = _moreLeftButton.frame.size.width / 2;
-    _moreRightButton.layer.cornerRadius = _moreRightButton.frame.size.width / 2;
 
     _dottedPageControl.hidesForSinglePage = YES;
     
@@ -109,52 +106,7 @@
     NSIndexPath* path = [_taskImageCollectionView indexPathForCell:vis];
     
     _dottedPageControl.currentPage = path.row;
-//    
-//    if (path.row == 0) {
-//        [UIView animateWithDuration:time animations:^{
-//            _moreRightButton.alpha = alph;
-//            _moreLeftButton.alpha = 0.0;
-//        }];
-//    } else if (path.row == self.taskImages.count - 1){
-//        [UIView animateWithDuration:time animations:^{
-//            _moreRightButton.alpha = 0.0;
-//            _moreLeftButton.alpha = alph;
-//        }];
-//    } else {
-//        [UIView animateWithDuration:time animations:^{
-//            _moreRightButton.alpha = alph;
-//            _moreLeftButton.alpha = alph;
-//        }];
-//    }
-    
 }
-
-//-(void)collectionView:(UICollectionView*)collectionView
-//      willDisplayCell:(UICollectionViewCell *)cell
-//   forItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-////    if (indexPath.row > 0 && indexPath.row < self.taskImages.count - 1) {
-////        [UIView animateWithDuration:time animations:^{
-////            _moreLeftButton.alpha = alph;
-////            _moreRightButton.alpha = alph;
-////        }];
-////    } else if (indexPath.row == 0 && self.taskImages.count > 1) {
-////        [UIView animateWithDuration:time animations:^{
-////            _moreRightButton.alpha = alph;
-////            _moreLeftButton.alpha = 0.0;
-////        }];
-////    } else if (indexPath.row > 0 && indexPath.row == self.taskImages.count - 1) {
-////        [UIView animateWithDuration:time animations:^{
-////            _moreRightButton.alpha = 0.0;
-////            _moreLeftButton.alpha = alph;
-////        }];
-////    } else {
-////        [UIView animateWithDuration:time animations:^{
-////            _moreRightButton.alpha = 0;
-////            _moreLeftButton.alpha = 0;
-////        }];
-////    }
-//}
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 

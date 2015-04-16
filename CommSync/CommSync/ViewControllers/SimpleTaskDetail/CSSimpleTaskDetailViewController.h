@@ -16,8 +16,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *taskImageCollectionView;
 
 @property (weak, nonatomic) IBOutlet UITextView *objectTextView;
-@property (weak, nonatomic) IBOutlet UIButton *moreLeftButton;
-@property (weak, nonatomic) IBOutlet UIButton *moreRightButton;
 
 @property (weak, nonatomic) IBOutlet UIPageControl *dottedPageControl;
 
