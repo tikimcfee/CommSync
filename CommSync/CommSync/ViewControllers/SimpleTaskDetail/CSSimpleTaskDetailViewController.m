@@ -10,6 +10,9 @@
 #import "CSTaskImageCollectionViewCell.h"
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
 
+#define time 0.2
+#define alph 0.75
+
 @interface CSSimpleTaskDetailViewController ()
 
 @property (nonatomic) int currentIndex;
@@ -30,6 +33,17 @@
     }];
     
     [self setupCollectionView];
+    
+    _moreLeftButton.layer.cornerRadius = _moreLeftButton.frame.size.width / 2;
+    _moreRightButton.layer.cornerRadius = _moreRightButton.frame.size.width / 2;
+
+    _dottedPageControl.hidesForSinglePage = YES;
+    
+    [self setupViewsFromSourceTask];
+}
+
+- (void) setupViewsFromSourceTask {
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,7 +58,6 @@
 }
 
 -(void)setupCollectionView {
-//    [self.taskImageCollectionView registerClass:[CMFGalleryCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
@@ -53,6 +66,9 @@
     [self.taskImageCollectionView setPagingEnabled:YES];
     [self.taskImageCollectionView setCollectionViewLayout:flowLayout];
     self.taskImageCollectionView.backgroundColor = [UIColor clearColor];
+//    self.taskImageCollectionView.layer.cornerRadius = 8;
+//    self.taskImageCollectionView.layer.borderWidth = 1;
+//    self.taskImageCollectionView.layer.borderColor = [UIColor lightGrayColor].CGColor;
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -60,23 +76,88 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+//    _moreLeftButton.alpha = 0;
+//    if (self.taskImages.count == 0) {
+//        _moreRightButton.alpha = 0;
+//    } else if (self.taskImages.count >= 1) {
+//        _moreRightButton.alpha = alph;
+//    }
+    
+    _dottedPageControl.numberOfPages = self.taskImages.count;
+    _dottedPageControl.currentPage = 0;
+    
     return self.taskImages.count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     CSTaskImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTaskImageCollectionViewCell forIndexPath:indexPath];
     
-    cell.contentView.layer.cornerRadius = 8;
-    cell.contentView.clipsToBounds = YES;
+    cell.taskImageView.layer.cornerRadius = 8;
+    cell.taskImageView.clipsToBounds = YES;
     
     [cell configureCellWithImage:[_taskImages objectAtIndex:indexPath.row]];
     
     return cell;
+}
+
+-(void)collectionView:(UICollectionView*)collectionView
+      didEndDisplayingCell:(UICollectionViewCell *)cell
+   forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CSTaskImageCollectionViewCell* vis = [[_taskImageCollectionView visibleCells] objectAtIndex:0];
+    NSIndexPath* path = [_taskImageCollectionView indexPathForCell:vis];
+    
+    _dottedPageControl.currentPage = path.row;
+//    
+//    if (path.row == 0) {
+//        [UIView animateWithDuration:time animations:^{
+//            _moreRightButton.alpha = alph;
+//            _moreLeftButton.alpha = 0.0;
+//        }];
+//    } else if (path.row == self.taskImages.count - 1){
+//        [UIView animateWithDuration:time animations:^{
+//            _moreRightButton.alpha = 0.0;
+//            _moreLeftButton.alpha = alph;
+//        }];
+//    } else {
+//        [UIView animateWithDuration:time animations:^{
+//            _moreRightButton.alpha = alph;
+//            _moreLeftButton.alpha = alph;
+//        }];
+//    }
     
 }
 
+//-(void)collectionView:(UICollectionView*)collectionView
+//      willDisplayCell:(UICollectionViewCell *)cell
+//   forItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+////    if (indexPath.row > 0 && indexPath.row < self.taskImages.count - 1) {
+////        [UIView animateWithDuration:time animations:^{
+////            _moreLeftButton.alpha = alph;
+////            _moreRightButton.alpha = alph;
+////        }];
+////    } else if (indexPath.row == 0 && self.taskImages.count > 1) {
+////        [UIView animateWithDuration:time animations:^{
+////            _moreRightButton.alpha = alph;
+////            _moreLeftButton.alpha = 0.0;
+////        }];
+////    } else if (indexPath.row > 0 && indexPath.row == self.taskImages.count - 1) {
+////        [UIView animateWithDuration:time animations:^{
+////            _moreRightButton.alpha = 0.0;
+////            _moreLeftButton.alpha = alph;
+////        }];
+////    } else {
+////        [UIView animateWithDuration:time animations:^{
+////            _moreRightButton.alpha = 0;
+////            _moreLeftButton.alpha = 0;
+////        }];
+////    }
+//}
+
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+
     return self.taskImageCollectionView.frame.size;
 }
 

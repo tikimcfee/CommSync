@@ -14,29 +14,13 @@
 - (void) awakeFromNib {
     [super awakeFromNib];
     
+    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
 }
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-////        NSArray *arrayOfViews = [[NSBundle mainBundle] loadNibNamed:@"CMFGalleryCell" owner:self options:nil];
-////        
-////        if ([arrayOfViews count] < 1) {
-////            return nil;
-////        }
-////        
-////        if (![[arrayOfViews objectAtIndex:0] isKindOfClass:[UICollectionViewCell class]]) {
-////            return nil;
-////        }
-////        
-////        self = [arrayOfViews objectAtIndex:0];
-//    }
-//    
-//    return self;
-//}
 
 - (void)configureCellWithImage:(UIImage*)taskImage {
+    
+    
     [_taskImageView setImage:taskImage];
     [_taskImageView setContentMode:UIViewContentModeScaleAspectFill];
 }
