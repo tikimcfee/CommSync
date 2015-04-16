@@ -17,17 +17,15 @@
 @interface CSTaskProgressTableViewCell : UITableViewCell
 
 // View hierarcy and UI
-@property (weak, nonatomic) IBOutlet M13ProgressViewRing *progressRingView;
-@property (weak, nonatomic) IBOutlet UILabel *taskStatusLabel;
-@property (strong, nonatomic) NSProgress* loadProgress;
+@property (strong, nonatomic) IBOutlet M13ProgressViewRing *progressRingView;
+@property (strong, nonatomic) IBOutlet UILabel *taskStatusLabel;
 
 // Task information and state
-@property (strong, nonatomic) CSNewTaskResourceInformationContainer *sourceTask;
 @property (strong, nonatomic) NSString* resourceName;
 @property (strong, nonatomic) void (^progressCompletionBlock)(CSTaskProgressTableViewCell*, TLIndexPathUpdates* updates);
 
 
 // Configuration method
-- (void)configureWithSourceInformation:(CSNewTaskResourceInformationContainer*)container;
+- (void)configureWithIdentifier:(NSString*)container;
 
 @end

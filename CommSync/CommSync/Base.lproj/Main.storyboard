@@ -112,7 +112,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ESx-en-tpc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="643" y="1271"/>
+            <point key="canvasLocation" x="853" y="1270"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9nJ-GG-Wi7">
@@ -1263,11 +1263,10 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Item" id="Sh0-AW-6bi"/>
-                    <keyCommands/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mx7-kd-pDl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3353" y="1371"/>
+            <point key="canvasLocation" x="3353" y="1334"/>
         </scene>
         <!--Task List View Controller-->
         <scene sceneID="3IN-nb-AvK">

@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import "CSTaskResourceSendOperation.h"
 
 // Session management strings
 #define COMMSYNC_SERVICE_ID @"comm-sync-2014"
@@ -16,9 +18,12 @@
 #define MANUAL_DISCONNECT_STRING @"|~DISCONNECT~|"
 
 // Notification names
+#define kCSTaskObservationID @"kCSTaskObservationID"
 #define kCSDidStartReceivingResourceWithName @"kCSDidStartReceivingResourceWithName"
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
+
+@class CSTaskRealmModel, RLMRealm;
 
 @protocol MCSessionDataHandlingDelegate <NSObject>
 
@@ -31,8 +36,6 @@
 
 @end
 
-@class CSTaskTransientObjectStore;
-
 @interface CSSessionManager : NSObject <MCNearbyServiceBrowserDelegate,
                                         MCNearbyServiceAdvertiserDelegate,
                                         MCSessionDelegate>
@@ -42,8 +45,10 @@
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
-@property (strong, nonatomic) NSMutableDictionary* peerHistory;
 @property (strong, nonatomic) NSMutableDictionary* unreadMessages;
+
+// Data queue
+@property (strong, nonatomic) NSOperationQueue* mainTaskSendQueue;
 
 
 // 1-1 session objects
@@ -57,8 +62,8 @@
 - (void) sendPulseToPeers;
 
 // Task transmission
-- (void) sendNewTaskToPeers:(CSTaskTransientObjectStore*)newTask;
-- (void) sendSingleTask:(CSTaskTransientObjectStore*)task toSinglePeer:(MCPeerID*)peer;
+- (void) sendNewTaskToPeers:(CSTaskRealmModel*)newTask;
+- (void) sendSingleTask:(CSTaskRealmModel*)task toSinglePeer:(MCPeerID*)peer;
 
 - (void) sendDataPacketToPeers: (NSData*)dataPacket;
 - (void) sendSingleDataPacket:  (NSData*)dataPacket toSinglePeer:(MCPeerID*)peer;
@@ -69,11 +74,20 @@
 - (void) nukeRealm;
 - (void) nukeHistory;
 
-- (void)updatePeerHistory:(MCPeerID *)peerID;
-- (void)batchUpdateRealmWithTasks:(NSArray*)tasks;
+- (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
 
-
++ (NSString *)incomingTaskRealmDirectory;
 + (NSString *)peerHistoryRealmDirectory;
++ (NSString *)privateMessageRealmDirectory;
++ (NSString *)chatMessageRealmDirectory;
+@property (strong, nonatomic) RLMRealm *peerHistoryRealm;
+@property (strong, nonatomic) RLMRealm *chatMessageRealm;
+@property (strong, nonatomic) RLMRealm *privateMessageRealm;
+
+@property (strong, nonatomic) dispatch_queue_t taskRealmQueue;
+@property (strong, nonatomic) dispatch_queue_t privateMessageQueue;
+@property (strong, nonatomic) dispatch_queue_t chatMessageQueue;
+@property (strong, nonatomic) dispatch_queue_t peerHistoryQueue;
 
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 

@@ -20,6 +20,27 @@
     return @{@"mediaData":emptyData, @"mediaType":type};
 }
 
+- (id) initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        self.mediaData = [aDecoder decodeObjectForKey:kMediaData];
+        self.mediaType = [((NSNumber*)[aDecoder decodeObjectForKey:kMediaType]) integerValue];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:_mediaData forKey:kMediaData];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_mediaType] forKey:kMediaType];
+}
+
++(CSTaskMediaRealmModel*)mediaModelWithModel:(CSTaskMediaRealmModel*)model {
+    CSTaskMediaRealmModel* newModel = [CSTaskMediaRealmModel new];
+    newModel.mediaType = model.mediaType;
+    newModel.mediaData = [NSData dataWithData:model.mediaData];
+    
+    return newModel;
+}
+
 // Specify properties to ignore (Realm won't persist these)
 
 //+ (NSArray *)ignoredProperties

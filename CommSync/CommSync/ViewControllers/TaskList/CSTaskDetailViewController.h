@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
-#import "CSTaskTransientObjectStore.h"
 #import "CSPictureViewController.h"
 #import "SZTextView.h"
 #import <AVFoundation/AVFoundation.h>
+#import "AppDelegate.h"
 
 @interface CSTaskDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITextFieldDelegate>
 {
@@ -21,7 +21,6 @@
 
 //task objects
 @property (strong, nonatomic) CSTaskRealmModel               *sourceTask;
-@property (strong, nonatomic) CSTaskTransientObjectStore     *transientTask;
 @property (weak, nonatomic) IBOutlet CSPictureViewController *embed;
 //Header Items
 
@@ -46,14 +45,13 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerWidth;
-
+@property (strong, nonatomic) AppDelegate* app;
 - (IBAction)    playAudio:(id)sender;
 - (IBAction)    setRed:(id)sender;
 - (IBAction)    setGreen:(id)sender;
 - (IBAction)    setYellow:(id)sender;
 - (IBAction)    editMode:(id)sender;
 - (IBAction)    addPicture:(id)sender;
-- (IBAction)    completeTask:(id)sender;
 - (void)        setImagesFromTask;
 
 @end

@@ -14,10 +14,8 @@
 @interface CSTaskListUpdateOperation : NSOperation <TLIndexPathControllerDelegate>
 
 @property (weak, nonatomic) UITableView* tableviewToUpdate;
-@property (strong, nonatomic) TLIndexPathUpdates* updatesToPerform;
 
-@property (strong, nonatomic) void (^reloadBlock)(CSTaskProgressTableViewCell* sourceData);
-@property (strong, nonatomic) CSTaskProgressTableViewCell* sourceDataToRemove;
+@property (strong, nonatomic) void (^reloadBlock)();
 @property (strong, nonatomic) TLIndexPathController* indexPathController;
 @property (assign, nonatomic) BOOL tableviewIsVisible;
 

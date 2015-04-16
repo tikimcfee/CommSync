@@ -35,7 +35,12 @@ NSMutableArray* pickerData;
         [pickerData addObject:@"Assign to self"];
 
         [_assignmentLabel setText:_sourceTask.assignedID];
-        [pickerData addObjectsFromArray: sessionManager.peerHistory.allKeys];
+        
+        RLMResults *peerHistory = [CSUserRealmModel allObjectsInRealm:sessionManager.peerHistoryRealm];
+        for(CSUserRealmModel *peer in peerHistory)
+        {
+            [pickerData addObject:peer.displayName];
+        }
     }
     else{
         [pickerData addObject:@"None"];
@@ -63,13 +68,13 @@ NSMutableArray* pickerData;
 
 
 // The number of columns of data
-- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 1;
 }
 
 // The number of rows of data
-- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     return pickerData.count;
 }

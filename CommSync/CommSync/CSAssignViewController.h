@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "CSSessionManager.h"
 #import "CSTaskRealmModel.h"
+#import "CSUserRealmModel.h"
 #import <Realm/Realm.h>
 
 

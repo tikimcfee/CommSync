@@ -7,7 +7,6 @@
 //
 
 #import "CSTaskDetailViewController.h"
-#import "CSTaskTransientObjectStore.h"
 #import "CustomHeaderCell.h"
 #import "CSCommentRealmModel.h"
 #import "CustomFooterCell.h"
@@ -37,6 +36,8 @@
 // Revision management
 @property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
 @property (strong, nonatomic) NSMutableDictionary *unsavedChanges;
+@property (strong, nonatomic) NSMutableArray* taskImages;
+@property (strong, nonatomic) NSData* taskAudio;
 
 @end
 
@@ -46,9 +47,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //creates a transient task based off the current source task
-    _transientTask = [[CSTaskTransientObjectStore alloc] initWithRealmModel:self.sourceTask];
-
     self.navigationBar.title = self.sourceTask.taskTitle;
     
     //sets size of the container based on screen
@@ -57,45 +55,38 @@
     
     //scroll to bottom
     [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - 180) animated:YES];
-  
-                                                            
     
-    /**
-     *  Register to use custom table view cells
-     */
-    [self.tableView registerNib:[UINib nibWithNibName:@"CSChatTableViewCell" bundle:nil] forCellReuseIdentifier:kChatTableViewCellIdentifier];
+    //  Register to use custom table view cells
+    [self.tableView registerNib:[UINib nibWithNibName:@"CSChatTableViewCell" bundle:nil]
+         forCellReuseIdentifier:kChatTableViewCellIdentifier];
     self.tableView.estimatedRowHeight = 44.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
-    _tableView.tableHeaderView = _headerView;
+    self.tableView.tableHeaderView = _headerView;
 
-    
     [_titleLabel setEnabled:NO];
-    
-    
-    
-    self.audioPlayer.delegate = self;
-    
-    [_transientTask  getAllImagesForTaskWithCompletionBlock:^void(BOOL didFinish) {
-        if(didFinish) {
-            [self setImagesFromTask];
-        }
-    }];
-    
-    // Set table view header contents
-    _titleLabel.text = self.sourceTask.taskTitle;
-    _descriptionLabel.text = self.sourceTask.taskDescription;
-    
     if(![_titleLabel isEnabled]){
         if([_descriptionLabel.text  isEqual: @""]) _descriptionLabel.placeholder = @"NO DESCRIPTION";
         if([self.sourceTask.taskTitle  isEqual: @""]) _titleLabel.placeholder = @"NO TITLE";
     }
     
+    // Load task images
+    _taskImages = [NSMutableArray new];
+    [_sourceTask  getAllImagesForTaskWithCompletionBlock:^void(NSMutableArray* images) {
+        _taskImages = images;
+        [self setImagesFromTask];
+    }];
+    
+    // Load task audio
+    _taskAudio = [_sourceTask getTaskAudio];
+    
+    // Set table view header contents
+    _titleLabel.text = self.sourceTask.taskTitle;
+    _descriptionLabel.text = self.sourceTask.taskDescription;
     _priorityLabel.text = self.sourceTask.taskTitle;
     
     [self displayPriority];
     
-    
+    self.audioPlayer.delegate = self;
     [self configureAVAudioSession];
     
     // start with a blank set of changes
@@ -152,8 +143,8 @@
 # pragma mark - Callbacks and UI State
 - (void)setImagesFromTask {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_transientTask.TRANSIENT_taskImages.count > 0) {
-            _embed.taskImages = _transientTask.TRANSIENT_taskImages;
+        if (_taskImages > 0) {
+            _embed.taskImages = _taskImages;
             [_embed.tableView reloadData];
             [self.tableView reloadData];
        }
@@ -202,11 +193,14 @@
 
         [_audioRecorder stopRecording];
         
-        _transientTask.TRANSIENT_audioDataURL =  _audioRecorder.fileOutputURL;
-        if(_transientTask.TRANSIENT_audioDataURL) {
-            _sourceTask.taskAudio = [NSData dataWithContentsOfURL:_transientTask.TRANSIENT_audioDataURL];
+        _sourceTask.TRANSIENT_audioDataURL =   _audioRecorder.fileOutputURL;
+        if(_sourceTask.TRANSIENT_audioDataURL) {
+            NSData* newAudio = [NSData dataWithContentsOfURL:_sourceTask.TRANSIENT_audioDataURL];
+            [_sourceTask addTaskMediaOfType:CSTaskMediaType_Photo
+                                   withData:newAudio
+                                    toRealm:realm
+                               inTransation:NO];
         }
-        [_transientTask saveImages:_sourceTask];
         [realm commitWriteTransaction];
         
         
@@ -336,10 +330,9 @@
 
     if(!_titleLabel.isEnabled)
     {
-        NSData* audioData = self.sourceTask.taskAudio;
         NSError* error;
         
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:&error];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:_taskAudio error:&error];
         [self.audioPlayer play];
     }
     else{
@@ -417,19 +410,17 @@
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
     void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
-        if(!_transientTask.TRANSIENT_taskImages) {
-            _transientTask.TRANSIENT_taskImages = [NSMutableArray new];
-        }
         
-        [_transientTask.TRANSIENT_taskImages addObject:image];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            RLMRealm* realm = [RLMRealm defaultRealm];
-            [realm beginWriteTransaction];
-            [_transientTask saveImages:_sourceTask];
-            [realm commitWriteTransaction];
-        });
+        NSLog(@"New size after normalization only is %ld",
+              (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
+        NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
+        NSLog(@"New size after JPEG compression is %ld",
+              (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
 
+        [_sourceTask addTaskMediaOfType:CSTaskMediaType_Photo
+                               withData:thisImage
+                                toRealm:[RLMRealm defaultRealm]
+                           inTransation:YES];
         
         [_embed.tableView reloadData];
     };
