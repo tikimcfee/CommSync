@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 @interface CSSimpleTaskDetailViewController ()
 
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
-@property (strong, nonatomic) NSURL* taskAudioURL;
+@property (strong, nonatomic) NSData* taskAudio;
 @property (strong, nonatomic) NSMutableArray* taskImages;
 @property (nonatomic, assign) CSSimpleDetailMode mode;
 @property (nonatomic, strong) NSIndexPath* currentTaskImagePath;
@@ -64,11 +64,6 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _unsavedChanges = [NSMutableDictionary new];
     _currentRevisions = [CSTaskRevisionRealmModel new];
     
-    _taskAudioURL = [_sourceTask temporarilyPersistTaskAudioToDisk];
-    if (!_taskAudioURL) {
-        _audioPlayerContainer.hidden = YES;
-        _audioPlayerContainer.userInteractionEnabled = NO;
-    }
 }
 
 - (void) setupViewsFromSourceTask {
@@ -77,27 +72,38 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _objectTextView.textContainer.lineFragmentPadding = 0;
     _objectTextView.textContainerInset = UIEdgeInsetsZero;
     
+    _taskTitleTextField.text = _sourceTask.taskTitle;
     _taskTitleTextField.userInteractionEnabled = NO;
-    _editIconImageView.userInteractionEnabled = YES;
 
     _priorityButtonsMainView.alpha = 0.0;
     _priorityButtonsMainView.userInteractionEnabled = NO;
     
     UIColor* c;
+    NSString* s;
     if (_sourceTask.taskPriority == CSTaskPriorityHigh) {
         c = [UIColor kTaskHighPriorityColor];
+        s = @"High";
     } else if (_sourceTask.taskPriority == CSTaskPriorityMedium) {
         c = [UIColor kTaskMidPriorityColor];
+        s = @"Mid";
     } else {
         c = [UIColor kTaskLowPriorityColor];
+        s = @"Low";
     }
     _priorityBarView.backgroundColor = c;
     _priorityTextLabel.textColor = c;
+    _priorityTextLabel.text = [NSString stringWithFormat:@"%@ Priority", s];
     
-    self.editIconImageView.tintColor = [UIColor flatBelizeHoleColor];
-    UIImage* image = self.editIconImageView.image;
-    self.editIconImageView.image = nil;
-    self.editIconImageView.image = image;
+    _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor flatConcreteColor]];
+    _backToListImageView.image = [IonIcons imageWithIcon:ion_ios_list size:33.0f color:[UIColor flatConcreteColor]];
+    
+    _taskAudio = [_sourceTask getTaskAudio];
+    if (!_taskAudio) {
+        _audioPlayerContainer.hidden = YES;
+        _audioPlayerContainer.userInteractionEnabled = NO;
+    } else {
+        _audioPlayImageView.image = [IonIcons imageWithIcon:ion_ios_recording size:33.0f color:[UIColor flatConcreteColor]];
+    }
 }
 
 -(void)setupCollectionView {
@@ -230,6 +236,10 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 #pragma mark -
 #pragma mark Actions and User Controls
+- (IBAction)backToList:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)beginEditing:(id)sender {
     if(_mode == CSSimpleDetailMode_View) {
         _mode = CSSimpleDetailMode_Edit;

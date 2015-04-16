@@ -906,13 +906,13 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Task Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oKR-zl-bff">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Task Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oKR-zl-bff">
                                             <rect key="frame" x="20" y="8" width="572" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BdU-t9-SRE">
-                                            <rect key="frame" x="20" y="43" width="572" height="175"/>
+                                            <rect key="frame" x="20" y="37" width="572" height="181"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ete-Ba-Fyg">
@@ -954,6 +954,28 @@
                                                 <outlet property="delegate" destination="ITi-gD-sJd" id="Jcj-Zo-ZoE"/>
                                             </connections>
                                         </collectionView>
+                                        <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-yI-DtX">
+                                            <rect key="frame" x="261" y="196" width="79" height="17"/>
+                                            <subviews>
+                                                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8gf-MJ-wYQ">
+                                                    <rect key="frame" x="20" y="-10" width="39" height="37"/>
+                                                    <color key="pageIndicatorTintColor" red="0.56078431370000004" green="0.5568627451" blue="0.57254901960000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="currentPageIndicatorTintColor" red="0.001619284414" green="0.52099992350000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </pageControl>
+                                            </subviews>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstItem="8gf-MJ-wYQ" firstAttribute="leading" secondItem="xxN-yI-DtX" secondAttribute="leading" constant="20" id="0pP-KC-GCX"/>
+                                                <constraint firstAttribute="bottom" secondItem="8gf-MJ-wYQ" secondAttribute="bottom" constant="-10" id="9Zs-gt-frW"/>
+                                                <constraint firstAttribute="trailing" secondItem="8gf-MJ-wYQ" secondAttribute="trailing" constant="20" id="St3-V2-PS9"/>
+                                                <constraint firstItem="8gf-MJ-wYQ" firstAttribute="top" secondItem="xxN-yI-DtX" secondAttribute="top" constant="-10" id="miI-44-XLe"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="4"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HwR-MQ-K1n" userLabel="priority bar">
                                             <rect key="frame" x="0.0" y="0.0" width="12" height="336"/>
                                             <color key="backgroundColor" red="0.46274513010000001" green="0.74509805439999999" blue="0.231372565" alpha="1" colorSpace="deviceRGB"/>
@@ -1072,30 +1094,27 @@
                                                 <constraint firstAttribute="trailing" secondItem="hym-LY-DsD" secondAttribute="trailing" id="x06-g5-5QH"/>
                                             </constraints>
                                         </view>
-                                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8gf-MJ-wYQ">
-                                            <rect key="frame" x="281" y="181" width="39" height="37"/>
-                                        </pageControl>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="BdU-t9-SRE" firstAttribute="leading" secondItem="HwR-MQ-K1n" secondAttribute="trailing" constant="8" id="1FJ-FJ-V0H"/>
+                                        <constraint firstAttribute="trailing" secondItem="oKR-zl-bff" secondAttribute="trailing" constant="8" id="1XU-uc-FYu"/>
                                         <constraint firstItem="oKR-zl-bff" firstAttribute="leading" secondItem="HwR-MQ-K1n" secondAttribute="trailing" constant="8" id="1xA-tB-2Vd"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="top" secondItem="6bA-oB-Kmv" secondAttribute="bottom" constant="8" id="481-Zg-EFf"/>
                                         <constraint firstItem="s1O-2G-uHK" firstAttribute="top" secondItem="BdU-t9-SRE" secondAttribute="bottom" constant="8" id="6rk-98-hen"/>
                                         <constraint firstAttribute="trailing" secondItem="g6C-4q-W1L" secondAttribute="trailing" id="ASG-ym-ciP"/>
                                         <constraint firstAttribute="bottom" secondItem="g6C-4q-W1L" secondAttribute="bottom" id="Bgf-lv-7CV"/>
-                                        <constraint firstItem="BdU-t9-SRE" firstAttribute="top" secondItem="oKR-zl-bff" secondAttribute="bottom" constant="14" id="EmX-3f-3xv"/>
+                                        <constraint firstItem="BdU-t9-SRE" firstAttribute="top" secondItem="oKR-zl-bff" secondAttribute="bottom" constant="8" id="EmX-3f-3xv"/>
                                         <constraint firstItem="HwR-MQ-K1n" firstAttribute="top" secondItem="PcE-gW-NH6" secondAttribute="top" id="G7p-fi-Jxv"/>
                                         <constraint firstAttribute="trailing" secondItem="6bA-oB-Kmv" secondAttribute="trailing" constant="8" id="Gdb-4I-drY"/>
                                         <constraint firstAttribute="trailing" secondItem="BdU-t9-SRE" secondAttribute="trailing" constant="8" id="LEl-BU-aKS"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="leading" secondItem="PcE-gW-NH6" secondAttribute="leading" id="Reh-HH-rDy"/>
                                         <constraint firstItem="HwR-MQ-K1n" firstAttribute="leading" secondItem="PcE-gW-NH6" secondAttribute="leading" id="UjW-Yf-tnO"/>
-                                        <constraint firstItem="8gf-MJ-wYQ" firstAttribute="bottom" secondItem="BdU-t9-SRE" secondAttribute="bottom" id="Z6f-c7-foD"/>
-                                        <constraint firstAttribute="centerX" secondItem="8gf-MJ-wYQ" secondAttribute="centerX" id="a6c-CB-BZd"/>
                                         <constraint firstItem="oKR-zl-bff" firstAttribute="top" secondItem="PcE-gW-NH6" secondAttribute="top" constant="8" id="b2a-un-EqL"/>
                                         <constraint firstItem="6bA-oB-Kmv" firstAttribute="top" secondItem="s1O-2G-uHK" secondAttribute="bottom" constant="8" id="hB7-Oa-QEU"/>
+                                        <constraint firstItem="xxN-yI-DtX" firstAttribute="bottom" secondItem="BdU-t9-SRE" secondAttribute="bottom" constant="-5" id="hQs-sG-FKN"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="top" secondItem="HwR-MQ-K1n" secondAttribute="bottom" id="mnI-wU-UWS"/>
-                                        <constraint firstAttribute="trailing" secondItem="oKR-zl-bff" secondAttribute="trailing" constant="8" id="x9d-Xb-blT"/>
+                                        <constraint firstAttribute="centerX" secondItem="xxN-yI-DtX" secondAttribute="centerX" id="pPL-Ee-wAI"/>
                                         <constraint firstItem="6bA-oB-Kmv" firstAttribute="leading" secondItem="HwR-MQ-K1n" secondAttribute="trailing" constant="8" id="xDu-uK-3lx"/>
                                         <constraint firstItem="s1O-2G-uHK" firstAttribute="leading" secondItem="oKR-zl-bff" secondAttribute="leading" id="z9w-Z7-Pjh"/>
                                     </constraints>
@@ -1113,49 +1132,109 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="DLK-kf-ZDf">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="C8C-0J-A7i">
+                            <view key="customView" contentMode="scaleToFill" id="32o-mQ-sAj">
+                                <rect key="frame" x="0.0" y="0.0" width="133" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nq4-cq-vtM">
+                                        <rect key="frame" x="0.0" y="0.0" width="33" height="33"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="33" id="C2e-XI-b42"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="nq4-cq-vtM" firstAttribute="top" secondItem="32o-mQ-sAj" secondAttribute="top" id="NWi-u1-t1I"/>
+                                    <constraint firstAttribute="bottom" secondItem="nq4-cq-vtM" secondAttribute="bottom" id="OIp-3p-BNs"/>
+                                    <constraint firstItem="nq4-cq-vtM" firstAttribute="leading" secondItem="32o-mQ-sAj" secondAttribute="leading" id="PRz-7V-q9W"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="n1I-Ts-gkZ" appends="YES" id="esx-Lv-aXx"/>
+                                </connections>
+                            </view>
+                        </barButtonItem>
+                        <view key="titleView" contentMode="scaleAspectFit" id="p2O-Qx-Xde" userLabel="audio play view">
+                            <rect key="frame" x="180" y="6" width="240" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-7j-q0D">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="33"/>
+                                    <gestureRecognizers/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="t07-O4-NdS" appends="YES" id="h0D-rN-wH5"/>
+                                    </connections>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="Iw8-7j-q0D" firstAttribute="top" secondItem="p2O-Qx-Xde" secondAttribute="top" id="8Tx-HZ-ob7"/>
+                                <constraint firstAttribute="trailing" secondItem="Iw8-7j-q0D" secondAttribute="trailing" id="Lf0-Mf-3rJ"/>
+                                <constraint firstAttribute="bottom" secondItem="Iw8-7j-q0D" secondAttribute="bottom" id="SJq-ww-6ai"/>
+                                <constraint firstItem="Iw8-7j-q0D" firstAttribute="leading" secondItem="p2O-Qx-Xde" secondAttribute="leading" id="vUy-Hy-QmV"/>
+                            </constraints>
+                        </view>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="x6o-3u-wVq">
                             <view key="customView" contentMode="scaleToFill" id="DLu-hO-JT9">
                                 <rect key="frame" x="0.0" y="0.0" width="133" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="editIcon" translatesAutoresizingMaskIntoConstraints="NO" id="6Vq-bh-qBB">
-                                        <rect key="frame" x="69" y="0.0" width="64" height="33"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Vq-bh-qBB">
+                                        <rect key="frame" x="100" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="64" id="Ecn-BV-YcD"/>
+                                            <constraint firstAttribute="width" constant="33" id="Ecn-BV-YcD"/>
                                         </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="ZIZ-sU-U4G" appends="YES" id="Tfu-gb-isw"/>
-                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="6Vq-bh-qBB" firstAttribute="top" secondItem="DLu-hO-JT9" secondAttribute="top" id="20W-Pk-m0e"/>
                                     <constraint firstAttribute="bottom" secondItem="6Vq-bh-qBB" secondAttribute="bottom" id="WbE-eg-AUb"/>
                                     <constraint firstAttribute="trailing" secondItem="6Vq-bh-qBB" secondAttribute="trailing" id="X2K-cG-QlX"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Mif-Tn-qRi" appends="YES" id="onJ-kM-lsJ"/>
+                                </connections>
                             </view>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="audioPlayImageView" destination="Iw8-7j-q0D" id="6X8-I4-yt8"/>
+                        <outlet property="audioPlayerContainer" destination="p2O-Qx-Xde" id="4R4-HC-oFr"/>
+                        <outlet property="backToListImageView" destination="nq4-cq-vtM" id="Wh2-d4-ypr"/>
                         <outlet property="dottedPageControl" destination="8gf-MJ-wYQ" id="zUs-F8-fia"/>
                         <outlet property="editIconImageView" destination="6Vq-bh-qBB" id="6zZ-uL-w50"/>
                         <outlet property="highPriorityButton" destination="eCO-Ty-gVa" id="ztu-yB-94k"/>
                         <outlet property="lowPriorityButton" destination="9eZ-NZ-spT" id="Ec6-oC-Ili"/>
                         <outlet property="midPriorityButton" destination="xBy-3l-1wi" id="86T-wJ-700"/>
                         <outlet property="objectTextView" destination="6bA-oB-Kmv" id="QH0-fM-Ihx"/>
+                        <outlet property="playAudioRecognizer" destination="t07-O4-NdS" id="otk-Tn-RGO"/>
                         <outlet property="priorityBarView" destination="HwR-MQ-K1n" id="UdM-M3-UDq"/>
                         <outlet property="priorityButtonsMainView" destination="N6p-EC-eu1" id="owk-Wt-xUH"/>
                         <outlet property="priorityTextLabel" destination="HtY-iR-3G0" id="4r3-YU-8sZ"/>
                         <outlet property="taskImageCollectionView" destination="BdU-t9-SRE" id="Zku-M5-DGg"/>
+                        <outlet property="taskTitleTextField" destination="oKR-zl-bff" id="umt-ZJ-2Z0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1wy-td-dAd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="ZIZ-sU-U4G" userLabel="Editing Tap Gesture">
+                <tapGestureRecognizer id="t07-O4-NdS" userLabel="Play Audio">
                     <connections>
-                        <action selector="beginEditing:" destination="ITi-gD-sJd" id="rcI-QL-Ean"/>
+                        <action selector="playAudio:" destination="ITi-gD-sJd" id="2df-5T-uBe"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Mif-Tn-qRi" userLabel="Editing">
+                    <connections>
+                        <action selector="beginEditing:" destination="ITi-gD-sJd" id="9aE-l7-yKE"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="n1I-Ts-gkZ" userLabel="Back to list">
+                    <connections>
+                        <action selector="backToList:" destination="ITi-gD-sJd" id="Yr8-lV-te1"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -1654,7 +1733,6 @@
     </scenes>
     <resources>
         <image name="Play Button" width="56" height="56"/>
-        <image name="editIcon" width="100" height="105"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="8nV-bw-P48"/>

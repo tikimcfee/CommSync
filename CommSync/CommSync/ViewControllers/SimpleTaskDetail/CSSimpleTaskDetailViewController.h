@@ -22,6 +22,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *priorityTextLabel;
 
 @property (strong, nonatomic) IBOutlet UIView *audioPlayerContainer;
+@property (strong, nonatomic) IBOutlet UIImageView *audioPlayImageView;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *playAudioRecognizer;
+@property (strong, nonatomic) IBOutlet UIImageView *backToListImageView;
+
 
 // Controls
 @property (weak, nonatomic) IBOutlet UIPageControl *dottedPageControl;
