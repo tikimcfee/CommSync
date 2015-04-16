@@ -84,7 +84,6 @@
 -(NSString *) getPicture
 {
     if(!self.avatar) return @"Avatar-1";
-    else NSLog(@"Avatar%ld", (long)self.avatar);
     return [NSString stringWithFormat:@"Avatar%d", self.avatar];
 }
 

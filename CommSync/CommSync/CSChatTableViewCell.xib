@@ -63,6 +63,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Avatar2" width="600" height="448"/>
+        <image name="Avatar2" width="224" height="225"/>
     </resources>
 </document>

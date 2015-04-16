@@ -643,21 +643,14 @@
 -(void)updateAvatar: (NSInteger) number
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
         CSUserRealmModel *myself = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName];
-        
         [_peerHistoryRealm beginWriteTransaction];
         myself.avatar = number;
-        
         [_peerHistoryRealm commitWriteTransaction];
-        
         self.myUserModel= myself;
-        
-        
         NSDictionary *dict = @{@"Avatar"  :   _myPeerID.displayName,
                                @"number"        :   [NSNumber numberWithInteger:number],
                                };
-        
         NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:dict];
         [self sendDataPacketToPeers:requestData];
     });

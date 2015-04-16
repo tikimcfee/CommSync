@@ -1172,10 +1172,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="SimpleTableItem" selectionStyle="default" indentationWidth="10" reuseIdentifier="SimpleTableItem" id="QOY-El-vCj">
+                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="SimpleTableItem" selectionStyle="default" indentationWidth="10" reuseIdentifier="SimpleTableItem" id="QOY-El-vCj" customClass="CSUserInfoCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QOY-El-vCj" id="DwR-Lz-CXL">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ieQ-BB-iCB">
+                                            <rect key="frame" x="509" y="0.0" width="90" height="43"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="90" id="dRK-S4-Z0J"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rd1-HH-1uQ">
+                                            <rect key="frame" x="1" y="0.0" width="492" height="43"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ieQ-BB-iCB" secondAttribute="trailing" constant="-7" id="AD0-ft-2d2"/>
+                                        <constraint firstItem="rd1-HH-1uQ" firstAttribute="top" secondItem="ieQ-BB-iCB" secondAttribute="top" id="COP-3F-PFA"/>
+                                        <constraint firstItem="ieQ-BB-iCB" firstAttribute="leading" secondItem="rd1-HH-1uQ" secondAttribute="trailing" constant="16" id="KwM-Ut-NZy"/>
+                                        <constraint firstItem="rd1-HH-1uQ" firstAttribute="bottom" secondItem="ieQ-BB-iCB" secondAttribute="bottom" id="RML-by-EBA"/>
+                                        <constraint firstItem="rd1-HH-1uQ" firstAttribute="top" secondItem="DwR-Lz-CXL" secondAttribute="top" id="VNx-Rv-Ge0"/>
+                                        <constraint firstAttribute="bottom" secondItem="ieQ-BB-iCB" secondAttribute="bottom" id="lpj-Q5-PLl"/>
+                                        <constraint firstItem="rd1-HH-1uQ" firstAttribute="leading" secondItem="DwR-Lz-CXL" secondAttribute="leadingMargin" constant="-7" id="nOO-tK-PFS"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
