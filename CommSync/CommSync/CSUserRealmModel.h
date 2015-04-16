@@ -21,7 +21,7 @@
 - (instancetype)initWithMessage:(NSData *)peerID withDisplayName: (NSString*) display;
 - (void) addMessage;
 - (void) removeMessages;
-- (NSString*) getMessageNumber;
+- (int) getMessageNumber;
 -(void)addUnsent;
 -(void)removeUnsent;
 

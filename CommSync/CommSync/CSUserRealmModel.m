@@ -72,9 +72,9 @@
     self.unsentMessages = 0;
 }
 
--(NSString*)getMessageNumber
+-(int)getMessageNumber
 {
-    return [NSString stringWithFormat:@"( %d unread)", self.unreadMessages];
+    return (int)self.unreadMessages;
 }
 
 + (NSString*)primaryKey {
