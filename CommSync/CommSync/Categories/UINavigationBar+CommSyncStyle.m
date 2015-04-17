@@ -15,6 +15,7 @@
     self.barTintColor = [UIColor flatWetAsphaltColor];
     self.barStyle = UIBarStyleBlack;
     self.tintColor = [UIColor flatCloudsColor];
+    self.translucent = NO;
 }
 
 @end

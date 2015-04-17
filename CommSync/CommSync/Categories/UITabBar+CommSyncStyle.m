@@ -13,8 +13,9 @@
 
 - (void)setupCommSyncStyle {
     
-    self.barTintColor = [UIColor flatCloudsColor];
-    self.tintColor = [UIColor flatWetAsphaltColor];
+    self.barTintColor = [UIColor flatWetAsphaltColor];
+    self.translucent = NO;
+    self.tintColor = [UIColor flatCloudsColor];
 }
 
 @end

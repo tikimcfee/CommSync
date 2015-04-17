@@ -108,7 +108,7 @@
                             <outlet property="delegate" destination="85q-Sc-dkp" id="hL0-7W-AE8"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" systemItem="more" id="h6Y-1V-hDj"/>
+                    <tabBarItem key="tabBarItem" title="" image="settings" id="h6Y-1V-hDj"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ESx-en-tpc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -118,7 +118,7 @@
         <scene sceneID="9nJ-GG-Wi7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BXf-C0-RVZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="mostViewed" id="hO2-xv-cyU"/>
+                    <tabBarItem key="tabBarItem" title="" image="task-list" id="hO2-xv-cyU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5N4-9i-Ybb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1063,7 +1063,7 @@
         <scene sceneID="wtP-1v-klN">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Suc-Lv-nyY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="contacts" id="Y1A-Y1-NNj"/>
+                    <tabBarItem key="tabBarItem" image="contact-list" id="Y1A-Y1-NNj"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bmI-Ax-f2g">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1087,12 +1087,12 @@
                         <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gE5-eO-iRi">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Item" id="0Xd-38-kme"/>
+                    <tabBarItem key="tabBarItem" title="" image="chat" id="0Xd-38-kme"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Qy-o6-8Jp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1382,10 +1382,14 @@
     </scenes>
     <resources>
         <image name="Play Button" width="56" height="56"/>
+        <image name="chat" width="25" height="25"/>
+        <image name="contact-list" width="25" height="26"/>
+        <image name="settings" width="25" height="25"/>
+        <image name="task-list" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="GGy-g5-dRX"/>
         <segue reference="8nV-bw-P48"/>
         <segue reference="r3J-Hg-HkT"/>
-        <segue reference="esm-L7-fWV"/>
     </inferredMetricsTieBreakers>
 </document>
