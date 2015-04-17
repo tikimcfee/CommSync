@@ -106,7 +106,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Stq-cC-nUg">
-                                                    <rect key="frame" x="160" y="8" width="46" height="27"/>
+                                                    <rect key="frame" x="160" y="3" width="46" height="36"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="46" id="DfY-sl-TqG"/>
                                                     </constraints>
@@ -122,13 +122,13 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="bottom" secondItem="Nu5-rG-Yue" secondAttribute="bottomMargin" id="D52-Yx-WrH"/>
+                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="bottom" secondItem="Nu5-rG-Yue" secondAttribute="bottomMargin" constant="4" id="D52-Yx-WrH"/>
                                                 <constraint firstItem="Stq-cC-nUg" firstAttribute="leading" secondItem="5uI-Za-fM5" secondAttribute="trailing" constant="4" id="c8g-u6-p4Y"/>
-                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="top" secondItem="Stq-cC-nUg" secondAttribute="top" constant="3" id="cuY-0a-5MD"/>
+                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="top" secondItem="Stq-cC-nUg" secondAttribute="top" constant="8" id="cuY-0a-5MD"/>
                                                 <constraint firstItem="5uI-Za-fM5" firstAttribute="centerY" secondItem="Nu5-rG-Yue" secondAttribute="centerY" id="q3B-Mg-8cr"/>
                                                 <constraint firstItem="5uI-Za-fM5" firstAttribute="leading" secondItem="Nu5-rG-Yue" secondAttribute="leadingMargin" constant="8" id="xzQ-f5-agd"/>
-                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="bottom" secondItem="Stq-cC-nUg" secondAttribute="bottom" constant="-3" id="yNT-9V-iDR"/>
-                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="top" secondItem="Nu5-rG-Yue" secondAttribute="topMargin" id="yOM-AD-zZA"/>
+                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="bottom" secondItem="Stq-cC-nUg" secondAttribute="bottom" constant="-7" id="yNT-9V-iDR"/>
+                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="top" secondItem="Nu5-rG-Yue" secondAttribute="topMargin" constant="-5" id="yOM-AD-zZA"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1193,7 +1193,7 @@
                                                 </mask>
                                             </variation>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K4x-1a-j4v">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K4x-1a-j4v">
                                             <rect key="frame" x="-6" y="0.0" width="65" height="43"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="65" id="EzL-6J-zlT"/>
