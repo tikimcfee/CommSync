@@ -19,6 +19,7 @@
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
 		4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4562F2051A78927200090005 /* CSTaskRealmModel.m */; };
+		4577D8581AE081DF00DBD42D /* CSInsetTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4577D8571AE081DF00DBD42D /* CSInsetTextField.m */; };
 		457832EB1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */; };
 		4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4595391D19E38F1F00744747 /* CSSessionManager.m */; };
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
@@ -167,6 +168,8 @@
 		454D92091A78581F000B74A8 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4562F2041A78927200090005 /* CSTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRealmModel.h; path = Models/CSTaskRealmModel.h; sourceTree = "<group>"; };
 		4562F2051A78927200090005 /* CSTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRealmModel.m; path = Models/CSTaskRealmModel.m; sourceTree = "<group>"; };
+		4577D8561AE081DF00DBD42D /* CSInsetTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSInsetTextField.h; path = ViewControllers/SimpleTaskDetail/CSInsetTextField.h; sourceTree = "<group>"; };
+		4577D8571AE081DF00DBD42D /* CSInsetTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSInsetTextField.m; path = ViewControllers/SimpleTaskDetail/CSInsetTextField.m; sourceTree = "<group>"; };
 		457832E91ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIncomingTaskRealmModel.h; path = Models/CSIncomingTaskRealmModel.h; sourceTree = "<group>"; };
 		457832EA1ADADFDE0016C7B0 /* CSIncomingTaskRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIncomingTaskRealmModel.m; path = Models/CSIncomingTaskRealmModel.m; sourceTree = "<group>"; };
 		4595391C19E38F1F00744747 /* CSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSessionManager.h; path = "Session Management/CSSessionManager.h"; sourceTree = "<group>"; };
@@ -542,6 +545,19 @@
 				74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		458B243D1ADCB8EB00A30FAA /* Simple Task Detail */ = {
+			isa = PBXGroup;
+			children = (
+				458B243A1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.h */,
+				458B243B1ADCB64500A30FAA /* CSSimpleTaskDetailViewController.m */,
+				458B243E1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.h */,
+				458B243F1ADCB91700A30FAA /* CSTaskImageCollectionViewCell.m */,
+				4577D8561AE081DF00DBD42D /* CSInsetTextField.h */,
+				4577D8571AE081DF00DBD42D /* CSInsetTextField.m */,
+			);
+			name = "Simple Task Detail";
 			sourceTree = "<group>";
 		};
 		4595391F19E38F2F00744747 /* Session Management */ = {
@@ -1280,6 +1296,7 @@
 				74C541F81A93E67100FC29AD /* UITableView+ScrollOptimizer.m in Sources */,
 				746F6ACD1A892613007A83E8 /* EZAudioPlayer.m in Sources */,
 				933AA1421A71DCF100DCC10A /* CSTaskDetailViewController.m in Sources */,
+				4577D8581AE081DF00DBD42D /* CSInsetTextField.m in Sources */,
 				93EBABDB1A964552006BAF4A /* JSQMessagesBubbleImage.m in Sources */,
 				93EBABD81A964552006BAF4A /* JSQMediaItem.m in Sources */,
 				93EBABDA1A964552006BAF4A /* JSQMessagesAvatarImage.m in Sources */,
@@ -1320,6 +1337,7 @@
 				746F6AD01A892613007A83E8 /* EZAudioPlotGLKViewController.m in Sources */,
 				746F6AD21A892613007A83E8 /* EZOutput.m in Sources */,
 				93CA13CE1A92C8BE00402BE4 /* CSChatMessageRealmModel.m in Sources */,
+				45CD64CC1AE0444300E8410A /* README.md in Sources */,
 				4595391E19E38F1F00744747 /* CSSessionManager.m in Sources */,
 				3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */,
 				74C541F31A93E67100FC29AD /* TLNoResultsTableDataModel.m in Sources */,
