@@ -7,7 +7,8 @@
 //
 
 #import "CSTaskListViewController.h"
-#import "CSTaskDetailViewController.h"
+//#import "CSTaskDetailViewController.h"
+#import "CSSimpleTaskDetailViewController.h"
 #import "CSTaskTableViewCell.h"
 #import "CSTaskProgressTableViewCell.h"
 #import "CSSessionDataAnalyzer.h"
@@ -272,7 +273,7 @@
     // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"showTaskDetail"])
     {
-        CSTaskDetailViewController *vc = [segue destinationViewController];
+        CSSimpleTaskDetailViewController *vc = [segue destinationViewController];
         if ([sender isKindOfClass:[CSTaskRealmModel class]])
         {
             [vc setSourceTask:sender];

@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 + (CSTaskRealmModel*)taskModelWithModel:(CSTaskRealmModel*)model;
 
 - (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
+- (NSURL*) temporarilyPersistTaskAudioToDisk;
 
 - (void) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction;
 - (void) addComment: (CSCommentRealmModel *) newComment;

@@ -146,6 +146,25 @@
     return fileURL;
 }
 
+- (NSURL*) temporarilyPersistTaskAudioToDisk {
+
+    NSString *fileName = [NSString stringWithFormat:@"%@_AUDIO.m4a", self.concatenatedID];
+    
+    
+    NSURL *fileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+    
+    NSError* error;
+    NSData* audio = [self getTaskAudio];
+    
+    if (audio) {
+        [audio writeToURL:fileURL options:NSDataWritingAtomic error:&error];
+    } else {
+        fileURL = nil;
+    }
+    
+    return fileURL;
+}
+
 #pragma mark - ASYNC callbacks
 - (void) getAllImagesForTaskWithCompletionBlock:(void (^)(NSMutableArray*))completion {
     

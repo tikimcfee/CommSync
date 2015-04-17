@@ -1460,7 +1460,7 @@
                         <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gE5-eO-iRi">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1761,7 +1761,12 @@
         <image name="task-list" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="esm-L7-fWV"/>
+        <segue reference="GGy-g5-dRX"/>
         <segue reference="8nV-bw-P48"/>
+<<<<<<< HEAD
+        <segue reference="r3J-Hg-HkT"/>
+=======
+        <segue reference="esm-L7-fWV"/>
+>>>>>>> master
     </inferredMetricsTieBreakers>
 </document>
