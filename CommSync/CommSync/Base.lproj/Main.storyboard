@@ -1032,6 +1032,9 @@
                                                             <state key="normal">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="priorityChanged:" destination="ITi-gD-sJd" eventType="touchUpInside" id="J8Z-Lj-f8N"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xBy-3l-1wi">
                                                             <rect key="frame" x="132" y="-29" width="112" height="112"/>
@@ -1040,6 +1043,9 @@
                                                             <state key="normal">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="priorityChanged:" destination="ITi-gD-sJd" eventType="touchUpInside" id="pQT-wH-Z5J"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eCO-Ty-gVa">
                                                             <rect key="frame" x="264" y="-29" width="112" height="112"/>
@@ -1051,6 +1057,9 @@
                                                             <state key="normal">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="priorityChanged:" destination="ITi-gD-sJd" eventType="touchUpInside" id="fpM-i7-vaI"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

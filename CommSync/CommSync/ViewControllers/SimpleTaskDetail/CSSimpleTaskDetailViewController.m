@@ -276,8 +276,6 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _mode = CSSimpleDetailMode_View;
         [self toggleDetailsMode];
         [self createTaskRevision];
-        // check if changes were made...
-        // save changes in revisions
     }
 }
 
@@ -287,21 +285,29 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _objectTextView.editable = NO;
         _priorityButtonsMainView.userInteractionEnabled = YES;
         
-        [UIView animateWithDuration:time animations:^{
-            _taskTitleTextField.backgroundColor = [UIColor clearColor];
-            _objectTextView.backgroundColor = [UIColor clearColor];
-            _priorityButtonsMainView.alpha = 0.0;
-        }];
+        [UIView animateWithDuration:time
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             _taskTitleTextField.backgroundColor = [UIColor clearColor];
+                             _objectTextView.backgroundColor = [UIColor clearColor];
+                             _priorityButtonsMainView.alpha = 0.0;
+                         }
+                         completion:nil];
     } else {
         _taskTitleTextField.userInteractionEnabled = YES;
         _objectTextView.editable = YES;
         _priorityButtonsMainView.userInteractionEnabled = YES;
         
-        [UIView animateWithDuration:time animations:^{
-            _taskTitleTextField.backgroundColor = [UIColor flatCloudsColor];
-            _objectTextView.backgroundColor = [UIColor flatCloudsColor];
-            _priorityButtonsMainView.alpha = 1.0;
-        }];
+        [UIView animateWithDuration:time
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             _taskTitleTextField.backgroundColor = [UIColor flatCloudsColor];
+                             _objectTextView.backgroundColor = [UIColor flatCloudsColor];
+                             _priorityButtonsMainView.alpha = 1.0;
+                         }
+                         completion:nil];
     }
     
     [CATransaction begin];
@@ -342,14 +348,35 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 - (IBAction) priorityChanged:(id)sender {
+    UIColor* toColor;
+    NSString* p;
     if (sender == _lowPriorityButton) {
-        
+        toColor = [UIColor kTaskLowPriorityColor];
+        p = @"Low";
     } else if (sender == _midPriorityButton) {
-        
+        toColor = [UIColor kTaskMidPriorityColor];
+        p = @"Mid";
     } else if (sender == _highPriorityButton) {
-        
+        toColor = [UIColor kTaskHighPriorityColor];
+        p = @"High";
     }
     
+    [UIView animateWithDuration:time
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         _priorityTextLabel.textColor = toColor;
+                         _priorityBarView.backgroundColor = toColor;
+                     }
+                     completion:nil];
+    
+    CATransition *textChange = [CATransition animation];
+    textChange.duration = time;
+    textChange.type = kCATransitionFade;
+    textChange.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [_priorityTextLabel.layer addAnimation:textChange forKey:@"changeTextTransition"];
+    
+    _priorityTextLabel.text = [NSString stringWithFormat:@"%@ Priority", p];
     
 }
 
