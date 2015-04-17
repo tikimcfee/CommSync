@@ -12,6 +12,7 @@
 #import "IonIcons.h"
 
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
+#define kTextBorderColor flatWetAsphaltColor
 
 #define time 0.2
 #define alph 0.75
@@ -27,6 +28,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
 @property (strong, nonatomic) NSData* taskAudio;
 @property (strong, nonatomic) NSMutableArray* taskImages;
+@property (nonatomic, assign) CGRect oldFrameForCollectionView;
+@property (nonatomic, assign) CGRect oldFrameForHeaderView;
 @property (nonatomic, assign) CSSimpleDetailMode mode;
 @property (nonatomic, strong) NSIndexPath* currentTaskImagePath;
 
@@ -51,8 +54,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     __weak typeof(self) weakSelf = self;
     [_sourceTask getAllImagesForTaskWithCompletionBlock:^(NSMutableArray* loadedImages) {
-        weakSelf.taskImages = loadedImages;
-        [weakSelf.taskImageCollectionView reloadData];
+        if(loadedImages.count == 0) {
+            [weakSelf removeTaskImageCollectionView];
+        } else {
+            weakSelf.taskImages = loadedImages;
+            [weakSelf.taskImageCollectionView reloadData];
+        }
     }];
     
     _dottedPageControl.hidesForSinglePage = YES;
@@ -66,11 +73,31 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
 }
 
+- (void) removeTaskImageCollectionView {
+    UIView* header = self.tableview.tableHeaderView;
+    _oldFrameForHeaderView = header.frame;
+    CGRect frame = CGRectMake(CGRectGetMinX(header.frame),
+                              CGRectGetMinY(header.frame),
+                              CGRectGetWidth(header.frame),
+                              CGRectGetHeight(header.frame) - _taskImageCollectionView.frame.size.height);;
+    header.frame = frame;
+    _oldFrameForCollectionView = self.taskImageCollectionView.frame;
+    self.taskImageCollectionView.frame = CGRectZero;
+    [self.tableview setTableHeaderView:header];
+}
+
+//  The code below will reset the header view to its old calculated size
+- (void) repairTaskImageCollectionView {
+    self.tableview.tableHeaderView.frame = _oldFrameForHeaderView;
+    self.taskImageCollectionView.frame = _oldFrameForCollectionView;
+    [self.tableview setTableHeaderView:self.tableview.tableHeaderView];
+}
+
 - (void) setupViewsFromSourceTask {
     [_objectTextView setText:_sourceTask.taskDescription];
     _objectTextView.editable = NO;
     _objectTextView.textContainer.lineFragmentPadding = 0;
-    _objectTextView.textContainerInset = UIEdgeInsetsZero;
+    _objectTextView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4);
     
     _taskTitleTextField.text = _sourceTask.taskTitle;
     _taskTitleTextField.userInteractionEnabled = NO;
@@ -260,7 +287,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _objectTextView.editable = NO;
         _priorityButtonsMainView.userInteractionEnabled = YES;
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:time animations:^{
             _taskTitleTextField.backgroundColor = [UIColor clearColor];
             _objectTextView.backgroundColor = [UIColor clearColor];
             _priorityButtonsMainView.alpha = 0.0;
@@ -270,12 +297,48 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _objectTextView.editable = YES;
         _priorityButtonsMainView.userInteractionEnabled = YES;
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:time animations:^{
             _taskTitleTextField.backgroundColor = [UIColor flatCloudsColor];
             _objectTextView.backgroundColor = [UIColor flatCloudsColor];
             _priorityButtonsMainView.alpha = 1.0;
         }];
     }
+    
+    [CATransaction begin];
+    [self animationForLayer:_taskTitleTextField.layer];
+    [self animationForLayer:_objectTextView.layer];
+    [CATransaction commit];
+}
+
+- (CAAnimationGroup*)animationForLayer:(CALayer*)layer {
+    UIColor* toColor;
+    CGFloat width;
+    if(_mode == CSSimpleDetailMode_Edit) {
+        toColor = [UIColor kTextBorderColor];
+        width = 2;
+    } else {
+        toColor = [UIColor clearColor];
+        width = 0;
+    }
+    
+    
+    CABasicAnimation* color = [CABasicAnimation animationWithKeyPath:@"borderColor"];
+    color.fromValue = (id)layer.borderColor;
+    color.toValue = (id)toColor.CGColor;
+    layer.borderColor = toColor.CGColor;
+    
+    CABasicAnimation* borderWidth = [CABasicAnimation animationWithKeyPath:@"borderWidth"];
+    borderWidth.fromValue = [NSNumber numberWithFloat:layer.borderWidth];
+    borderWidth.toValue = [NSNumber numberWithFloat:width];
+    layer.borderWidth = width;
+    
+    CAAnimationGroup* both = [CAAnimationGroup animation];
+    both.duration = time;
+    both.animations = @[color, borderWidth];
+    both.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [layer addAnimation:both forKey:@"color and width"];
+    return both;
 }
 
 - (IBAction) priorityChanged:(id)sender {

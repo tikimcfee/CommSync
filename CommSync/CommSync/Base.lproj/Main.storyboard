@@ -906,7 +906,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Task Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oKR-zl-bff">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Task Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oKR-zl-bff" customClass="CSInsetTextField">
                                             <rect key="frame" x="20" y="8" width="572" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -916,7 +916,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ete-Ba-Fyg">
-                                                <size key="itemSize" width="600" height="200"/>
+                                                <size key="itemSize" width="300" height="100"/>
                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -926,11 +926,11 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                        <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kHt-iy-k7F">
-                                                                <rect key="frame" x="2" y="0.0" width="596" height="200"/>
+                                                                <rect key="frame" x="4" y="0.0" width="292" height="100"/>
                                                                 <color key="backgroundColor" red="1" green="0.073311755916592225" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             </imageView>
                                                         </subviews>
@@ -939,10 +939,10 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="kHt-iy-k7F" secondAttribute="trailing" constant="2" id="Awl-9g-iEp"/>
+                                                        <constraint firstAttribute="trailing" secondItem="kHt-iy-k7F" secondAttribute="trailing" constant="4" id="Awl-9g-iEp"/>
                                                         <constraint firstItem="kHt-iy-k7F" firstAttribute="top" secondItem="i15-FM-EIc" secondAttribute="top" id="UZ6-jG-Rzr"/>
                                                         <constraint firstAttribute="bottom" secondItem="kHt-iy-k7F" secondAttribute="bottom" id="dpl-ll-1In"/>
-                                                        <constraint firstItem="kHt-iy-k7F" firstAttribute="leading" secondItem="i15-FM-EIc" secondAttribute="leading" constant="2" id="giy-Ua-PH1"/>
+                                                        <constraint firstItem="kHt-iy-k7F" firstAttribute="leading" secondItem="i15-FM-EIc" secondAttribute="leading" constant="4" id="giy-Ua-PH1"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="taskImageView" destination="kHt-iy-k7F" id="H2M-4N-U1O"/>
@@ -984,7 +984,7 @@
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OBJECTIVE" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s1O-2G-uHK">
-                                            <rect key="frame" x="20" y="226" width="62" height="14"/>
+                                            <rect key="frame" x="24" y="226" width="62" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" red="0.6942209005355835" green="0.73005121946334839" blue="0.75357025861740112" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1113,10 +1113,11 @@
                                         <constraint firstItem="oKR-zl-bff" firstAttribute="top" secondItem="PcE-gW-NH6" secondAttribute="top" constant="8" id="b2a-un-EqL"/>
                                         <constraint firstItem="6bA-oB-Kmv" firstAttribute="top" secondItem="s1O-2G-uHK" secondAttribute="bottom" constant="8" id="hB7-Oa-QEU"/>
                                         <constraint firstItem="xxN-yI-DtX" firstAttribute="bottom" secondItem="BdU-t9-SRE" secondAttribute="bottom" constant="-5" id="hQs-sG-FKN"/>
+                                        <constraint firstItem="s1O-2G-uHK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="oKR-zl-bff" secondAttribute="bottom" constant="8" id="kyg-2V-IkR"/>
                                         <constraint firstItem="g6C-4q-W1L" firstAttribute="top" secondItem="HwR-MQ-K1n" secondAttribute="bottom" id="mnI-wU-UWS"/>
                                         <constraint firstAttribute="centerX" secondItem="xxN-yI-DtX" secondAttribute="centerX" id="pPL-Ee-wAI"/>
                                         <constraint firstItem="6bA-oB-Kmv" firstAttribute="leading" secondItem="HwR-MQ-K1n" secondAttribute="trailing" constant="8" id="xDu-uK-3lx"/>
-                                        <constraint firstItem="s1O-2G-uHK" firstAttribute="leading" secondItem="oKR-zl-bff" secondAttribute="leading" id="z9w-Z7-Pjh"/>
+                                        <constraint firstItem="s1O-2G-uHK" firstAttribute="leading" secondItem="oKR-zl-bff" secondAttribute="leading" constant="4" id="z9w-Z7-Pjh"/>
                                     </constraints>
                                 </view>
                             </tableView>
@@ -1217,6 +1218,7 @@
                         <outlet property="priorityBarView" destination="HwR-MQ-K1n" id="UdM-M3-UDq"/>
                         <outlet property="priorityButtonsMainView" destination="N6p-EC-eu1" id="owk-Wt-xUH"/>
                         <outlet property="priorityTextLabel" destination="HtY-iR-3G0" id="4r3-YU-8sZ"/>
+                        <outlet property="tableview" destination="YML-pl-WPD" id="4tg-0W-XOv"/>
                         <outlet property="taskImageCollectionView" destination="BdU-t9-SRE" id="Zku-M5-DGg"/>
                         <outlet property="taskTitleTextField" destination="oKR-zl-bff" id="umt-ZJ-2Z0"/>
                     </connections>

@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
 #import <AVFoundation/AVFoundation.h>
+#import "CSInsetTextField.h"
 
 @interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate,AVAudioPlayerDelegate>
 
 // Views
-@property (weak, nonatomic) IBOutlet UITextField *taskTitleTextField;
+@property (strong, nonatomic) IBOutlet UITableView *tableview;
+@property (weak, nonatomic) IBOutlet CSInsetTextField *taskTitleTextField;
 @property (weak, nonatomic) IBOutlet UICollectionView *taskImageCollectionView;
 @property (weak, nonatomic) IBOutlet UITextView *objectTextView;
 
