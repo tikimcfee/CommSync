@@ -107,8 +107,6 @@
 //inserts the comments into the cells one comment per cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-
-  
     static NSString *cellIdentifier = @"ChatViewCell";
     CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
@@ -124,7 +122,6 @@
     cell.messageLabel.text = comment.text;
     cell.transform = self.tableView.transform;
     return cell;
-    
 }
 
 

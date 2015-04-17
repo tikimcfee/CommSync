@@ -11,7 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "CSInsetTextField.h"
 
-@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate,AVAudioPlayerDelegate>
+@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate,AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 // Views
 @property (strong, nonatomic) IBOutlet UITableView *tableview;

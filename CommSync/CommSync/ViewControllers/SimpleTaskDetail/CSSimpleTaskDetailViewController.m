@@ -8,6 +8,7 @@
 
 #import "CSSimpleTaskDetailViewController.h"
 #import "CSTaskImageCollectionViewCell.h"
+#import "CSChatTableViewCell.h"
 #import "UIColor+FlatColors.h"
 #import "IonIcons.h"
 
@@ -130,6 +131,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _audioPlayerContainer.userInteractionEnabled = NO;
     } else {
         _audioPlayImageView.image = [IonIcons imageWithIcon:ion_ios_recording size:33.0f color:[UIColor flatConcreteColor]];
+        _audioPlayImageView.userInteractionEnabled = YES;
     }
 }
 
@@ -141,6 +143,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     [self.taskImageCollectionView setPagingEnabled:YES];
     [self.taskImageCollectionView setCollectionViewLayout:flowLayout];
     self.taskImageCollectionView.backgroundColor = [UIColor clearColor];
+    self.taskImageCollectionView.layer.cornerRadius = 8;
+    self.taskImageCollectionView.clipsToBounds = YES;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -164,6 +168,28 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 #pragma mark - TableView DataSource Delegate
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.sourceTask.comments.count >= 4 ? 4 : self.sourceTask.comments.count;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *cellIdentifier = @"ChatViewCell";
+    CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
+    
+    if (!cell)
+    {
+        cell = [[CSChatTableViewCell alloc] init];
+    }
+    
+    cell.createdByLabel.text = comment.UID;
+    cell.messageLabel.text = comment.text;
+    cell.transform = self.tableview.transform;
+    return cell;
+}
 
 #pragma mark - CollectionView DataSource/Delegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

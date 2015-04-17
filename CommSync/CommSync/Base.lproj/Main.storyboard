@@ -1050,7 +1050,6 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstItem="9eZ-NZ-spT" firstAttribute="leading" secondItem="N6p-EC-eu1" secondAttribute="leading" id="2HI-Ys-I2v"/>
                                                         <constraint firstItem="9eZ-NZ-spT" firstAttribute="leading" secondItem="N6p-EC-eu1" secondAttribute="leading" id="2LX-Ku-uit"/>
                                                         <constraint firstItem="9eZ-NZ-spT" firstAttribute="centerY" secondItem="eCO-Ty-gVa" secondAttribute="centerY" id="8c3-q8-uIT"/>
                                                         <constraint firstItem="xBy-3l-1wi" firstAttribute="leading" secondItem="9eZ-NZ-spT" secondAttribute="trailing" constant="10" id="8qV-NW-Qo4"/>
@@ -1061,17 +1060,10 @@
                                                         <constraint firstItem="eCO-Ty-gVa" firstAttribute="leading" secondItem="xBy-3l-1wi" secondAttribute="trailing" constant="10" id="cJO-q0-NKN"/>
                                                         <constraint firstItem="xBy-3l-1wi" firstAttribute="height" secondItem="eCO-Ty-gVa" secondAttribute="height" id="fRE-gi-8RC"/>
                                                         <constraint firstItem="eCO-Ty-gVa" firstAttribute="top" relation="lessThanOrEqual" secondItem="N6p-EC-eu1" secondAttribute="top" constant="6" id="fVD-VL-faP"/>
-                                                        <constraint firstAttribute="width" constant="202" id="reO-zw-EQT"/>
                                                         <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="eCO-Ty-gVa" secondAttribute="bottom" constant="6" id="rjP-V1-69z"/>
                                                         <constraint firstItem="9eZ-NZ-spT" firstAttribute="height" secondItem="xBy-3l-1wi" secondAttribute="height" id="rzj-sb-5qC"/>
                                                         <constraint firstItem="eCO-Ty-gVa" firstAttribute="centerY" secondItem="xBy-3l-1wi" secondAttribute="centerY" id="v6p-R7-ELV"/>
                                                     </constraints>
-                                                    <variation key="default">
-                                                        <mask key="constraints">
-                                                            <exclude reference="reO-zw-EQT"/>
-                                                            <exclude reference="2HI-Ys-I2v"/>
-                                                        </mask>
-                                                    </variation>
                                                 </view>
                                                 <view contentMode="scaleToFill" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="M4h-hA-bqV">
                                                     <rect key="frame" x="8" y="2" width="129" height="60"/>
@@ -1144,6 +1136,10 @@
                                         <constraint firstItem="s1O-2G-uHK" firstAttribute="leading" secondItem="oKR-zl-bff" secondAttribute="leading" constant="4" id="z9w-Z7-Pjh"/>
                                     </constraints>
                                 </view>
+                                <connections>
+                                    <outlet property="dataSource" destination="ITi-gD-sJd" id="nXS-Eo-NDz"/>
+                                    <outlet property="delegate" destination="ITi-gD-sJd" id="UtQ-Z5-m73"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
