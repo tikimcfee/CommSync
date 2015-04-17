@@ -14,14 +14,16 @@
 //@property (strong, nonatomic) NSString* peerID;
 @property (strong, nonatomic) NSData* peerID;
 @property (strong, nonatomic) NSString* displayName;
+@property  NSInteger avatar;
 @property  NSInteger unreadMessages;
-@property  NSInteger unsetMessages;
-@property (strong, nonatomic) NSString* UUID;
+@property  NSInteger unsentMessages;
 
 - (instancetype)initWithMessage:(NSData *)peerID withDisplayName: (NSString*) display;
 - (void) addMessage;
 - (void) removeMessages;
-- (NSString*) getMessageNumber;
+- (int) getMessageNumber;
 -(void)addUnsent;
 -(void)removeUnsent;
+
+-(NSString*) getPicture;
 @end

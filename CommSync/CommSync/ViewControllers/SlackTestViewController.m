@@ -11,7 +11,6 @@
 #import "CSChatMessageRealmModel.h"
 #import "CSUserRealmModel.h"
 #import "CSChatTableViewCell.h"
-#import "UINavigationBar+CommSyncStyle.h"
 #import <Realm/Realm.h>
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
@@ -42,6 +41,14 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
 
 #pragma mark - View Lifecycle
 - (void)viewDidLoad {
@@ -73,13 +80,8 @@
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0f];
-    
-    /**
-     * Get a copy of the session manager
-     */
-    self.sessionManager = app.globalSessionManager;
-
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+   
     /**
      *  Register to use custom table view cells
      */
@@ -91,23 +93,6 @@
      *  Register for chat realm notifications
      */
     [self registerForChatRealmNotifications];
-    
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    /*
-     *  Add navigation bar
-     */
-    UINavigationBar *bar = [UINavigationBar new];
-    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 60.0)];
-    [bar setupCommSyncStyle];
-
-    UILabel *barLabel = [UILabel new];
-    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2)-45.0, 30.0, 90.0, 20.0)];
-    [barLabel setText:@"Group Chat"];
-    [barLabel setTextColor:[UIColor whiteColor]];
-    
-    [bar addSubview:barLabel];
-    [self.view addSubview:bar];
 }
 
 #pragma mark - Override SlackViewController Methods
@@ -123,39 +108,42 @@
     
     if(!_sourceTask){
         CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser toUser:(_peerID)? _peerID.displayName : @"ALL"];
-
-        
-        
-        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:message];
         
         if (_peerID){
             [_privateMessageRealm beginWriteTransaction];
             [_privateMessageRealm addObject:message];
             [_privateMessageRealm commitWriteTransaction];
             
+            //the user is not currently connected so add it to unsent message
             if(![_sessionManager.currentConnectedPeers valueForKey:message.recipient])
             {
-                CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", message.recipient][0];
+                CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:message.recipient];
                 [_sessionManager.peerHistoryRealm beginWriteTransaction];
                 [user addUnsent];
                 [_sessionManager.peerHistoryRealm commitWriteTransaction];
             }
-            if([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
-            {
+            else {
+                NSDictionary *dataToSend = @{@"PrivateMessage"  :   message};
+                NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                //If we are directly connected send them the message
+                if ([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
+                {
                     //the user is connected to the target so we can send it directly
                     [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:message.recipient]];
+                }
+                //otherwise send it to everyone in hopes it finds the recipient
+                else [self.sessionManager sendDataPacketToPeers:messageData];
             }
-            //if we arnt connected well find somebody who is
-            else [self.sessionManager sendDataPacketToPeers:messageData];
         }
+            
         else{
             [_chatRealm beginWriteTransaction];
             [_chatRealm addObject:message];
             [_chatRealm commitWriteTransaction];
+            NSDictionary *dataToSend = @{@"ChatMessage"  :   message};
+            NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
             [self.sessionManager sendDataPacketToPeers:messageData];
         }
-
-       
     }
     
     else{
@@ -210,7 +198,7 @@
 
 - (CSChatTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+
     static NSString *cellIdentifier = @"ChatViewCell";
     CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
@@ -220,17 +208,18 @@
     }
     
     if(!_sourceTask){
-    
-        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
-    
-        cell.createdByLabel.text = msg.createdBy;
-        cell.messageLabel.text = msg.text;
-        cell.transform = self.tableView.transform;
         
-        if ([msg.createdBy isEqualToString:_currentUser]) {
-            cell.createdByLabel.textAlignment = NSTextAlignmentRight;
-            cell.messageLabel.textAlignment = NSTextAlignmentRight;
-        }
+            CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+    
+            cell.createdByLabel.text = msg.createdBy;
+            cell.messageLabel.text = msg.text;
+            cell.transform = self.tableView.transform;
+            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
+        
+        
+            NSString *image = [person getPicture];
+            [cell.avatarImage setImage:[UIImage imageNamed:image]];
+        
     }
     
     else{
@@ -238,9 +227,8 @@
         cell.createdByLabel.text = comment.UID;
         cell.messageLabel.text = comment.text;
         cell.transform = self.tableView.transform;
+        
     }
-    
-    
     return cell;
 }
 
@@ -307,8 +295,6 @@
     return [orderedChatMessages objectAtIndex:index];
 }
 
-- (UIStatusBarStyle) preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
+
 
 @end

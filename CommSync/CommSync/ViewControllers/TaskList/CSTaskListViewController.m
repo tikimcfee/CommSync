@@ -15,8 +15,6 @@
 #import "CSTaskListUpdateOperation.h"
 #import "AppDelegate.h"
 #import <Crashlytics/Crashlytics.h>
-#import "UINavigationBar+CommSyncStyle.h"
-#import "UITabBar+CommSyncStyle.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -133,11 +131,6 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-
-    [self setTagFilter];
-    
-    // setup navigation controller style
-    [self.navigationController.navigationBar setupCommSyncStyle];
     
     // setup tab bar controller style
     [self.tabBarController.tabBar setupCommSyncStyle];

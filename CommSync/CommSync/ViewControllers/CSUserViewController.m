@@ -8,8 +8,7 @@
 
 #import "CSUserViewController.h"
 #import "CSUserDetailView.h"
-#import "AppDelegate.h"
-#import "UINavigationBar+CommSyncStyle.h"
+#import "CSUserInfoCell.h"
 
 @interface CSUserViewController ()
 {
@@ -48,9 +47,6 @@
                                                object:nil];
     
     [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(checkMessages) userInfo:nil repeats:YES];
-    
-    // setup navigation controller style
-    [self.navigationController.navigationBar setupCommSyncStyle];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,9 +75,9 @@
 #pragma mark - UITableViewDataSource Delegates
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *simpleTableIdentifier = @"SimpleTableItem";
+    static NSString *simpleTableIdentifier = @"UserCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    CSUserInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     NSString* userName;
     
@@ -94,14 +90,30 @@
         userName = user.displayName;
     }
     
-    NSString* connectionStatus = [@"---------" stringByAppendingString:[_sessionManager.currentConnectedPeers valueForKey:userName]? @"Connected" : @"Disconnected"];
+    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:userName])? [UIColor greenColor]: [UIColor redColor];
     
+    CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:userName];
+    cell.userLabel.text = userName;
+    [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];
     
-    CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", userName][0];
-    
-    cell.text =  _filter ? [userName stringByAppendingString:connectionStatus]: [userName stringByAppendingString: user.getMessageNumber];
+    if([user getMessageNumber] == 0){
+        [cell.envelopePic setImage:[UIImage imageNamed:@"emptyEnvelope"]];
+        [cell.unreadNumber setHidden:TRUE];
+    }
+    else{
+        [cell.envelopePic setImage:[UIImage imageNamed:@"envelope"]];
+        [cell.unreadNumber setHidden:FALSE];
+        cell.unreadNumber.text = ([user getMessageNumber] <= 9)? [NSString stringWithFormat:@"%d", [user getMessageNumber]] : @"9+";
+        cell.unreadNumber.layer.cornerRadius = 12.0;
+        cell.unreadNumber.layer.masksToBounds = YES;
+    }
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

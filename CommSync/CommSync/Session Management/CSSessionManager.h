@@ -23,7 +23,7 @@
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
 
-@class CSTaskRealmModel, RLMRealm;
+@class CSTaskRealmModel, RLMRealm, CSUserRealmModel;
 
 @protocol MCSessionDataHandlingDelegate <NSObject>
 
@@ -41,7 +41,9 @@
                                         MCSessionDelegate>
 
 // MCMultiPeer objects
-@property (strong, nonatomic) MCPeerID* myPeerID;
+@property (strong, nonatomic) MCPeerID*         myPeerID;
+@property (strong, nonatomic) CSUserRealmModel* myUserModel;
+
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
@@ -74,7 +76,9 @@
 - (void) nukeRealm;
 - (void) nukeHistory;
 
-- (void)updatePeerHistory:(MCPeerID *)peerID withID:(NSString*) UUID;
+- (void)updatePeerHistory:  (CSUserRealmModel *)    peer;
+- (void)createNewPeer:      (MCPeerID *)            peerID;
+- (void)updateAvatar:       (NSInteger)            number;
 
 + (NSString *)incomingTaskRealmDirectory;
 + (NSString *)peerHistoryRealmDirectory;

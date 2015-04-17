@@ -19,8 +19,6 @@
 #import "CSAudioPlotViewController.h"
 #import "UIImage+normalize.h"
 #import "CSAssignViewController.h"
-#import "CSTaskRevisionRealmModel.h"
-
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 
@@ -33,9 +31,6 @@
 // Image picker
 @property (strong, nonatomic) UIImagePickerController   *imagePicker;
 
-// Revision management
-@property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
-@property (strong, nonatomic) NSMutableDictionary *unsavedChanges;
 @property (strong, nonatomic) NSMutableArray* taskImages;
 @property (strong, nonatomic) NSData* taskAudio;
 
@@ -88,10 +83,6 @@
     
     self.audioPlayer.delegate = self;
     [self configureAVAudioSession];
-    
-    // start with a blank set of changes
-    self.unsavedChanges = [NSMutableDictionary new];
-    self.currentRevisions = [CSTaskRevisionRealmModel new];
 }
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
@@ -203,13 +194,12 @@
         }
         [realm commitWriteTransaction];
         
-        
-        
         [_titleLabel setEnabled:NO];
         [_descriptionLabel setEditable:NO];
         [_editButton setTitle:@"Edit"];
         
         [_footerView setHidden:NO];
+        
         
         [self.tableView reloadData];
         [_priorityLabel setHidden:NO];
@@ -218,73 +208,10 @@
         [_redButton setHidden:YES];
         
         [_audioButton setHidden:NO];
+    
     }
 }
 
-- (void)createTaskRevision {
-    
-    [self findAndSetTaskChanges];
-    
-    NSArray *allChanges = [self.unsavedChanges allKeys];
-    
-    if ([allChanges count] == 0) return;
-    
-    for (NSNumber *property in allChanges) {
-        
-        [self.currentRevisions forTask:self.sourceTask
-                        reviseProperty:[property integerValue]
-                                    to:[self.unsavedChanges objectForKey:property]];
-    }
-    
-    // save revisions
-    [self.currentRevisions save:self.sourceTask];
-    [self.sourceTask addRevision:self.currentRevisions];
-    
-    // reset changes
-    self.unsavedChanges = [NSMutableDictionary new];
-    self.currentRevisions = [CSTaskRevisionRealmModel new];
-}
-
-- (void)findAndSetTaskChanges {
-    
-    // title changed
-    if (![self.sourceTask.taskTitle isEqualToString:self.titleLabel.text]) {
-        NSDictionary *titleChanges = @{
-                                       @"from": self.sourceTask.taskTitle,
-                                       @"to": self.titleLabel.text
-                                       };
-        [self.unsavedChanges setObject:titleChanges forKey:@"taskTitle"];
-    }
-    
-    // description changed
-    if (![self.sourceTask.taskDescription isEqualToString:self.descriptionLabel.text]) {
-        NSDictionary *descriptionChanges = @{
-                                             @"from": self.sourceTask.taskDescription,
-                                             @"to": self.descriptionLabel.text
-                                             };
-        [self.unsavedChanges setObject:descriptionChanges forKey:@"taskDescription"];
-    }
-    
-    // get priority
-    CSTaskPriority newPriority;
-    if (self.priorityColor.backgroundColor == [UIColor redColor])
-        newPriority = CSTaskPriorityHigh;
-    
-    else if(self.priorityColor.backgroundColor == [UIColor yellowColor])
-        newPriority = CSTaskPriorityMedium;
-    
-    else
-        newPriority = CSTaskPriorityLow;
-    
-    // priority changed
-    if (self.sourceTask.taskPriority != newPriority) {
-        NSDictionary *descriptionChanges = @{
-                                             @"from": [NSNumber numberWithInt:self.sourceTask.taskPriority],
-                                             @"to": [NSNumber numberWithInt:newPriority]
-                                             };
-        [self.unsavedChanges setObject:descriptionChanges forKey:@"taskPriority"];
-    }
-}
 
 - (IBAction)setRed:(id)sender {
     [_redButton setAlpha:1];

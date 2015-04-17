@@ -7,7 +7,7 @@
 //
 
 #import "CSSettingsViewController.h"
-
+#import "CSUserRealmModel.h"
 @interface CSSettingsViewController ()
 @property (copy, nonatomic) void (^nukeSessionHandler)(UIAlertAction *);
 @property (copy, nonatomic) void (^nukeDatabaseHandler)(UIAlertAction *);
@@ -20,12 +20,19 @@
     AppDelegate *_app;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [_avatarPic setImage: [UIImage imageNamed:_sessionManager.myUserModel.getPicture]];
+    [super viewWillAppear:animated];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     _app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     _sessionManager = _app.globalSessionManager;
+
     
     __weak CSSettingsViewController *weakSelf = self;
     
@@ -157,6 +164,8 @@
             case 2:
                 [self showAlertWithHandler:_nukePeerHistoryHandler];
                 break;
+                
+            case 3: break;
                 
             default:
                 NSLog(@"Settings ERROR: This selection has no action");
