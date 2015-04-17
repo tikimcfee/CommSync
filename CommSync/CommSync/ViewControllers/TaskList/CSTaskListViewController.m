@@ -133,8 +133,6 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-
-    [self setTagFilter];
     
     // setup navigation controller style
     [self.navigationController.navigationBar setupCommSyncStyle];

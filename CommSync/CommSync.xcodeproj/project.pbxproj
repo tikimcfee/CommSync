@@ -8,8 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		3F416E6A1A86C77500EDC347 /* CustomFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F416E691A86C77500EDC347 /* CustomFooterCell.m */; };
+		3F9132E01ADD9D26002D45B0 /* CSAvatarSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9132DF1ADD9D26002D45B0 /* CSAvatarSelectionView.m */; };
+		3F9132E61ADDA5C4002D45B0 /* CSAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9132E51ADDA5C4002D45B0 /* CSAvatarCell.m */; };
 		3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FBBF1371A9C0887007124CD /* Main.storyboard */; };
 		3FD986131A8466DB0084781B /* CustomHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD986121A8466DB0084781B /* CustomHeaderCell.m */; };
+		3FDCA4911ADEF8B300A7D454 /* CSUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDCA4901ADEF8B300A7D454 /* CSUserInfoCell.m */; };
 		3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */; };
 		3FE492091AD741D40089E518 /* CSTaskRevisionRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */; };
 		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
@@ -148,9 +151,15 @@
 /* Begin PBXFileReference section */
 		3F416E681A86C77500EDC347 /* CustomFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFooterCell.h; sourceTree = "<group>"; };
 		3F416E691A86C77500EDC347 /* CustomFooterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFooterCell.m; sourceTree = "<group>"; };
+		3F9132DE1ADD9D26002D45B0 /* CSAvatarSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAvatarSelectionView.h; sourceTree = "<group>"; };
+		3F9132DF1ADD9D26002D45B0 /* CSAvatarSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAvatarSelectionView.m; sourceTree = "<group>"; };
+		3F9132E41ADDA5C4002D45B0 /* CSAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAvatarCell.h; path = ../CSAvatarCell.h; sourceTree = "<group>"; };
+		3F9132E51ADDA5C4002D45B0 /* CSAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAvatarCell.m; path = ../CSAvatarCell.m; sourceTree = "<group>"; };
 		3FBBF1381A9C0887007124CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FD986111A8466DB0084781B /* CustomHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderCell.h; sourceTree = "<group>"; };
 		3FD986121A8466DB0084781B /* CustomHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderCell.m; sourceTree = "<group>"; };
+		3FDCA48F1ADEF8B300A7D454 /* CSUserInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserInfoCell.h; sourceTree = "<group>"; };
+		3FDCA4901ADEF8B300A7D454 /* CSUserInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserInfoCell.m; sourceTree = "<group>"; };
 		3FE492041AD741D40089E518 /* CSTaskMediaRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskMediaRealmModel.h; path = Models/CSTaskMediaRealmModel.h; sourceTree = "<group>"; };
 		3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaRealmModel.m; path = Models/CSTaskMediaRealmModel.m; sourceTree = "<group>"; };
 		3FE492061AD741D40089E518 /* CSTaskRevisionRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRevisionRealmModel.h; path = Models/CSTaskRevisionRealmModel.h; sourceTree = "<group>"; };
@@ -501,6 +510,8 @@
 				95FE62FF1AABC9F300EE9A19 /* CSUserDetailView.m */,
 				7444522D1A0ACEDB00C87723 /* CSUserViewController.h */,
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
+				3FDCA48F1ADEF8B300A7D454 /* CSUserInfoCell.h */,
+				3FDCA4901ADEF8B300A7D454 /* CSUserInfoCell.m */,
 			);
 			name = Users;
 			sourceTree = "<group>";
@@ -595,6 +606,10 @@
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
 				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
 				3FBBF1371A9C0887007124CD /* Main.storyboard */,
+				3F9132DE1ADD9D26002D45B0 /* CSAvatarSelectionView.h */,
+				3F9132DF1ADD9D26002D45B0 /* CSAvatarSelectionView.m */,
+				3F9132E41ADDA5C4002D45B0 /* CSAvatarCell.h */,
+				3F9132E51ADDA5C4002D45B0 /* CSAvatarCell.m */,
 				459D5F7619DB449900C91EFA /* Supporting Files */,
 				93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */,
 				93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */,
@@ -1280,9 +1295,11 @@
 				93EBABEB1A964552006BAF4A /* JSQMessagesToolbarContentView.m in Sources */,
 				746F6AD51A892613007A83E8 /* TPCircularBuffer.c in Sources */,
 				74C541F01A93E67100FC29AD /* TLCollapsibleDataModel.m in Sources */,
+				3F9132E61ADDA5C4002D45B0 /* CSAvatarCell.m in Sources */,
 				746F6ACB1A892613007A83E8 /* EZAudio.m in Sources */,
 				74C541F91A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m in Sources */,
 				93EBABD21A964552006BAF4A /* JSQMessagesTimestampFormatter.m in Sources */,
+				3FDCA4911ADEF8B300A7D454 /* CSUserInfoCell.m in Sources */,
 				93EBABE61A964552006BAF4A /* JSQMessagesInputToolbar.m in Sources */,
 				740998301A0C395A00229AFC /* CSSettingsViewController.m in Sources */,
 				741DE96D1A92C47300AC488F /* CSTaskProgressTableViewCell.m in Sources */,
@@ -1322,6 +1339,7 @@
 				4562F2061A78927200090005 /* CSTaskRealmModel.m in Sources */,
 				93EBABCD1A964552006BAF4A /* JSQMessagesViewController.m in Sources */,
 				93EBABD31A964552006BAF4A /* JSQMessagesToolbarButtonFactory.m in Sources */,
+				3F9132E01ADD9D26002D45B0 /* CSAvatarSelectionView.m in Sources */,
 				45C956491A97EE8100364555 /* CSTaskListUpdateOperation.m in Sources */,
 				746F6ACA1A892613007A83E8 /* AEFloatConverter.m in Sources */,
 				74C541F41A93E67100FC29AD /* TLDynamicHeightLabelCell.m in Sources */,

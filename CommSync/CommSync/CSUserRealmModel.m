@@ -22,19 +22,8 @@
         self.peerID = peerID;
         self.displayName = display;
         self.unreadMessages = 0;
-        self.unsetMessages = 0;
-        
-        self.UUID  = [NSString stringWithFormat:@"%c%c%c%c%cc%c%c%c%c",
-                       arc4random_uniform(25)+65,
-                       arc4random_uniform(25)+65,
-                       arc4random_uniform(25)+65,
-                       arc4random_uniform(25)+65,
-                       arc4random_uniform(25)+65,
-                       arc4random_uniform(25)+97,
-                       arc4random_uniform(25)+97,
-                       arc4random_uniform(25)+97,
-                       arc4random_uniform(25)+97];
-       
+        self.unsentMessages = 0;
+        self.avatar = -1;
     }
     
     return self;
@@ -47,8 +36,8 @@
     {
         self.peerID= [aDecoder decodeObjectForKey:@"peerID"];
         self.displayName= [aDecoder decodeObjectForKey:@"displayName"];
-        self.UUID= [aDecoder decodeObjectForKey:@"UUID"];
         self.unreadMessages = [aDecoder decodeIntForKey:@"unreadMessages"];
+        self.avatar = [aDecoder decodeIntegerForKey:@"Avatar"];
     }
     
     return self;
@@ -58,8 +47,8 @@
 {
     [aCoder encodeObject:self.displayName forKey:@"displayName"];
     [aCoder encodeObject:self.peerID forKey:@"peerID"];
-    [aCoder encodeObject:self.UUID forKey:@"UUID"];
     [aCoder encodeInteger:self.unreadMessages forKey:@"unreadMessages"];
+    [aCoder encodeInteger:self.avatar forKey:@"Avatar"];
 }
 
 -(void)addMessage
@@ -69,29 +58,33 @@
 
 -(void)removeMessages
 {
-   // self.stringNum = @"0";
     self.unreadMessages = 0;
 }
 
 
 -(void)addUnsent
 {
-    self.unsetMessages = self.unsetMessages + 1;
+    self.unsentMessages = self.unsentMessages + 1;
 }
 
 -(void)removeUnsent
 {
-    self.unsetMessages = 0;
+    self.unsentMessages = 0;
 }
 
--(NSString*)getMessageNumber
+-(int)getMessageNumber
 {
-   // if(!_stringNum) _stringNum = @"0";
-    return [NSString stringWithFormat:@"( %ld unread)", self.unreadMessages];
+    return (int)self.unreadMessages;
 }
 
 + (NSString*)primaryKey {
-    return @"UUID";
+    return @"displayName";
+}
+
+-(NSString *) getPicture
+{
+    if(!self.avatar) return @"Avatar-1";
+    return [NSString stringWithFormat:@"Avatar%d", self.avatar];
 }
 
 @end
