@@ -11,6 +11,7 @@
 #import "CSChatMessageRealmModel.h"
 #import "CSUserRealmModel.h"
 #import "CSChatTableViewCell.h"
+#import "UINavigationBar+CommSyncStyle.h"
 #import <Realm/Realm.h>
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
@@ -93,6 +94,26 @@
      *  Register for chat realm notifications
      */
     [self registerForChatRealmNotifications];
+    
+    /*
+     *  Remove cell view separator
+     */
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    /*
+     *  Add navigation bar
+     */
+    UINavigationBar *bar = [UINavigationBar new];
+    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 64.0)];
+    [bar setupCommSyncStyle];
+    
+    UILabel *barLabel = [UILabel new];
+    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2)-45.0, 32.0, 90.0, 20.0)];
+    [barLabel setText:@"Group Chat"];
+    [barLabel setTextColor:[UIColor whiteColor]];
+    
+    [bar addSubview:barLabel];
+    [self.view addSubview:bar];
 }
 
 #pragma mark - Override SlackViewController Methods

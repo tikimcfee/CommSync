@@ -8,6 +8,8 @@
 
 #import "CSSettingsViewController.h"
 #import "CSUserRealmModel.h"
+#import "UINavigationBar+CommSyncStyle.h"
+
 @interface CSSettingsViewController ()
 @property (copy, nonatomic) void (^nukeSessionHandler)(UIAlertAction *);
 @property (copy, nonatomic) void (^nukeDatabaseHandler)(UIAlertAction *);
@@ -47,7 +49,8 @@
     self.nukePeerHistoryHandler = ^(UIAlertAction *action){
         [weakSelf nukePeerHistory];
     };
-
+    
+    [self.navigationController.navigationBar setupCommSyncStyle];
 }
 
 - (void)showAlertWithHandler:(void (^)(UIAlertAction *))actionHandler {
