@@ -127,17 +127,15 @@
                 NSMutableArray* differences = [[NSMutableArray alloc]init];
                 for(CSUserRealmModel *peer in [receivedObject valueForKey:kcs_USER_ARRAY])
                 {
-                    if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.displayName] && ![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
-                        
-                        [self updatePeerHistory:peer];
-                        [differences addObject:peer];
+                    if(![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                       if( [self updatePeerHistory:peer] )[differences addObject:peer];
                     }
                 }
                 //if there were any diffrerences in the histories then send full history to all peers
                 if([differences count] > 0){
                     NSDictionary *dataToSend = @{@"UserArray"  :   differences};
-                    NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
-                    [_parentAnalyzer.globalManager sendDataPacketToPeers:[NSKeyedArchiver archivedDataWithRootObject:historyData]];
+                    NSData *differenceData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                    [_parentAnalyzer.globalManager sendDataPacketToPeers:differenceData];
                  }
             });
         }
@@ -154,18 +152,31 @@
     
 }
 
-- (void) updatePeerHistory:(CSUserRealmModel *) peer
+- (bool) updatePeerHistory:(CSUserRealmModel *) peer
 {
-    if([peer.displayName isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName])
-        return;
-    [peer removeUnsent];
-    [peer removeMessages];
+    CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.displayName];
     
-    [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
-    if(![CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.displayName])
+    //if we dont have the user add them
+    if(!ownPeer)
+    {
+        [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
+        [peer removeUnsent];
+        [peer removeMessages];
         [_parentAnalyzer.globalManager.peerHistoryRealm addObject:peer];
-    [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
+        [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
+        return true;
+    }
     
+    //if the users avatar is different then change it
+    else if( peer.avatar != ownPeer.avatar)
+    {
+        [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
+         ownPeer.avatar = peer.avatar;
+        [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
+        return true;
+    }
+   //otherwise no differences
+    return false;
 }
 
 - (bool) updatePeerAvatar:(NSString*) displayName withNumber: (NSNumber*) number
