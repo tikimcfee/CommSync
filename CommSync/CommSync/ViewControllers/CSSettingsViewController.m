@@ -47,6 +47,7 @@
     self.nukePeerHistoryHandler = ^(UIAlertAction *action){
         [weakSelf nukePeerHistory];
     };
+
 }
 
 - (void)showAlertWithHandler:(void (^)(UIAlertAction *))actionHandler {

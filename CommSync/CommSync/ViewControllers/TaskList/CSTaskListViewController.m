@@ -132,7 +132,13 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-//    [self setTagFilter];
+    // setup tab bar controller style
+    [self.tabBarController.tabBar setupCommSyncStyle];
+    
+    for (UITabBarItem *tab in self.tabBarController.tabBar.items) {
+        tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
+        tab.title = nil;
+    }
 }
 
 - (void)setupInitialTaskDataModels {
