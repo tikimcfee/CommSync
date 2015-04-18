@@ -121,9 +121,9 @@
     
     if(!_filter){
       MCPeerID *peerName = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
-        peer = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName = %@", peerName.displayName][0];
+        peer = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:peerName.displayName];
     }
-    else peer = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row];
+    else peer = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName != %@", _sessionManager.myPeerID.displayName][indexPath.row];
     
     [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
     [self.tableView reloadData];

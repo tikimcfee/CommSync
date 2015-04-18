@@ -740,14 +740,11 @@
 
 -(void) addMessage:(NSString *)peer
 {
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"displayName = %@", peer][0];
+        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:peer];
         NSLog(@"%@", user.displayName);
         [_peerHistoryRealm beginWriteTransaction];
         [user addMessage];
         [_peerHistoryRealm commitWriteTransaction];
-    });
 }
 
 -(void) removeMessage:(NSString *)peer
