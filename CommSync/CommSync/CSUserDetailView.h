@@ -22,4 +22,5 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraint;
 @property (weak, nonatomic) IBOutlet UIView *messageContainer;
 @property int topHeight;
+@property (weak, nonatomic) IBOutlet UIImageView *userAvatarImage;
 @end

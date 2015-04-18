@@ -169,7 +169,7 @@
                 break;
                 
             case 3: break;
-                
+            case 4: break;
             default:
                 NSLog(@"Settings ERROR: This selection has no action");
                 break;

@@ -12,6 +12,7 @@
 
 @interface CSTaskTableViewCell : UITableViewCell
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 
 - (void)configureWithSourceTask:(CSTaskRealmModel *)task;
 @end

@@ -147,6 +147,8 @@
 		93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */; };
 		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
+		95013C841AE1C1AF0074FB4B /* CSUserCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */; };
+		95013C8B1AE1C7750074FB4B /* UserSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C8A1AE1C7750074FB4B /* UserSelectionView.m */; };
 		953E396B1AC8CA11003FE833 /* CSPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 953E396A1AC8CA11003FE833 /* CSPictureController.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 		95FCFD4E1AD08217000BB566 /* CSAssignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */; };
@@ -464,6 +466,10 @@
 		93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSChatTableViewCell.xib; sourceTree = "<group>"; };
 		93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatTableViewCell.h; sourceTree = "<group>"; };
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
+		95013C811AE1C1AE0074FB4B /* CSUserCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserCollectionCell.h; sourceTree = "<group>"; };
+		95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserCollectionCell.m; sourceTree = "<group>"; };
+		95013C891AE1C7750074FB4B /* UserSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionView.h; sourceTree = "<group>"; };
+		95013C8A1AE1C7750074FB4B /* UserSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSelectionView.m; sourceTree = "<group>"; };
 		953E39691AC8CA11003FE833 /* CSPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPictureController.h; sourceTree = "<group>"; };
 		953E396A1AC8CA11003FE833 /* CSPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPictureController.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCommentRealmModel.h; path = Models/CSCommentRealmModel.h; sourceTree = "<group>"; };
@@ -525,6 +531,10 @@
 				7444522E1A0ACEDB00C87723 /* CSUserViewController.m */,
 				3FDCA48F1ADEF8B300A7D454 /* CSUserInfoCell.h */,
 				3FDCA4901ADEF8B300A7D454 /* CSUserInfoCell.m */,
+				95013C811AE1C1AE0074FB4B /* CSUserCollectionCell.h */,
+				95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */,
+				95013C891AE1C7750074FB4B /* UserSelectionView.h */,
+				95013C8A1AE1C7750074FB4B /* UserSelectionView.m */,
 			);
 			name = Users;
 			sourceTree = "<group>";
@@ -1336,6 +1346,7 @@
 				3F9132E61ADDA5C4002D45B0 /* CSAvatarCell.m in Sources */,
 				746F6ACB1A892613007A83E8 /* EZAudio.m in Sources */,
 				74C541F91A93E67100FC29AD /* UITableViewController+ScrollOptimizer.m in Sources */,
+				95013C841AE1C1AF0074FB4B /* CSUserCollectionCell.m in Sources */,
 				93EBABD21A964552006BAF4A /* JSQMessagesTimestampFormatter.m in Sources */,
 				3FDCA4911ADEF8B300A7D454 /* CSUserInfoCell.m in Sources */,
 				93EBABE61A964552006BAF4A /* JSQMessagesInputToolbar.m in Sources */,
@@ -1418,6 +1429,7 @@
 				93EBABD01A964552006BAF4A /* JSQMessagesBubbleImageFactory.m in Sources */,
 				93EBABD51A964552006BAF4A /* JSQMessagesCollectionViewFlowLayoutInvalidationContext.m in Sources */,
 				93EBABDD1A964552006BAF4A /* JSQVideoMediaItem.m in Sources */,
+				95013C8B1AE1C7750074FB4B /* UserSelectionView.m in Sources */,
 				74C541EE1A93E67100FC29AD /* TLIndexPathSectionInfo.m in Sources */,
 				93EBABCF1A964552006BAF4A /* JSQMessagesAvatarImageFactory.m in Sources */,
 				93EBABDF1A964552006BAF4A /* JSQMessagesCollectionView.m in Sources */,

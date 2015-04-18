@@ -31,8 +31,6 @@
     self.app= (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = _app.globalSessionManager;
     
-
-
     _navBar.title = ([_sessionManager.unreadMessages count] > 0)? @"Unread Messages" : @"No Unread Messages";
     _connectionCount = [_sessionManager.currentConnectedPeers count];
     

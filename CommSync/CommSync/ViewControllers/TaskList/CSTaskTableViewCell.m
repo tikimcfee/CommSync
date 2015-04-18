@@ -32,6 +32,7 @@
 {
     self.sourceTask = task;
     self.title.text = task.taskTitle;
+    self.assignmentLabel.text = task.assignedID;
     switch (task.taskPriority) {
         case CSTaskPriorityHigh:
 //            self.priorityColorView.backgroundColor = [UIColor colorWithRed:0.626 green:0.081 blue:0.000 alpha:0.800];

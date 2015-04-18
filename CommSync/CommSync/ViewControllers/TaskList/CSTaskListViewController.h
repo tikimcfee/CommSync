@@ -20,6 +20,6 @@
 @property (strong, nonatomic) IBOutlet UIPickerView *tagFilter;
 @property (strong, nonatomic) IBOutlet NSMutableArray *tags;
 - (IBAction)completionFilter:(id)sender;
-
+@property (weak, nonatomic) IBOutlet UILabel *assignedText;
 -(void) setTagFilter;
 @end

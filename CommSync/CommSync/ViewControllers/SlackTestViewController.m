@@ -104,12 +104,12 @@
      *  Add navigation bar
      */
     UINavigationBar *bar = [UINavigationBar new];
-    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 64.0)];
+    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
     [bar setupCommSyncStyle];
     
     UILabel *barLabel = [UILabel new];
-    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2)-45.0, 32.0, 90.0, 20.0)];
-    [barLabel setText:@"Group Chat"];
+    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2- 45.0), _peerID? 8: 32, 100.0, 20.0)];
+    [barLabel setText:(_peerID)? @"Private Chat" :@"Group Chat"];
     [barLabel setTextColor:[UIColor whiteColor]];
     
     [bar addSubview:barLabel];

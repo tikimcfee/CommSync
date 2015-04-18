@@ -35,11 +35,9 @@
     [_peer removeMessages];
     [_sessionManager.peerHistoryRealm commitWriteTransaction];
     
-
-    
-    
+    NSString *image = [_peer getPicture];
+    [self.userAvatarImage setImage:[UIImage imageNamed:image]];
 }
-
 
 
 - (void)didReceiveMemoryWarning {
@@ -58,9 +56,9 @@
 */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    _peerID = [NSKeyedUnarchiver unarchiveObjectWithData:_peer.peerID];
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
-        _peerID = [NSKeyedUnarchiver unarchiveObjectWithData:_peer.peerID];
         SlackTestViewController *vc = [segue destinationViewController];
         [vc setPeerID:_peerID];
     }
