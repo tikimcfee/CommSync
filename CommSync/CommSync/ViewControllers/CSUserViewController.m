@@ -84,7 +84,7 @@
         userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
     }
     else{
-        CSUserRealmModel* user = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row];
+        CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName != %@", _sessionManager.myPeerID.displayName][indexPath.row];
         userName = user.displayName;
     }
     
@@ -132,7 +132,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(!_filter) return [_sessionManager.currentConnectedPeers count];
-    return [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count];
+    return [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count] - 1;
 }
 
 

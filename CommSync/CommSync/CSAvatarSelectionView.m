@@ -27,8 +27,6 @@
     int height = (self.view.frame.size.height / 100);
     float widthBuffer = (self.view.frame.size.width - (100 * wide)) / (1 + wide);
     float heightBuffer = (self.view.frame.size.height - (100 * height)) / (1 + height);
-
-    NSLog(@"%f height %f width", heightBuffer, widthBuffer);
     [collectionViewLayout setSectionInset:UIEdgeInsetsMake( heightBuffer, widthBuffer, heightBuffer, widthBuffer)];
     
 }

@@ -23,6 +23,15 @@
     // Do any additional setup after loading the view.
     self.app= (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = _app.globalSessionManager;
+    
+    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
+    
+    //gets the max size that can fit confortably in the frame and evenly spaces them
+    int wide = (self.view.frame.size.width / 100);
+    int height = (self.view.frame.size.height / 100);
+    float widthBuffer = (self.view.frame.size.width - (100 * wide)) / (1 + wide);
+    float heightBuffer = (self.view.frame.size.height - (100 * height)) / (1 + height);
+    [collectionViewLayout setSectionInset:UIEdgeInsetsMake( heightBuffer, widthBuffer, heightBuffer, widthBuffer)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,15 +57,14 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 1;
+  return  [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count] - 1;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CSUserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCell" forIndexPath:indexPath];
  
-    CSUserRealmModel* user = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row];
-
+    CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName != %@", _sessionManager.myPeerID.displayName][indexPath.row];
     cell.avatarImage.image = [UIImage imageNamed:user.getPicture];
     cell.displayLabel.text = user.displayName;
     [cell.avatarImage.layer setCornerRadius:35.0f];
