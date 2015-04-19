@@ -192,7 +192,7 @@
 
 -(bool) queueMessages:(CSChatMessageRealmModel*) message
 {
-    NSString* messageID =[message.createdBy stringByAppendingString:(NSString*)message.text];
+    NSString* messageID =[message.createdBy stringByAppendingString:(NSString*)message.messageText];
     @synchronized (_messagePool){
         if([_messagePool valueForKey:messageID] || [message.createdBy isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName])
         {
@@ -215,7 +215,7 @@
     
         if([[CSChatMessageRealmModel objectsInRealm:_parentAnalyzer.globalManager.privateMessageRealm withPredicate:pred] count] != 0) return;
     
-        [_parentAnalyzer.globalManager addMessage:message.senderDisplayName];
+        [_parentAnalyzer.globalManager addMessage:message.createdBy];
     
         [_parentAnalyzer.globalManager.privateMessageRealm beginWriteTransaction];
         [_parentAnalyzer.globalManager.privateMessageRealm addObject:message];

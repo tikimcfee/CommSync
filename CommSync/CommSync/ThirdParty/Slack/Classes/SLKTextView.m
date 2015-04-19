@@ -167,7 +167,7 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 
 - (NSUInteger)numberOfLines
 {
-    return abs(self.contentSize.height/self.font.lineHeight);
+    return fabs(self.contentSize.height/self.font.lineHeight);
 }
 
 // Returns a different number of lines when landscape and only on iPhone

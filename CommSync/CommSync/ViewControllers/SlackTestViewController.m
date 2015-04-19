@@ -233,7 +233,7 @@
             CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
             cell.createdByLabel.text = msg.createdBy;
-            cell.messageLabel.text = msg.text;
+            cell.messageLabel.text = msg.messageText;
             cell.transform = self.tableView.transform;
             CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
         
