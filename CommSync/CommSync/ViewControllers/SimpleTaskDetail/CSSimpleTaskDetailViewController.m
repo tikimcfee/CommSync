@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
          forCellReuseIdentifier:kChatTableViewCellIdentifier];
     
     self.firstLayoutComplete = NO;
-    self.newPriority = -1;
+    self.newPriority = CSTaskPriorityUnset;
 }
 
 - (void) removeTaskImageCollectionView {
@@ -348,7 +348,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // reset changes
     self.unsavedChanges = [NSMutableDictionary new];
     self.currentRevisions = [CSTaskRevisionRealmModel new];
-    self.newPriority = -1;
+    self.newPriority = CSTaskPriorityUnset;
 }
 
 - (void)findAndSetTaskChanges {
@@ -366,7 +366,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     }
     
     // priority changed
-    if (_newPriority != -1 && self.sourceTask.taskPriority != _newPriority) {
+    if (_newPriority != CSTaskPriorityUnset && self.sourceTask.taskPriority != _newPriority) {
         [self.unsavedChanges setObject:[NSNumber numberWithInt:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
         self.sourceTask.taskPriority = _newPriority;
     }

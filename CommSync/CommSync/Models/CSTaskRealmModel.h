@@ -32,7 +32,8 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
     CSTaskPriorityLow = 0,
     CSTaskPriorityMedium,
-    CSTaskPriorityHigh
+    CSTaskPriorityHigh,
+    CSTaskPriorityUnset
 };
 
 @interface CSTaskRealmModel : RLMObject <NSCoding>

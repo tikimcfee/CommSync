@@ -12,7 +12,7 @@
 #import "CSInsetTextField.h"
 #import "CSCustomTapRecognizer.h"
 
-@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, CSCustomTapListenerDelegate>
+@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
 // main views and containers
 @property (strong, nonatomic) IBOutlet UITableView *tableview;
