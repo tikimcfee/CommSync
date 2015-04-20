@@ -51,6 +51,9 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 @property (nonatomic, assign) CSSimpleDetailMode mode;
 @property (nonatomic, strong) NSIndexPath* currentTaskImagePath;
 
+@property (nonatomic, strong) UIImage* taskIncompleteImage;
+@property (nonatomic, strong) UIImage* taskCompleteImage;
+
 // Revision management
 @property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
 @property (strong, nonatomic) NSMutableDictionary *unsavedChanges;
@@ -96,7 +99,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
          forCellReuseIdentifier:kChatTableViewCellIdentifier];
     
     self.firstLayoutComplete = NO;
-//    [self.navigationItem.leftBarButtonItems ]
+    self.newPriority = -1;
 }
 
 - (void) removeTaskImageCollectionView {
@@ -153,13 +156,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor flatConcreteColor]];
     _backToListImageView.image = [IonIcons imageWithIcon:ion_ios_list size:33.0f color:[UIColor flatConcreteColor]];
-    _checkIconImageView.image = [IonIcons imageWithIcon:ion_ios_checkmark_outline size:64.0f color:c];
+    _taskIncompleteImage = [IonIcons imageWithIcon:ion_ios_checkmark_outline size:64.0f color:c];
+    _taskCompleteImage = [IonIcons imageWithIcon:ion_ios_checkmark size:64.0f color:[UIColor flatEmeraldColor]];
+    _checkIconImageView.image = _taskIncompleteImage;
     _editIconImageView.userInteractionEnabled = YES;
     _backToListImageView.userInteractionEnabled = YES;
     _checkIconImageView.userInteractionEnabled = YES;
-    
-//     icon for 'filled' circle
-//     _checkIconImageView.image = [IonIcons imageWithIcon:ion_checkmark_circled size:64.0f color:[UIColor flatConcreteColor]];
     
     _taskAudio = [_sourceTask getTaskAudio];
     if (!_taskAudio) {
@@ -172,6 +174,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     _tableview.estimatedRowHeight = 44.0f;
     _tableview.rowHeight = UITableViewAutomaticDimension;
+    
+    [self animateImages];
 }
 
 -(void)setupCollectionView {
@@ -213,12 +217,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _tableview.contentSize = CGSizeMake(_tableview.contentSize.width,
                                         _tableview.contentSize.height + 44);
     
-    _playAudioRecognizer.frameToDetect = _audioPlayImageView.frame;
-    _playAudioRecognizer.tapDelegate = self;
-    _backToListRecognizer.frameToDetect = _backToListImageView.frame;
-    _backToListRecognizer.tapDelegate = self;
-    _editingRecognizer.frameToDetect = _editIconImageView.frame;
-    _editingRecognizer.tapDelegate = self;
+//    _playAudioRecognizer.frameToDetect = _audioPlayImageView.frame;
+//    _playAudioRecognizer.tapDelegate = self;
+//    _backToListRecognizer.frameToDetect = _backToListImageView.frame;
+//    _backToListRecognizer.tapDelegate = self;
+//    _editingRecognizer.frameToDetect = _editIconImageView.frame;
+//    _editingRecognizer.tapDelegate = self;
 }
 
 #pragma mark - TableView DataSource + Delegate
@@ -344,6 +348,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // reset changes
     self.unsavedChanges = [NSMutableDictionary new];
     self.currentRevisions = [CSTaskRevisionRealmModel new];
+    self.newPriority = -1;
 }
 
 - (void)findAndSetTaskChanges {
@@ -361,7 +366,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     }
     
     // priority changed
-    if (self.sourceTask.taskPriority != _newPriority) {
+    if (_newPriority != -1 && self.sourceTask.taskPriority != _newPriority) {
         [self.unsavedChanges setObject:[NSNumber numberWithInt:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
         self.sourceTask.taskPriority = _newPriority;
     }
@@ -371,27 +376,36 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 #pragma mark -
 #pragma mark Actions and User Controls
-
-- (void)handleSuccessfulTouchEvent:(UITapGestureRecognizer *)recognizer {
-    if(recognizer == _playAudioRecognizer) {
-        [self playAudio];
-    } else if(recognizer == _backToListRecognizer) {
-        [self backToList];
-    } else if (recognizer == _editingRecognizer) {
-        [self beginEditing];
-    }
-}
-
 - (IBAction)completeTask:(id)sender {
-    // TODO: complete task code
+    //
+    BOOL target = _sourceTask.completed ? NO : YES;
+    
+    [[RLMRealm defaultRealm] beginWriteTransaction];
+    _sourceTask.completed = target;
+    [[RLMRealm defaultRealm] commitWriteTransaction];
+    
+    [self animateImages];
+
 }
 
+- (void)animateImages
+{
+    UIImage *image = _sourceTask.completed ? _taskCompleteImage : _taskIncompleteImage;
+    
+    [UIView transitionWithView:self.checkIconImageView
+                      duration:1.0f // animation duration
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        self.checkIconImageView.image = image; // change to other image
+                    } completion:^(BOOL finished) {
+                    }];
+}
 
-- (void)backToList {
+- (IBAction)backToList:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)beginEditing {
+- (IBAction)beginEditing:(id)sender {
     if(_mode == CSSimpleDetailMode_View) {
         _mode = CSSimpleDetailMode_Edit;
         [self toggleDetailsMode];
@@ -587,8 +601,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 #pragma mark -- END Image Picker
-
-- (void)playAudio {
+- (IBAction)playAudio:(id)sender {
     NSError* error;
     
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]

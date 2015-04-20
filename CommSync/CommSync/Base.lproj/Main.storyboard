@@ -316,7 +316,7 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
-                                <inset key="separatorInset" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="assignmentLabel" destination="UPO-TL-uRW" id="GlD-Hz-VOM"/>
                                     <outlet property="priorityColorView" destination="4hI-WJ-eNZ" id="eNn-IO-EDZ"/>
@@ -1027,7 +1027,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="YML-pl-WPD">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="YML-pl-WPD">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -1290,13 +1290,13 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cDT-CW-MaP" id="qaG-CZ-bS3">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qzT-cm-mOJ">
+                                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qzT-cm-mOJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="131"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f0w-RM-FzV">
+                                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f0w-RM-FzV">
                                                             <rect key="frame" x="22" y="11" width="556" height="109"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Comments" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="J1K-Cf-sZB">
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="View Comments" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="J1K-Cf-sZB">
                                                                     <rect key="frame" x="216" y="0.0" width="125" height="109"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1406,6 +1406,9 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="C2e-XI-b42"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="n1I-Ts-gkZ" appends="YES" id="x6v-G3-m8v"/>
+                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1415,9 +1418,6 @@
                                     <constraint firstAttribute="bottom" secondItem="nq4-cq-vtM" secondAttribute="bottom" id="OIp-3p-BNs"/>
                                     <constraint firstItem="nq4-cq-vtM" firstAttribute="leading" secondItem="32o-mQ-sAj" secondAttribute="leading" id="PRz-7V-q9W"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="n1I-Ts-gkZ" appends="YES" id="pKi-R8-AJr"/>
-                                </connections>
                             </view>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" width="66" style="plain" id="x6o-3u-wVq">
@@ -1426,18 +1426,24 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Vq-bh-qBB">
-                                        <rect key="frame" x="90" y="0.0" width="33" height="33"/>
+                                        <rect key="frame" x="78" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="Ecn-BV-YcD"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="Mif-Tn-qRi" appends="YES" id="9e8-bP-hMd"/>
+                                        </connections>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-7j-q0D">
-                                        <rect key="frame" x="10" y="0.0" width="33" height="33"/>
+                                        <rect key="frame" x="22" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="m6a-HH-63X"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="t07-O4-NdS" appends="YES" id="vM8-RX-jFt"/>
+                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1445,15 +1451,11 @@
                                 <constraints>
                                     <constraint firstItem="6Vq-bh-qBB" firstAttribute="top" secondItem="DLu-hO-JT9" secondAttribute="top" id="20W-Pk-m0e"/>
                                     <constraint firstAttribute="bottom" secondItem="6Vq-bh-qBB" secondAttribute="bottom" id="WbE-eg-AUb"/>
-                                    <constraint firstAttribute="trailing" secondItem="6Vq-bh-qBB" secondAttribute="trailing" constant="10" id="X2K-cG-QlX"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Vq-bh-qBB" secondAttribute="trailing" constant="22" id="X2K-cG-QlX"/>
                                     <constraint firstAttribute="bottom" secondItem="Iw8-7j-q0D" secondAttribute="bottom" id="a8t-ON-EAf"/>
                                     <constraint firstItem="Iw8-7j-q0D" firstAttribute="top" secondItem="DLu-hO-JT9" secondAttribute="top" id="lfY-gN-dTx"/>
-                                    <constraint firstItem="Iw8-7j-q0D" firstAttribute="leading" secondItem="DLu-hO-JT9" secondAttribute="leading" constant="10" id="v56-WQ-G4h"/>
+                                    <constraint firstItem="Iw8-7j-q0D" firstAttribute="leading" secondItem="DLu-hO-JT9" secondAttribute="leading" constant="22" id="v56-WQ-G4h"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="Mif-Tn-qRi" appends="YES" id="Z38-qY-yvD"/>
-                                    <outletCollection property="gestureRecognizers" destination="t07-O4-NdS" appends="YES" id="EWk-1D-szk"/>
-                                </connections>
                             </view>
                         </barButtonItem>
                     </navigationItem>
@@ -1485,9 +1487,21 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1wy-td-dAd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="t07-O4-NdS" userLabel="Play Audio" customClass="CSCustomTapRecognizer"/>
-                <tapGestureRecognizer id="Mif-Tn-qRi" userLabel="Editing" customClass="CSCustomTapRecognizer"/>
-                <tapGestureRecognizer id="n1I-Ts-gkZ" userLabel="Back to list" customClass="CSCustomTapRecognizer"/>
+                <tapGestureRecognizer id="t07-O4-NdS" userLabel="Play Audio">
+                    <connections>
+                        <action selector="playAudio:" destination="ITi-gD-sJd" id="UNj-AP-oag"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Mif-Tn-qRi" userLabel="Editing">
+                    <connections>
+                        <action selector="beginEditing:" destination="ITi-gD-sJd" id="GcM-DQ-ltD"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="n1I-Ts-gkZ" userLabel="Back to list">
+                    <connections>
+                        <action selector="backToList:" destination="ITi-gD-sJd" id="ido-IQ-xp0"/>
+                    </connections>
+                </tapGestureRecognizer>
                 <tapGestureRecognizer id="p9j-zB-agt" userLabel="bottom action button recognizer">
                     <connections>
                         <action selector="bottomActionButtonTapped:" destination="ITi-gD-sJd" id="wkT-WB-1os"/>
@@ -1513,7 +1527,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="black" maximumZoomScale="8" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSl-xw-TOJ">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" maximumZoomScale="8" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSl-xw-TOJ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>

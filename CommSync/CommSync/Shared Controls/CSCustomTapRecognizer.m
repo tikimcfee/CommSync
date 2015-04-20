@@ -8,7 +8,7 @@
 
 #import "CSCustomTapRecognizer.h"
 
-#define hitBox 30
+#define hitBox 15
 
 @implementation CSCustomTapRecognizer
 
@@ -24,16 +24,15 @@
                                     CGRectGetWidth(_frameToDetect) + hitBox,
                                     CGRectGetHeight(_frameToDetect) + hitBox);
 
-    biggerTouch = [self.view convertRect:biggerTouch toView:nil];
-    CGRect someRect = [self.view convertRect:_frameToDetect toView:nil];
+//    biggerTouch = [self.view convertRect:biggerTouch toView:nil];
     
-    NSLog(@"BIGGER: %f, %f :: %f, %f", biggerTouch.origin.x, biggerTouch.origin.y,
-          biggerTouch.size.width, biggerTouch.size.height);
+//    NSLog(@"BIGGER: %f, %f :: %f, %f", biggerTouch.origin.x, biggerTouch.origin.y,
+//          biggerTouch.size.width, biggerTouch.size.height);
     
     for (UITouch* touch in touches) {
         // tap location in the window
-        CGPoint loc = [touch locationInView:nil];
-        NSLog(@"%f, %f", loc.x, loc.y);
+        CGPoint loc = [touch locationInView:self.view];
+//        NSLog(@"%f, %f", loc.x, loc.y);
         
         if (CGRectContainsPoint(biggerTouch, loc)) {
             [self.tapDelegate handleSuccessfulTouchEvent:self];

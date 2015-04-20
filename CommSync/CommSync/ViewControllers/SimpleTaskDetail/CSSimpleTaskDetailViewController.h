@@ -44,9 +44,9 @@
 
 // Gesture Recognizers
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *completeTaskRecognizer;
-@property (strong, nonatomic) IBOutlet CSCustomTapRecognizer *playAudioRecognizer;
-@property (strong, nonatomic) IBOutlet CSCustomTapRecognizer *backToListRecognizer;
-@property (strong, nonatomic) IBOutlet CSCustomTapRecognizer *editingRecognizer;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *playAudioRecognizer;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *backToListRecognizer;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *editingRecognizer;
 
 // Models and data
 @property (strong, nonatomic) CSTaskRealmModel* sourceTask;
