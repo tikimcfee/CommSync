@@ -40,6 +40,7 @@
 
 // Image picker
 @property (strong, nonatomic) UIImagePickerController* imagePicker;
+@property (assign, nonatomic) BOOL imageProcessingComplete;
 
 // VC for audio recording
 @property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
@@ -98,6 +99,7 @@
     _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
     
     self.descriptionTextField.placeholder = @"Enter description here...";
+    _imageProcessingComplete = YES;
 }
 
 
@@ -111,6 +113,8 @@
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.delegate = self;
     self.imagePicker.showsCameraControls = YES;
+    
+    self.imageProcessingComplete = NO;
     
     [self presentViewController:newPicker animated:YES completion:nil];
 }
@@ -128,8 +132,8 @@
         NSLog(@"New size after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
         newMedia.mediaData = thisImage;
         
-        
         [self.pendingTask.taskMedia addObject: newMedia];
+        self.imageProcessingComplete = YES;
     };
     
     [image normalizedImageWithCompletionBlock:fixImageIfNeeded];
@@ -140,6 +144,7 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+    self.imageProcessingComplete = YES;
 }
 
 
@@ -199,6 +204,22 @@
 }
 
 - (IBAction)closeViewAndSave:(id)sender {
+    if(_imageProcessingComplete == NO) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Woah there!"
+                                                                      message:@"You're fast - give us a sec to finish saving this for you!"
+                                                               preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* accept = [UIAlertAction actionWithTitle:@"Got it."
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction *action) {
+                                                           [alert dismissViewControllerAnimated:YES completion:nil];
+                                                       }];
+        
+        [alert addAction:accept];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    
     if(_audioRecorder.isRecording) {
         [_audioRecorder stopRecording];
     }

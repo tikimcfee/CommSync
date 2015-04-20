@@ -94,17 +94,13 @@
         RLMResults* incoming = [CSIncomingTaskRealmModel allObjectsInRealm:incomingRealm];
         NSMutableArray* tasks = [NSMutableArray new];
         for (CSIncomingTaskRealmModel* task in incoming) {
-//            if (![weakSelf.indexPathController.dataModel containsItem:task.taskObservationString]) {
-                [tasks addObject:task.taskObservationString];
-//            }
+            [tasks addObject:task.taskObservationString];
         }
         
         RLMRealm* tasksRealm = [RLMRealm defaultRealm];
         RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
         for (CSTaskRealmModel* task in allTasks) {
-//            if (![weakSelf.indexPathController.dataModel containsItem:task.concatenatedID]) {
-                [tasks addObject:task.concatenatedID];
-//            }
+            [tasks addObject:task.concatenatedID];
         }
         
         TLIndexPathDataModel* tasksDataModel = [[TLIndexPathDataModel alloc] initWithItems: tasks];
@@ -198,7 +194,8 @@
 {
     @synchronized(_indexPathController.dataModel) {
         NSString* selected = [_indexPathController.dataModel itemAtIndexPath:indexPath];
-        CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]]
+        CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:
+                                                                                   [CSSessionManager incomingTaskRealmDirectory]]
                                                                     forPrimaryKey:selected];
         if(model) {
             return NO;
@@ -317,19 +314,19 @@
     [self.tableView reloadData];
 }
 
--(void) setTagFilter{
-    
-    if(!_tags){
-        
-         for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
-        {
-            [_sessionManager addTag: temp.tag];
-        }
-    }
-        _tags = [[NSMutableArray alloc] init];
-        
-        [_tags addObject:@"All Tasks"];
-        [_tags addObject:@"Untagged Tasks"];
-        [_tags addObjectsFromArray:_sessionManager.allTags.allKeys];
-}
+//-(void) setTagFilter{
+//    
+//    if(!_tags){
+//        
+//         for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+//        {
+//            [_sessionManager addTag: temp.tag];
+//        }
+//    }
+//        _tags = [[NSMutableArray alloc] init];
+//        
+//        [_tags addObject:@"All Tasks"];
+//        [_tags addObject:@"Untagged Tasks"];
+//        [_tags addObjectsFromArray:_sessionManager.allTags.allKeys];
+//}
 @end
