@@ -21,9 +21,16 @@
 
 #define time 0.2
 #define alph 0.75
+// Check background color : #AFF494
 
+/**
+    REQUIRED IMPLEMENTATION FOR EMPTY CLASSES!
+ */
 @implementation CSRestOfCommentsTableViewCell
 @end
+/**
+    REQUIRED IMPLEMENTATION FOR EMPTY CLASSES!
+ */
 
 typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 {
@@ -77,8 +84,6 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         }
     }];
     
-    _dottedPageControl.hidesForSinglePage = YES;
-    
     [self setupCollectionView];
     [self setupViewsFromSourceTask];
     
@@ -91,7 +96,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
          forCellReuseIdentifier:kChatTableViewCellIdentifier];
     
     self.firstLayoutComplete = NO;
-    
+//    [self.navigationItem.leftBarButtonItems ]
 }
 
 - (void) removeTaskImageCollectionView {
@@ -144,13 +149,22 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _priorityTextLabel.textColor = c;
     _priorityTextLabel.text = [NSString stringWithFormat:@"%@ Priority", s];
     
+    _dottedPageControl.hidesForSinglePage = YES;
+    
     _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor flatConcreteColor]];
     _backToListImageView.image = [IonIcons imageWithIcon:ion_ios_list size:33.0f color:[UIColor flatConcreteColor]];
+    _checkIconImageView.image = [IonIcons imageWithIcon:ion_ios_checkmark_outline size:64.0f color:c];
+    _editIconImageView.userInteractionEnabled = YES;
+    _backToListImageView.userInteractionEnabled = YES;
+    _checkIconImageView.userInteractionEnabled = YES;
+    
+//     icon for 'filled' circle
+//     _checkIconImageView.image = [IonIcons imageWithIcon:ion_checkmark_circled size:64.0f color:[UIColor flatConcreteColor]];
     
     _taskAudio = [_sourceTask getTaskAudio];
     if (!_taskAudio) {
-        _audioPlayerContainer.hidden = YES;
-        _audioPlayerContainer.userInteractionEnabled = NO;
+        _audioPlayImageView.hidden = YES;
+        _audioPlayImageView.userInteractionEnabled = NO;
     } else {
         _audioPlayImageView.image = [IonIcons imageWithIcon:ion_ios_recording size:33.0f color:[UIColor flatConcreteColor]];
         _audioPlayImageView.userInteractionEnabled = YES;
@@ -175,25 +189,10 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-//    CGFloat r = _midPriorityButton.frame.size.height / 2;
-//    _midPriorityButton.layer.cornerRadius = r;
-//    _lowPriorityButton.layer.cornerRadius = r;
-//    _highPriorityButton.layer.cornerRadius = r;
-//    
-//    if (self.firstLayoutComplete) {
-//        return;
-//    }
-//    
-//    _tableview.contentSize = CGSizeMake(_tableview.contentSize.width,
-//                                        _tableview.contentSize.height + 44);
-//    self.firstLayoutComplete = YES;
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
-    
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -213,6 +212,13 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     _tableview.contentSize = CGSizeMake(_tableview.contentSize.width,
                                         _tableview.contentSize.height + 44);
+    
+    _playAudioRecognizer.frameToDetect = _audioPlayImageView.frame;
+    _playAudioRecognizer.tapDelegate = self;
+    _backToListRecognizer.frameToDetect = _backToListImageView.frame;
+    _backToListRecognizer.tapDelegate = self;
+    _editingRecognizer.frameToDetect = _editIconImageView.frame;
+    _editingRecognizer.tapDelegate = self;
 }
 
 #pragma mark - TableView DataSource + Delegate
@@ -365,11 +371,27 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 #pragma mark -
 #pragma mark Actions and User Controls
-- (IBAction)backToList:(id)sender {
+
+- (void)handleSuccessfulTouchEvent:(UITapGestureRecognizer *)recognizer {
+    if(recognizer == _playAudioRecognizer) {
+        [self playAudio];
+    } else if(recognizer == _backToListRecognizer) {
+        [self backToList];
+    } else if (recognizer == _editingRecognizer) {
+        [self beginEditing];
+    }
+}
+
+- (IBAction)completeTask:(id)sender {
+    // TODO: complete task code
+}
+
+
+- (void)backToList {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)beginEditing:(id)sender {
+- (void)beginEditing {
     if(_mode == CSSimpleDetailMode_View) {
         _mode = CSSimpleDetailMode_Edit;
         [self toggleDetailsMode];
@@ -566,7 +588,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 #pragma mark -- END Image Picker
 
-- (IBAction)playAudio:(id)sender {
+- (void)playAudio {
     NSError* error;
     
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]
