@@ -11,12 +11,19 @@
 #import "CSChatTableViewCell.h"
 #import "UIColor+FlatColors.h"
 #import "IonIcons.h"
+#import "SlackTestViewController.h"
+#import "UIImage+normalize.h"
+#import "CSPictureController.h"
 
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
+#define kChatTableViewCellIdentifier @"ChatViewCell"
 #define kTextBorderColor flatWetAsphaltColor
 
 #define time 0.2
 #define alph 0.75
+
+@implementation CSRestOfCommentsTableViewCell
+@end
 
 typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 {
@@ -26,7 +33,10 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 @interface CSSimpleTaskDetailViewController ()
 
+// Backing controls
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
+@property (strong, nonatomic) UIImagePickerController* imagePicker;
+
 @property (strong, nonatomic) NSData* taskAudio;
 @property (strong, nonatomic) NSMutableArray* taskImages;
 @property (nonatomic, assign) CGRect oldFrameForCollectionView;
@@ -37,6 +47,10 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 // Revision management
 @property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
 @property (strong, nonatomic) NSMutableDictionary *unsavedChanges;
+@property (nonatomic, assign) CSTaskPriority newPriority;
+
+// State
+@property (assign, nonatomic) BOOL firstLayoutComplete;
 
 @end
 
@@ -72,6 +86,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _unsavedChanges = [NSMutableDictionary new];
     _currentRevisions = [CSTaskRevisionRealmModel new];
     
+    // Cell Returns
+    [self.tableview registerNib:[UINib nibWithNibName:@"CSChatTableViewCell" bundle:nil]
+         forCellReuseIdentifier:kChatTableViewCellIdentifier];
+    
+    self.firstLayoutComplete = NO;
+    
 }
 
 - (void) removeTaskImageCollectionView {
@@ -106,6 +126,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _priorityButtonsMainView.alpha = 0.0;
     _priorityButtonsMainView.userInteractionEnabled = NO;
     
+    _bottomActionButton.backgroundColor = [[UIColor flatPeterRiverColor] colorWithAlphaComponent:0.8];
+    
     UIColor* c;
     NSString* s;
     if (_sourceTask.taskPriority == CSTaskPriorityHigh) {
@@ -133,6 +155,9 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _audioPlayImageView.image = [IonIcons imageWithIcon:ion_ios_recording size:33.0f color:[UIColor flatConcreteColor]];
         _audioPlayImageView.userInteractionEnabled = YES;
     }
+    
+    _tableview.estimatedRowHeight = 44.0f;
+    _tableview.rowHeight = UITableViewAutomaticDimension;
 }
 
 -(void)setupCollectionView {
@@ -147,13 +172,28 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     self.taskImageCollectionView.clipsToBounds = YES;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+//    CGFloat r = _midPriorityButton.frame.size.height / 2;
+//    _midPriorityButton.layer.cornerRadius = r;
+//    _lowPriorityButton.layer.cornerRadius = r;
+//    _highPriorityButton.layer.cornerRadius = r;
+//    
+//    if (self.firstLayoutComplete) {
+//        return;
+//    }
+//    
+//    _tableview.contentSize = CGSizeMake(_tableview.contentSize.width,
+//                                        _tableview.contentSize.height + 44);
+//    self.firstLayoutComplete = YES;
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    CGFloat r = _midPriorityButton.frame.size.height / 2;
-    _midPriorityButton.layer.cornerRadius = r;
-    _lowPriorityButton.layer.cornerRadius = r;
-    _highPriorityButton.layer.cornerRadius = r;
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -165,33 +205,76 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         
         _currentTaskImagePath = path;
     }
+    
+    CGFloat r = _midPriorityButton.frame.size.height / 2;
+    _midPriorityButton.layer.cornerRadius = r;
+    _lowPriorityButton.layer.cornerRadius = r;
+    _highPriorityButton.layer.cornerRadius = r;
+    
+    _tableview.contentSize = CGSizeMake(_tableview.contentSize.width,
+                                        _tableview.contentSize.height + 44);
 }
 
-#pragma mark - TableView DataSource Delegate
+#pragma mark - TableView DataSource + Delegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(indexPath.row == 4 && self.sourceTask.comments.count > 4) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self performSegueWithIdentifier:@"commentSegue" sender:self];
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.row == 4 && self.sourceTask.comments.count > 4 ? YES : NO;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row == 4 && self.sourceTask.comments.count > 4) {
+        return 88;
+    }
+    return UITableViewAutomaticDimension;
+}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.sourceTask.comments.count >= 4 ? 4 : self.sourceTask.comments.count;
+    return self.sourceTask.comments.count > 4 ? 5 : self.sourceTask.comments.count;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *cellIdentifier = @"ChatViewCell";
-    CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
-    
-    if (!cell)
-    {
-        cell = [[CSChatTableViewCell alloc] init];
+    static NSString *allCommentsIdentifier = @"allCommentsCell";
+    UITableViewCell* cell;
+    if(indexPath.row == 4) {
+        cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
+        CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
+        NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
+        cellRef.label.text = [NSString stringWithFormat:@"View %d more comment%@",
+                              _sourceTask.comments.count - 4,
+                              plural];
+    } else {
+        CSChatTableViewCell *cellRef = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = cellRef;
+        CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
+        
+        cellRef.createdByLabel.text = comment.UID;
+        cellRef.messageLabel.text = comment.text;
+        cellRef.transform = self.tableview.transform;
     }
-    
-    cell.createdByLabel.text = comment.UID;
-    cell.messageLabel.text = comment.text;
-    cell.transform = self.tableview.transform;
     return cell;
 }
 
 #pragma mark - CollectionView DataSource/Delegate
+- (BOOL)collectionView:(UICollectionView*)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    CSTaskImageCollectionViewCell* selected = (CSTaskImageCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    [self performSegueWithIdentifier:@"enlargedPictureController" sender: selected.taskImageView.image];
+}
+
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
@@ -258,33 +341,26 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 - (void)findAndSetTaskChanges {
-    
+    [[RLMRealm defaultRealm] beginWriteTransaction];
     // title changed
     if (![self.sourceTask.taskTitle isEqualToString:self.taskTitleTextField.text]) {
         [self.unsavedChanges setObject:self.taskTitleTextField.text forKey:[NSNumber numberWithInteger:CSTaskProperty_taskTitle]];
+        self.sourceTask.taskTitle = self.taskTitleTextField.text;
     }
     
     // description changed
     if (![self.sourceTask.taskDescription isEqualToString:self.objectTextView.text]) {
         [self.unsavedChanges setObject:self.objectTextView.text forKey:[NSNumber numberWithInteger:CSTaskProperty_taskDescription]];
+        self.sourceTask.taskDescription = self.objectTextView.text;
     }
-    
-    // get priority
-    CSTaskPriority newPriority;
-    
-    if (self.priorityBarView.backgroundColor == [UIColor kTaskHighPriorityColor])
-        newPriority = CSTaskPriorityHigh;
-    
-    else if(self.priorityBarView.backgroundColor == [UIColor kTaskMidPriorityColor])
-        newPriority = CSTaskPriorityMedium;
-    
-    else
-        newPriority = CSTaskPriorityLow;
     
     // priority changed
-    if (self.sourceTask.taskPriority != newPriority) {
-        [self.unsavedChanges setObject:[NSNumber numberWithInt:newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
+    if (self.sourceTask.taskPriority != _newPriority) {
+        [self.unsavedChanges setObject:[NSNumber numberWithInt:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
+        self.sourceTask.taskPriority = _newPriority;
     }
+    
+    [[RLMRealm defaultRealm] commitWriteTransaction];
 }
 
 #pragma mark -
@@ -306,10 +382,13 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 - (void) toggleDetailsMode {
+    
+    NSString* bottomButtonText;
     if (_mode == CSSimpleDetailMode_View) {
         _taskTitleTextField.userInteractionEnabled = NO;
         _objectTextView.editable = NO;
         _priorityButtonsMainView.userInteractionEnabled = YES;
+        bottomButtonText = @"Add Comment";
         
         [UIView animateWithDuration:time
                               delay:0
@@ -318,27 +397,41 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
                              _taskTitleTextField.backgroundColor = [UIColor clearColor];
                              _objectTextView.backgroundColor = [UIColor clearColor];
                              _priorityButtonsMainView.alpha = 0.0;
+                             _bottomActionButton.backgroundColor = [[UIColor flatPeterRiverColor] colorWithAlphaComponent:0.8];
                          }
                          completion:nil];
     } else {
         _taskTitleTextField.userInteractionEnabled = YES;
         _objectTextView.editable = YES;
         _priorityButtonsMainView.userInteractionEnabled = YES;
+        bottomButtonText = @"Add Photo";
         
         [UIView animateWithDuration:time
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             _taskTitleTextField.backgroundColor = [UIColor flatCloudsColor];
-                             _objectTextView.backgroundColor = [UIColor flatCloudsColor];
-                             _priorityButtonsMainView.alpha = 1.0;
+                            _taskTitleTextField.backgroundColor = [UIColor flatCloudsColor];
+                            _objectTextView.backgroundColor = [UIColor flatCloudsColor];
+                            _priorityButtonsMainView.alpha = 1.0;
+                            _bottomActionButton.backgroundColor = [[UIColor flatCarrotColor] colorWithAlphaComponent:0.8];
                          }
                          completion:nil];
     }
     
     [CATransaction begin];
+    
+    // add/remove editable borders
     [self animationForLayer:_taskTitleTextField.layer];
     [self animationForLayer:_objectTextView.layer];
+    
+    // change button text
+    CATransition *textChange = [CATransition animation];
+    textChange.duration = time;
+    textChange.type = kCATransitionFade;
+    textChange.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [_bottomActionString.layer addAnimation:textChange forKey:@"changeTextTransition"];
+    _bottomActionString.text = bottomButtonText;
+    
     [CATransaction commit];
 }
 
@@ -373,23 +466,52 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     return both;
 }
 
+- (IBAction)bottomActionButtonTapped:(id)sender {
+    if(_mode == CSSimpleDetailMode_Edit)
+    {
+        // add a new image to task
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^{
+            UIImagePickerController* newPicker = [[UIImagePickerController alloc] init];
+            
+            weakSelf.imagePicker = newPicker;
+            weakSelf.imagePicker.allowsEditing = YES;
+            weakSelf.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            weakSelf.imagePicker.delegate = self;
+            weakSelf.imagePicker.showsCameraControls = YES;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf presentViewController:newPicker animated:YES completion:nil];
+            });
+        });
+    }
+    else {
+        [self performSegueWithIdentifier:@"commentSegue" sender:self];
+    }
+}
+
+
 - (IBAction) priorityChanged:(id)sender {
     UIColor* toColor;
     NSString* p;
     if (sender == _lowPriorityButton) {
+        _newPriority = CSTaskPriorityLow;
         toColor = [UIColor kTaskLowPriorityColor];
         p = @"Low";
     } else if (sender == _midPriorityButton) {
+        _newPriority = CSTaskPriorityMedium;
         toColor = [UIColor kTaskMidPriorityColor];
         p = @"Mid";
     } else if (sender == _highPriorityButton) {
+        _newPriority = CSTaskPriorityHigh;
         toColor = [UIColor kTaskHighPriorityColor];
         p = @"High";
     }
     
     [UIView animateWithDuration:time
                           delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
+
+                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          _priorityTextLabel.textColor = toColor;
                          _priorityBarView.backgroundColor = toColor;
@@ -403,8 +525,46 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     [_priorityTextLabel.layer addAnimation:textChange forKey:@"changeTextTransition"];
     
     _priorityTextLabel.text = [NSString stringWithFormat:@"%@ Priority", p];
-    
 }
+
+#pragma mark -- Image Picker
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+
+    __weak typeof(self) weakSelf = self;
+    void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
+        
+
+        NSLog(@"New size after normalization only is %ld",
+              (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
+        NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
+        NSLog(@"New size after JPEG compression is %ld",
+              (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.sourceTask addTaskMediaOfType:CSTaskMediaType_Photo
+                                           withData:thisImage
+                                            toRealm:[RLMRealm defaultRealm]
+                                       inTransation:YES];
+        });
+        
+        [weakSelf.sourceTask getAllImagesForTaskWithCompletionBlock:^(NSMutableArray* loadedImages) {
+            weakSelf.taskImages = loadedImages;
+            [weakSelf.taskImageCollectionView reloadData];
+        }];
+    };
+    
+    [image normalizedImageWithCompletionBlock:fixImageIfNeeded];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+#pragma mark -- END Image Picker
 
 - (IBAction)playAudio:(id)sender {
     NSError* error;
@@ -412,6 +572,17 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]
                                                      error:&error];
     [self.audioPlayer play];
+}
+
+#pragma mark - Segues
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString: @"commentSegue"]) {
+        SlackTestViewController *temp = segue.destinationViewController;
+        temp.sourceTask = _sourceTask;
+    } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
+        CSPictureController* picture = segue.destinationViewController;
+        picture.taskImage = sender;
+    }
 }
 
 //#pragma mark -

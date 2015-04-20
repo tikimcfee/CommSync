@@ -57,7 +57,7 @@
     if ([[segue identifier] isEqualToString:@"pictureView"]) {
         
         CSPictureController *temp = segue.destinationViewController;
-        temp.image = sender;
+        [temp.pictureImage setImage:sender];
     }
     
 

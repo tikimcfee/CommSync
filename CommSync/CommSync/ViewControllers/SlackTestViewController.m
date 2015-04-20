@@ -70,9 +70,6 @@
         else{
             _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
-            
-            
-            
             _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
                                  _peerID.displayName, _peerID.displayName ];
             
@@ -103,17 +100,20 @@
     /*
      *  Add navigation bar
      */
-    UINavigationBar *bar = [UINavigationBar new];
-    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
-    [bar setupCommSyncStyle];
-    
-    UILabel *barLabel = [UILabel new];
-    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2- 45.0), _peerID? 8: 32, 100.0, 20.0)];
-    [barLabel setText:(_peerID)? @"Private Chat" :@"Group Chat"];
-    [barLabel setTextColor:[UIColor whiteColor]];
-    
-    [bar addSubview:barLabel];
-    [self.view addSubview:bar];
+    if (!_sourceTask) {
+        UINavigationBar *bar = [UINavigationBar new];
+        [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
+        [bar setupCommSyncStyle];
+
+        UILabel *barLabel = [UILabel new];
+        [barLabel setFrame:CGRectMake((self.view.frame.size.width/2- 45.0), _peerID? 8: 32, 100.0, 20.0)];
+        [barLabel setText:(_peerID)? @"Private Chat" :@"Group Chat"];
+        [barLabel setTextColor:[UIColor whiteColor]];
+
+        [bar addSubview:barLabel];
+        [self.view addSubview:bar];
+    }
+
 }
 
 #pragma mark - Override SlackViewController Methods
@@ -316,6 +316,8 @@
     return [orderedChatMessages objectAtIndex:index];
 }
 
-
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
 
 @end

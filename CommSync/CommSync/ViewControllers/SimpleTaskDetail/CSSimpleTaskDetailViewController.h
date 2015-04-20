@@ -11,7 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "CSInsetTextField.h"
 
-@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate,AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
 // Views
 @property (strong, nonatomic) IBOutlet UITableView *tableview;
@@ -32,12 +32,21 @@
 // Controls
 @property (weak, nonatomic) IBOutlet UIPageControl *dottedPageControl;
 @property (weak, nonatomic) IBOutlet UIImageView *editIconImageView;
+
 @property (strong, nonatomic) IBOutlet UIButton *lowPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *midPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *highPriorityButton;
 
+@property (strong, nonatomic) IBOutlet UIView *bottomActionButton;
+@property (strong, nonatomic) IBOutlet UILabel *bottomActionString;
 
 // Models and data
 @property (strong, nonatomic) CSTaskRealmModel* sourceTask;
+
+@end
+
+@interface CSRestOfCommentsTableViewCell : UITableViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel* label;
 
 @end

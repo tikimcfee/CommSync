@@ -9,6 +9,7 @@
 #import "CSUserViewController.h"
 #import "CSUserDetailView.h"
 #import "CSUserInfoCell.h"
+#import "UINavigationBar+CommSyncStyle.h"
 
 @interface CSUserViewController ()
 {
@@ -37,14 +38,14 @@
     
     self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)_connectionCount];
     
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateConnectionCountAndTableView:)
                                                  name:@"PEER_CHANGED_STATE"
                                                object:nil];
     
     [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(checkMessages) userInfo:nil repeats:YES];
+    
+    [self.navigationController.navigationBar setupCommSyncStyle];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -173,7 +174,6 @@
 
 -(void) checkMessages
 {
-    
     if(!self)
     {
         return;
@@ -182,6 +182,10 @@
     _navBar.title = ([[CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"unreadMessages > %d",0 ] count] > 0)?  @"Unread Messages" : @"No Unread Messages";
     });
     [self.tableView reloadData];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 @end

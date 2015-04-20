@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CSPictureController : UIViewController
-@property (weak, nonatomic) IBOutlet UIImageView *pictureImage;
-@property (weak, nonatomic) IBOutlet UIImage *image;
+@interface CSPictureController : UIViewController <UIScrollViewDelegate>
+
+@property (strong, nonatomic) UIImage* taskImage;
+@property (strong, nonatomic) UIImageView *pictureImage;
+@property (strong, nonatomic) IBOutlet UIScrollView *zoomviewForImage;
 
 
 @end
