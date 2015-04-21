@@ -23,6 +23,11 @@
 #define kUserConnectingNotification @"Is Connecting"
 #define kNewTaskNotification @"kNewTaskNotification"
 
+typedef NS_ENUM(NSInteger, CSTaskListMode) {
+    CSTaskListMode_Open = 0,
+    CSTaskListMode_Completed
+};
+
 @interface CSTaskListViewController () <TLIndexPathControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
@@ -159,6 +164,17 @@
     
 }
 
+- (void)toggleToNewMode:(id)sender {
+//    if () {
+//        <#statements#>
+//    }
+    //TODO
+    // get reference to segmented controller
+    // add this method as target
+    // check to see what was selected
+    // if complete, change data model (in operation.. queud!)
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -276,43 +292,42 @@
 }
 
 
-// The number of columns of data
-- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
+//// The number of columns of data
+//- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+//{
+//    return 1;
+//}
 // The number of rows of data
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [_tags count];
-}
-
-// The data to return for the row and component (column) that's being passed in
-- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return _tags[row];
-}
-
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    if(row == 0) _tag = nil;
-    else if (row == 1) _tag = @"";
-    else _tag = _tags[row];
-    
-    [self setupInitialTaskDataModels];
-    [self.tableView reloadData];
-}
-
-- (IBAction)completionFilter:(id)sender {
-    _completed = !_completed;
-    
-    if(_completed) [_completedLabel setText:@"Completed"];
-    else [_completedLabel setText:@"In Progress"];
-    [self setupInitialTaskDataModels];
-    [self.tableView reloadData];
-}
+//- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+//{
+//    return [_tags count];
+//}
+//
+//// The data to return for the row and component (column) that's being passed in
+//- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+//{
+//    return _tags[row];
+//}
+//
+//
+//- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+//{
+//    if(row == 0) _tag = nil;
+//    else if (row == 1) _tag = @"";
+//    else _tag = _tags[row];
+//    
+//    [self setupInitialTaskDataModels];
+//    [self.tableView reloadData];
+//}
+//
+//- (IBAction)completionFilter:(id)sender {
+//    _completed = !_completed;
+//    
+//    if(_completed) [_completedLabel setText:@"Completed"];
+//    else [_completedLabel setText:@"In Progress"];
+//    [self setupInitialTaskDataModels];
+//    [self.tableView reloadData];
+//}
 
 //-(void) setTagFilter{
 //    
