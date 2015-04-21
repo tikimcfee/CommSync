@@ -27,12 +27,9 @@
     int height = (self.view.frame.size.height / 100);
     float widthBuffer = (self.view.frame.size.width - (100 * wide)) / (1 + wide);
     float heightBuffer = (self.view.frame.size.height -  (100 * height)) / (1 + height);
-    [collectionViewLayout setSectionInset:UIEdgeInsetsMake( heightBuffer /2, widthBuffer, 0, widthBuffer)];
+    [collectionViewLayout setSectionInset:UIEdgeInsetsMake( heightBuffer /2, widthBuffer, heightBuffer / 2, widthBuffer)];
     collectionViewLayout.minimumInteritemSpacing = widthBuffer;
     collectionViewLayout.minimumLineSpacing = heightBuffer;
-    NSLog(@"entire height %f entire width%f", self.view.frame.size.height, self.view.frame.size.width);
-    NSLog(@"across %d, high %d", wide, height);
-    NSLog(@"height %f width %f", heightBuffer, widthBuffer);
 }
 
 -(void) viewDidLoad

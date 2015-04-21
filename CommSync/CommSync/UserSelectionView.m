@@ -57,20 +57,40 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-  return  [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count] - 1;
+  return  [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count] + 1;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CSUserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCell" forIndexPath:indexPath];
  
-    CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName != %@", _sessionManager.myPeerID.displayName][indexPath.row];
+    if(indexPath.row == 0){
+        cell.avatarImage.image = [UIImage imageNamed:@"Avatar -1"];
+        cell.displayLabel.text = @"Unassigned";
+        [cell.avatarImage.layer setCornerRadius:(cell.avatarImage.frame.size.width / 2)];
+        cell.avatarImage.layer.masksToBounds = YES;
+        return cell;
+    }
+    
+    CSUserRealmModel* user = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row - 1];
+    
     cell.avatarImage.image = [UIImage imageNamed:user.getPicture];
     cell.displayLabel.text = user.displayName;
-    [cell.avatarImage.layer setCornerRadius:35.0f];
+    [cell.avatarImage.layer setCornerRadius:(cell.avatarImage.frame.size.width / 2)];
     cell.avatarImage.layer.masksToBounds = YES;
     //cell.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:userName])? [UIColor greenColor]: [UIColor redColor];
     
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row == 0 ) [self.saveDelegate assignUser:nil];
+    
+    else{
+        CSUserRealmModel* person = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row - 1];
+        [self.saveDelegate assignUser:person.uniqueID];
+    }
+   // [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

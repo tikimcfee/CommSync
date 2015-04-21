@@ -688,6 +688,7 @@
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm deleteAllObjects];
     [_peerHistoryRealm commitWriteTransaction];
+    [self createUserModel];
 }
 
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message

@@ -7,8 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CSUserRealmModel.h"
+
+@protocol CSAssignUserDelegate <NSObject>
+
+- (void) assignUser:( NSString* )personID;
+
+@end
 
 @interface UserSelectionView : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) id <CSAssignUserDelegate> saveDelegate;
 
 @end
