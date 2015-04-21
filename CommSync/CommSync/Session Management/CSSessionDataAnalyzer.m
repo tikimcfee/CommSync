@@ -364,7 +364,7 @@ didStartReceivingResourceWithName:(NSString *)resourceName
     newIncomingTask.peerDisplayName = peerID.displayName;
     
     [incomingTaskRealm beginWriteTransaction];
-    [incomingTaskRealm addObject:newIncomingTask];
+    [incomingTaskRealm addOrUpdateObject:newIncomingTask];
     [incomingTaskRealm commitWriteTransaction];
     
     // Post notification globally
