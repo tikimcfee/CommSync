@@ -6,17 +6,18 @@
 //  Copyright (c) 2015 AppsByDLI. All rights reserved.
 //
 
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSUserRealmModel.h"
 #import "CSChatTableViewCell.h"
 #import "UINavigationBar+CommSyncStyle.h"
+#import "UIColor+FlatColors.h"
 #import <Realm/Realm.h>
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 
-@interface SlackTestViewController ()
+@interface CSChatViewController ()
 // use this realm object to persist data to disk
 @property (strong, nonatomic) RLMRealm *chatRealm;
 @property (strong, nonatomic) RLMRealm *privateMessageRealm;
@@ -25,7 +26,7 @@
 @property (strong, nonatomic) NSPredicate *pred;
 @end
 
-@implementation SlackTestViewController
+@implementation CSChatViewController
 {
     RLMNotificationToken *_chatRealmNotification;
     RLMNotificationToken *_privateMessageRealmNotification;
@@ -61,14 +62,14 @@
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.sessionManager = app.globalSessionManager;
     _currentUser = _sessionManager.myUniqueID;
-    NSLog(_peerID.displayName); 
+    NSLog(@"%@", _peerID.displayName);
     if(_sourceTask == nil){
         if(!_peerID) {
-            _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+            _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
             _chatRealm.autorefresh = YES;
         }
         else{
-            _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
+            _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
             _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", _peerID.uniqueID, _peerID.uniqueID ];
         }
@@ -96,22 +97,23 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     /*
-     *  Add navigation bar
+     *  Set navigation bar style
      */
-    if (!_sourceTask) {
+    [self.navigationController.navigationBar setupCommSyncStyle];
+    
+    if (!_sourceTask && _peerID) {
         UINavigationBar *bar = [UINavigationBar new];
         [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
         [bar setupCommSyncStyle];
-
+        
         UILabel *barLabel = [UILabel new];
-        [barLabel setFrame:CGRectMake((self.view.frame.size.width/2- 45.0), _peerID? 8: 32, 100.0, 20.0)];
-        [barLabel setText:(_peerID)? @"Private Chat" :@"Group Chat"];
+        [barLabel setFrame:CGRectMake(self.view.frame.size.width/2- 45.0, 8, 100.0, 20.0)];
+        [barLabel setText: @"Private Chat"];
         [barLabel setTextColor:[UIColor whiteColor]];
-
+        
         [bar addSubview:barLabel];
         [self.view addSubview:bar];
     }
-
 }
 
 #pragma mark - Override SlackViewController Methods
@@ -122,7 +124,6 @@
     UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
     UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
     
-   
     [self.tableView beginUpdates];
     
     if(!_sourceTask){
@@ -198,10 +199,10 @@
         
         if (!_chatRealm)
         {
-            _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+            _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
             
         }
-        if(!_privateMessageRealm) _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
+        if(!_privateMessageRealm) _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
     
         if(!_peerID)return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
         
@@ -227,16 +228,20 @@
     
     if(!_sourceTask){
         
-            CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
-    
-            cell.messageLabel.text = msg.messageText;
-            cell.transform = self.tableView.transform;
+        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+
+        cell.messageLabel.text = msg.messageText;
+        cell.transform = self.tableView.transform;
+
+        CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
+        cell.createdByLabel.text = person.displayName;
+
+        NSString *image = [person getPicture];
+        [cell.avatarImage setImage:[UIImage imageNamed:image]];
         
-            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
-            cell.createdByLabel.text = person.displayName;
-        
-            NSString *image = [person getPicture];
-            [cell.avatarImage setImage:[UIImage imageNamed:image]];
+        if ([msg.createdBy isEqualToString:self.peerID.uniqueID]) {
+            cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.7f];
+        }
     }
     
     else{
@@ -247,12 +252,18 @@
         cell.transform = self.tableView.transform;
         
     }
+    
     return cell;
 }
 
+#pragma mark - UITableView Delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewAutomaticDimension;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
 }
 
 #pragma mark - Helper Methods
@@ -274,7 +285,7 @@
 {
     if(!_sourceTask){
         
-        __weak SlackTestViewController *weakSelf = self;
+        __weak CSChatViewController *weakSelf = self;
         if(!_peerID){
             _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -290,8 +301,10 @@
             }];
         }
         else{
+            
+            __weak CSChatViewController *weakSelf = self;
             _privateMessageRealmNotification = [_privateMessageRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
-                
+
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf.tableView reloadData];
                     
@@ -302,9 +315,9 @@
                         [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
                     }
                     //reset private messages
-                    [_sessionManager.peerHistoryRealm beginWriteTransaction];
-                    [_peerID removeMessages];
-                    [_sessionManager.peerHistoryRealm commitWriteTransaction];
+                    [weakSelf.sessionManager.peerHistoryRealm beginWriteTransaction];
+                    [weakSelf.peerID removeMessages];
+                    [weakSelf.sessionManager.peerHistoryRealm commitWriteTransaction];
                 });
             }];
         }

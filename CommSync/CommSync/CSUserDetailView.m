@@ -7,7 +7,7 @@
 //
 
 #import "CSUserDetailView.h"
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "CSTaskListViewController.h"
 #import "AppDelegate.h"
 #import "UINavigationBar+CommSyncStyle.h"
@@ -68,8 +68,8 @@
 {
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
-        NSLog(_peer.displayName);
-        SlackTestViewController *vc = [segue destinationViewController];
+        NSLog(@"%@", _peer.displayName);
+        CSChatViewController *vc = [segue destinationViewController];
         [vc setPeerID:_peer];
     }
     

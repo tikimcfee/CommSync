@@ -22,13 +22,22 @@
 // UI
 #import "SZTextView.h"
 #import "CSAudioPlotViewController.h"
+#import "CSPictureController.h"
+#import "IonIcons.h"
+#import "UIColor+FlatColors.h"
+#import "UINavigationBar+CommSyncStyle.h"
+#import "CSTaskImageCollectionViewCell.h"
 
 // Data transmission
 #import "CSSessionDataAnalyzer.h"
 
-@interface CSTaskCreationViewController()
+
+#define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
+
+@interface CSTaskCreationViewController() 
 
 // Main view
+@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet SZTextView *descriptionTextField;
 
@@ -41,6 +50,9 @@
 // Image picker
 @property (strong, nonatomic) UIImagePickerController* imagePicker;
 @property (assign, nonatomic) BOOL imageProcessingComplete;
+@property (strong, nonatomic) IBOutlet UICollectionView *taskImageCollection;
+@property (strong, nonatomic) NSMutableArray* taskImages;
+
 
 // VC for audio recording
 @property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
@@ -63,6 +75,19 @@
     [super viewDidLoad];
     
     _sessionManager = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).globalSessionManager;
+    
+    self.taskImageCollection.dataSource = self;
+    self.taskImageCollection.delegate = self;
+    self.taskImages = [NSMutableArray new];
+    
+    self.view.backgroundColor = [UIColor flatCloudsColor];
+    self.descriptionTextField.backgroundColor = [UIColor flatCloudsColor];
+    
+    self.addTaskImageButton.layer.cornerRadius = 22.0f;
+    self.addTaskImageButton.backgroundColor = [UIColor flatWetAsphaltColor];
+    [self.addTaskImageButton setImage:[IonIcons imageWithIcon:ion_ios_camera size:35.0f color:[UIColor flatCloudsColor]] forState:UIControlStateNormal];
+    
+    [self.navigationBar setupCommSyncStyle];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -72,6 +97,9 @@
         
         self.audioRecorder = (CSAudioPlotViewController*)[segue destinationViewController];
         self.audioRecorder.fileNameSansExtension = self.pendingTask.concatenatedID;
+    } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
+        CSPictureController* picture = segue.destinationViewController;
+        picture.taskImage = sender;
     }
 }
 
@@ -122,6 +150,9 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    [self.taskImages addObject:image];
+    [self.taskImageCollection reloadData];
     
     void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
         CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];
@@ -247,11 +278,61 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-
-- (BOOL) prefersStatusBarHidden
-{
+#pragma mark - CollectionView DataSource/Delegate
+- (BOOL)collectionView:(UICollectionView*)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    CSTaskImageCollectionViewCell* selected = (CSTaskImageCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    [self performSegueWithIdentifier:@"enlargedPictureController" sender: selected.taskImageView.image];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
+//    _dottedPageControl.numberOfPages = self.taskImages.count;
+//    _dottedPageControl.currentPage = 0;
+    
+    return self.taskImages.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    CSTaskImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTaskImageCollectionViewCell forIndexPath:indexPath];
+    
+    cell.taskImageView.layer.cornerRadius = 8;
+    cell.taskImageView.clipsToBounds = YES;
+    
+    [cell configureCellWithImage:[self.taskImages objectAtIndex:indexPath.row]];
+    
+    return cell;
+}
+
+-(void)collectionView:(UICollectionView*)collectionView
+ didEndDisplayingCell:(UICollectionViewCell *)cell
+   forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+//    CSTaskImageCollectionViewCell* vis = [[self.taskImageCollection visibleCells] objectAtIndex:0];
+//    NSIndexPath* path = [self.taskImageCollection indexPathForCell:vis];
+    
+//    _currentTaskImagePath = path;
+//    _dottedPageControl.currentPage = path.row;
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return self.taskImageCollection.frame.size;
+}
+
+#pragma mark - Status Bar
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "CSUserDetailView.h"
 #import "CSUserInfoCell.h"
 #import "UINavigationBar+CommSyncStyle.h"
+#import "UIColor+FlatColors.h"
 
 @interface CSUserViewController ()
 {
@@ -92,7 +93,8 @@
     }
     
     userName = user.displayName;
-    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor greenColor]: [UIColor redColor];
+    cell.availableStatus.layer.cornerRadius = 12.5f;
+    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor flatNephritisColor]: [UIColor flatPomegranateColor];
     
     cell.userLabel.text = userName;
     [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];
@@ -137,38 +139,18 @@
     return [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count] - 1;
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-- (IBAction)FilterPeers:(id)sender {
-    if(!_filter){
-        _filter = YES;
-        [_filterButton setTitle:@"View Online Peers"];
-        
-    }
-    else{
-        _filter = NO;
-        [_filterButton setTitle:@"View All Peers"];
-    }
-    __weak CSUserViewController *weakSelf = self;
-    [weakSelf.tableView reloadData];
+- (IBAction)filterByConnectedStatus:(id)sender {
+    UISegmentedControl *filterControl = (UISegmentedControl *)sender;
+    
+    self.filter = (filterControl.selectedSegmentIndex==0) ? NO : YES;
+    [self.tableView reloadData];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showUserDetail"])
     {
         CSUserDetailView *vc = [segue destinationViewController];
-        if ([sender isKindOfClass:[CSUserRealmModel class]])
-        {
-            CSUserRealmModel* temp = sender;
+        if ([sender isKindOfClass:[CSUserRealmModel class]]) {
             [vc setPeer:sender];
         }
     }

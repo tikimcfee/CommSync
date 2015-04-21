@@ -15,7 +15,7 @@
 #import "CSChatMessageRealmModel.h"
 #import "CSSessionDataAnalyzer.h"
 #import "CSUserRealmModel.h"
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"

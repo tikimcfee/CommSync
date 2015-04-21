@@ -11,7 +11,7 @@
 #import "CSChatTableViewCell.h"
 #import "UIColor+FlatColors.h"
 #import "IonIcons.h"
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "UIImage+normalize.h"
 #import "CSPictureController.h"
 #import "CSUserRealmModel.h"
@@ -287,7 +287,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
         CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
         NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
-        cellRef.label.text = [NSString stringWithFormat:@"View %d more comment%@",
+        cellRef.label.text = [NSString stringWithFormat:@"View %lu more comment%@",
                               _sourceTask.comments.count - 4,
                               plural];
     } else {
@@ -665,7 +665,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 #pragma mark - Segues
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString: @"commentSegue"]) {
-        SlackTestViewController *temp = segue.destinationViewController;
+        CSChatViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
     } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
         CSPictureController* picture = segue.destinationViewController;

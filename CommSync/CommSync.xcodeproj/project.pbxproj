@@ -24,7 +24,6 @@
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
 		459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */; };
-		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
 		45C956461A97CF0C00364555 /* CSRealmWriteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */; };
@@ -85,6 +84,7 @@
 		74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541E71A93E67100FC29AD /* TLCollectionViewController.m */; };
 		74C541FB1A93E67100FC29AD /* TLTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541EA1A93E67100FC29AD /* TLTableViewController.m */; };
 		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
+		74E8E6941AE6A131005A3224 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74E8E6931AE6A131005A3224 /* Images.xcassets */; };
 		932A53F01ADC892600F04268 /* UITabBar+CommSyncStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 932A53EF1ADC892600F04268 /* UITabBar+CommSyncStyle.m */; };
 		932A53F31ADC89F600F04268 /* UINavigationBar+CommSyncStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 932A53F21ADC89F600F04268 /* UINavigationBar+CommSyncStyle.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
@@ -101,9 +101,10 @@
 		93EBACDF1A97D8A0006BAF4A /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD51A97D8A0006BAF4A /* SLKTextView.m */; };
 		93EBACE01A97D8A0006BAF4A /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD71A97D8A0006BAF4A /* SLKTextViewController.m */; };
 		93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */; };
-		93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */; };
+		93EBACE41A97D91D006BAF4A /* CSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* CSChatViewController.m */; };
 		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
+		93F875DA1AE627560074FF59 /* CSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F875D91AE627560074FF59 /* CSTabBarController.m */; };
 		95013C841AE1C1AF0074FB4B /* CSUserCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */; };
 		95013C8B1AE1C7750074FB4B /* UserSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C8A1AE1C7750074FB4B /* UserSelectionView.m */; };
 		953E396B1AC8CA11003FE833 /* CSPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 953E396A1AC8CA11003FE833 /* CSPictureController.m */; };
@@ -145,7 +146,6 @@
 		459D5F7A19DB449900C91EFA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		459D5F7B19DB449900C91EFA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		459D5F7E19DB449900C91EFA /* CommSync.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CommSync.xcdatamodel; sourceTree = "<group>"; };
-		459D5F8619DB449900C91EFA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioPlotViewController.h; path = ViewControllers/TaskList/CSAudioPlotViewController.h; sourceTree = "<group>"; };
 		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
@@ -286,6 +286,7 @@
 		74DB14F61A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSFrameworkSupportedDataServer.h; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.h"; sourceTree = "<group>"; };
 		74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSFrameworkSupportedDataServer.m; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.m"; sourceTree = "<group>"; };
 		74DB14F91A7FEC1000ECBADB /* CSConnectivityConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSConnectivityConstants.h; path = "Session Management/Framework Supported/CSConnectivityConstants.h"; sourceTree = "<group>"; };
+		74E8E6931AE6A131005A3224 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		932A53EE1ADC892600F04268 /* UITabBar+CommSyncStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITabBar+CommSyncStyle.h"; path = "Categories/UITabBar+CommSyncStyle.h"; sourceTree = "<group>"; };
 		932A53EF1ADC892600F04268 /* UITabBar+CommSyncStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITabBar+CommSyncStyle.m"; path = "Categories/UITabBar+CommSyncStyle.m"; sourceTree = "<group>"; };
 		932A53F11ADC89F600F04268 /* UINavigationBar+CommSyncStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationBar+CommSyncStyle.h"; path = "Categories/UINavigationBar+CommSyncStyle.h"; sourceTree = "<group>"; };
@@ -319,11 +320,13 @@
 		93EBACD71A97D8A0006BAF4A /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
 		93EBACD81A97D8A0006BAF4A /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
 		93EBACD91A97D8A0006BAF4A /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
-		93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlackTestViewController.h; path = ViewControllers/SlackTestViewController.h; sourceTree = "<group>"; };
-		93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlackTestViewController.m; path = ViewControllers/SlackTestViewController.m; sourceTree = "<group>"; };
+		93EBACE21A97D91D006BAF4A /* CSChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSChatViewController.h; path = ViewControllers/CSChatViewController.h; sourceTree = "<group>"; };
+		93EBACE31A97D91D006BAF4A /* CSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSChatViewController.m; path = ViewControllers/CSChatViewController.m; sourceTree = "<group>"; };
 		93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSChatTableViewCell.xib; sourceTree = "<group>"; };
 		93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatTableViewCell.h; sourceTree = "<group>"; };
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
+		93F875D81AE627560074FF59 /* CSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTabBarController.h; path = ViewControllers/CSTabBarController.h; sourceTree = "<group>"; };
+		93F875D91AE627560074FF59 /* CSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTabBarController.m; path = ViewControllers/CSTabBarController.m; sourceTree = "<group>"; };
 		95013C811AE1C1AE0074FB4B /* CSUserCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserCollectionCell.h; sourceTree = "<group>"; };
 		95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserCollectionCell.m; sourceTree = "<group>"; };
 		95013C891AE1C7750074FB4B /* UserSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionView.h; sourceTree = "<group>"; };
@@ -483,9 +486,9 @@
 				744452291A0ACE2700C87723 /* ViewControllers */,
 				4595391F19E38F2F00744747 /* Session Management */,
 				45FAB0D31AE54950005AC325 /* Shared Controls */,
-				459D5F8619DB449900C91EFA /* Images.xcassets */,
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
+				74E8E6931AE6A131005A3224 /* Images.xcassets */,
 				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
 				3FBBF1371A9C0887007124CD /* Main.storyboard */,
 				3F9132DE1ADD9D26002D45B0 /* CSAvatarSelectionView.h */,
@@ -602,8 +605,10 @@
 				933AA13A1A71DCA800DCC10A /* TaskList */,
 				7409982E1A0C395A00229AFC /* CSSettingsViewController.h */,
 				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
-				93EBACE21A97D91D006BAF4A /* SlackTestViewController.h */,
-				93EBACE31A97D91D006BAF4A /* SlackTestViewController.m */,
+				93EBACE21A97D91D006BAF4A /* CSChatViewController.h */,
+				93EBACE31A97D91D006BAF4A /* CSChatViewController.m */,
+				93F875D81AE627560074FF59 /* CSTabBarController.h */,
+				93F875D91AE627560074FF59 /* CSTabBarController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -966,8 +971,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */,
+				74E8E6941AE6A131005A3224 /* Images.xcassets in Resources */,
 				746F6AD61A892613007A83E8 /* CHANGELOG in Resources */,
-				459D5F8719DB449900C91EFA /* Images.xcassets in Resources */,
 				3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */,
 				45CE97F41AE14DF500B90157 /* LICENSE in Resources */,
 				45CE97F61AE14F7200B90157 /* ionicons.ttf in Resources */,
@@ -1004,7 +1009,7 @@
 				95FE63001AABC9F300EE9A19 /* CSUserDetailView.m in Sources */,
 				3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */,
 				93EBACE11A97D8A0006BAF4A /* SLKTypingIndicatorView.m in Sources */,
-				93EBACE41A97D91D006BAF4A /* SlackTestViewController.m in Sources */,
+				93EBACE41A97D91D006BAF4A /* CSChatViewController.m in Sources */,
 				74C541ED1A93E67100FC29AD /* TLIndexPathItem.m in Sources */,
 				933AA1411A71DCF100DCC10A /* CSTaskCreationViewController.m in Sources */,
 				3FE492091AD741D40089E518 /* CSTaskRevisionRealmModel.m in Sources */,
@@ -1035,6 +1040,7 @@
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
 				45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
+				93F875DA1AE627560074FF59 /* CSTabBarController.m in Sources */,
 				74C541F51A93E67100FC29AD /* TLIndexPathTreeItem.m in Sources */,
 				93EBACDB1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,

@@ -17,11 +17,18 @@
 #import <Crashlytics/Crashlytics.h>
 #import "UINavigationBar+CommSyncStyle.h"
 #import "UITabBar+CommSyncStyle.h"
+#import "UIColor+FlatColors.h"
+#import "IonIcons.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
 #define kUserConnectingNotification @"Is Connecting"
 #define kNewTaskNotification @"kNewTaskNotification"
+
+typedef NS_ENUM(NSInteger, CSTaskListMode) {
+    CSTaskListMode_Open = 0,
+    CSTaskListMode_Completed
+};
 
 @interface CSTaskListViewController () <TLIndexPathControllerDelegate>
 
@@ -42,6 +49,9 @@
 @property (strong, nonatomic) TLIndexPathController* indexPathController;
 @property (strong, nonatomic) NSOperationQueue* tableviewUpdateQueue;
 
+// Filtering controls
+@property (nonatomic, assign) NSInteger completionToggleIndex;
+
 @property (assign, nonatomic) BOOL willRefreshFromIncomingTask;
 @property (strong, nonatomic) NSMutableArray* incomingTasks;
 @property (copy, nonatomic) void (^incomingTaskCallback)();
@@ -51,6 +61,7 @@
 
 @implementation CSTaskListViewController
 
+static CGFloat TIME_TO_UPDATE = -1;
 
 #pragma mark - View Lifecycle
 
@@ -98,8 +109,11 @@
         }
         
         RLMRealm* tasksRealm = [RLMRealm defaultRealm];
-        RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
-        for (CSTaskRealmModel* task in allTasks) {
+//        RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
+        NSNumber* completed = _completionToggleIndex == 1 ? [NSNumber numberWithBool:YES] : [NSNumber numberWithBool:NO];
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"completed == %@", completed];
+        RLMResults* filteredTask = [CSTaskRealmModel objectsInRealm:tasksRealm withPredicate:predicate];
+        for (CSTaskRealmModel* task in filteredTask) {
             [tasks addObject:task.concatenatedID];
         }
         
@@ -109,7 +123,15 @@
     
     _incomingTaskCallback = ^void()
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        NSTimeInterval time;
+        if (TIME_TO_UPDATE != -1) {
+            time = TIME_TO_UPDATE;
+            TIME_TO_UPDATE = -1;
+        } else {
+            time = 0.5;
+        }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, time * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             CSTaskListUpdateOperation* newUpdate = [CSTaskListUpdateOperation new];
             
             newUpdate.tableviewToUpdate = weakSelf.tableView;
@@ -136,10 +158,16 @@
     // setup tab bar controller style
     [self.tabBarController.tabBar setupCommSyncStyle];
     
-    for (UITabBarItem *tab in self.tabBarController.tabBar.items) {
-        tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
-        tab.title = nil;
-    }
+//    for (UITabBarItem *tab in self.tabBarController.tabBar.items) {
+//        tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
+//        tab.title = nil;
+//    }
+    
+    // toggle callback
+    [_completionToggleControl addTarget:self
+                                 action:@selector(toggleToNewMode:)
+                       forControlEvents:UIControlEventValueChanged];
+    _completionToggleIndex = 0;
 }
 
 - (void)setupInitialTaskDataModels {
@@ -157,6 +185,16 @@
 
 - (void)registerForNotifications {
     
+}
+
+- (void)toggleToNewMode:(id)sender {
+    if(_completionToggleControl.selectedSegmentIndex != _completionToggleIndex) {
+        _completionToggleIndex = _completionToggleControl.selectedSegmentIndex;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            TIME_TO_UPDATE = 0.0;
+            _incomingTaskCallback();
+        });
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -276,43 +314,42 @@
 }
 
 
-// The number of columns of data
-- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
+//// The number of columns of data
+//- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+//{
+//    return 1;
+//}
 // The number of rows of data
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [_tags count];
-}
-
-// The data to return for the row and component (column) that's being passed in
-- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return _tags[row];
-}
-
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    if(row == 0) _tag = nil;
-    else if (row == 1) _tag = @"";
-    else _tag = _tags[row];
-    
-    [self setupInitialTaskDataModels];
-    [self.tableView reloadData];
-}
-
-- (IBAction)completionFilter:(id)sender {
-    _completed = !_completed;
-    
-    if(_completed) [_completedLabel setText:@"Completed"];
-    else [_completedLabel setText:@"In Progress"];
-    [self setupInitialTaskDataModels];
-    [self.tableView reloadData];
-}
+//- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+//{
+//    return [_tags count];
+//}
+//
+//// The data to return for the row and component (column) that's being passed in
+//- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+//{
+//    return _tags[row];
+//}
+//
+//
+//- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+//{
+//    if(row == 0) _tag = nil;
+//    else if (row == 1) _tag = @"";
+//    else _tag = _tags[row];
+//    
+//    [self setupInitialTaskDataModels];
+//    [self.tableView reloadData];
+//}
+//
+//- (IBAction)completionFilter:(id)sender {
+//    _completed = !_completed;
+//    
+//    if(_completed) [_completedLabel setText:@"Completed"];
+//    else [_completedLabel setText:@"In Progress"];
+//    [self setupInitialTaskDataModels];
+//    [self.tableView reloadData];
+//}
 
 //-(void) setTagFilter{
 //    

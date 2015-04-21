@@ -75,4 +75,8 @@
     _layedOut = YES;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 @end
