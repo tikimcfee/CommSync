@@ -14,6 +14,7 @@
 @property (copy, nonatomic) void (^nukeSessionHandler)(UIAlertAction *);
 @property (copy, nonatomic) void (^nukeDatabaseHandler)(UIAlertAction *);
 @property (copy, nonatomic) void (^nukePeerHistoryHandler)(UIAlertAction *);
+@property (copy, nonatomic) void (^nukeChatHistoryHandler)(UIAlertAction *);
 @end
 
 @implementation CSSettingsViewController
@@ -50,6 +51,10 @@
         [weakSelf nukePeerHistory];
     };
     
+    self.nukeChatHistoryHandler = ^(UIAlertAction *action){
+        [weakSelf nukeChatHistory];
+    };
+    
     [self.navigationController.navigationBar setupCommSyncStyle];
 }
 
@@ -63,7 +68,7 @@
     NSIndexPath* path;
     if (actionHandler == self.nukeDatabaseHandler) {
         path = [NSIndexPath indexPathForRow:1 inSection:1];
-        title = @"Clear Database";
+        title = @"Delete All Tasks";
     }
     else if (actionHandler == self.nukeSessionHandler) {
         path = [NSIndexPath indexPathForRow:0 inSection:1];
@@ -72,6 +77,10 @@
     else if (actionHandler == self.nukePeerHistoryHandler) {
         path = [NSIndexPath indexPathForRow:2 inSection:1];
         title = @"Clear Peer History";
+    }
+    else if (actionHandler == self.nukeChatHistoryHandler) {
+        path = [NSIndexPath indexPathForRow:3 inSection:1];
+        title = @"Delete Chat Messages";
     }
     
     CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:path];
@@ -103,6 +112,10 @@
 - (void)nukePeerHistory {
     //removes all former peers from the data base and replaces the peer history list with current list
     [_sessionManager nukeHistory];
+}
+
+- (void)nukeChatHistory {
+    [_sessionManager nukeChatHistory];
 }
 
 - (void)changeUsernameTo:(NSString*)name {
@@ -168,7 +181,9 @@
                 [self showAlertWithHandler:_nukePeerHistoryHandler];
                 break;
                 
-            case 3: break;
+            case 3:
+                [self showAlertWithHandler:_nukeChatHistoryHandler];
+                break;
             case 4: break;
             default:
                 NSLog(@"Settings ERROR: This selection has no action");

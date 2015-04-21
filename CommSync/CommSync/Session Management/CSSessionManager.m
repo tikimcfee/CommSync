@@ -358,6 +358,11 @@
     [_serviceAdvertiser startAdvertisingPeer];
 }
 
+- (void)nukeChatHistory {
+    [_chatMessageRealm beginWriteTransaction];
+    [_chatMessageRealm deleteAllObjects];
+    [_chatMessageRealm commitWriteTransaction];
+}
 
 - (void)nukeRealm
 {

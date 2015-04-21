@@ -76,6 +76,7 @@
 - (void) resetBrowserAndAdvertiser;
 - (void) nukeRealm;
 - (void) nukeHistory;
+- (void) nukeChatHistory;
 
 - (void)createUserModel;
 - (void)updateAvatar:       (NSInteger)            number;
