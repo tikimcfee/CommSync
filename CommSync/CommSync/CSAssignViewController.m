@@ -36,7 +36,10 @@ NSMutableArray* pickerData;
 
         [_assignmentLabel setText:_sourceTask.assignedID];
         
+       
         RLMResults *peerHistory = [CSUserRealmModel allObjectsInRealm:sessionManager.peerHistoryRealm];
+    
+        
         for(CSUserRealmModel *peer in peerHistory)
         {
             [pickerData addObject:peer.displayName];

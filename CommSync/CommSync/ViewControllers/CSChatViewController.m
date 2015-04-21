@@ -244,8 +244,11 @@
         
             NSString *image = [person getPicture];
             [cell.avatarImage setImage:[UIImage imageNamed:image]];
-        if ([msg.createdBy isEqualToString:self.peerID.uniqueID]) {
-            cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.7f];
+        if ([msg.createdBy isEqualToString:_sessionManager.myUniqueID]) {
+            cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.4f];
+        }
+        else{
+            cell.backgroundColor = [UIColor whiteColor];
         }
     }
     

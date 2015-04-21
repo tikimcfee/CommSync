@@ -64,10 +64,10 @@
 - (void)updateConnectionCountAndTableView:(NSNotification *)notification
 {
     __weak CSUserViewController *weakSelf = self;
+    NSInteger connectionCount = [_sessionManager.currentConnectedPeers count];
+    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger connectionCount = [_sessionManager.currentConnectedPeers count];
-        weakSelf.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
         [weakSelf.tableView reloadData];
     });
 }

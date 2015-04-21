@@ -127,7 +127,7 @@
                 NSMutableArray* differences = [[NSMutableArray alloc]init];
                 for(CSUserRealmModel *peer in [receivedObject valueForKey:kcs_USER_ARRAY])
                 {
-                    if(![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myUniqueID]){
+                    if(![peer.uniqueID isEqualToString: _parentAnalyzer.globalManager.myUniqueID]){
                        if( [self updatePeerHistory:peer] )[differences addObject:peer];
                     }
                 }
