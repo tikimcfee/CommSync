@@ -54,10 +54,6 @@
 // Data queue
 @property (strong, nonatomic) NSOperationQueue* mainTaskSendQueue;
 
-
-// 1-1 session objects
-@property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
-
 // Delegate objects for handling callbacks
 @property (strong, nonatomic) id <MCSessionDataHandlingDelegate> dataHandlingDelegate;
 
@@ -85,6 +81,8 @@
 + (NSString *)peerHistoryRealmDirectory;
 + (NSString *)privateMessageRealmDirectory;
 + (NSString *)chatMessageRealmDirectory;
+
+
 @property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 @property (strong, nonatomic) RLMRealm *chatMessageRealm;
 @property (strong, nonatomic) RLMRealm *privateMessageRealm;
@@ -96,7 +94,16 @@
 
 @property (strong, nonatomic) NSMutableDictionary* allTags;
 
+- (MCSession*)synchronizedWithLookup:(NSString*)toLookup
+                        withAddition:(NSString*)toAdd
+                          forSession:(MCSession*)sessionToAdd
+                          orDeletion:(NSString*)toDelete;
+
+- (MCSession*)synchronizedPeerRetrievalForDisplayName:(NSString*)displayName;
+
+
 -(void) addTag:(NSString*) tag;
 -(void) addMessage:(NSString*) peer;
 -(void) removeMessage:(NSString*) peer;
+
 @end

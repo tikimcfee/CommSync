@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 
 @implementation CSTaskListViewController
 
-static CGFloat TIME_TO_UPDATE = -1;
+//static CGFloat TIME_TO_UPDATE = -1;
 
 #pragma mark - View Lifecycle
 
@@ -123,13 +123,13 @@ static CGFloat TIME_TO_UPDATE = -1;
     
     _incomingTaskCallback = ^void()
     {
-        NSTimeInterval time;
-        if (TIME_TO_UPDATE != -1) {
-            time = TIME_TO_UPDATE;
-            TIME_TO_UPDATE = -1;
-        } else {
-            time = 0.5;
-        }
+        NSTimeInterval time = 0.5;
+//        if (TIME_TO_UPDATE != -1) {
+//            time = TIME_TO_UPDATE;
+//            TIME_TO_UPDATE = -1;
+//        } else {
+//            time = 0.5;
+//        }
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, time * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             CSTaskListUpdateOperation* newUpdate = [CSTaskListUpdateOperation new];
@@ -191,7 +191,7 @@ static CGFloat TIME_TO_UPDATE = -1;
     if(_completionToggleControl.selectedSegmentIndex != _completionToggleIndex) {
         _completionToggleIndex = _completionToggleControl.selectedSegmentIndex;
         dispatch_async(dispatch_get_main_queue(), ^{
-            TIME_TO_UPDATE = 0.0;
+//            TIME_TO_UPDATE = 0.0;
             _incomingTaskCallback();
         });
     }

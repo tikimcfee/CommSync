@@ -62,7 +62,6 @@
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.sessionManager = app.globalSessionManager;
     _currentUser = _sessionManager.myUniqueID;
-    NSLog(@"%@", _peerID.displayName);
     if(_sourceTask == nil){
         if(!_peerID) {
             _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
@@ -145,7 +144,7 @@
                 NSDictionary *dataToSend = @{@"PrivateMessage"  :   message};
                 NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                 //If we are directly connected send them the message
-                if ([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:_peerID.uniqueID])
+                if ([_sessionManager synchronizedPeerRetrievalForDisplayName:_peerID.displayName])
                 {
                     //the user is connected to the target so we can send it directly
                     [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:_peerID.uniqueID]];
@@ -228,17 +227,16 @@
     
     if(!_sourceTask){
         
-        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
-
-        cell.messageLabel.text = msg.messageText;
-        cell.transform = self.tableView.transform;
-
-        CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
-        cell.createdByLabel.text = person.displayName;
-
-        NSString *image = [person getPicture];
-        [cell.avatarImage setImage:[UIImage imageNamed:image]];
+            CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+    
+            cell.messageLabel.text = msg.messageText;
+            cell.transform = self.tableView.transform;
         
+            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
+            cell.createdByLabel.text = person.displayName;
+        
+            NSString *image = [person getPicture];
+            [cell.avatarImage setImage:[UIImage imageNamed:image]];
         if ([msg.createdBy isEqualToString:self.peerID.uniqueID]) {
             cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.7f];
         }

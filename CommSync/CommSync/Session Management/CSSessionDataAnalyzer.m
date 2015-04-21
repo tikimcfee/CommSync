@@ -95,7 +95,7 @@
             //if the message is meant for so meone else then propagate it so they get it
             if(![message.recipient isEqualToString:_parentAnalyzer.globalManager.myPeerID.displayName]){
                 
-                if([_parentAnalyzer.globalManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
+                if([_parentAnalyzer.globalManager synchronizedWithLookup:message.recipient withAddition:nil forSession:nil orDeletion:nil])
                 {
                     //the user is connected to the target so we can send it directly
                     [_parentAnalyzer.globalManager sendSingleDataPacket:_dataToAnalyze toSinglePeer: [_parentAnalyzer.globalManager.currentConnectedPeers valueForKey:message.recipient]];

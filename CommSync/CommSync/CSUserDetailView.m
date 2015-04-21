@@ -34,19 +34,6 @@
     
     NSString *image = [_peer getPicture];
     [self.userAvatarImage setImage:[UIImage imageNamed:image]];
-    
-   
-    UINavigationBar *bar = [UINavigationBar new];
-    [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width,32)];
-    [bar setupCommSyncStyle];
-    _height.constant = (self.view.frame.size.height  * 0.48);
-    UILabel *barLabel = [UILabel new];
-    [barLabel setFrame:CGRectMake((self.view.frame.size.width/2- 45.0), 8, 120.0, 20.0)];
-    [barLabel setText:@"Assigned Tasks"];
-    [barLabel setTextColor:[UIColor whiteColor]];
-    
-    [bar addSubview:barLabel];
-    [self.view addSubview:bar];
 }
 
 

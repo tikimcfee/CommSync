@@ -93,8 +93,7 @@
     }
     
     userName = user.displayName;
-    cell.availableStatus.layer.cornerRadius = 12.5f;
-    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor flatNephritisColor]: [UIColor flatPomegranateColor];
+    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor greenColor]: [UIColor redColor];
     
     cell.userLabel.text = userName;
     [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];

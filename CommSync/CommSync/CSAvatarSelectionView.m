@@ -20,6 +20,8 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
   
     //gets the max size that can fit confortably in the frame and evenly spaces them
@@ -64,7 +66,7 @@
     {
         cell = [[CSAvatarCell alloc] init];
     }
-    NSString* avatar = [NSString stringWithFormat:@"Avatar %lu",(unsigned long)indexPath.row + 1];
+    NSString* avatar = [NSString stringWithFormat:@"Avatar %li",indexPath.row + 1];
     [cell.avatarImage setImage:[UIImage imageNamed:avatar]];
     
     [cell.layer setCornerRadius:50.0f];

@@ -27,6 +27,9 @@
 @property (nonatomic, strong) NSMutableDictionary* devicesThatDeferredToMeDisplayNamesToPeerIDs;
 @property (nonatomic, strong) RLMRealm* realm;
 
+// 1-1 session objects
+@property (strong, nonatomic) NSMutableDictionary* sessionLookupDisplayNamesToSessions;
+
 @property (nonatomic, strong) CSSessionDataAnalyzer* dataAnalyzer;
 @property (nonatomic, strong) CSUserRealmModel *peers;
 
@@ -300,20 +303,49 @@
 }
 
 # pragma mark - Session Helpers
-- (MCSession*)setAndReturnNewSessionForPeer:(MCPeerID*)peer {
-    MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
-    newSession.delegate = self;
-    
-    if([_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName]) {
-        NSLog(@"[!] A session already exists for this peer. Disconnecting from that session and RESETTING value to new session.");
-        MCSession* oldSession = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
-        [oldSession disconnect];
-        oldSession.delegate = nil;
+//- (MCSession*)setAndReturnNewSessionForPeer:(MCPeerID*)peer {
+//    MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
+//    newSession.delegate = self;
+//    
+//    if([_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName]) {
+//        NSLog(@"[!] A session already exists for this peer. Disconnecting from that session and RESETTING value to new session.");
+//        MCSession* oldSession = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
+//        [oldSession disconnect];
+//        oldSession.delegate = nil;
+//    }
+//    
+//    [_sessionLookupDisplayNamesToSessions setValue:newSession forKey:peer.displayName];
+//    
+//    return newSession;
+//}
+- (MCSession*)synchronizedWithLookup:(NSString*)toLookup
+                        withAddition:(NSString*)toAdd
+                          forSession:(MCSession*)sessionToAdd
+                          orDeletion:(NSString*)toDelete {
+    if (toLookup) {
+        @synchronized (_sessionLookupDisplayNamesToSessions) {
+            return [_sessionLookupDisplayNamesToSessions valueForKey:toLookup];
+        }
+    } else if (toAdd && sessionToAdd) {
+        @synchronized (_sessionLookupDisplayNamesToSessions) {
+            [_sessionLookupDisplayNamesToSessions setObject:sessionToAdd forKey:toAdd];
+        }
+        return sessionToAdd;
+        
+    } else if (toDelete) {
+        @synchronized (_sessionLookupDisplayNamesToSessions) {
+            [_sessionLookupDisplayNamesToSessions removeObjectForKey:toDelete];
+        }
+        return nil;
     }
     
-    [_sessionLookupDisplayNamesToSessions setValue:newSession forKey:peer.displayName];
-    
-    return newSession;
+    return nil;
+}
+
+- (MCSession*)synchronizedPeerRetrievalForDisplayName:(NSString*)displayName {
+    @synchronized (_sessionLookupDisplayNamesToSessions) {
+        return [_sessionLookupDisplayNamesToSessions valueForKey:displayName];
+    }
 }
 
 - (void)nukeSession
@@ -392,7 +424,7 @@
     
     //#warning THIS MAY BE TERRIBLE BEHAVIOR... HOPE NOT!
     BOOL shouldRecreate = NO;
-    if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
+    if([self synchronizedWithLookup:peerID.displayName withAddition:nil forSession:nil orDeletion:nil])
     {
         NSLog(@"[%@] is already in a session.", peerID.displayName);
         //        NSLog(@"Assuming a reconnection attempt needs to be made... rebuilding session for peer [%@]", peerID.displayName);
@@ -409,18 +441,17 @@
 {
     
     NSTimeInterval linkDeadTime = 15;
-    MCSession* inviteSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
+    MCSession* inviteSession = [self synchronizedWithLookup:peerID.displayName
+                                               withAddition:nil
+                                                 forSession:nil
+                                                 orDeletion:nil];
     if(!inviteSession) {
         inviteSession = [[MCSession alloc] initWithPeer:_myPeerID];
         inviteSession.delegate = self;
-        [_sessionLookupDisplayNamesToSessions setValue:inviteSession forKey:peerID.displayName];
-    } else if (recreate) {
-        MCSession* newSession = [[MCSession alloc] initWithPeer:_myPeerID];
-        newSession.delegate = self;
-        inviteSession.delegate = nil;
-        [_sessionLookupDisplayNamesToSessions removeObjectForKey:peerID.displayName];
-        [_sessionLookupDisplayNamesToSessions setValue:newSession forKey:peerID.displayName];
-        inviteSession = newSession;
+        [self synchronizedWithLookup:nil
+                        withAddition:peerID.displayName
+                          forSession:inviteSession
+                          orDeletion:nil];
     }
     
     [_serviceBrowser invitePeer:peerID toSession:inviteSession withContext:nil timeout:linkDeadTime];
@@ -450,7 +481,7 @@
 {
     NSLog(@"PeerID:[%@] sent an invitation.", peerID.displayName);
     
-    if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
+    if([self synchronizedWithLookup:peerID.displayName withAddition:nil forSession:nil orDeletion:nil])
     {
         NSLog(@"Peer already in session; sending NO.");
         invitationHandler(NO, nil);
@@ -461,7 +492,6 @@
     
     MCSession* acceptSession = [[MCSession alloc] initWithPeer:_myPeerID];
     acceptSession.delegate = self;
-    [_sessionLookupDisplayNamesToSessions setValue:acceptSession forKey:peerID.displayName];
     
     invitationHandler(YES, acceptSession);
 }
@@ -493,64 +523,70 @@
             
             // We never connected, or lost a connection to, the peer.
             // Reset connection browsing and move on.
-            if([_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName])
+            if([self synchronizedWithLookup:peerID.displayName withAddition:nil forSession:nil orDeletion:nil])
             {
                 NSLog(@"Removing peer [%@] from known session.", peerID.displayName);
-                MCSession* badSession = [_sessionLookupDisplayNamesToSessions valueForKey:peerID.displayName];
+                MCSession* badSession = [self synchronizedWithLookup:peerID.displayName
+                                                        withAddition:nil
+                                                          forSession:nil
+                                                          orDeletion:nil];
                 [badSession disconnect];
                 badSession.delegate = nil;
-                [_sessionLookupDisplayNamesToSessions removeObjectForKey:peerID.displayName];
+                [self synchronizedWithLookup:nil withAddition:nil forSession:nil orDeletion:peerID.displayName];
             }
             
             [self resetBrowserAndAdvertiser];
             break;
         case MCSessionStateConnecting:
             stateString = kUserConnectingNotification;
+            [self synchronizedWithLookup:nil withAddition:peerID.displayName forSession:session orDeletion:nil];
             break;
         case MCSessionStateConnected:
         {
             stateString = kUserConnectedNotification;
             [_currentConnectedPeers setValue:peerID forKey:peerID.displayName];
             
-            
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(_peerHistoryQueue, ^{
                 
                 //send all peer data to eachother
                 NSMutableArray *peers = [[NSMutableArray alloc]init];
-                for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:_peerHistoryRealm])
+                RLMRealm* peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+                for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:peerHistoryRealm]) {
                     [peers addObject:user];
+                }
                 
                 NSDictionary *dataToSend = @{@"UserArray"  :   peers};
-                
                 NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                 [self sendSingleDataPacket:historyData toSinglePeer:peerID];
                 
-                CSUserRealmModel *peer = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:peerID.displayName];
-                
                 //if there are any unsent messages then send them
+                CSUserRealmModel *peer = [CSUserRealmModel objectInRealm:peerHistoryRealm forPrimaryKey:peerID.displayName];
                 NSInteger number = peer.unsentMessages;
                 if(number > 0)
                 {
-                    NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", peerID.displayName, peerID.displayName];
-                    RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:pred];
-                    NSMutableArray* send = [[NSMutableArray alloc] init];
-                   
-                    //add unsent messages
-                    for(int i = 0; i < number; i++ )
-                        [send addObject: messages[[messages count] - 1 - i]];
+                    dispatch_async(_chatMessageQueue, ^{
+                        NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", peerID.displayName, peerID.displayName];
+                        RLMRealm* privateMessageRealm = [RLMRealm realmWithPath:[CSSessionManager privateMessageRealmDirectory]];
+                        RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred];
+                        NSMutableArray* send = [[NSMutableArray alloc] init];
+                       
+                        //add unsent messages
+                        for(int i = 0; i < number; i++ ) {
+                            [send addObject: messages[[messages count] - 1 - i]];
+                        }
+                        
+                        NSDictionary *dataToSend = @{@"PMArray"  :   send};
+                        NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                        [self sendSingleDataPacket:data toSinglePeer:peerID];
+                    });
                     
-                    NSDictionary *dataToSend = @{@"PMArray"  :   send};
-                    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
-                    [self sendSingleDataPacket:data toSinglePeer:peerID];
                 }
-                
             });
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(_chatMessageQueue, ^{
                 NSMutableArray* send = [[NSMutableArray alloc]init];
-                for(CSChatMessageRealmModel* message in [CSChatMessageRealmModel allObjectsInRealm:_chatMessageRealm])
-                {
+                RLMRealm* chatRealm = [RLMRealm realmWithPath:[CSSessionManager chatMessageRealmDirectory]];
+                for(CSChatMessageRealmModel* message in [CSChatMessageRealmModel allObjectsInRealm:chatRealm]) {
                     [send addObject:message];
                 }
                 if([send count] > 0) {
@@ -563,8 +599,7 @@
             dispatch_async(_taskRealmQueue, ^{
                 NSMutableArray* send = [[NSMutableArray alloc]init];
             
-                for(CSTaskRealmModel* task in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
-                {
+                for(CSTaskRealmModel* task in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]]) {
                     [send addObject:task.concatenatedID];
                 }
             

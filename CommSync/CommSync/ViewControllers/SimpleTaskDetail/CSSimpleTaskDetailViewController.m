@@ -20,7 +20,7 @@
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 #define kTextBorderColor flatWisteriaColor
 
-#define time 0.2
+#define time 0.3
 #define alph 0.75
 // Check background color : #AFF494
 
@@ -287,7 +287,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
         CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
         NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
-        cellRef.label.text = [NSString stringWithFormat:@"View %lu more comment%@",
+        cellRef.label.text = [NSString stringWithFormat:@"View %u more comment%@",
                               _sourceTask.comments.count - 4,
                               plural];
     } else {
@@ -429,7 +429,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     UIImage *image = _sourceTask.completed ? _taskCompleteImage : _taskIncompleteImage;
     
     [UIView transitionWithView:self.checkIconImageView
-                      duration:1.0f // animation duration
+                      duration:time // animation duration
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^{
                         self.checkIconImageView.image = image; // change to other image
