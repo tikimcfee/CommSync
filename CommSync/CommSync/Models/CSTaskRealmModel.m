@@ -202,6 +202,16 @@
     return nil;
 }
 
+- (CSTaskMediaRealmModel*) getTaskAudioModel {
+    for (CSTaskMediaRealmModel* media in self.taskMedia) {
+        if(media.mediaType == CSTaskMediaType_Audio) {
+            return media;
+        }
+    }
+    
+    return nil;
+}
+
 - (void) addComment: (CSCommentRealmModel *) newComment{
     RLMRealm* realm = [RLMRealm defaultRealm];
 

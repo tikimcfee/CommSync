@@ -11,8 +11,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import "CSInsetTextField.h"
 #import "CSCustomTapRecognizer.h"
+#import "CSAudioPlotViewController.h"
 
-@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, CSCustomTapListenerDelegate>
+@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, CSAudioPlotActionDelegate>
 
 // main views and containers
 @property (strong, nonatomic) IBOutlet UITableView *tableview;
@@ -21,7 +22,7 @@
 // Nav bar controls
 @property (weak, nonatomic) IBOutlet UIImageView *editIconImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *audioPlayImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *backToListImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *assigneeImageView;
 
 // Header : Main Task Details and Images
 @property (weak, nonatomic) IBOutlet CSInsetTextField *taskTitleTextField;
@@ -47,13 +48,14 @@
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *playAudioRecognizer;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *backToListRecognizer;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *editingRecognizer;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *assigneeRecognizer;
 
 // Models and data
 @property (strong, nonatomic) CSTaskRealmModel* sourceTask;
 
 @end
 
-#pragma mark - Lazy and simple table view cell implementation
+#pragma mark - Lazy and simple table view cell implementations
 @interface CSRestOfCommentsTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel* label;
 @end

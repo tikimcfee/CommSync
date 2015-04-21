@@ -14,10 +14,11 @@
 #import "SlackTestViewController.h"
 #import "UIImage+normalize.h"
 #import "CSPictureController.h"
+#import "CSUserRealmModel.h"
 
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
 #define kChatTableViewCellIdentifier @"ChatViewCell"
-#define kTextBorderColor flatWetAsphaltColor
+#define kTextBorderColor flatWisteriaColor
 
 #define time 0.2
 #define alph 0.75
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 // Backing controls
 @property (strong, nonatomic) AVAudioPlayer* audioPlayer;
+@property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
 @property (strong, nonatomic) UIImagePickerController* imagePicker;
 
 @property (strong, nonatomic) NSData* taskAudio;
@@ -53,6 +55,10 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 @property (nonatomic, strong) UIImage* taskIncompleteImage;
 @property (nonatomic, strong) UIImage* taskCompleteImage;
+
+@property (nonatomic, strong) UIImage* taskAudioNormal;
+@property (nonatomic, strong) UIImage* taskAudioNaN;
+@property (nonatomic, strong) UIImage* taskAudioEditing;
 
 // Revision management
 @property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
@@ -99,7 +105,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
          forCellReuseIdentifier:kChatTableViewCellIdentifier];
     
     self.firstLayoutComplete = NO;
-    self.newPriority = -1;
+    self.newPriority = CSTaskPriorityUnset;
 }
 
 - (void) removeTaskImageCollectionView {
@@ -127,9 +133,11 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _objectTextView.editable = NO;
     _objectTextView.textContainer.lineFragmentPadding = 0;
     _objectTextView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4);
+    _objectTextView.layer.cornerRadius = 4;
     
     _taskTitleTextField.text = _sourceTask.taskTitle;
     _taskTitleTextField.userInteractionEnabled = NO;
+    _taskTitleTextField.layer.cornerRadius = 4;
 
     _priorityButtonsMainView.alpha = 0.0;
     _priorityButtonsMainView.userInteractionEnabled = NO;
@@ -154,24 +162,40 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     _dottedPageControl.hidesForSinglePage = YES;
     
-    _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor flatConcreteColor]];
-    _backToListImageView.image = [IonIcons imageWithIcon:ion_ios_list size:33.0f color:[UIColor flatConcreteColor]];
+    _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor whiteColor]];
     _taskIncompleteImage = [IonIcons imageWithIcon:ion_ios_checkmark_outline size:64.0f color:c];
     _taskCompleteImage = [IonIcons imageWithIcon:ion_ios_checkmark size:64.0f color:[UIColor flatEmeraldColor]];
     _checkIconImageView.image = _taskIncompleteImage;
     _editIconImageView.userInteractionEnabled = YES;
-    _backToListImageView.userInteractionEnabled = YES;
     _checkIconImageView.userInteractionEnabled = YES;
     
-    _taskAudio = [_sourceTask getTaskAudio];
-    if (!_taskAudio) {
-        _audioPlayImageView.hidden = YES;
-        _audioPlayImageView.userInteractionEnabled = NO;
+    CSUserRealmModel* assignedUser = [CSUserRealmModel objectForPrimaryKey:self.sourceTask.assignedID];
+    if (assignedUser) {
+        _assigneeImageView.image = [UIImage imageNamed:[assignedUser getPicture]];
     } else {
-        _audioPlayImageView.image = [IonIcons imageWithIcon:ion_ios_recording size:33.0f color:[UIColor flatConcreteColor]];
-        _audioPlayImageView.userInteractionEnabled = YES;
+        _assigneeImageView.image = [UIImage imageNamed:@"Avatar-1"];
+    }
+    _assigneeImageView.userInteractionEnabled = YES;
+    
+    
+    // Get and set audio images for later reuse in editing modes
+    _taskAudio = [_sourceTask getTaskAudio];
+    _taskAudioNaN = [IonIcons imageWithIcon:ion_ios_recording
+                                       size:33.0f
+                                      color:[[UIColor flatCloudsColor]
+                                             colorWithAlphaComponent:0.5]];
+    _taskAudioNormal = [IonIcons imageWithIcon:ion_ios_recording
+                                          size:33.0f
+                                         color:[UIColor whiteColor]];
+    if (!_taskAudio) {
+        _audioPlayImageView.image = _taskAudioNaN;
+//        _audioPlayImageView.userInteractionEnabled = NO;
+    } else {
+        _audioPlayImageView.image = _taskAudioNormal;
+//        _audioPlayImageView.userInteractionEnabled = YES;
     }
     
+    _audioPlayImageView.userInteractionEnabled = YES;
     _tableview.estimatedRowHeight = 44.0f;
     _tableview.rowHeight = UITableViewAutomaticDimension;
     
@@ -193,6 +217,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.tableview reloadData];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -216,13 +241,6 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     _tableview.contentSize = CGSizeMake(_tableview.contentSize.width,
                                         _tableview.contentSize.height + 44);
-    
-//    _playAudioRecognizer.frameToDetect = _audioPlayImageView.frame;
-//    _playAudioRecognizer.tapDelegate = self;
-//    _backToListRecognizer.frameToDetect = _backToListImageView.frame;
-//    _backToListRecognizer.tapDelegate = self;
-//    _editingRecognizer.frameToDetect = _editIconImageView.frame;
-//    _editingRecognizer.tapDelegate = self;
 }
 
 #pragma mark - TableView DataSource + Delegate
@@ -241,20 +259,31 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 {
     if(indexPath.row == 4 && self.sourceTask.comments.count > 4) {
         return 88;
+    } else if (indexPath.row == 0 && self.sourceTask.comments.count == 0) {
+        return 132;
     }
     return UITableViewAutomaticDimension;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.sourceTask.comments.count > 4 ? 5 : self.sourceTask.comments.count;
+    if(self.sourceTask.comments.count == 0) {
+        return 1;
+    } else if(self.sourceTask.comments.count > 4) {
+        return 5;
+    } else {
+        return self.sourceTask.comments.count;
+    }
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *cellIdentifier = @"ChatViewCell";
     static NSString *allCommentsIdentifier = @"allCommentsCell";
+    static NSString *noCommentsIdentifier = @"noCommentsCell";
     UITableViewCell* cell;
-    if(indexPath.row == 4) {
+    if (self.sourceTask.comments.count == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:noCommentsIdentifier];
+    } else if(indexPath.row == 4) {
         cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
         CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
         NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
@@ -264,7 +293,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     } else {
         CSChatTableViewCell *cellRef = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         cell = cellRef;
-        CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex:indexPath.row];
+        RLMResults* comments = [self.sourceTask.comments sortedResultsUsingProperty:@"time" ascending:NO];
+        CSCommentRealmModel *comment = [comments objectAtIndex:indexPath.row];
         
         cellRef.createdByLabel.text = comment.UID;
         cellRef.messageLabel.text = comment.text;
@@ -348,7 +378,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // reset changes
     self.unsavedChanges = [NSMutableDictionary new];
     self.currentRevisions = [CSTaskRevisionRealmModel new];
-    self.newPriority = -1;
+    self.newPriority = CSTaskPriorityUnset;
 }
 
 - (void)findAndSetTaskChanges {
@@ -366,7 +396,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     }
     
     // priority changed
-    if (_newPriority != -1 && self.sourceTask.taskPriority != _newPriority) {
+    if (_newPriority != CSTaskPriorityUnset && self.sourceTask.taskPriority != _newPriority) {
         [self.unsavedChanges setObject:[NSNumber numberWithInt:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
         self.sourceTask.taskPriority = _newPriority;
     }
@@ -376,6 +406,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 
 #pragma mark -
 #pragma mark Actions and User Controls
+- (IBAction)reassignTask:(id)sender {
+    // TODO
+    // Pop assignee vc
+}
+
+
 - (IBAction)completeTask:(id)sender {
     //
     BOOL target = _sourceTask.completed ? NO : YES;
@@ -459,6 +495,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // add/remove editable borders
     [self animationForLayer:_taskTitleTextField.layer];
     [self animationForLayer:_objectTextView.layer];
+    [self animationForLayer:_audioPlayImageView.layer];
     
     // change button text
     CATransition *textChange = [CATransition animation];
@@ -546,13 +583,22 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     [UIView animateWithDuration:time
                           delay:0
-
                          options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          _priorityTextLabel.textColor = toColor;
                          _priorityBarView.backgroundColor = toColor;
                      }
                      completion:nil];
+    
+    if (self.sourceTask.completed == NO) {
+        [UIView transitionWithView:self.checkIconImageView
+                          duration:time
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                                self.checkIconImageView.image = [IonIcons imageWithIcon:ion_ios_checkmark_outline size:64.0f color:toColor];
+                        } completion:nil];
+    }
+
     
     CATransition *textChange = [CATransition animation];
     textChange.duration = time;
@@ -586,6 +632,9 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         });
         
         [weakSelf.sourceTask getAllImagesForTaskWithCompletionBlock:^(NSMutableArray* loadedImages) {
+            if (weakSelf.taskImages.count == 0) {
+                [weakSelf repairTaskImageCollectionView];
+            }
             weakSelf.taskImages = loadedImages;
             [weakSelf.taskImageCollectionView reloadData];
         }];
@@ -602,11 +651,15 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 #pragma mark -- END Image Picker
 - (IBAction)playAudio:(id)sender {
-    NSError* error;
-    
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]
-                                                     error:&error];
-    [self.audioPlayer play];
+    if (_mode == CSSimpleDetailMode_View && self.taskAudio) {
+        NSError* error;
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]
+                                                         error:&error];
+        [self.audioPlayer play];
+    } else if (_mode == CSSimpleDetailMode_Edit){
+        [self performSegueWithIdentifier:@"CSAudioPlotViewController" sender:nil];
+    }
+
 }
 
 #pragma mark - Segues
@@ -617,7 +670,44 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
         CSPictureController* picture = segue.destinationViewController;
         picture.taskImage = sender;
+    } else if ([segue.identifier isEqualToString:@"CSAudioPlotViewController"]){
+        // VC for audio recording
+        self.audioRecorder = (CSAudioPlotViewController*)[segue destinationViewController];
+        self.audioRecorder.fileNameSansExtension = self.sourceTask.concatenatedID;
+        self.audioRecorder.showShowSaveAndClose = YES;
+        self.audioRecorder.saveDelegate = self;
     }
+}
+
+- (BOOL) saveAudio {
+    [[RLMRealm defaultRealm] beginWriteTransaction];
+    self.sourceTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
+    if(self.sourceTask.TRANSIENT_audioDataURL) {
+        CSTaskMediaRealmModel* oldMedia = [_sourceTask getTaskAudioModel];
+        if (oldMedia) {
+            [[RLMRealm defaultRealm] deleteObject:oldMedia];
+        }
+        
+        CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];
+        newMedia.mediaType = CSTaskMediaType_Audio;
+        newMedia.mediaData = [NSData dataWithContentsOfURL:self.sourceTask.TRANSIENT_audioDataURL];
+
+        if (self.taskAudio == nil) {
+            [UIView transitionWithView:self.audioPlayImageView
+                              duration:time // animation duration
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                self.audioPlayImageView.image = _taskAudioNormal; // change to other image
+                            } completion:^(BOOL finished) {
+                            }];
+        }
+        
+        _taskAudio = newMedia.mediaData;
+        [self.sourceTask.taskMedia addObject: newMedia];
+    }
+    
+    [[RLMRealm defaultRealm] commitWriteTransaction];
+    return YES;
 }
 
 //#pragma mark -

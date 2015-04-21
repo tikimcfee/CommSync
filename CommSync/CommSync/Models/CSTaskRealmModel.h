@@ -32,7 +32,8 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 {
     CSTaskPriorityLow = 0,
     CSTaskPriorityMedium,
-    CSTaskPriorityHigh
+    CSTaskPriorityHigh,
+    CSTaskPriorityUnset
 };
 
 @interface CSTaskRealmModel : RLMObject <NSCoding>
@@ -59,7 +60,10 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property CSTaskPriority taskPriority;
 
 - (void) getAllImagesForTaskWithCompletionBlock:(void (^)(NSMutableArray*))completion;
+
 - (NSData*) getTaskAudio;
+- (CSTaskMediaRealmModel*) getTaskAudioModel;
+
 + (CSTaskRealmModel*)taskModelWithModel:(CSTaskRealmModel*)model;
 
 - (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
