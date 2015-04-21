@@ -1760,15 +1760,21 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="GUB-ok-pez">
+                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" title="Item" id="QQP-fv-ZeV"/>
-                        <barButtonItem key="rightBarButtonItem" title="All Peers" id="Prf-3R-QLk">
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CYC-8x-3ju">
+                            <rect key="frame" x="180" y="7" width="240" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Connected"/>
+                                <segment title="Disconnected"/>
+                            </segments>
                             <connections>
-                                <action selector="FilterPeers:" destination="v0D-Ly-N7E" id="0Pr-s2-tgE"/>
+                                <action selector="filterByConnectedStatus:" destination="v0D-Ly-N7E" eventType="valueChanged" id="9L6-RI-4Xv"/>
                             </connections>
-                        </barButtonItem>
+                        </segmentedControl>
                     </navigationItem>
                     <connections>
-                        <outlet property="FilterButton" destination="Prf-3R-QLk" id="I4Y-B9-Wy8"/>
                         <outlet property="navBar" destination="GUB-ok-pez" id="qgH-UD-wyg"/>
                         <outlet property="userConnectionCount" destination="QQP-fv-ZeV" id="Zzv-1n-zaC"/>
                         <segue destination="FbK-pY-oQ5" kind="show" identifier="showUserDetail" id="KlC-hO-jOc"/>
