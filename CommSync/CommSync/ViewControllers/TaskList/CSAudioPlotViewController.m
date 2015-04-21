@@ -7,9 +7,13 @@
 //
 
 #import "CSAudioPlotViewController.h"
+#import "IonIcons.h"
+#import "UIColor+FlatColors.h"
 
 @interface CSAudioPlotViewController ()
 
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonCenterYConstraint;
 
 
 @end
@@ -31,6 +35,16 @@
     }
     return self;
 }
+
+- (IBAction)saveNewRecording:(id)sender {
+    [self.saveDelegate saveAudio];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)closeWithoutSaving:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 -(void)initializeViewController {
     // Create an instance of the microphone and tell it to use this view controller instance as the delegate
@@ -59,8 +73,8 @@
     [super viewDidLoad];
     
 
-    self.audioPlot.backgroundColor = [UIColor colorWithRed:0.231 green:0.498 blue:0.980 alpha:1.000];
-    self.audioPlot.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlot.backgroundColor = [UIColor flatSilverColor];
+    self.audioPlot.color           = [UIColor flatWetAsphaltColor];
     self.audioPlot.plotType        = EZPlotTypeBuffer;
     self.audioPlot.shouldFill      = YES;
     self.audioPlot.shouldMirror    = YES;
@@ -68,6 +82,21 @@
     
     self.playAudioButton.userInteractionEnabled = NO;
     self.playAudioButton.alpha = 0;
+    
+    if (self.showShowSaveAndClose) {
+        //
+        _saveImageView.image = [IonIcons imageWithIcon:ion_plus_circled size:40 color:[UIColor flatEmeraldColor]];
+        _closeImageView.image = [IonIcons imageWithIcon:ion_ios_close size:40 color:[UIColor flatAlizarinColor]];
+        _saveImageView.userInteractionEnabled = YES;
+        _closeImageView.userInteractionEnabled = YES;
+        _saveImageView.alpha = 0;
+        _buttonCenterYConstraint.constant = -64.0f;
+    } else {
+        _saveImageView.userInteractionEnabled = NO;
+        _closeImageView.userInteractionEnabled = NO;
+        _saveImageView.hidden = YES;
+        _closeImageView.hidden = YES;
+    }
 }
 
 -(void)playFile:(id)sender
@@ -146,15 +175,23 @@
         [self.recorder closeAudioFile];
         self.recorder = nil;
         self.playAudioButton.userInteractionEnabled = YES;
+        self.saveImageView.userInteractionEnabled = YES;
+        self.closeImageView.userInteractionEnabled = YES;
         [UIView animateWithDuration:0.2 animations:^{
             self.playAudioButton.alpha = 1;
+            self.saveImageView.alpha = 1;
+            self.closeImageView.alpha = 1;
         }];
     }
     else {
         _isRecording = YES;
         self.playAudioButton.userInteractionEnabled = NO;
+        self.saveImageView.userInteractionEnabled = NO;
+        self.closeImageView.userInteractionEnabled = NO;
         [UIView animateWithDuration:0.2 animations:^{
             self.playAudioButton.alpha = 0;
+            self.saveImageView.alpha = 0;
+            self.closeImageView.alpha = 0;
         }];
         [self.microphone startFetchingAudio];
         self.recorder = [EZRecorder recorderWithDestinationURL:[self testFilePathURL]

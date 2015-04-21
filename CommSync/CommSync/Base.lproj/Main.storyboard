@@ -1284,20 +1284,20 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="allCommentsCell" rowHeight="132" id="cDT-CW-MaP" userLabel="view all tablecell" customClass="CSRestOfCommentsTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="allCommentsCell" rowHeight="88" id="cDT-CW-MaP" userLabel="view all tablecell" customClass="CSRestOfCommentsTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cDT-CW-MaP" id="qaG-CZ-bS3">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qzT-cm-mOJ">
-                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="132"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="88"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f0w-RM-FzV">
-                                                            <rect key="frame" x="22" y="11" width="556" height="110"/>
+                                                            <rect key="frame" x="22" y="11" width="556" height="66"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Comments" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="J1K-Cf-sZB">
-                                                                    <rect key="frame" x="216" y="0.0" width="125" height="110"/>
+                                                                    <rect key="frame" x="216" y="0.0" width="125" height="66"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -1342,6 +1342,26 @@
                                         <connections>
                                             <outlet property="label" destination="J1K-Cf-sZB" id="RPr-0a-FoK"/>
                                         </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noCommentsCell" id="CcE-sk-jSt">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CcE-sk-jSt" id="jqF-Gq-qFJ">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="• No comments yet •" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mcs-U6-mAw">
+                                                    <rect key="frame" x="221" y="0.0" width="158" height="44"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.69892966747283936" green="0.72953826189041138" blue="0.75169730186462402" alpha="0.6181766795865633" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="mcs-U6-mAw" firstAttribute="top" secondItem="jqF-Gq-qFJ" secondAttribute="top" id="5Kr-MR-f8I"/>
+                                                <constraint firstAttribute="bottom" secondItem="mcs-U6-mAw" secondAttribute="bottom" id="kin-1t-nQY"/>
+                                                <constraint firstAttribute="centerX" secondItem="mcs-U6-mAw" secondAttribute="centerX" id="tNn-6y-xGr"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -1395,38 +1415,13 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="DLK-kf-ZDf">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" width="66" style="plain" id="C8C-0J-A7i">
-                            <view key="customView" contentMode="scaleToFill" id="32o-mQ-sAj">
-                                <rect key="frame" x="0.0" y="0.0" width="133" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nq4-cq-vtM">
-                                        <rect key="frame" x="0.0" y="0.0" width="33" height="33"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="33" id="C2e-XI-b42"/>
-                                        </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="n1I-Ts-gkZ" appends="YES" id="x6v-G3-m8v"/>
-                                        </connections>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstItem="nq4-cq-vtM" firstAttribute="top" secondItem="32o-mQ-sAj" secondAttribute="top" id="NWi-u1-t1I"/>
-                                    <constraint firstAttribute="bottom" secondItem="nq4-cq-vtM" secondAttribute="bottom" id="OIp-3p-BNs"/>
-                                    <constraint firstItem="nq4-cq-vtM" firstAttribute="leading" secondItem="32o-mQ-sAj" secondAttribute="leading" id="PRz-7V-q9W"/>
-                                </constraints>
-                            </view>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" width="66" style="plain" id="x6o-3u-wVq">
                             <view key="customView" contentMode="scaleToFill" id="DLu-hO-JT9">
                                 <rect key="frame" x="0.0" y="0.0" width="133" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Vq-bh-qBB">
-                                        <rect key="frame" x="78" y="0.0" width="33" height="33"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Vq-bh-qBB" userLabel="editImage">
+                                        <rect key="frame" x="100" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="Ecn-BV-YcD"/>
@@ -1435,8 +1430,8 @@
                                             <outletCollection property="gestureRecognizers" destination="Mif-Tn-qRi" appends="YES" id="9e8-bP-hMd"/>
                                         </connections>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-7j-q0D">
-                                        <rect key="frame" x="22" y="0.0" width="33" height="33"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-7j-q0D" userLabel="audioImage">
+                                        <rect key="frame" x="57" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="m6a-HH-63X"/>
@@ -1445,24 +1440,38 @@
                                             <outletCollection property="gestureRecognizers" destination="t07-O4-NdS" appends="YES" id="vM8-RX-jFt"/>
                                         </connections>
                                     </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dw6-od-1Op" userLabel="assigneeImage">
+                                        <rect key="frame" x="14" y="0.0" width="33" height="33"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="33" id="htw-JV-65H"/>
+                                        </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="AIz-JJ-ahl" appends="YES" id="dz4-MO-v6b"/>
+                                        </connections>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="6Vq-bh-qBB" firstAttribute="top" secondItem="DLu-hO-JT9" secondAttribute="top" id="20W-Pk-m0e"/>
+                                    <constraint firstItem="dw6-od-1Op" firstAttribute="top" secondItem="DLu-hO-JT9" secondAttribute="top" id="EZ8-qJ-daS"/>
+                                    <constraint firstItem="Iw8-7j-q0D" firstAttribute="leading" secondItem="dw6-od-1Op" secondAttribute="trailing" constant="10" id="Eby-Lh-gYi"/>
                                     <constraint firstAttribute="bottom" secondItem="6Vq-bh-qBB" secondAttribute="bottom" id="WbE-eg-AUb"/>
-                                    <constraint firstAttribute="trailing" secondItem="6Vq-bh-qBB" secondAttribute="trailing" constant="22" id="X2K-cG-QlX"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Vq-bh-qBB" secondAttribute="trailing" id="X2K-cG-QlX"/>
+                                    <constraint firstItem="6Vq-bh-qBB" firstAttribute="leading" secondItem="Iw8-7j-q0D" secondAttribute="trailing" constant="10" id="Zc9-Jb-FEh"/>
                                     <constraint firstAttribute="bottom" secondItem="Iw8-7j-q0D" secondAttribute="bottom" id="a8t-ON-EAf"/>
                                     <constraint firstItem="Iw8-7j-q0D" firstAttribute="top" secondItem="DLu-hO-JT9" secondAttribute="top" id="lfY-gN-dTx"/>
-                                    <constraint firstItem="Iw8-7j-q0D" firstAttribute="leading" secondItem="DLu-hO-JT9" secondAttribute="leading" constant="22" id="v56-WQ-G4h"/>
+                                    <constraint firstAttribute="bottom" secondItem="dw6-od-1Op" secondAttribute="bottom" id="o0k-6z-M6j"/>
                                 </constraints>
                             </view>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="assigneeImageView" destination="dw6-od-1Op" id="TvS-R2-VFI"/>
+                        <outlet property="assigneeRecognizer" destination="AIz-JJ-ahl" id="JU6-vK-yQU"/>
                         <outlet property="audioPlayImageView" destination="Iw8-7j-q0D" id="6X8-I4-yt8"/>
-                        <outlet property="backToListImageView" destination="nq4-cq-vtM" id="Wh2-d4-ypr"/>
                         <outlet property="backToListRecognizer" destination="n1I-Ts-gkZ" id="XLy-Ad-pgN"/>
                         <outlet property="bottomActionButton" destination="ghm-1I-Rlw" id="mRX-RV-e59"/>
                         <outlet property="bottomActionString" destination="XP0-yC-EGt" id="T1r-2A-DeA"/>
@@ -1484,6 +1493,7 @@
                         <outlet property="taskTitleTextField" destination="oKR-zl-bff" id="umt-ZJ-2Z0"/>
                         <segue destination="6ZR-ay-eUY" kind="show" identifier="commentSegue" id="JaT-61-TFH"/>
                         <segue destination="e8e-7b-F0Z" kind="presentation" identifier="enlargedPictureController" id="vtR-27-CVO"/>
+                        <segue destination="dcw-MX-1Cl" kind="presentation" identifier="CSAudioPlotViewController" id="mex-m0-oqp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1wy-td-dAd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1510,6 +1520,11 @@
                 <tapGestureRecognizer id="AQC-W9-8Kz" userLabel="complete task recognizer">
                     <connections>
                         <action selector="completeTask:" destination="ITi-gD-sJd" id="oyi-nO-1VO"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="AIz-JJ-ahl" userLabel="assignee recognizer">
+                    <connections>
+                        <action selector="reassignTask:" destination="ITi-gD-sJd" id="RoV-Vt-TdV"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -1836,12 +1851,13 @@
                         <viewControllerLayoutGuide type="bottom" id="hP1-0m-1nj"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="k3d-m3-Efq" customClass="EZAudioPlotGL">
-                        <rect key="frame" x="0.0" y="0.0" width="560" height="40"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
-                                <rect key="frame" x="496" y="0.0" width="38" height="38"/>
+                                <rect key="frame" x="534" y="280" width="40" height="40"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="CEd-Xz-CYr"/>
                                     <constraint firstAttribute="width" secondItem="tIz-Sj-DCN" secondAttribute="height" multiplier="1:1" id="ZF7-kf-swH"/>
                                 </constraints>
                                 <state key="normal" image="Play Button">
@@ -1851,13 +1867,38 @@
                                     <action selector="playFile:" destination="dcw-MX-1Cl" eventType="touchUpInside" id="9bU-yd-GP1"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gCa-lw-h9L" userLabel="close view">
+                                <rect key="frame" x="26" y="280" width="40" height="40"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="fFx-10-2gu"/>
+                                    <constraint firstAttribute="width" secondItem="gCa-lw-h9L" secondAttribute="height" multiplier="1:1" id="hjv-LQ-2tu"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="aI7-oj-xnU" appends="YES" id="wWb-To-b06"/>
+                                </connections>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2uj-si-by2" userLabel="save view">
+                                <rect key="frame" x="76" y="280" width="40" height="40"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="3Qt-vU-Zph"/>
+                                    <constraint firstAttribute="width" secondItem="2uj-si-by2" secondAttribute="height" multiplier="1:1" id="RxG-si-QHV"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="VRs-ki-smX" appends="YES" id="nit-RV-EEc"/>
+                                </connections>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="hP1-0m-1nj" firstAttribute="top" secondItem="tIz-Sj-DCN" secondAttribute="bottom" constant="2" id="29K-ZY-wOU"/>
-                            <constraint firstItem="tIz-Sj-DCN" firstAttribute="top" secondItem="1KL-Lf-d78" secondAttribute="bottom" id="DCz-Av-hyo"/>
+                            <constraint firstItem="gCa-lw-h9L" firstAttribute="leading" secondItem="k3d-m3-Efq" secondAttribute="leadingMargin" constant="10" id="0e8-Nv-kiT"/>
+                            <constraint firstItem="gCa-lw-h9L" firstAttribute="centerY" secondItem="tIz-Sj-DCN" secondAttribute="centerY" id="Coy-E9-y8c"/>
+                            <constraint firstItem="tIz-Sj-DCN" firstAttribute="centerY" secondItem="2uj-si-by2" secondAttribute="centerY" id="F1j-BM-lPZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="tIz-Sj-DCN" secondAttribute="trailing" constant="10" id="Fd5-C5-wYS"/>
+                            <constraint firstAttribute="centerY" secondItem="tIz-Sj-DCN" secondAttribute="centerY" id="Gxd-wc-6ID"/>
+                            <constraint firstItem="2uj-si-by2" firstAttribute="leading" secondItem="gCa-lw-h9L" secondAttribute="trailing" constant="10" id="aVy-u6-EpG"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1871,17 +1912,30 @@
                     <toolbarItems/>
                     <connections>
                         <outlet property="audioPlot" destination="k3d-m3-Efq" id="vBf-N2-9q9"/>
+                        <outlet property="buttonCenterYConstraint" destination="Gxd-wc-6ID" id="E4n-ho-FzI"/>
+                        <outlet property="closeImageView" destination="gCa-lw-h9L" id="NY7-jk-dor"/>
                         <outlet property="playAudioButton" destination="tIz-Sj-DCN" id="twl-zq-fFJ"/>
+                        <outlet property="saveImageView" destination="2uj-si-by2" id="Paz-i9-6Sc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nFj-WM-ptK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="kh9-h9-S5h">
+                <tapGestureRecognizer id="kh9-h9-S5h" userLabel="play/stop audio">
                     <connections>
                         <action selector="toggleMicrophone:" destination="dcw-MX-1Cl" id="YMp-hI-p5c"/>
                     </connections>
                 </tapGestureRecognizer>
+                <tapGestureRecognizer id="VRs-ki-smX" userLabel="save recognizer">
+                    <connections>
+                        <action selector="saveNewRecording:" destination="dcw-MX-1Cl" id="5H9-Q4-IK7"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="aI7-oj-xnU" userLabel="dismiss without saving recognizer">
+                    <connections>
+                        <action selector="closeWithoutSaving:" destination="dcw-MX-1Cl" id="Lks-6K-Lmf"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="4317" y="-319"/>
+            <point key="canvasLocation" x="4795" y="-313"/>
         </scene>
         <!--User Detail View-->
         <scene sceneID="4Ar-eQ-bsT">
@@ -2268,6 +2322,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="JaT-61-TFH"/>
+        <segue reference="mex-m0-oqp"/>
         <segue reference="b5M-pZ-5fR"/>
     </inferredMetricsTieBreakers>
 </document>
