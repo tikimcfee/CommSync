@@ -47,6 +47,9 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 @property (strong, nonatomic) TLIndexPathController* indexPathController;
 @property (strong, nonatomic) NSOperationQueue* tableviewUpdateQueue;
 
+// Filtering controls
+@property (nonatomic, assign) NSInteger completionToggleIndex;
+
 @property (assign, nonatomic) BOOL willRefreshFromIncomingTask;
 @property (strong, nonatomic) NSMutableArray* incomingTasks;
 @property (copy, nonatomic) void (^incomingTaskCallback)();
@@ -56,6 +59,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 
 @implementation CSTaskListViewController
 
+static CGFloat TIME_TO_UPDATE = -1;
 
 #pragma mark - View Lifecycle
 
@@ -103,8 +107,11 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         }
         
         RLMRealm* tasksRealm = [RLMRealm defaultRealm];
-        RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
-        for (CSTaskRealmModel* task in allTasks) {
+//        RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
+        NSNumber* completed = _completionToggleIndex == 1 ? [NSNumber numberWithBool:YES] : [NSNumber numberWithBool:NO];
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"completed == %@", completed];
+        RLMResults* filteredTask = [CSTaskRealmModel objectsInRealm:tasksRealm withPredicate:predicate];
+        for (CSTaskRealmModel* task in filteredTask) {
             [tasks addObject:task.concatenatedID];
         }
         
@@ -114,7 +121,15 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     
     _incomingTaskCallback = ^void()
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        NSTimeInterval time;
+        if (TIME_TO_UPDATE != -1) {
+            time = TIME_TO_UPDATE;
+            TIME_TO_UPDATE = -1;
+        } else {
+            time = 0.5;
+        }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, time * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             CSTaskListUpdateOperation* newUpdate = [CSTaskListUpdateOperation new];
             
             newUpdate.tableviewToUpdate = weakSelf.tableView;
@@ -145,6 +160,12 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
         tab.title = nil;
     }
+    
+    // toggle callback
+    [_completionToggleControl addTarget:self
+                                 action:@selector(toggleToNewMode:)
+                       forControlEvents:UIControlEventValueChanged];
+    _completionToggleIndex = 0;
 }
 
 - (void)setupInitialTaskDataModels {
@@ -165,14 +186,13 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 }
 
 - (void)toggleToNewMode:(id)sender {
-//    if () {
-//        <#statements#>
-//    }
-    //TODO
-    // get reference to segmented controller
-    // add this method as target
-    // check to see what was selected
-    // if complete, change data model (in operation.. queud!)
+    if(_completionToggleControl.selectedSegmentIndex != _completionToggleIndex) {
+        _completionToggleIndex = _completionToggleControl.selectedSegmentIndex;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            TIME_TO_UPDATE = 0.0;
+            _incomingTaskCallback();
+        });
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

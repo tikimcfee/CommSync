@@ -287,7 +287,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
         CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
         NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
-        cellRef.label.text = [NSString stringWithFormat:@"View %d more comment%@",
+        cellRef.label.text = [NSString stringWithFormat:@"View %lu more comment%@",
                               _sourceTask.comments.count - 4,
                               plural];
     } else {
