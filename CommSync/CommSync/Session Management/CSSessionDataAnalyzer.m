@@ -182,7 +182,8 @@
 - (bool) updatePeerAvatar:(NSString*) uniqueID withNumber: (NSNumber*) number
 {
     CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:uniqueID];
-    if(peer.avatar == [number integerValue]) return false;
+    if(peer.avatar == [number integerValue] || [peer.uniqueID isEqualToString:_parentAnalyzer.globalManager.myUniqueID]) return false;
+    
     
     [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
     peer.avatar = [number integerValue];
