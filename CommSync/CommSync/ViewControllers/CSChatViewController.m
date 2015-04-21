@@ -60,8 +60,8 @@
      */
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.sessionManager = app.globalSessionManager;
-    _currentUser = app.userDisplayName;
-    
+    _currentUser = _sessionManager.myUniqueID;
+    NSLog(_peerID.displayName); 
     if(_sourceTask == nil){
         if(!_peerID) {
             _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
@@ -70,9 +70,7 @@
         else{
             _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
-            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
-                                 _peerID.displayName, _peerID.displayName ];
-            
+            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", _peerID.uniqueID, _peerID.uniqueID ];
         }
     }
     
@@ -114,7 +112,7 @@
     [self.tableView beginUpdates];
     
     if(!_sourceTask){
-        CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser toUser:(_peerID)? _peerID.displayName : @"ALL"];
+        CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser toUser:(_peerID)? _peerID.uniqueID : @"ALL"];
         
         if (_peerID){
             [_privateMessageRealm beginWriteTransaction];
@@ -122,21 +120,20 @@
             [_privateMessageRealm commitWriteTransaction];
             
             //the user is not currently connected so add it to unsent message
-            if(![_sessionManager.currentConnectedPeers valueForKey:message.recipient])
+            if(![_sessionManager.currentConnectedPeers valueForKey:_peerID.uniqueID])
             {
-                CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:message.recipient];
                 [_sessionManager.peerHistoryRealm beginWriteTransaction];
-                [user addUnsent];
+                [_peerID addUnsent];
                 [_sessionManager.peerHistoryRealm commitWriteTransaction];
             }
             else {
                 NSDictionary *dataToSend = @{@"PrivateMessage"  :   message};
                 NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                 //If we are directly connected send them the message
-                if ([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:message.recipient])
+                if ([_sessionManager.sessionLookupDisplayNamesToSessions valueForKey:_peerID.uniqueID])
                 {
                     //the user is connected to the target so we can send it directly
-                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:message.recipient]];
+                    [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:_peerID.uniqueID]];
                 }
                 //otherwise send it to everyone in hopes it finds the recipient
                 else [self.sessionManager sendDataPacketToPeers:messageData];
@@ -218,20 +215,20 @@
         
             CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
     
-            cell.createdByLabel.text = msg.createdBy;
             cell.messageLabel.text = msg.messageText;
             cell.transform = self.tableView.transform;
-            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
         
+            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
+            cell.createdByLabel.text = person.displayName;
         
             NSString *image = [person getPicture];
             [cell.avatarImage setImage:[UIImage imageNamed:image]];
-        
     }
     
     else{
         CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex: ([_sourceTask.comments count] - (indexPath.row  + 1) )];
-        cell.createdByLabel.text = comment.UID;
+        CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:comment.UID];
+        cell.createdByLabel.text = person.displayName;
         cell.messageLabel.text = comment.text;
         cell.transform = self.tableView.transform;
         
@@ -280,6 +277,7 @@
         }
         else{
             _privateMessageRealmNotification = [_privateMessageRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf.tableView reloadData];
                     
@@ -289,6 +287,10 @@
                         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
                         [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
                     }
+                    //reset private messages
+                    [_sessionManager.peerHistoryRealm beginWriteTransaction];
+                    [_peerID removeMessages];
+                    [_sessionManager.peerHistoryRealm commitWriteTransaction];
                 });
             }];
         }

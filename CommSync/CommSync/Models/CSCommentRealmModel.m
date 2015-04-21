@@ -34,10 +34,6 @@
         self.UID = [aDecoder decodeObjectForKey:@"UID"];
         self.text = [aDecoder decodeObjectForKey:@"text"];
         self.time = [aDecoder decodeObjectForKey:@"time"];
-        
-        
-        // TODO
-        // Task media
     }
     return self;
 }

@@ -32,7 +32,7 @@
     }
     
     // Multipeer initialization
-    _globalSessionManager = [[CSSessionManager alloc] initWithID:self.userDisplayName];
+    _globalSessionManager = [[CSSessionManager alloc] initWithID:uuid withDisplay:self.userDisplayName];
 
  
     return YES;

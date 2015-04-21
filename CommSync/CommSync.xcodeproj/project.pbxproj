@@ -104,6 +104,7 @@
 		93EBACE41A97D91D006BAF4A /* CSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE31A97D91D006BAF4A /* CSChatViewController.m */; };
 		93EBACE61A9BA473006BAF4A /* CSChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */; };
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
+		93F875DA1AE627560074FF59 /* CSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F875D91AE627560074FF59 /* CSTabBarController.m */; };
 		95013C841AE1C1AF0074FB4B /* CSUserCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */; };
 		95013C8B1AE1C7750074FB4B /* UserSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C8A1AE1C7750074FB4B /* UserSelectionView.m */; };
 		953E396B1AC8CA11003FE833 /* CSPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 953E396A1AC8CA11003FE833 /* CSPictureController.m */; };
@@ -324,6 +325,8 @@
 		93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSChatTableViewCell.xib; sourceTree = "<group>"; };
 		93EBACE71A9BA601006BAF4A /* CSChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSChatTableViewCell.h; sourceTree = "<group>"; };
 		93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSChatTableViewCell.m; sourceTree = "<group>"; };
+		93F875D81AE627560074FF59 /* CSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTabBarController.h; path = ViewControllers/CSTabBarController.h; sourceTree = "<group>"; };
+		93F875D91AE627560074FF59 /* CSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTabBarController.m; path = ViewControllers/CSTabBarController.m; sourceTree = "<group>"; };
 		95013C811AE1C1AE0074FB4B /* CSUserCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserCollectionCell.h; sourceTree = "<group>"; };
 		95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserCollectionCell.m; sourceTree = "<group>"; };
 		95013C891AE1C7750074FB4B /* UserSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionView.h; sourceTree = "<group>"; };
@@ -604,6 +607,8 @@
 				7409982F1A0C395A00229AFC /* CSSettingsViewController.m */,
 				93EBACE21A97D91D006BAF4A /* CSChatViewController.h */,
 				93EBACE31A97D91D006BAF4A /* CSChatViewController.m */,
+				93F875D81AE627560074FF59 /* CSTabBarController.h */,
+				93F875D91AE627560074FF59 /* CSTabBarController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1035,6 +1040,7 @@
 				746F6AD31A892613007A83E8 /* EZPlot.m in Sources */,
 				45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */,
 				459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */,
+				93F875DA1AE627560074FF59 /* CSTabBarController.m in Sources */,
 				74C541F51A93E67100FC29AD /* TLIndexPathTreeItem.m in Sources */,
 				93EBACDB1A97D8A0006BAF4A /* UIScrollView+SLKAdditions.m in Sources */,
 				933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */,

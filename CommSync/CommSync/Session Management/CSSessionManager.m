@@ -35,7 +35,7 @@
 
 @implementation CSSessionManager
 
-- (CSSessionManager*) initWithID:(NSString*)userID
+- (CSSessionManager*) initWithID:(NSString*)userID withDisplay:(NSString *)userName
 {
     //
     // Session management objects
@@ -43,7 +43,8 @@
     if(self = [super init])
     {
         _myPeerID = [[MCPeerID alloc] initWithDisplayName:userID];
-
+        _myUniqueID = userID;
+        _myDisplayName = userName;
         _dataAnalyzer = [CSSessionDataAnalyzer sharedInstance:self];
         _dataHandlingDelegate = _dataAnalyzer;
         
@@ -82,11 +83,11 @@
             _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
             _peerHistoryRealm.autorefresh = YES;
             
-            self.myUserModel = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName];
+            self.myUserModel = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myUniqueID];
            
             if(!_myUserModel)
             {
-                [self createNewPeer:_myPeerID];
+                [self createUserModel];
             }
         });
         
@@ -105,7 +106,7 @@
         _mainTaskSendQueue = [NSOperationQueue new];
         _mainTaskSendQueue.maxConcurrentOperationCount = 3;
 
-		[NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(sendPulseToPeers) userInfo:nil repeats:YES];
+		[NSTimer scheduledTimerWithTimeInterval:300.0 target:self selector:@selector(validateDataWithRandomPeer) userInfo:nil repeats:YES];
     }
        
     return self;
@@ -120,7 +121,7 @@
 }
 
 # pragma mark - Heartbeat
-- (void) sendPulseToPeers
+- (void) validateDataWithRandomPeer
 {
     //    NSString* pulseText = PULSE_STRING;
     //    NSData* newPulse = [pulseText dataUsingEncoding:NSUTF8StringEncoding];
@@ -137,10 +138,19 @@
     if([_currentConnectedPeers count] < 1) return;
     
     NSLog(@"validating data");
+    NSMutableArray* send = [[NSMutableArray alloc]init];
     
-    for( CSTaskRealmModel *temp in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
+    for(CSTaskRealmModel* task in [CSTaskRealmModel allObjectsInRealm:[RLMRealm defaultRealm]])
     {
-        [[CSSessionDataAnalyzer sharedInstance:nil] validateDataWithRandomPeer:temp];
+        [send addObject:task.concatenatedID];
+    }
+    
+    if([send count] > 0) {
+        NSDictionary *dataToSend = @{@"TaskArray"  :   send};
+        NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+        NSNumber* t = [NSNumber numberWithInteger:[_currentConnectedPeers.allKeys count]];
+        NSUInteger random = arc4random_uniform([t unsignedIntValue]);
+        [self sendSingleDataPacket:data toSinglePeer:_currentConnectedPeers.allValues[random]];
     }
 }
 
@@ -466,6 +476,7 @@
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     NSString* stateString;
+    
     switch (state) {
         case MCSessionStateNotConnected:
             stateString = kUserNotConnectedNotification;
@@ -638,15 +649,14 @@
 #pragma mark - Database actions
 
 
-- (void)createNewPeer:(MCPeerID *)peerID
+- (void)createUserModel
 {
     
-    NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:peerID];
-    CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:peerID.displayName];
+    NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:self.myPeerID];
+    CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:_myDisplayName withID:_myUniqueID];
     
     peerToUse.avatar = -1;
     _myUserModel = peerToUse;
-    
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm addObject:peerToUse];
     [_peerHistoryRealm commitWriteTransaction];
@@ -656,7 +666,7 @@
 -(void)updateAvatar: (NSInteger) number
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        CSUserRealmModel *myself = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myPeerID.displayName];
+        CSUserRealmModel *myself = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myUniqueID];
         [_peerHistoryRealm beginWriteTransaction];
         myself.avatar = number;
         self.myUserModel = myself;

@@ -24,8 +24,6 @@
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 - (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task;
-- (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task;
-
 
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;

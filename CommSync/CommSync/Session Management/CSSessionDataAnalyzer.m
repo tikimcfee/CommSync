@@ -127,7 +127,7 @@
                 NSMutableArray* differences = [[NSMutableArray alloc]init];
                 for(CSUserRealmModel *peer in [receivedObject valueForKey:kcs_USER_ARRAY])
                 {
-                    if(![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myPeerID.displayName]){
+                    if(![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myUniqueID]){
                        if( [self updatePeerHistory:peer] )[differences addObject:peer];
                     }
                 }
@@ -154,7 +154,7 @@
 
 - (bool) updatePeerHistory:(CSUserRealmModel *) peer
 {
-    CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.displayName];
+    CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.uniqueID];
     
     //if we dont have the user add them
     if(!ownPeer)
@@ -179,9 +179,9 @@
     return false;
 }
 
-- (bool) updatePeerAvatar:(NSString*) displayName withNumber: (NSNumber*) number
+- (bool) updatePeerAvatar:(NSString*) uniqueID withNumber: (NSNumber*) number
 {
-    CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:displayName];
+    CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:uniqueID];
     if(peer.avatar == [number integerValue]) return false;
     
     [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
@@ -480,17 +480,6 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
 
     [_globalManager sendDataPacketToPeers:newTaskData];
-}
-
-- (void) validateDataWithRandomPeer:(CSTaskRealmModel*)task
-{
-    NSDictionary* newTaskDictionary = [self buildNewTaskNotificationFromTaskID:task.concatenatedID];
-    NSData* newTaskData = [NSKeyedArchiver archivedDataWithRootObject:newTaskDictionary];
-    
-    NSNumber* t = [NSNumber numberWithInteger:[_globalManager.currentConnectedPeers.allKeys count]];
-    NSUInteger random = arc4random_uniform([t unsignedIntValue]);
-    [_globalManager sendSingleDataPacket:newTaskData
-                            toSinglePeer: _globalManager.currentConnectedPeers.allValues[random]];
 }
 
 #pragma mark - Data analysis

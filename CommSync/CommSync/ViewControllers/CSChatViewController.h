@@ -10,11 +10,11 @@
 #import "CSTaskRealmModel.h"
 #import "CSCommentRealmModel.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import "CSUserRealmModel.h"
 
 @interface CSChatViewController : SLKTextViewController
 
 @property (strong, nonatomic) CSTaskRealmModel *sourceTask;
-@property (strong, nonatomic) MCPeerID *peerID;
-
+@property (strong, nonatomic) CSUserRealmModel *peerID;
 
 @end

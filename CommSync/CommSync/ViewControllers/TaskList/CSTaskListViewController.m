@@ -17,6 +17,8 @@
 #import <Crashlytics/Crashlytics.h>
 #import "UINavigationBar+CommSyncStyle.h"
 #import "UITabBar+CommSyncStyle.h"
+#import "UIColor+FlatColors.h"
+#import "IonIcons.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -136,10 +138,10 @@
     // setup tab bar controller style
     [self.tabBarController.tabBar setupCommSyncStyle];
     
-    for (UITabBarItem *tab in self.tabBarController.tabBar.items) {
-        tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
-        tab.title = nil;
-    }
+//    for (UITabBarItem *tab in self.tabBarController.tabBar.items) {
+//        tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
+//        tab.title = nil;
+//    }
 }
 
 - (void)setupInitialTaskDataModels {
