@@ -24,7 +24,6 @@
 		459D5F7919DB449900C91EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7819DB449900C91EFA /* main.m */; };
 		459D5F7C19DB449900C91EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7B19DB449900C91EFA /* AppDelegate.m */; };
 		459D5F7F19DB449900C91EFA /* CommSync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */; };
-		459D5F8719DB449900C91EFA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8619DB449900C91EFA /* Images.xcassets */; };
 		459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459D5F8819DB449900C91EFA /* LaunchScreen.xib */; };
 		45ADF0401A899A2100D2BF43 /* CSAudioPlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */; };
 		45C956461A97CF0C00364555 /* CSRealmWriteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C956451A97CF0C00364555 /* CSRealmWriteOperation.m */; };
@@ -85,6 +84,7 @@
 		74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541E71A93E67100FC29AD /* TLCollectionViewController.m */; };
 		74C541FB1A93E67100FC29AD /* TLTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C541EA1A93E67100FC29AD /* TLTableViewController.m */; };
 		74DB14CE1A7FDDE500ECBADB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DB14CD1A7FDDE500ECBADB /* UIKit.framework */; };
+		74E8E6941AE6A131005A3224 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74E8E6931AE6A131005A3224 /* Images.xcassets */; };
 		932A53F01ADC892600F04268 /* UITabBar+CommSyncStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 932A53EF1ADC892600F04268 /* UITabBar+CommSyncStyle.m */; };
 		932A53F31ADC89F600F04268 /* UINavigationBar+CommSyncStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 932A53F21ADC89F600F04268 /* UINavigationBar+CommSyncStyle.m */; };
 		933AA1391A71DC9A00DCC10A /* CSTaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 933AA1381A71DC9A00DCC10A /* CSTaskTableViewCell.m */; };
@@ -146,7 +146,6 @@
 		459D5F7A19DB449900C91EFA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		459D5F7B19DB449900C91EFA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		459D5F7E19DB449900C91EFA /* CommSync.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CommSync.xcdatamodel; sourceTree = "<group>"; };
-		459D5F8619DB449900C91EFA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		459D5F8919DB449900C91EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		45ADF03E1A899A2100D2BF43 /* CSAudioPlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioPlotViewController.h; path = ViewControllers/TaskList/CSAudioPlotViewController.h; sourceTree = "<group>"; };
 		45ADF03F1A899A2100D2BF43 /* CSAudioPlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioPlotViewController.m; path = ViewControllers/TaskList/CSAudioPlotViewController.m; sourceTree = "<group>"; };
@@ -287,6 +286,7 @@
 		74DB14F61A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSFrameworkSupportedDataServer.h; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.h"; sourceTree = "<group>"; };
 		74DB14F71A7FEB5000ECBADB /* CSFrameworkSupportedDataServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSFrameworkSupportedDataServer.m; path = "Session Management/Framework Supported/CSFrameworkSupportedDataServer.m"; sourceTree = "<group>"; };
 		74DB14F91A7FEC1000ECBADB /* CSConnectivityConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSConnectivityConstants.h; path = "Session Management/Framework Supported/CSConnectivityConstants.h"; sourceTree = "<group>"; };
+		74E8E6931AE6A131005A3224 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		932A53EE1ADC892600F04268 /* UITabBar+CommSyncStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITabBar+CommSyncStyle.h"; path = "Categories/UITabBar+CommSyncStyle.h"; sourceTree = "<group>"; };
 		932A53EF1ADC892600F04268 /* UITabBar+CommSyncStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITabBar+CommSyncStyle.m"; path = "Categories/UITabBar+CommSyncStyle.m"; sourceTree = "<group>"; };
 		932A53F11ADC89F600F04268 /* UINavigationBar+CommSyncStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationBar+CommSyncStyle.h"; path = "Categories/UINavigationBar+CommSyncStyle.h"; sourceTree = "<group>"; };
@@ -486,9 +486,9 @@
 				744452291A0ACE2700C87723 /* ViewControllers */,
 				4595391F19E38F2F00744747 /* Session Management */,
 				45FAB0D31AE54950005AC325 /* Shared Controls */,
-				459D5F8619DB449900C91EFA /* Images.xcassets */,
 				459D5F8819DB449900C91EFA /* LaunchScreen.xib */,
 				459D5F7D19DB449900C91EFA /* CommSync.xcdatamodeld */,
+				74E8E6931AE6A131005A3224 /* Images.xcassets */,
 				93EBACE51A9BA473006BAF4A /* CSChatTableViewCell.xib */,
 				3FBBF1371A9C0887007124CD /* Main.storyboard */,
 				3F9132DE1ADD9D26002D45B0 /* CSAvatarSelectionView.h */,
@@ -971,8 +971,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				459D5F8A19DB449900C91EFA /* LaunchScreen.xib in Resources */,
+				74E8E6941AE6A131005A3224 /* Images.xcassets in Resources */,
 				746F6AD61A892613007A83E8 /* CHANGELOG in Resources */,
-				459D5F8719DB449900C91EFA /* Images.xcassets in Resources */,
 				3FBBF1391A9C0887007124CD /* Main.storyboard in Resources */,
 				45CE97F41AE14DF500B90157 /* LICENSE in Resources */,
 				45CE97F61AE14F7200B90157 /* ionicons.ttf in Resources */,

@@ -83,6 +83,7 @@
     self.playAudioButton.alpha = 0;
     
     self.micImage.image = [IonIcons imageWithIcon:ion_ios_mic iconColor:[UIColor flatCloudsColor] iconSize:30.0f imageSize:CGSizeMake(45.0f, 40.f)];
+    
     if (self.showShowSaveAndClose) {
         //
         _saveImageView.image = [IonIcons imageWithIcon:ion_plus_circled size:40 color:[UIColor flatEmeraldColor]];

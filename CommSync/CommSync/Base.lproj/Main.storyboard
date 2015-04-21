@@ -372,6 +372,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="completionToggleControl" destination="pek-h6-xbz" id="Tf6-rf-yMw"/>
                         <segue destination="ITi-gD-sJd" kind="show" identifier="showTaskDetail" id="NWk-jO-0jw"/>
                     </connections>
                 </tableViewController>
@@ -1794,7 +1795,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="keW-qa-5Z4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1767" y="435"/>
+            <point key="canvasLocation" x="1767" y="441"/>
         </scene>
         <!--Chat-->
         <scene sceneID="aiq-mD-3Xc">
@@ -1909,7 +1910,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="4399" y="-313"/>
+            <point key="canvasLocation" x="4795" y="-313"/>
         </scene>
         <!--User Detail View-->
         <scene sceneID="4Ar-eQ-bsT">
@@ -2315,9 +2316,9 @@
         <image name="task-list" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="b5M-pZ-5fR"/>
         <segue reference="GGy-g5-dRX"/>
-        <segue reference="JaT-61-TFH"/>
         <segue reference="REA-By-De3"/>
+        <segue reference="JaT-61-TFH"/>
+        <segue reference="b5M-pZ-5fR"/>
     </inferredMetricsTieBreakers>
 </document>

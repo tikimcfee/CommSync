@@ -63,6 +63,7 @@
 
 // Lifecycle and connection testing
 - (CSSessionManager*) initWithID:(NSString*)userID withDisplay:(NSString*) userName;
+
 - (void) sendPulseToPeers;
 
 // Task transmission
