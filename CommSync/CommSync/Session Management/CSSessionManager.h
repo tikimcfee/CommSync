@@ -42,6 +42,8 @@
 
 // MCMultiPeer objects
 @property (strong, nonatomic) MCPeerID*         myPeerID;
+@property (strong, nonatomic) NSString*         myUniqueID;
+@property (strong, nonatomic) NSString*         myDisplayName;
 @property (strong, nonatomic) CSUserRealmModel* myUserModel;
 
 @property (strong, nonatomic) MCNearbyServiceAdvertiser* serviceAdvertiser;
@@ -60,7 +62,7 @@
 @property (strong, nonatomic) id <MCSessionDataHandlingDelegate> dataHandlingDelegate;
 
 // Lifecycle and connection testing
-- (CSSessionManager*) initWithID:(NSString*)userID;
+- (CSSessionManager*) initWithID:(NSString*)userID withDisplay:(NSString*) userName;
 - (void) sendPulseToPeers;
 
 // Task transmission
@@ -77,7 +79,7 @@
 - (void) nukeHistory;
 
 - (void)updatePeerHistory:  (CSUserRealmModel *)    peer;
-- (void)createNewPeer:      (MCPeerID *)            peerID;
+- (void)createUserModel;
 - (void)updateAvatar:       (NSInteger)            number;
 
 + (NSString *)incomingTaskRealmDirectory;

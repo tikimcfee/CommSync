@@ -13,7 +13,7 @@
 @end
 @implementation CSUserRealmModel
 
-- (instancetype)initWithMessage:(NSData *)peerID withDisplayName:(NSString*) display
+- (instancetype)initWithMessage:(NSData *)peerID withDisplayName:(NSString*) display withID:uniqueID
 {
     self = [super init];
     
@@ -24,6 +24,7 @@
         self.unreadMessages = 0;
         self.unsentMessages = 0;
         self.avatar = -1;
+        self.uniqueID = uniqueID;
     }
     
     return self;
@@ -38,6 +39,7 @@
         self.displayName= [aDecoder decodeObjectForKey:@"displayName"];
         self.unreadMessages = [aDecoder decodeIntForKey:@"unreadMessages"];
         self.avatar = [aDecoder decodeIntegerForKey:@"Avatar"];
+        self.uniqueID = [aDecoder decodeObjectForKey:@"uniqueID"];
     }
     
     return self;
@@ -49,6 +51,7 @@
     [aCoder encodeObject:self.peerID forKey:@"peerID"];
     [aCoder encodeInteger:self.unreadMessages forKey:@"unreadMessages"];
     [aCoder encodeInteger:self.avatar forKey:@"Avatar"];
+    [aCoder encodeObject:self.uniqueID forKey:@"uniqueID"];
 }
 
 -(void)addMessage
@@ -78,13 +81,13 @@
 }
 
 + (NSString*)primaryKey {
-    return @"displayName";
+    return @"uniqueID";
 }
 
 -(NSString *) getPicture
 {
-    if(!self.avatar) return @"Avatar-1";
-    return [NSString stringWithFormat:@"Avatar%d", self.avatar];
+    if(!self.avatar) return @"Avatar -1";
+    return [NSString stringWithFormat:@"Avatar %d", self.avatar];
 }
 
 @end

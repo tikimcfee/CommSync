@@ -31,10 +31,6 @@
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
     
-    [_sessionManager.peerHistoryRealm beginWriteTransaction];
-    [_peer removeMessages];
-    [_sessionManager.peerHistoryRealm commitWriteTransaction];
-    
     NSString *image = [_peer getPicture];
     [self.userAvatarImage setImage:[UIImage imageNamed:image]];
 }
@@ -56,11 +52,11 @@
 */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    _peerID = [NSKeyedUnarchiver unarchiveObjectWithData:_peer.peerID];
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
+        NSLog(_peer.displayName);
         SlackTestViewController *vc = [segue destinationViewController];
-        [vc setPeerID:_peerID];
+        [vc setPeerID:_peer];
     }
     
     if ([[segue identifier] isEqualToString:@"personalListSegue"])

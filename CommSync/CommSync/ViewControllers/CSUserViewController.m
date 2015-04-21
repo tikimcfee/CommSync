@@ -77,21 +77,23 @@
     static NSString *simpleTableIdentifier = @"UserCell";
     
     CSUserInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    CSUserRealmModel* user;
     
     NSString* userName;
-    
+    NSString* uniqueID;
     
     if(!_filter){
-        userName = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
+        uniqueID = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
+        user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:uniqueID];
     }
     else{
-        CSUserRealmModel* user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName != %@", _sessionManager.myPeerID.displayName][indexPath.row];
-        userName = user.displayName;
+        user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"uniqueID != %@", _sessionManager.myUniqueID][indexPath.row];
+        uniqueID = user.uniqueID;
     }
     
-    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:userName])? [UIColor greenColor]: [UIColor redColor];
+    userName = user.displayName;
+    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor greenColor]: [UIColor redColor];
     
-    CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:userName];
     cell.userLabel.text = userName;
     [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];
     
@@ -103,7 +105,7 @@
         [cell.envelopePic setImage:[UIImage imageNamed:@"envelope"]];
         [cell.unreadNumber setHidden:FALSE];
         cell.unreadNumber.text = ([user getMessageNumber] <= 9)? [NSString stringWithFormat:@"%d", [user getMessageNumber]] : @"9+";
-        cell.unreadNumber.layer.cornerRadius = 12.0;
+        cell.unreadNumber.layer.cornerRadius = cell.unreadNumber.frame.size.width / 2;
         cell.unreadNumber.layer.masksToBounds = YES;
     }
 
@@ -121,11 +123,10 @@
     CSUserRealmModel *peer;
     
     if(!_filter){
-      MCPeerID *peerName = [[_sessionManager.currentConnectedPeers allValues] objectAtIndex:indexPath.row];
-        peer = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:peerName.displayName];
+        NSString *peerID = [[_sessionManager.currentConnectedPeers allKeys] objectAtIndex:indexPath.row];
+        peer = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:peerID];
     }
-    else peer = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"displayName != %@", _sessionManager.myPeerID.displayName][indexPath.row];
-    
+    else peer = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"uniqueID != %@", _sessionManager.myUniqueID][indexPath.row];
     [self performSegueWithIdentifier:@"showUserDetail" sender:peer];
     [self.tableView reloadData];
 }
@@ -167,6 +168,7 @@
         CSUserDetailView *vc = [segue destinationViewController];
         if ([sender isKindOfClass:[CSUserRealmModel class]])
         {
+            CSUserRealmModel* temp = sender;
             [vc setPeer:sender];
         }
     }
