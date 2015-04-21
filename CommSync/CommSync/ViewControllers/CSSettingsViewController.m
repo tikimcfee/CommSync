@@ -25,8 +25,11 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [_avatarPic setImage: [UIImage imageNamed:_sessionManager.myUserModel.getPicture]];
     [super viewWillAppear:animated];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_avatarPic setImage: [UIImage imageNamed:_sessionManager.myUserModel.getPicture]];
+    });
 }
 
 - (void)viewDidLoad {

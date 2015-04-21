@@ -100,6 +100,20 @@
      *  Set navigation bar style
      */
     [self.navigationController.navigationBar setupCommSyncStyle];
+    
+    if (!_sourceTask && _peerID) {
+        UINavigationBar *bar = [UINavigationBar new];
+        [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
+        [bar setupCommSyncStyle];
+        
+        UILabel *barLabel = [UILabel new];
+        [barLabel setFrame:CGRectMake(self.view.frame.size.width/2- 45.0, 8, 100.0, 20.0)];
+        [barLabel setText: @"Private Chat"];
+        [barLabel setTextColor:[UIColor whiteColor]];
+        
+        [bar addSubview:barLabel];
+        [self.view addSubview:bar];
+    }
 }
 
 #pragma mark - Override SlackViewController Methods
