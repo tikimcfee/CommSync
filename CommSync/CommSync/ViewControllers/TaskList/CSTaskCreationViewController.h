@@ -10,7 +10,7 @@
 #import "CSTaskRealmModel.h"
 #import "CSTaskDetailViewController.h"
 
-@interface CSTaskCreationViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface CSTaskCreationViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 
 @property (strong, nonatomic) CSTaskDetailViewController *taskScreen;

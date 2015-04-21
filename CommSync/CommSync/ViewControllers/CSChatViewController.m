@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 AppsByDLI. All rights reserved.
 //
 
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
 #import "CSUserRealmModel.h"
@@ -16,7 +16,7 @@
 
 #define kChatTableViewCellIdentifier @"ChatViewCell"
 
-@interface SlackTestViewController ()
+@interface CSChatViewController ()
 // use this realm object to persist data to disk
 @property (strong, nonatomic) RLMRealm *chatRealm;
 @property (strong, nonatomic) RLMRealm *privateMessageRealm;
@@ -25,7 +25,7 @@
 @property (strong, nonatomic) NSPredicate *pred;
 @end
 
-@implementation SlackTestViewController
+@implementation CSChatViewController
 {
     RLMNotificationToken *_chatRealmNotification;
     RLMNotificationToken *_privateMessageRealmNotification;
@@ -64,11 +64,11 @@
     
     if(_sourceTask == nil){
         if(!_peerID) {
-            _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+            _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
             _chatRealm.autorefresh = YES;
         }
         else{
-            _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
+            _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
             _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@",
                                  _peerID.displayName, _peerID.displayName ];
@@ -98,22 +98,9 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     /*
-     *  Add navigation bar
+     *  Set navigation bar style
      */
-    if (!_sourceTask) {
-        UINavigationBar *bar = [UINavigationBar new];
-        [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
-        [bar setupCommSyncStyle];
-
-        UILabel *barLabel = [UILabel new];
-        [barLabel setFrame:CGRectMake((self.view.frame.size.width/2- 45.0), _peerID? 8: 32, 100.0, 20.0)];
-        [barLabel setText:(_peerID)? @"Private Chat" :@"Group Chat"];
-        [barLabel setTextColor:[UIColor whiteColor]];
-
-        [bar addSubview:barLabel];
-        [self.view addSubview:bar];
-    }
-
+    [self.navigationController.navigationBar setupCommSyncStyle];
 }
 
 #pragma mark - Override SlackViewController Methods
@@ -124,7 +111,6 @@
     UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
     UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
     
-   
     [self.tableView beginUpdates];
     
     if(!_sourceTask){
@@ -201,10 +187,10 @@
         
         if (!_chatRealm)
         {
-            _chatRealm = [RLMRealm realmWithPath:[SlackTestViewController chatMessageRealmDirectory]];
+            _chatRealm = [RLMRealm realmWithPath:[CSChatViewController chatMessageRealmDirectory]];
             
         }
-        if(!_privateMessageRealm) _privateMessageRealm = [RLMRealm realmWithPath:[SlackTestViewController privateMessageRealmDirectory]];
+        if(!_privateMessageRealm) _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
     
         if(!_peerID)return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
         
@@ -277,7 +263,7 @@
 {
     if(!_sourceTask){
         
-        __weak SlackTestViewController *weakSelf = self;
+        __weak CSChatViewController *weakSelf = self;
         if(!_peerID){
             _chatRealmNotification = [_chatRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
                 dispatch_async(dispatch_get_main_queue(), ^{

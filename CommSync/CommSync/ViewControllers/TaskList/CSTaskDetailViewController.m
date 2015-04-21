@@ -15,7 +15,7 @@
 #import "CSTaskCreationViewController.h"
 #import "ImageCell.h"
 #import "CSPictureViewController.h"
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "CSAudioPlotViewController.h"
 #import "UIImage+normalize.h"
 #import "CSAssignViewController.h"
@@ -302,7 +302,7 @@
     
     //both have a sourceTask value, thus we can combine them
     if ([[segue identifier] isEqualToString:@"commentSegue"]) {
-        SlackTestViewController *temp = segue.destinationViewController;
+        CSChatViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
     }
     

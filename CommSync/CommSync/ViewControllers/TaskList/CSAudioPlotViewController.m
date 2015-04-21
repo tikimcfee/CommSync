@@ -7,6 +7,9 @@
 //
 
 #import "CSAudioPlotViewController.h"
+#import "UIColor+FlatColors.h"
+#import "IonIcons.h"
+#import "ionicons-codes.h"
 
 @interface CSAudioPlotViewController ()
 
@@ -59,8 +62,8 @@
     [super viewDidLoad];
     
 
-    self.audioPlot.backgroundColor = [UIColor colorWithRed:0.231 green:0.498 blue:0.980 alpha:1.000];
-    self.audioPlot.color           = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.audioPlot.backgroundColor = [UIColor flatWetAsphaltColor];
+    self.audioPlot.color           = [UIColor flatCloudsColor];
     self.audioPlot.plotType        = EZPlotTypeBuffer;
     self.audioPlot.shouldFill      = YES;
     self.audioPlot.shouldMirror    = YES;
@@ -68,6 +71,8 @@
     
     self.playAudioButton.userInteractionEnabled = NO;
     self.playAudioButton.alpha = 0;
+    
+    self.micImage.image = [IonIcons imageWithIcon:ion_ios_mic iconColor:[UIColor flatCloudsColor] iconSize:30.0f imageSize:CGSizeMake(45.0f, 40.f)];
 }
 
 -(void)playFile:(id)sender

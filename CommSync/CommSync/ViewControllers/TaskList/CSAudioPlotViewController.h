@@ -24,6 +24,8 @@
 @property (nonatomic,strong) NSURL* fileOutputURL;
 
 @property (strong, nonatomic) IBOutlet UIButton *playAudioButton;
+@property (strong, nonatomic) IBOutlet UIImageView *micImage;
+
 
 @property (nonatomic,strong) AVAudioPlayer *audioPlayer;
 

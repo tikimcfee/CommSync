@@ -11,7 +11,7 @@
 #import "CSChatTableViewCell.h"
 #import "UIColor+FlatColors.h"
 #import "IonIcons.h"
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "UIImage+normalize.h"
 #import "CSPictureController.h"
 
@@ -612,7 +612,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 #pragma mark - Segues
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString: @"commentSegue"]) {
-        SlackTestViewController *temp = segue.destinationViewController;
+        CSChatViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
     } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
         CSPictureController* picture = segue.destinationViewController;

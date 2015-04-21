@@ -7,7 +7,7 @@
 //
 
 #import "CSUserDetailView.h"
-#import "SlackTestViewController.h"
+#import "CSChatViewController.h"
 #import "CSTaskListViewController.h"
 #import "AppDelegate.h"
 
@@ -59,7 +59,7 @@
     _peerID = [NSKeyedUnarchiver unarchiveObjectWithData:_peer.peerID];
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
-        SlackTestViewController *vc = [segue destinationViewController];
+        CSChatViewController *vc = [segue destinationViewController];
         [vc setPeerID:_peerID];
     }
     
