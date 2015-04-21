@@ -10,6 +10,7 @@
 #import "CSUserDetailView.h"
 #import "CSUserInfoCell.h"
 #import "UINavigationBar+CommSyncStyle.h"
+#import "UIColor+FlatColors.h"
 
 @interface CSUserViewController ()
 {
@@ -92,7 +93,8 @@
     }
     
     userName = user.displayName;
-    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor greenColor]: [UIColor redColor];
+    cell.availableStatus.layer.cornerRadius = 12.5f;
+    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor flatNephritisColor]: [UIColor flatPomegranateColor];
     
     cell.userLabel.text = userName;
     [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];

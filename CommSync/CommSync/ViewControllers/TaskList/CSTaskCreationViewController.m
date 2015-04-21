@@ -22,6 +22,7 @@
 // UI
 #import "SZTextView.h"
 #import "CSAudioPlotViewController.h"
+#import "CSPictureController.h"
 #import "IonIcons.h"
 #import "UIColor+FlatColors.h"
 #import "UINavigationBar+CommSyncStyle.h"
@@ -77,6 +78,7 @@
     
     self.taskImageCollection.dataSource = self;
     self.taskImageCollection.delegate = self;
+    self.taskImages = [NSMutableArray new];
     
     self.view.backgroundColor = [UIColor flatCloudsColor];
     self.descriptionTextField.backgroundColor = [UIColor flatCloudsColor];
@@ -95,6 +97,9 @@
         
         self.audioRecorder = (CSAudioPlotViewController*)[segue destinationViewController];
         self.audioRecorder.fileNameSansExtension = self.pendingTask.concatenatedID;
+    } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
+        CSPictureController* picture = segue.destinationViewController;
+        picture.taskImage = sender;
     }
 }
 

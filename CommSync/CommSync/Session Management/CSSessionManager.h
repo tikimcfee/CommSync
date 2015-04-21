@@ -64,8 +64,6 @@
 // Lifecycle and connection testing
 - (CSSessionManager*) initWithID:(NSString*)userID withDisplay:(NSString*) userName;
 
-- (void) sendPulseToPeers;
-
 // Task transmission
 - (void) sendNewTaskToPeers:(CSTaskRealmModel*)newTask;
 - (void) sendSingleTask:(CSTaskRealmModel*)task toSinglePeer:(MCPeerID*)peer;
@@ -79,7 +77,6 @@
 - (void) nukeRealm;
 - (void) nukeHistory;
 
-- (void)updatePeerHistory:  (CSUserRealmModel *)    peer;
 - (void)createUserModel;
 - (void)updateAvatar:       (NSInteger)            number;
 

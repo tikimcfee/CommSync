@@ -54,7 +54,7 @@
 {
     if ([[segue identifier] isEqualToString:@"personalChatSegue"])
     {
-        NSLog(_peer.displayName);
+        NSLog(@"%@", _peer.displayName);
         CSChatViewController *vc = [segue destinationViewController];
         [vc setPeerID:_peer];
     }
