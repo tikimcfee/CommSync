@@ -622,8 +622,6 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     __weak typeof(self) weakSelf = self;
     void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
-        
-        
         NSLog(@"New size after normalization only is %ld",
               (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
         NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
@@ -641,7 +639,9 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
                 [weakSelf repairTaskImageCollectionView];
             }
             weakSelf.taskImages = loadedImages;
-            [weakSelf.taskImageCollectionView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.taskImageCollectionView reloadData];
+            });
         }];
     };
     
