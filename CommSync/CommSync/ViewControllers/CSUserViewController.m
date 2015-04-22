@@ -59,8 +59,6 @@
 - (void)updateConnectionCountAndTableView:(NSNotification *)notification
 {
     __weak CSUserViewController *weakSelf = self;
-    NSInteger connectionCount = [_sessionManager.currentConnectedPeers count];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.tableView reloadData];
     });
