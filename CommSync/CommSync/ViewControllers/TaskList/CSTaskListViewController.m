@@ -159,7 +159,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 - (void)setupInitialTaskDataModels {
     NSMutableArray* tasks = [NSMutableArray new];
     RLMRealm* tasksRealm = [RLMRealm defaultRealm];
-    RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
+    RLMResults* allTasks = (_user)?[CSTaskRealmModel objectsInRealm:tasksRealm where:@"assignedID = %@",_user] : [CSTaskRealmModel allObjectsInRealm:tasksRealm];
     for (CSTaskRealmModel* task in allTasks) {
         [tasks addObject:task.concatenatedID];
     }
@@ -254,7 +254,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    CSTaskRealmModel *task = [CSTaskRealmModel objectForPrimaryKey:[self.indexPathController.dataModel itemAtIndexPath:indexPath]];
+    CSTaskRealmModel *task = (_user)?[CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] where:@"assignedID = %@",_user][indexPath.row]:[CSTaskRealmModel objectForPrimaryKey:[self.indexPathController.dataModel itemAtIndexPath:indexPath]];
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 
 }
@@ -285,9 +285,8 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         selected = [_indexPathController.dataModel itemAtIndexPath:indexPath];
     }
     
-    CSIncomingTaskRealmModel* incomingTask = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm]
-                                                                       forPrimaryKey:selected];
-    CSTaskRealmModel* task = [CSTaskRealmModel objectForPrimaryKey:selected];
+    CSIncomingTaskRealmModel* incomingTask = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm] forPrimaryKey:selected];
+    CSTaskRealmModel* task = (_user)?[CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] where:@"assignedID = %@",_user][indexPath.row]:[CSTaskRealmModel objectForPrimaryKey:selected];
     if(incomingTask) {
         // return an incoming task view
         CSTaskProgressTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"CSTaskProgressTableViewCell"];

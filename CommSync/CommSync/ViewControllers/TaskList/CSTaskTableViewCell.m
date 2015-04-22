@@ -8,7 +8,8 @@
 
 #import "CSTaskTableViewCell.h"
 #import "UIColor+FlatColors.h"
-
+#import "CSUserRealmModel.h"
+#import "CSRealmFactory.h"
 @interface CSTaskTableViewCell ()
 @property (strong, nonatomic) IBOutlet UILabel *title;
 @property (strong, nonatomic) IBOutlet UIView *priorityColorView;
@@ -32,7 +33,9 @@
 {
     self.sourceTask = task;
     self.title.text = task.taskTitle;
-    self.assignmentLabel.text = task.assignedID;
+    //if theres no string its unassigned otherwise it belongs to someone and show their username
+    self.assignmentLabel.text = [task.assignedID isEqualToString:@""]? @"Unassigned": ((CSUserRealmModel*)[CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:task.assignedID]).displayName;
+    
     switch (task.taskPriority) {
         case CSTaskPriorityHigh:
             self.priorityColorView.backgroundColor = [UIColor kTaskHighPriorityColor];

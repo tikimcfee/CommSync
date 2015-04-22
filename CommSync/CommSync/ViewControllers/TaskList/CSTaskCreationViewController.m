@@ -258,7 +258,7 @@
     self.pendingTask.taskTitle = self.titleTextField.text;
     self.pendingTask.taskDescription = self.descriptionTextField.text;
     self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
-    self.pendingTask.assignedID = @"Unassigned";
+    self.pendingTask.assignedID = @"";
     self.pendingTask.tag = @"";
     self.pendingTask.completed = false;
     if(self.pendingTask.TRANSIENT_audioDataURL) {
