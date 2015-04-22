@@ -10,11 +10,11 @@
 
 @interface CSChatMessageRealmModel : RLMObject <NSCoding>
 
-@property (nonatomic, strong, readonly) NSString *messageText;
-@property (nonatomic, strong, readonly) NSDate *createdAt;
-@property (nonatomic, strong, readonly) NSString *createdBy;
-@property (nonatomic, strong, readonly) NSString* recipient;
-
+@property (nonatomic, strong, readonly) NSString*   messageText;
+@property (nonatomic, strong, readonly) NSDate*     createdAt;
+@property (nonatomic, strong, readonly) NSString*   createdBy;
+@property (nonatomic, strong, readonly) NSString*   recipient;
+@property (nonatomic, strong)           NSString*   uniqueID;
 
 - (instancetype)initWithMessage:(NSString *)message byUser:(NSString *)username toUser: (NSString*)recipient;
 

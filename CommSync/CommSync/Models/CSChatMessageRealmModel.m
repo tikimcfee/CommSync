@@ -26,6 +26,7 @@
         self.messageText = message;
         self.createdAt = [NSDate date];
         self.recipient = recipient;
+        self.uniqueID = [[NSUUID UUID] UUIDString];
     }
     
     return self;
@@ -39,6 +40,7 @@
         self.messageText = [aDecoder decodeObjectForKey:@"text"];
         self.createdAt = [aDecoder decodeObjectForKey:@"createdAt"];
         self.recipient = [aDecoder decodeObjectForKey:@"recipient"];
+        self.uniqueID = [aDecoder decodeObjectForKey:@"uniqueID"];
     }
     
     return self;
@@ -50,6 +52,7 @@
     [aCoder encodeObject:self.messageText forKey:@"text"];
     [aCoder encodeObject:self.createdAt forKey:@"createdAt"];
     [aCoder encodeObject:self.recipient forKey:@"recipient"];
+    [aCoder encodeObject:self.uniqueID forKey:@"uniqueID"];
 }
 
 - (NSString *)senderId
@@ -86,6 +89,8 @@
     return self.recipient;
 }
 
-
++ (NSString*)primaryKey {
+    return @"uniqueID";
+}
 
 @end

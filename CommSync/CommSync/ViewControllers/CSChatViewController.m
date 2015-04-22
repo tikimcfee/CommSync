@@ -70,7 +70,7 @@
         else{
             _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
             _privateMessageRealm.autorefresh = YES;
-            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", _peerID.uniqueID, _peerID.uniqueID ];
+            _pred = [NSPredicate predicateWithFormat:@"createdBy = %@ AND recipient = %@ OR createdBy = %@ AND recipient = %@", _peerID.uniqueID, _sessionManager.myUniqueID, _sessionManager.myUniqueID, _peerID.uniqueID ];
         }
     }
     
@@ -141,24 +141,25 @@
             [_privateMessageRealm commitWriteTransaction];
             
             //the user is not currently connected so add it to unsent message
-            if(![_sessionManager.currentConnectedPeers valueForKey:_peerID.uniqueID])
-            {
-                [_sessionManager.peerHistoryRealm beginWriteTransaction];
-                [_peerID addUnsent];
-                [_sessionManager.peerHistoryRealm commitWriteTransaction];
-            }
-            else {
+//            if(![_sessionManager.currentConnectedPeers valueForKey:_peerID.uniqueID])
+//            {
+//                [_sessionManager.peerHistoryRealm beginWriteTransaction];
+//                [_peerID addUnsent];
+//                [_sessionManager.peerHistoryRealm commitWriteTransaction];
+//            }
+//            else {
                 NSDictionary *dataToSend = @{@"PrivateMessage"  :   message};
                 NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
                 //If we are directly connected send them the message
-                if ([_sessionManager synchronizedPeerRetrievalForDisplayName:_peerID.displayName])
+              /*  if ([_sessionManager synchronizedPeerRetrievalForDisplayName:_peerID.displayName])
                 {
                     //the user is connected to the target so we can send it directly
                     [_sessionManager sendSingleDataPacket:messageData toSinglePeer: [_sessionManager.currentConnectedPeers valueForKey:_peerID.uniqueID]];
-                }
+                }*/
                 //otherwise send it to everyone in hopes it finds the recipient
-                else [self.sessionManager sendDataPacketToPeers:messageData];
-            }
+               // else
+                [self.sessionManager sendDataPacketToPeers:messageData];
+          //  }
         }
             
         else{
@@ -214,7 +215,7 @@
         
        
         return [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count] ;
-
+        
     }
     else{
         return [_sourceTask.comments count];

@@ -618,27 +618,33 @@
                 [self sendSingleDataPacket:historyData toSinglePeer:peerID];
                 
                 //if there are any unsent messages then send them
-                CSUserRealmModel *peer = [CSUserRealmModel objectInRealm:peerHistoryRealm forPrimaryKey:peerID.displayName];
-                NSInteger number = peer.unsentMessages;
-                if(number > 0)
-                {
+               // CSUserRealmModel *peer = [CSUserRealmModel objectInRealm:peerHistoryRealm forPrimaryKey:peerID.displayName];
+               // NSInteger number = peer.unsentMessages;
+                //if(number > 0)
+               // {
                     dispatch_async(_chatMessageQueue, ^{
-                        NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", peerID.displayName, peerID.displayName];
+                       // NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", peerID.displayName, peerID.displayName];
                         RLMRealm* privateMessageRealm = [CSRealmFactory privateMessageRealm];
-                        RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred];
+                        RLMResults* messages = [CSChatMessageRealmModel allObjectsInRealm:privateMessageRealm];
                         NSMutableArray* send = [[NSMutableArray alloc] init];
                        
                         //add unsent messages
-                        for(int i = 0; i < number; i++ ) {
-                            [send addObject: messages[[messages count] - 1 - i]];
+//                        for(int i = 0; i < number; i++ ) {
+//                            [send addObject: messages[[messages count] - 1 - i]];
+//                        }
+                        for(CSChatMessageRealmModel* message in messages)
+                        {
+                            [send addObject:message];
                         }
-                        
-                        NSDictionary *dataToSend = @{@"PMArray"  :   send};
-                        NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
-                        [self sendSingleDataPacket:data toSinglePeer:peerID];
+                        if([send count]> 0)
+                        {
+                            NSDictionary *dataToSend = @{@"PMArray"  :   send};
+                            NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+                            [self sendSingleDataPacket:data toSinglePeer:peerID];
+                        }
                     });
                     
-                }
+              //  }
             });
             
             dispatch_async(_chatMessageQueue, ^{
@@ -816,11 +822,11 @@
 
 -(void) addMessage:(NSString *)peer
 {
-        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:peer];
-        NSLog(@"%@", user.displayName);
-        [_peerHistoryRealm beginWriteTransaction];
+        RLMRealm *peerRealm = [CSRealmFactory peerHistoryRealm];
+        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:peerRealm forPrimaryKey:peer];
+        [peerRealm beginWriteTransaction];
         [user addMessage];
-        [_peerHistoryRealm commitWriteTransaction];
+        [peerRealm commitWriteTransaction];
 }
 
 -(void) removeMessage:(NSString *)peer
