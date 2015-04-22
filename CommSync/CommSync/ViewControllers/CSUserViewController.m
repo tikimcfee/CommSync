@@ -18,8 +18,6 @@
 }
 @property NSInteger connectionCount;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *userConnectionCount;
-
 @end
 
 @implementation CSUserViewController
@@ -35,9 +33,6 @@
     
     _navBar.title = ([_sessionManager.unreadMessages count] > 0)? @"Unread Messages" : @"No Unread Messages";
     _connectionCount = [_sessionManager.currentConnectedPeers count];
-    
-    
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)_connectionCount];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateConnectionCountAndTableView:)
@@ -65,7 +60,6 @@
 {
     __weak CSUserViewController *weakSelf = self;
     NSInteger connectionCount = [_sessionManager.currentConnectedPeers count];
-    self.userConnectionCount.title = [NSString stringWithFormat:@"%d", (int)connectionCount];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.tableView reloadData];
