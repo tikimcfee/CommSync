@@ -361,7 +361,11 @@ didStartReceivingResourceWithName:(NSString *)resourceName
     
     newIncomingTask.taskObservationString = taskObservationName;
     newIncomingTask.trueTaskName = resourceName;
-    newIncomingTask.peerDisplayName = peerID.displayName;
+    
+    RLMRealm* users = [CSRealmFactory peerHistoryRealm];
+    CSUserRealmModel* user = [CSUserRealmModel objectInRealm:users forPrimaryKey:peerID.displayName];
+    NSString* name = user ? user.displayName : @"Unknown User!";
+    newIncomingTask.peerDisplayName = name;
     
     [incomingTaskRealm beginWriteTransaction];
     [incomingTaskRealm addOrUpdateObject:newIncomingTask];
