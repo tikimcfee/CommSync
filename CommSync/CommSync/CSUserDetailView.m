@@ -19,12 +19,11 @@
 @implementation CSUserDetailView
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     _topHeight = _topConstraint.constant;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
- 
-    [super viewDidLoad];
         // Do any additional setup after loading the view.
     _nameLabel.text = _peerID.displayName;
     
@@ -83,7 +82,7 @@
 }
 
 //the keyboard shows up
-- (void)keyboardDidShow:(NSNotification *)sender {
+- (void)keyboardWillShow:(NSNotification *)sender {
     _taskLabel.hidden = true;
     _taskContainer.hidden = true;
     _messageLabel.hidden = true;
@@ -91,9 +90,9 @@
     CGRect newFrame = [self.view convertRect:frame fromView:[[UIApplication sharedApplication] delegate].window];
     //animate view moving uop
     [self.view layoutIfNeeded];
-    _heightConstraint.constant = newFrame.size.height - 50;
     _topConstraint.constant = 0;
-    [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
+    _heightConstraint.constant = newFrame.size.height - 90;
+    [UIView animateWithDuration:0.3 animations:^{[self.view layoutIfNeeded];}];
 }
 
 - (void)keyboardWillHide:(NSNotification *)sender {
@@ -104,6 +103,6 @@
     //animate view moving down
     [self.view layoutIfNeeded];
     _heightConstraint.constant = 0;
-    [UIView animateWithDuration:0.2 animations:^{[self.view layoutIfNeeded];}];
+    [UIView animateWithDuration:0.3 animations:^{[self.view layoutIfNeeded];}];
 }
 @end
