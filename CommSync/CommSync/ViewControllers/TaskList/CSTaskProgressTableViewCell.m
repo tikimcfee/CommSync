@@ -26,7 +26,7 @@
 
 - (void)configureWithIdentifier:(NSString*)identifier {
 
-    CSIncomingTaskRealmModel* incoming = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]]
+    CSIncomingTaskRealmModel* incoming = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm]
                                                                    forPrimaryKey:identifier];
     
     // Set label view traits

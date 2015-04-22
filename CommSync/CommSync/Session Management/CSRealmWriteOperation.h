@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CSTaskRealmModel.h"
+#import "CSRealmFactory.h"
 
 @interface CSRealmWriteOperation : NSOperation
 

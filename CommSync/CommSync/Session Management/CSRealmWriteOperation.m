@@ -10,8 +10,6 @@
 #import "CSSessionManager.h"
 #import "CSIncomingTaskRealmModel.h"
 
-#import <Realm/Realm.h>
-
 @interface CSRealmWriteOperation()
 
 //@property (strong, nonatomic) RLMNotificationToken* changeToken;
@@ -23,7 +21,7 @@
 - (void) main {
     
     RLMRealm* taskRealm = [RLMRealm defaultRealm];
-    RLMRealm* incomingTaskRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+    RLMRealm* incomingTaskRealm = [CSRealmFactory incomingTaskRealm];
 
     [taskRealm beginWriteTransaction];
     [taskRealm addObject:self.pendingTask];

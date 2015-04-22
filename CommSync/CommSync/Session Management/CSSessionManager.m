@@ -16,7 +16,6 @@
 #import "CSSessionDataAnalyzer.h"
 #import "CSUserRealmModel.h"
 #import "CSChatViewController.h"
-#import "CSRealmFactory.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
@@ -84,7 +83,7 @@
         _peerHistoryQueue = dispatch_queue_create("peerHistoryQueue", NULL);
         
         dispatch_sync(self.peerHistoryQueue,^{
-            _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+            _peerHistoryRealm = [CSRealmFactory peerHistoryRealm];
             _peerHistoryRealm.autorefresh = YES;
             
             self.myUserModel = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myUniqueID];
@@ -96,13 +95,13 @@
         });
         
         dispatch_sync(self.privateMessageQueue,^{
-            _privateMessageRealm = [RLMRealm realmWithPath :[CSSessionManager privateMessageRealmDirectory]];
+            _privateMessageRealm = [CSRealmFactory privateMessageRealm];
             _privateMessageRealm.autorefresh = YES;
         });
 
         
         dispatch_sync(self.chatMessageQueue,^{
-            _chatMessageRealm = [RLMRealm realmWithPath :[CSSessionManager chatMessageRealmDirectory]];
+            _chatMessageRealm = [CSRealmFactory chatMessageRealm];
             _chatMessageRealm.autorefresh = YES;
         });
 
@@ -551,7 +550,7 @@
                 
                 //send all peer data to eachother
                 NSMutableArray *peers = [[NSMutableArray alloc]init];
-                RLMRealm* peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+                RLMRealm* peerHistoryRealm = [CSRealmFactory peerHistoryRealm];
                 for (CSUserRealmModel* user in [CSUserRealmModel allObjectsInRealm:peerHistoryRealm]) {
                     [peers addObject:user];
                 }
@@ -567,7 +566,7 @@
                 {
                     dispatch_async(_chatMessageQueue, ^{
                         NSPredicate* pred = [NSPredicate predicateWithFormat:@"createdBy = %@ OR recipient = %@", peerID.displayName, peerID.displayName];
-                        RLMRealm* privateMessageRealm = [RLMRealm realmWithPath:[CSSessionManager privateMessageRealmDirectory]];
+                        RLMRealm* privateMessageRealm = [CSRealmFactory privateMessageRealm];
                         RLMResults* messages = [CSChatMessageRealmModel objectsInRealm:privateMessageRealm withPredicate:pred];
                         NSMutableArray* send = [[NSMutableArray alloc] init];
                        
@@ -586,7 +585,7 @@
             
             dispatch_async(_chatMessageQueue, ^{
                 NSMutableArray* send = [[NSMutableArray alloc]init];
-                RLMRealm* chatRealm = [RLMRealm realmWithPath:[CSSessionManager chatMessageRealmDirectory]];
+                RLMRealm* chatRealm = [CSRealmFactory chatMessageRealm];
                 for(CSChatMessageRealmModel* message in [CSChatMessageRealmModel allObjectsInRealm:chatRealm]) {
                     [send addObject:message];
                 }
@@ -724,7 +723,7 @@
 
 -(void)nukeHistory
 {
-    _peerHistoryRealm = [RLMRealm realmWithPath:[CSSessionManager peerHistoryRealmDirectory]];
+    _peerHistoryRealm = [CSRealmFactory peerHistoryRealm];
     //add all current connected peers to database
     [_peerHistoryRealm beginWriteTransaction];
     [_peerHistoryRealm deleteAllObjects];
@@ -735,59 +734,12 @@
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
 {
     dispatch_sync(_chatMessageQueue, ^{
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-        NSString *chatRealmPath = [basePath stringByAppendingString:@"/chat.realm"];
-        
-        RLMRealm *chatRealm = [RLMRealm realmWithPath:chatRealmPath];
+        RLMRealm *chatRealm = [CSRealmFactory chatMessageRealm];
         
         [chatRealm beginWriteTransaction];
         [chatRealm addObject:message];
         [chatRealm commitWriteTransaction];
     });
-}
-
-//- (void)batchUpdateRealmWithTasks:(NSArray*)tasks {
-//    
-//    dispatch_sync(_taskRealmQueue, ^{
-//        
-//        [_realm beginWriteTransaction];
-//        
-//        for(CSTaskRealmModel* task in tasks)
-//        {
-////            CSTaskRealmModel*  foundTask = [CSTaskRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:task.concatenatedID];
-//            
-////            if(!foundTask) {
-////                [self addTag:task.tag];
-////                [_realm addObject:task];
-////
-////            } else {
-////                NSLog(@"Duplicate task not being stored");
-////            }
-//        }
-//        [_realm commitWriteTransaction];
-//    });
-//}
-
-
-+ (NSString *)peerHistoryRealmDirectory
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    return [basePath stringByAppendingString:@"/peers.realm"];
-}
-
-+ (NSString*)incomingTaskRealmDirectory
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    return [basePath stringByAppendingString:@"/incomingTasks.realm"];
-}
-
--(void) addTag:(NSString*) tag
-{
-    if ([tag isEqualToString:@""] || tag == nil) return;
-    if(![_allTags valueForKey:tag]) [_allTags setValue:tag forKey:tag];
 }
 
 -(void) addMessage:(NSString *)peer
@@ -804,18 +756,4 @@
     if([_unreadMessages objectForKey:peer]) [_unreadMessages removeObjectForKey:peer];
 }
 
-
-+ (NSString *)chatMessageRealmDirectory
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    return [basePath stringByAppendingString:@"/chat.realm"];
-}
-
-+ (NSString *)privateMessageRealmDirectory
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    return [basePath stringByAppendingString:@"/privateMessage.realm"];
-}
 @end

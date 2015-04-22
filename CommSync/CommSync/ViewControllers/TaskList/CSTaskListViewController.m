@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     // Realms
     _realm = [RLMRealm defaultRealm];
     _realm.autorefresh = YES;
-    _incomingTasksRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+    _incomingTasksRealm = [CSRealmFactory incomingTaskRealm];
     _incomingTasksRealm.autorefresh = YES;
     
     // get global managers
@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     // Execution blocks and callbacks
     _reloadModels = ^void()
     {
-        RLMRealm* incomingRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+        RLMRealm* incomingRealm = [CSRealmFactory incomingTaskRealm];
         RLMResults* incoming = [CSIncomingTaskRealmModel allObjectsInRealm:incomingRealm];
         NSMutableArray* tasks = [NSMutableArray new];
         for (CSIncomingTaskRealmModel* task in incoming) {
@@ -105,7 +105,6 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         }
         
         RLMRealm* tasksRealm = [RLMRealm defaultRealm];
-//        RLMResults* allTasks = [CSTaskRealmModel allObjectsInRealm:tasksRealm];
         NSNumber* completed = _completionToggleIndex == 1 ? [NSNumber numberWithBool:YES] : [NSNumber numberWithBool:NO];
         NSPredicate* predicate = [NSPredicate predicateWithFormat:@"completed == %@", completed];
         RLMResults* filteredTask = [CSTaskRealmModel objectsInRealm:tasksRealm withPredicate:predicate];
@@ -219,8 +218,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 {
     @synchronized(_indexPathController.dataModel) {
         NSString* selected = [_indexPathController.dataModel itemAtIndexPath:indexPath];
-        CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:
-                                                                                   [CSSessionManager incomingTaskRealmDirectory]]
+        CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm]
                                                                     forPrimaryKey:selected];
         if(model) {
             return NO;
@@ -237,7 +235,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         selected = [_indexPathController.dataModel itemAtIndexPath:indexPath];
     }
     
-    CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]]
+    CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm]
                                                                 forPrimaryKey:selected];
     if(model) {
         return;
@@ -258,7 +256,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         selected = [_indexPathController.dataModel itemAtIndexPath:indexPath];
     }
     
-    CSIncomingTaskRealmModel* incomingTask = [CSIncomingTaskRealmModel objectInRealm:[RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]]
+    CSIncomingTaskRealmModel* incomingTask = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm]
                                                                        forPrimaryKey:selected];
     CSTaskRealmModel* task = [CSTaskRealmModel objectForPrimaryKey:selected];
     if(incomingTask) {

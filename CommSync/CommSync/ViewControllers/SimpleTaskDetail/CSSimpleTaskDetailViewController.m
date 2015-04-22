@@ -297,8 +297,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         RLMResults* comments = [self.sourceTask.comments sortedResultsUsingProperty:@"time" ascending:NO];
         CSCommentRealmModel *comment = [comments objectAtIndex:indexPath.row];
         
-        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:[RLMRealm realmWithPath:
-                                                                  [CSSessionManager peerHistoryRealmDirectory]]
+        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm]
                                                    forPrimaryKey:comment.UID];
         NSString* createdBy = user ? user.displayName : @"Unknown";
         cellRef.createdByLabel.text = createdBy;

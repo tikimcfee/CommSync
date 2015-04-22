@@ -355,7 +355,7 @@ didStartReceivingResourceWithName:(NSString *)resourceName
     NSString* taskObservationName = [NSString stringWithFormat:@"%@_INCOMING", resourceName];
     [progress setUserInfoObject:taskObservationName forKey:kCSTaskObservationID];
     
-    RLMRealm* incomingTaskRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
+    RLMRealm* incomingTaskRealm = [CSRealmFactory incomingTaskRealm];
     CSIncomingTaskRealmModel* newIncomingTask = [CSIncomingTaskRealmModel new];
     
     

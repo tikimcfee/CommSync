@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Realm/Realm.h>
+#import "CSRealmFactory.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import "CSTaskResourceSendOperation.h"
 
@@ -76,12 +76,6 @@
 
 - (void)createUserModel;
 - (void)updateAvatar:       (NSInteger)            number;
-
-+ (NSString *)incomingTaskRealmDirectory;
-+ (NSString *)peerHistoryRealmDirectory;
-+ (NSString *)privateMessageRealmDirectory;
-+ (NSString *)chatMessageRealmDirectory;
-
 
 @property (strong, nonatomic) RLMRealm *peerHistoryRealm;
 @property (strong, nonatomic) RLMRealm *chatMessageRealm;
