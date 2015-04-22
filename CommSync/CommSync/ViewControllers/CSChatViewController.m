@@ -234,16 +234,18 @@
     
     if(!_sourceTask){
         
-            CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+        CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+
+        cell.messageLabel.text = msg.messageText;
+        cell.transform = self.tableView.transform;
     
-            cell.messageLabel.text = msg.messageText;
-            cell.transform = self.tableView.transform;
+        CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
+        cell.createdByLabel.text = person.displayName;
+    
+        NSString *image = [person getPicture];
+        [cell.avatarImage setImage:[UIImage imageNamed:image]];
+        cell.avatarImage.layer.cornerRadius = cell.avatarImage.frame.size.width / 2;
         
-            CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
-            cell.createdByLabel.text = person.displayName;
-        
-            NSString *image = [person getPicture];
-            [cell.avatarImage setImage:[UIImage imageNamed:image]];
         if ([msg.createdBy isEqualToString:_sessionManager.myUniqueID]) {
             cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.4f];
         }
