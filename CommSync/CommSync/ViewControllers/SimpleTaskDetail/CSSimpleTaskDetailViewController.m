@@ -139,9 +139,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _taskTitleTextField.text = _sourceTask.taskTitle;
     _taskTitleTextField.userInteractionEnabled = NO;
     _taskTitleTextField.layer.cornerRadius = 4;
-
+    
     _priorityButtonsMainView.alpha = 0.0;
     _priorityButtonsMainView.userInteractionEnabled = NO;
+    _lowPriorityButton.backgroundColor = [UIColor kTaskLowPriorityColor];
+    _midPriorityButton.backgroundColor = [UIColor kTaskMidPriorityColor];
+    _highPriorityButton.backgroundColor = [UIColor kTaskHighPriorityColor];
     
     _bottomActionButton.backgroundColor = [[UIColor flatPeterRiverColor] colorWithAlphaComponent:0.8];
     
@@ -190,10 +193,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
                                          color:[UIColor whiteColor]];
     if (!_taskAudio) {
         _audioPlayImageView.image = _taskAudioNaN;
-//        _audioPlayImageView.userInteractionEnabled = NO;
     } else {
         _audioPlayImageView.image = _taskAudioNormal;
-//        _audioPlayImageView.userInteractionEnabled = YES;
     }
     
     _audioPlayImageView.userInteractionEnabled = YES;
@@ -617,21 +618,23 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-
+    NSString* UUID = self.sourceTask.concatenatedID;
+    
     __weak typeof(self) weakSelf = self;
     void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
         
-
+        
         NSLog(@"New size after normalization only is %ld",
               (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
         NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
         NSLog(@"New size after JPEG compression is %ld",
               (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
         
-        [weakSelf.sourceTask addTaskMediaOfType:CSTaskMediaType_Photo
-                                       withData:thisImage
-                                        toRealm:[RLMRealm defaultRealm]
-                                   inTransation:YES];
+        CSTaskRealmModel* memory = [CSTaskRealmModel objectForPrimaryKey:UUID];
+        [memory addTaskMediaOfType:CSTaskMediaType_Photo
+                          withData:thisImage
+                           toRealm:[RLMRealm defaultRealm]
+                      inTransation:YES];
         
         [weakSelf.sourceTask getAllImagesForTaskWithCompletionBlock:^(NSMutableArray* loadedImages) {
             if (weakSelf.taskImages.count == 0) {
@@ -653,6 +656,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 #pragma mark -- END Image Picker
 - (IBAction)playAudio:(id)sender {
+    [self configureAVAudioSession];
+    
     if (_mode == CSSimpleDetailMode_View && self.taskAudio) {
         NSError* error;
         self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]
@@ -662,6 +667,35 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         [self performSegueWithIdentifier:@"CSAudioPlotViewController" sender:nil];
     }
 
+}
+
+- (void) configureAVAudioSession //To play through main iPhone Speakers
+{
+    //get your app's audioSession singleton object
+    AVAudioSession* session = [AVAudioSession sharedInstance];
+    
+    //error handling
+    BOOL success;
+    NSError* error;
+    
+    //set the audioSession category.
+    //Needs to be Record or PlayAndRecord to use audioRouteOverride:
+    
+    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
+                             error:&error];
+    
+    if (!success)  NSLog(@"AVAudioSession error setting category:%@",error);
+    
+    //set the audioSession override
+    success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker
+                                         error:&error];
+    if (!success)  NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+    
+    //activate the audio session
+    success = [session setActive:YES error:&error];
+    if (!success) NSLog(@"AVAudioSession error activating: %@",error);
+    else NSLog(@"audioSession active");
+    
 }
 
 #pragma mark - Segues

@@ -21,8 +21,8 @@
 
 #import <UIKit/UIKit.h>
 
-#define kTaskLowPriorityColor flatTurquoiseColor
-#define kTaskMidPriorityColor flatOrangeColor
+#define kTaskLowPriorityColor flatBelizeHoleColor
+#define kTaskMidPriorityColor flatCarrotColor
 #define kTaskHighPriorityColor flatPomegranateColor
 
 @interface UIColor (FlatColors)

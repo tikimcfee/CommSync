@@ -102,6 +102,7 @@
 
 -(void)playFile:(id)sender
 {
+    [self configureAVAudioSession];
     
     // Update microphone state
     [self.microphone stopFetchingAudio];
@@ -130,6 +131,35 @@
                                                               error:&err];
     [self.audioPlayer play];
     self.audioPlayer.delegate = self;
+    
+}
+
+- (void) configureAVAudioSession //To play through main iPhone Speakers
+{
+    //get your app's audioSession singleton object
+    AVAudioSession* session = [AVAudioSession sharedInstance];
+    
+    //error handling
+    BOOL success;
+    NSError* error;
+    
+    //set the audioSession category.
+    //Needs to be Record or PlayAndRecord to use audioRouteOverride:
+    
+    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
+                             error:&error];
+    
+    if (!success)  NSLog(@"AVAudioSession error setting category:%@",error);
+    
+    //set the audioSession override
+    success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker
+                                         error:&error];
+    if (!success)  NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+    
+    //activate the audio session
+    success = [session setActive:YES error:&error];
+    if (!success) NSLog(@"AVAudioSession error activating: %@",error);
+    else NSLog(@"audioSession active");
     
 }
 
