@@ -259,29 +259,6 @@
 		74C541E91A93E67100FC29AD /* TLTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTableViewController.h; sourceTree = "<group>"; };
 		74C541EA1A93E67100FC29AD /* TLTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTableViewController.m; sourceTree = "<group>"; };
 		74DB14CD1A7FDDE500ECBADB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		74DB14D01A7FDE4300ECBADB /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
-		74DB14D11A7FDE4300ECBADB /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
-		74DB14D21A7FDE4300ECBADB /* ConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionDelegate.h; sourceTree = "<group>"; };
-		74DB14D31A7FDE4300ECBADB /* JKConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKConnection.h; sourceTree = "<group>"; };
-		74DB14D41A7FDE4300ECBADB /* JKConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKConnection.m; sourceTree = "<group>"; };
-		74DB14D51A7FDE4300ECBADB /* JKConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKConnectionDelegate.h; sourceTree = "<group>"; };
-		74DB14D61A7FDE4300ECBADB /* JKLocalConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKLocalConnection.h; sourceTree = "<group>"; };
-		74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKLocalConnection.m; sourceTree = "<group>"; };
-		74DB14D81A7FDE4300ECBADB /* JKPeer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeer.h; sourceTree = "<group>"; };
-		74DB14D91A7FDE4300ECBADB /* JKPeer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeer.m; sourceTree = "<group>"; };
-		74DB14DA1A7FDE4300ECBADB /* JKPeerConnectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivity.h; sourceTree = "<group>"; };
-		74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeerConnectivity.m; sourceTree = "<group>"; };
-		74DB14DC1A7FDE4300ECBADB /* JKPeerConnectivityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivityDelegate.h; sourceTree = "<group>"; };
-		74DB14DD1A7FDE4300ECBADB /* JKPeerConnectivitySetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKPeerConnectivitySetup.h; sourceTree = "<group>"; };
-		74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPeerConnectivitySetup.m; sourceTree = "<group>"; };
-		74DB14DF1A7FDE4300ECBADB /* JKRemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRemoteConnection.h; sourceTree = "<group>"; };
-		74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRemoteConnection.m; sourceTree = "<group>"; };
-		74DB14E11A7FDE4300ECBADB /* PeerBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerBrowser.h; sourceTree = "<group>"; };
-		74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerBrowser.m; sourceTree = "<group>"; };
-		74DB14E31A7FDE4300ECBADB /* PeerDiscoveryDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerDiscoveryDelegate.h; sourceTree = "<group>"; };
-		74DB14E41A7FDE4300ECBADB /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
-		74DB14E51A7FDE4300ECBADB /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
-		74DB14E61A7FDE4300ECBADB /* ServerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerDelegate.h; sourceTree = "<group>"; };
 		74E8E6931AE6A131005A3224 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		74E8E69B1AE71C4B005A3224 /* CSRealmFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSRealmFactory.h; path = Models/CSRealmFactory.h; sourceTree = "<group>"; };
 		74E8E69C1AE71C4B005A3224 /* CSRealmFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSRealmFactory.m; path = Models/CSRealmFactory.m; sourceTree = "<group>"; };
@@ -436,7 +413,6 @@
 				45190C2C1A89BD130030CB05 /* iOS Frameworks */,
 				454D92071A7857CD000B74A8 /* Realm.framework */,
 				746F6AAE1A892613007A83E8 /* EZAudio */,
-				74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -734,53 +710,6 @@
 				74C541EA1A93E67100FC29AD /* TLTableViewController.m */,
 			);
 			path = "View Controllers";
-			sourceTree = "<group>";
-		};
-		74DB14CF1A7FDE4300ECBADB /* JKConnectivityBETA */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14F01A7FE22000ECBADB /* High Level Interface */,
-				74DB14F11A7FE22D00ECBADB /* Low Level */,
-			);
-			name = JKConnectivityBETA;
-			path = ThirdParty/JKConnectivityBETA;
-			sourceTree = "<group>";
-		};
-		74DB14F01A7FE22000ECBADB /* High Level Interface */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14D31A7FDE4300ECBADB /* JKConnection.h */,
-				74DB14D41A7FDE4300ECBADB /* JKConnection.m */,
-				74DB14D51A7FDE4300ECBADB /* JKConnectionDelegate.h */,
-				74DB14D61A7FDE4300ECBADB /* JKLocalConnection.h */,
-				74DB14D71A7FDE4300ECBADB /* JKLocalConnection.m */,
-				74DB14D81A7FDE4300ECBADB /* JKPeer.h */,
-				74DB14D91A7FDE4300ECBADB /* JKPeer.m */,
-				74DB14DA1A7FDE4300ECBADB /* JKPeerConnectivity.h */,
-				74DB14DB1A7FDE4300ECBADB /* JKPeerConnectivity.m */,
-				74DB14DC1A7FDE4300ECBADB /* JKPeerConnectivityDelegate.h */,
-				74DB14DD1A7FDE4300ECBADB /* JKPeerConnectivitySetup.h */,
-				74DB14DE1A7FDE4300ECBADB /* JKPeerConnectivitySetup.m */,
-				74DB14DF1A7FDE4300ECBADB /* JKRemoteConnection.h */,
-				74DB14E01A7FDE4300ECBADB /* JKRemoteConnection.m */,
-			);
-			name = "High Level Interface";
-			sourceTree = "<group>";
-		};
-		74DB14F11A7FE22D00ECBADB /* Low Level */ = {
-			isa = PBXGroup;
-			children = (
-				74DB14D01A7FDE4300ECBADB /* Connection.h */,
-				74DB14D11A7FDE4300ECBADB /* Connection.m */,
-				74DB14D21A7FDE4300ECBADB /* ConnectionDelegate.h */,
-				74DB14E11A7FDE4300ECBADB /* PeerBrowser.h */,
-				74DB14E21A7FDE4300ECBADB /* PeerBrowser.m */,
-				74DB14E31A7FDE4300ECBADB /* PeerDiscoveryDelegate.h */,
-				74DB14E41A7FDE4300ECBADB /* Server.h */,
-				74DB14E51A7FDE4300ECBADB /* Server.m */,
-				74DB14E61A7FDE4300ECBADB /* ServerDelegate.h */,
-			);
-			name = "Low Level";
 			sourceTree = "<group>";
 		};
 		74E8E6951AE71B09005A3224 /* Custom .xibs */ = {
