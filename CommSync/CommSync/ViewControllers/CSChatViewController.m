@@ -46,9 +46,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    __weak CSChatViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
+        [weakSelf.tableView reloadData];
     });
 }
 

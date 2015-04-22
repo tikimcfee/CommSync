@@ -71,15 +71,11 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     
     __weak typeof(self) weakSelf = self;
     void (^realmNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            _incomingTaskCallback();
-        });
+        weakSelf.incomingTaskCallback();
     };
     
     void (^incomingTaskNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            _incomingTaskCallback();
-        });
+        weakSelf.incomingTaskCallback();
     };
     
     // Realms
@@ -124,13 +120,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     _incomingTaskCallback = ^void()
     {
         NSTimeInterval time = 0.5;
-//        if (TIME_TO_UPDATE != -1) {
-//            time = TIME_TO_UPDATE;
-//            TIME_TO_UPDATE = -1;
-//        } else {
-//            time = 0.5;
-//        }
-        
+
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, time * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             CSTaskListUpdateOperation* newUpdate = [CSTaskListUpdateOperation new];
             
@@ -190,10 +180,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 - (void)toggleToNewMode:(id)sender {
     if(_completionToggleControl.selectedSegmentIndex != _completionToggleIndex) {
         _completionToggleIndex = _completionToggleControl.selectedSegmentIndex;
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            TIME_TO_UPDATE = 0.0;
-            _incomingTaskCallback();
-        });
+        self.incomingTaskCallback();
     }
 }
 

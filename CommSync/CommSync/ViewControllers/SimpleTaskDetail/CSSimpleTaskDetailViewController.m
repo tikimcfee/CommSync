@@ -624,12 +624,10 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         NSLog(@"New size after JPEG compression is %ld",
               (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.sourceTask addTaskMediaOfType:CSTaskMediaType_Photo
-                                           withData:thisImage
-                                            toRealm:[RLMRealm defaultRealm]
-                                       inTransation:YES];
-        });
+        [weakSelf.sourceTask addTaskMediaOfType:CSTaskMediaType_Photo
+                                       withData:thisImage
+                                        toRealm:[RLMRealm defaultRealm]
+                                   inTransation:YES];
         
         [weakSelf.sourceTask getAllImagesForTaskWithCompletionBlock:^(NSMutableArray* loadedImages) {
             if (weakSelf.taskImages.count == 0) {

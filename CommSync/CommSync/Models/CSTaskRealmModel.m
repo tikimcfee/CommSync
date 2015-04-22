@@ -148,7 +148,7 @@
 
 #pragma mark - ASYNC callbacks
 - (void) getAllImagesForTaskWithCompletionBlock:(void (^)(NSMutableArray*))completion {
-    
+    // TODO: run on different queue
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableArray* taskImages = [NSMutableArray new];
         

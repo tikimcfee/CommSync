@@ -24,12 +24,6 @@
     
     RLMRealm* taskRealm = [RLMRealm defaultRealm];
     RLMRealm* incomingTaskRealm = [RLMRealm realmWithPath:[CSSessionManager incomingTaskRealmDirectory]];
-    
-//    void (^incomingTaskNotificationBlock)(NSString*, RLMRealm*) = ^void(NSString* note, RLMRealm* rlm) {
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-//            _incomingTaskCallback();
-//        });
-//    };
 
     [taskRealm beginWriteTransaction];
     [taskRealm addObject:self.pendingTask];

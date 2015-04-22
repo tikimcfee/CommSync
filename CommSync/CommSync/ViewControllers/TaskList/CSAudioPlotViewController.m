@@ -209,8 +209,9 @@
 withNumberOfChannels:(UInt32)numberOfChannels {
     
     // Note that any callback that provides streamed audio data (like streaming microphone input) happens on a separate audio thread that should not be blocked. When we feed audio data into any of the UI components we need to explicity create a GCD block on the main thread to properly get the UI to work.
+    __weak CSAudioPlotViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(),^{
-        [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
     });
 }
 
