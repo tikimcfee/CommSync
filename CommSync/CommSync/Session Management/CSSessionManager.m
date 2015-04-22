@@ -39,6 +39,7 @@
 @implementation CSSessionManager
 {
     volatile int32_t _sentResourceCount;
+    volatile int32_t _receivedResourceCount;
 }
 
 #pragma mark - Lifecycle
@@ -711,6 +712,9 @@
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
 {
+    // increment counter
+    OSAtomicIncrement32(&_receivedResourceCount);
+    
     // set state to transmitting to stop browsing/advertising
     self.state = CSSessionManagerStateTransmittingTasks;
     
@@ -722,8 +726,11 @@
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
+    // decrement counter
+    OSAtomicDecrement32(&_receivedResourceCount);
+    
     // if no more incoming tasks, set state to searching
-    if (self.dataAnalyzer.dataAnalysisQueue.operationCount == 0) {
+    if (_receivedResourceCount == 0) {
         self.state = CSSessionManagerStateSearching;
     }
     
