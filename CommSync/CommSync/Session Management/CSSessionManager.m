@@ -135,12 +135,16 @@
         return;
     }
     
+    _state = state;
+    
     if (state == CSSessionManagerStateTransmittingTasks) {
+        NSLog(@"Session Manager: State is now transmitting. Stopping browser and advertiser.");
         // stop all browsing and advertising activity
         [_serviceBrowser stopBrowsingForPeers];
         [_serviceAdvertiser stopAdvertisingPeer];
         
     } else {
+        NSLog(@"Session Manager: State is now searching. Starting browser and advertiser.");
         // start browsing and advertising
         [_serviceBrowser startBrowsingForPeers];
         [_serviceAdvertiser startAdvertisingPeer];
