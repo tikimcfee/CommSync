@@ -16,6 +16,7 @@
 #import "CSSessionDataAnalyzer.h"
 #import "CSUserRealmModel.h"
 #import "CSChatViewController.h"
+#import "CSRealmFactory.h"
 
 #define kUserNotConnectedNotification @"Not Connected"
 #define kUserConnectedNotification @"Connected"
