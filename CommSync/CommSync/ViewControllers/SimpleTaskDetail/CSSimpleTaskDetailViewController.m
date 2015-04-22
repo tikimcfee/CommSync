@@ -15,6 +15,7 @@
 #import "UIImage+normalize.h"
 #import "CSPictureController.h"
 #import "CSUserRealmModel.h"
+#import "CSSessionManager.h"
 
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
 #define kChatTableViewCellIdentifier @"ChatViewCell"
@@ -287,8 +288,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
         CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
         NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
-        cellRef.label.text = [NSString stringWithFormat:@"View %u more comment%@",
-                              _sourceTask.comments.count - 4,
+        cellRef.label.text = [NSString stringWithFormat:@"View %lu more comment%@",
+                              (long)_sourceTask.comments.count - 4,
                               plural];
     } else {
         CSChatTableViewCell *cellRef = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -296,7 +297,11 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         RLMResults* comments = [self.sourceTask.comments sortedResultsUsingProperty:@"time" ascending:NO];
         CSCommentRealmModel *comment = [comments objectAtIndex:indexPath.row];
         
-        cellRef.createdByLabel.text = comment.UID;
+        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:[RLMRealm realmWithPath:
+                                                                  [CSSessionManager peerHistoryRealmDirectory]]
+                                                   forPrimaryKey:comment.UID];
+        NSString* createdBy = user ? user.displayName : @"Unknown";
+        cellRef.createdByLabel.text = createdBy;
         cellRef.messageLabel.text = comment.text;
         cellRef.transform = self.tableview.transform;
     }

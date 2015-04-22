@@ -102,16 +102,23 @@
     
     if (!_sourceTask && _peerID) {
         UINavigationBar *bar = [UINavigationBar new];
-        [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, (_peerID)? 32: 64.0)];
+        [bar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 32)];
         [bar setupCommSyncStyle];
         
         UILabel *barLabel = [UILabel new];
-        [barLabel setFrame:CGRectMake(self.view.frame.size.width/2- 45.0, 8, 100.0, 20.0)];
+        [barLabel setFrame:CGRectMake(self.view.frame.size.width/2- 45.0, 8, 150.0, 20.0)];
         [barLabel setText: @"Private Chat"];
         [barLabel setTextColor:[UIColor whiteColor]];
         
         [bar addSubview:barLabel];
         [self.view addSubview:bar];
+    }
+    
+    if(_peerID){
+        //reset private messages
+        [self.sessionManager.peerHistoryRealm beginWriteTransaction];
+        [self.peerID removeMessages];
+        [self.sessionManager.peerHistoryRealm commitWriteTransaction];
     }
 }
 
@@ -237,8 +244,11 @@
         
             NSString *image = [person getPicture];
             [cell.avatarImage setImage:[UIImage imageNamed:image]];
-        if ([msg.createdBy isEqualToString:self.peerID.uniqueID]) {
-            cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.7f];
+        if ([msg.createdBy isEqualToString:_sessionManager.myUniqueID]) {
+            cell.backgroundColor = [[UIColor flatConcreteColor] colorWithAlphaComponent:0.4f];
+        }
+        else{
+            cell.backgroundColor = [UIColor whiteColor];
         }
     }
     

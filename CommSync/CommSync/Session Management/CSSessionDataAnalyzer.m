@@ -127,7 +127,7 @@
                 NSMutableArray* differences = [[NSMutableArray alloc]init];
                 for(CSUserRealmModel *peer in [receivedObject valueForKey:kcs_USER_ARRAY])
                 {
-                    if(![peer.displayName isEqualToString: _parentAnalyzer.globalManager.myUniqueID]){
+                    if(![peer.uniqueID isEqualToString: _parentAnalyzer.globalManager.myUniqueID]){
                        if( [self updatePeerHistory:peer] )[differences addObject:peer];
                     }
                 }
@@ -182,7 +182,8 @@
 - (bool) updatePeerAvatar:(NSString*) uniqueID withNumber: (NSNumber*) number
 {
     CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:uniqueID];
-    if(peer.avatar == [number integerValue]) return false;
+    if(peer.avatar == [number integerValue] || [peer.uniqueID isEqualToString:_parentAnalyzer.globalManager.myUniqueID]) return false;
+    
     
     [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
     peer.avatar = [number integerValue];
@@ -363,7 +364,7 @@ didStartReceivingResourceWithName:(NSString *)resourceName
     newIncomingTask.peerDisplayName = peerID.displayName;
     
     [incomingTaskRealm beginWriteTransaction];
-    [incomingTaskRealm addObject:newIncomingTask];
+    [incomingTaskRealm addOrUpdateObject:newIncomingTask];
     [incomingTaskRealm commitWriteTransaction];
     
     // Post notification globally
