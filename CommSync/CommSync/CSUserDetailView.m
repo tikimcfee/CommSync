@@ -26,7 +26,7 @@
     
         // Do any additional setup after loading the view.
     _nameLabel.text = _peerID.displayName;
-    
+    _height.constant = self.view.frame.size.height * .49;
     
     AppDelegate* d = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = d.globalSessionManager;
