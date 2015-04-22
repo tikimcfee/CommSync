@@ -12,8 +12,8 @@
 #import "TLIndexPathTools.h"
 
 @interface CSTaskListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
-@property (assign, nonatomic) NSString* user;
-@property (assign, nonatomic) NSString* tag;
+@property (strong, nonatomic) NSString* user;
+@property (strong, nonatomic) NSString* tag;
 @property BOOL completed;
 
 @property (strong, nonatomic) IBOutlet UISegmentedControl *completionToggleControl;
