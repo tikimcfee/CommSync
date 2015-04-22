@@ -141,16 +141,13 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    [self.tableView setSeparatorColor:[UIColor flatMidnightBlueColor]];
+    
     // setup navigation controller style
     [self.navigationController.navigationBar setupCommSyncStyle];
     
     // setup tab bar controller style
     [self.tabBarController.tabBar setupCommSyncStyle];
-    
-//    for (UITabBarItem *tab in self.tabBarController.tabBar.items) {
-//        tab.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
-//        tab.title = nil;
-//    }
     
     // toggle callback
     [_completionToggleControl addTarget:self
@@ -198,6 +195,20 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 {
     [super viewDidAppear:animated];   
     _controllerIsVisible = YES;
+}
+
+-(void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    // Force your tableview margins (this may be a bad idea)
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -249,6 +260,24 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
 }
 
 #pragma mark - UITableViewDataSource Delegates
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Remove seperator inset
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    // Prevent the cell from inheriting the Table View's margin settings
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    
+    // Explictly set your cell's layout margins
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString* selected;
