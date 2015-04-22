@@ -12,7 +12,7 @@
 #import "CSInsetTextField.h"
 #import "CSCustomTapRecognizer.h"
 #import "CSAudioPlotViewController.h"
-#import "UserSelectionView.h"
+#import "CSUserSelectionViewController.h"
 
 @interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, CSAudioPlotActionDelegate, CSAssignUserDelegate>
 

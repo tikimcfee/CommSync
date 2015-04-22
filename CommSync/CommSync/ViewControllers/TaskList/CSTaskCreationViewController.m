@@ -27,12 +27,12 @@
 #import "UIColor+FlatColors.h"
 #import "UINavigationBar+CommSyncStyle.h"
 #import "CSTaskImageCollectionViewCell.h"
+#import "CSTaskMediaCreationViewController.h"
 
 // Data transmission
 #import "CSSessionDataAnalyzer.h"
 
 
-#define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
 
 @interface CSTaskCreationViewController() 
 
@@ -40,16 +40,17 @@
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet SZTextView *descriptionTextField;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 
 @property (strong, nonatomic) IBOutlet UIButton *lowPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *mediumPriorityButton;
 @property (strong, nonatomic) IBOutlet UIButton *highPriorityButton;
 
 @property (strong, nonatomic) IBOutlet UIButton *addTaskImageButton;
+@property (strong, nonatomic) IBOutlet UIButton *assignButton;
 
 // Image picker
 @property (strong, nonatomic) UIImagePickerController* imagePicker;
-@property (assign, nonatomic) BOOL imageProcessingComplete;
 @property (strong, nonatomic) IBOutlet UICollectionView *taskImageCollection;
 @property (strong, nonatomic) NSMutableArray* taskImages;
 
@@ -76,30 +77,50 @@
     
     _sessionManager = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).globalSessionManager;
     
-    self.taskImageCollection.dataSource = self;
-    self.taskImageCollection.delegate = self;
+    // init properties
     self.taskImages = [NSMutableArray new];
+    [self sharedInit];
     
-    self.view.backgroundColor = [UIColor flatCloudsColor];
-    self.descriptionTextField.backgroundColor = [UIColor flatCloudsColor];
+    // disable next button
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
-    self.addTaskImageButton.layer.cornerRadius = 22.0f;
-    self.addTaskImageButton.backgroundColor = [UIColor flatWetAsphaltColor];
-    [self.addTaskImageButton setImage:[IonIcons imageWithIcon:ion_ios_camera size:35.0f color:[UIColor flatCloudsColor]] forState:UIControlStateNormal];
+    // focus on title text field immediately
+    [self.titleTextField becomeFirstResponder];
     
-    [self.navigationBar setupCommSyncStyle];
+    // set styles
+    [self configureInitialStyling];
+    
+    /* -- Notifications -- */
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(textFieldDidChange:)
+                                                 name:UITextFieldTextDidChangeNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(textFieldDidChange:)
+                                                 name:UITextViewTextDidChangeNotification
+                                               object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"CSAudioPlotViewController"]) {
-
-        [self sharedInit];
+    if([segue.identifier isEqualToString:@"kCSTaskMediaCreationSegue"]) {
         
-        self.audioRecorder = (CSAudioPlotViewController*)[segue destinationViewController];
-        self.audioRecorder.fileNameSansExtension = self.pendingTask.concatenatedID;
-    } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
-        CSPictureController* picture = segue.destinationViewController;
-        picture.taskImage = sender;
+        CSTaskMediaCreationViewController *vc = segue.destinationViewController;
+        // get current pending task values
+        self.pendingTask.taskTitle = self.titleTextField.text;
+        self.pendingTask.taskDescription = self.descriptionTextField.text;
+
+        [vc configureWithPendingTask:self.pendingTask];
+        
+    } else if ([segue.identifier isEqualToString:@"kAssignTaskSegue"]) {
+        
+        CSUserSelectionViewController *vc = segue.destinationViewController;
+        vc.saveDelegate = self;
+        
     }
 }
 
@@ -127,100 +148,64 @@
     _pendingTask.concatenatedID = [NSString stringWithFormat:@"%@%@", U, D];
     
     self.descriptionTextField.placeholder = @"Enter description here...";
-    _imageProcessingComplete = YES;
 }
 
+#pragma mark - Helper Methods
+- (void)configureInitialStyling {
+    
+    /* -- Set Styles -- */
+    self.view.backgroundColor = [UIColor flatCloudsColor];
+    self.descriptionTextField.backgroundColor = [UIColor flatCloudsColor];
+    self.lowPriorityButton.backgroundColor = [UIColor flatBelizeHoleColor];
+    self.mediumPriorityButton.backgroundColor = [UIColor flatOrangeColor];
+    self.highPriorityButton.backgroundColor = [UIColor flatPomegranateColor];
+    self.lowPriorityButton.layer.cornerRadius = self.lowPriorityButton.frame.size.width / 2;
+    self.mediumPriorityButton.layer.cornerRadius = self.mediumPriorityButton.frame.size.width / 2;
+    self.highPriorityButton.layer.cornerRadius = self.highPriorityButton.frame.size.width / 2;
+    [self.lowPriorityButton setImage:[IonIcons imageWithIcon:ion_ios_checkmark_empty size:50.0f color:[UIColor whiteColor]] forState:UIControlStateNormal];
+
+    
+    // configure camera button style
+    self.addTaskImageButton.layer.cornerRadius = 22.0f;
+    self.addTaskImageButton.backgroundColor = [UIColor flatWetAsphaltColor];
+    [self.addTaskImageButton setImage:[IonIcons imageWithIcon:ion_ios_camera size:35.0f color:[UIColor flatCloudsColor]] forState:UIControlStateNormal];
+    
+    // configure assign button style
+    self.assignButton.tintColor = [UIColor flatWetAsphaltColor];
+    [self.assignButton setImage:[IonIcons imageWithIcon:ion_ios_personadd_outline size:35.0f color:[UIColor flatWetAsphaltColor]] forState:UIControlStateNormal];
+    [self.assignButton setImage:[IonIcons imageWithIcon:ion_ios_personadd size:35.0f color:[UIColor flatWetAsphaltColor]] forState:UIControlStateHighlighted];
+    
+    // set navbar style
+    [self.navigationController.navigationBar setupCommSyncStyle];
+}
+
+#pragma mark - Notification Methods
+- (void)textFieldDidChange:(NSNotification*)notification {
+    self.navigationItem.rightBarButtonItem.enabled = (self.titleTextField.hasText && self.descriptionTextField.hasText) ? YES : NO;
+}
 
 #pragma mark - IBActions
-- (IBAction)addImageToTask:(id)sender {
-    
-    UIImagePickerController* newPicker = [[UIImagePickerController alloc] init];
-    
-    self.imagePicker = newPicker;
-    self.imagePicker.allowsEditing = YES;
-    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    self.imagePicker.delegate = self;
-    self.imagePicker.showsCameraControls = YES;
-    
-    self.imageProcessingComplete = NO;
-    
-    [self presentViewController:newPicker animated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    
-    [self.taskImages addObject:image];
-    [self.taskImageCollection reloadData];
-    
-    void (^fixImageIfNeeded)(UIImage*) = ^void(UIImage* image) {
-        CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];
-        newMedia.mediaType = CSTaskMediaType_Photo;
-        
-        NSLog(@"New size after normalization only is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:image] length]);
-        NSData* thisImage = UIImageJPEGRepresentation(image, 0.0); // make a new JPEG data object with some compressed size
-        NSLog(@"New size after JPEG compression is %ld", (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
-        newMedia.mediaData = thisImage;
-        
-        [self.pendingTask.taskMedia addObject: newMedia];
-        self.imageProcessingComplete = YES;
-    };
-    
-    [image normalizedImageWithCompletionBlock:fixImageIfNeeded];
-    
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    self.imageProcessingComplete = YES;
-}
-
-
 - (IBAction)priorityButtonTapped:(id)sender {
     
-    UIColor* backgroundColorToSet = nil;
-    if (sender == self.lowPriorityButton)
-    {
+    if (sender == self.lowPriorityButton) {
         self.pendingTask.taskPriority = CSTaskPriorityLow;
-        backgroundColorToSet = [self blendColor:[UIColor whiteColor]
-                                      WithColor:self.lowPriorityButton.backgroundColor
-                                          alpha:0.5];
-    }
-    else if (sender == self.mediumPriorityButton)
-    {
+        [self.lowPriorityButton setImage:[IonIcons imageWithIcon:ion_ios_checkmark_empty size:50.0f color:[UIColor whiteColor]] forState:UIControlStateNormal];
+        [self.mediumPriorityButton setImage:nil forState:UIControlStateNormal];
+        [self.highPriorityButton setImage:nil forState:UIControlStateNormal];
+        
+    } else if (sender == self.mediumPriorityButton) {
         self.pendingTask.taskPriority = CSTaskPriorityMedium;
-        backgroundColorToSet = [self blendColor:[UIColor whiteColor]
-                                      WithColor:self.mediumPriorityButton.backgroundColor
-                                          alpha:0.5];
-    }
-    else
-    {
-        self.pendingTask.taskPriority = CSTaskPriorityHigh;
-        backgroundColorToSet = [self blendColor:[UIColor whiteColor]
-                                      WithColor:self.highPriorityButton.backgroundColor
-                                          alpha:0.5];
-    }
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        self.view.backgroundColor = backgroundColorToSet;
-    }];
-}
+        [self.mediumPriorityButton setImage:[IonIcons imageWithIcon:ion_ios_checkmark_empty size:50.0f color:[UIColor whiteColor]] forState:UIControlStateNormal];
+        [self.lowPriorityButton setImage:nil forState:UIControlStateNormal];
+        [self.highPriorityButton setImage:nil forState:UIControlStateNormal];
 
-- (UIColor*)blendColor:(UIColor*)color1 WithColor:(UIColor*)color2 alpha:(CGFloat)alpha2
-{
-    alpha2 = MIN( 1.0, MAX( 0.0, alpha2 ) );
-    CGFloat beta = 1.0 - alpha2;
-    CGFloat r1, g1, b1, a1, r2, g2, b2, a2;
-    [color1 getRed:&r1 green:&g1 blue:&b1 alpha:&a1];
-    [color2 getRed:&r2 green:&g2 blue:&b2 alpha:&a2];
-    CGFloat red     = r1 * beta + r2 * alpha2;
-    CGFloat green   = g1 * beta + g2 * alpha2;
-    CGFloat blue    = b1 * beta + b2 * alpha2;
-    CGFloat alpha   = a1 * beta + a2 * alpha2;
-    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+    } else {
+        self.pendingTask.taskPriority = CSTaskPriorityHigh;
+        [self.highPriorityButton setImage:[IonIcons imageWithIcon:ion_ios_checkmark_empty size:50.0f color:[UIColor whiteColor]] forState:UIControlStateNormal];
+        [self.lowPriorityButton setImage:nil forState:UIControlStateNormal];
+        [self.mediumPriorityButton setImage:nil forState:UIControlStateNormal];
+
+    }
 }
 
 - (IBAction)tapGesture:(id)sender {
@@ -231,108 +216,37 @@
 - (IBAction)closeViewWithoutSaving:(id)sender {
     
     [self dismissViewControllerAnimated:YES completion:nil];
-
+    [self.titleTextField resignFirstResponder];
+    [self.descriptionTextField resignFirstResponder];
 }
 
-- (IBAction)closeViewAndSave:(id)sender {
-    if(_imageProcessingComplete == NO) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Woah there!"
-                                                                      message:@"You're fast - give us a sec to finish saving this for you!"
-                                                               preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction* accept = [UIAlertAction actionWithTitle:@"Got it."
-                                                         style:UIAlertActionStyleDefault
-                                                       handler:^(UIAlertAction *action) {
-                                                           [alert dismissViewControllerAnimated:YES completion:nil];
-                                                       }];
-        
-        [alert addAction:accept];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-        return;
-    }
+#pragma mark - UITextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    if(_audioRecorder.isRecording) {
-        [_audioRecorder stopRecording];
-    }
+    [self.descriptionTextField becomeFirstResponder];
+    [textField resignFirstResponder];
     
-    self.pendingTask.taskTitle = self.titleTextField.text;
-    self.pendingTask.taskDescription = self.descriptionTextField.text;
-    self.pendingTask.TRANSIENT_audioDataURL = self.audioRecorder.fileOutputURL;
-    self.pendingTask.assignedID = @"";
-    self.pendingTask.tag = @"";
-    self.pendingTask.completed = false;
-    if(self.pendingTask.TRANSIENT_audioDataURL) {
-        CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];
-        newMedia.mediaType = CSTaskMediaType_Audio;
-        newMedia.mediaData = [NSData dataWithContentsOfURL:self.pendingTask.TRANSIENT_audioDataURL];
-        [self.pendingTask.taskMedia addObject: newMedia];
-    }
-    
-//    [_sessionManager addTag:self.pendingTask.tag];
-    
-    [_realm beginWriteTransaction];
-    [_realm addObject:self.pendingTask];
-    [_realm commitWriteTransaction];
-    
-    [[CSSessionDataAnalyzer sharedInstance:nil] sendMessageToAllPeersForNewTask:self.pendingTask];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    return NO;
 }
 
-#pragma mark - CollectionView DataSource/Delegate
-- (BOOL)collectionView:(UICollectionView*)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    if([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    
     return YES;
 }
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    
-    CSTaskImageCollectionViewCell* selected = (CSTaskImageCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    
-    [self performSegueWithIdentifier:@"enlargedPictureController" sender: selected.taskImageView.image];
-}
 
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
+#pragma mark - CSUserSelectionViewController Delegate
+- (void)assignUser:(NSString *)personID {
+    if (personID) {
+        self.pendingTask.assignedID = personID;
+        [self.assignButton.titleLabel setText:[CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:personID].displayName];
+    }
 
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    
-//    _dottedPageControl.numberOfPages = self.taskImages.count;
-//    _dottedPageControl.currentPage = 0;
-    
-    return self.taskImages.count;
-}
-
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    CSTaskImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTaskImageCollectionViewCell forIndexPath:indexPath];
-    
-    cell.taskImageView.layer.cornerRadius = 8;
-    cell.taskImageView.clipsToBounds = YES;
-    
-    [cell configureCellWithImage:[self.taskImages objectAtIndex:indexPath.row]];
-    
-    return cell;
-}
-
--(void)collectionView:(UICollectionView*)collectionView
- didEndDisplayingCell:(UICollectionViewCell *)cell
-   forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-//    CSTaskImageCollectionViewCell* vis = [[self.taskImageCollection visibleCells] objectAtIndex:0];
-//    NSIndexPath* path = [self.taskImageCollection indexPathForCell:vis];
-    
-//    _currentTaskImagePath = path;
-//    _dottedPageControl.currentPage = path.row;
-}
-
--(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return self.taskImageCollection.frame.size;
-}
-
-#pragma mark - Status Bar
-- (UIStatusBarStyle) preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

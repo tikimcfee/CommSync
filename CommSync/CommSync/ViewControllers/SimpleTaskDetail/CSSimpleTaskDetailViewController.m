@@ -751,7 +751,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         self.audioRecorder.showShowSaveAndClose = YES;
         self.audioRecorder.saveDelegate = self;
     } else if ([segue.identifier isEqualToString:@"userSelectionSegue"]){
-        UserSelectionView* assigneeViewController = segue.destinationViewController;
+        CSUserSelectionViewController* assigneeViewController = segue.destinationViewController;
         assigneeViewController.saveDelegate = self;
     }
 }

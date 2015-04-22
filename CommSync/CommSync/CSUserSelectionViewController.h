@@ -15,7 +15,7 @@
 
 @end
 
-@interface UserSelectionView : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface CSUserSelectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) id <CSAssignUserDelegate> saveDelegate;
 

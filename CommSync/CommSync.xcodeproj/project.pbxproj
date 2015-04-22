@@ -15,6 +15,7 @@
 		3FDCA4911ADEF8B300A7D454 /* CSUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDCA4901ADEF8B300A7D454 /* CSUserInfoCell.m */; };
 		3FE492081AD741D40089E518 /* CSTaskMediaRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */; };
 		3FE492091AD741D40089E518 /* CSTaskRevisionRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */; };
+		3FF6856E1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6856D1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.m */; };
 		45190C301A89BD360030CB05 /* SZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45190C2F1A89BD360030CB05 /* SZTextView.m */; };
 		454D92081A7857CD000B74A8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92071A7857CD000B74A8 /* Realm.framework */; };
 		454D920A1A78581F000B74A8 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 454D92091A78581F000B74A8 /* libc++.dylib */; };
@@ -107,7 +108,7 @@
 		93EBACE91A9BA601006BAF4A /* CSChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBACE81A9BA601006BAF4A /* CSChatTableViewCell.m */; };
 		93F875DA1AE627560074FF59 /* CSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F875D91AE627560074FF59 /* CSTabBarController.m */; };
 		95013C841AE1C1AF0074FB4B /* CSUserCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */; };
-		95013C8B1AE1C7750074FB4B /* UserSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C8A1AE1C7750074FB4B /* UserSelectionView.m */; };
+		95013C8B1AE1C7750074FB4B /* CSUserSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95013C8A1AE1C7750074FB4B /* CSUserSelectionViewController.m */; };
 		953E396B1AC8CA11003FE833 /* CSPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 953E396A1AC8CA11003FE833 /* CSPictureController.m */; };
 		954A459D1A806C4C00854726 /* CSCommentRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 954A459C1A806C4C00854726 /* CSCommentRealmModel.m */; };
 		95FCFD4E1AD08217000BB566 /* CSAssignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FCFD4D1AD08217000BB566 /* CSAssignViewController.m */; };
@@ -131,6 +132,8 @@
 		3FE492051AD741D40089E518 /* CSTaskMediaRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaRealmModel.m; path = Models/CSTaskMediaRealmModel.m; sourceTree = "<group>"; };
 		3FE492061AD741D40089E518 /* CSTaskRevisionRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskRevisionRealmModel.h; path = Models/CSTaskRevisionRealmModel.h; sourceTree = "<group>"; };
 		3FE492071AD741D40089E518 /* CSTaskRevisionRealmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskRevisionRealmModel.m; path = Models/CSTaskRevisionRealmModel.m; sourceTree = "<group>"; };
+		3FF6856C1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTaskMediaCreationViewController.h; path = ViewControllers/CSTaskMediaCreationViewController.h; sourceTree = "<group>"; };
+		3FF6856D1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTaskMediaCreationViewController.m; path = ViewControllers/CSTaskMediaCreationViewController.m; sourceTree = "<group>"; };
 		45190C2E1A89BD360030CB05 /* SZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SZTextView.h; sourceTree = "<group>"; };
 		45190C2F1A89BD360030CB05 /* SZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SZTextView.m; sourceTree = "<group>"; };
 		454D92071A7857CD000B74A8 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ThirdParty/Realm.framework; sourceTree = "<group>"; };
@@ -304,8 +307,8 @@
 		93F875D91AE627560074FF59 /* CSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTabBarController.m; path = ViewControllers/CSTabBarController.m; sourceTree = "<group>"; };
 		95013C811AE1C1AE0074FB4B /* CSUserCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserCollectionCell.h; sourceTree = "<group>"; };
 		95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserCollectionCell.m; sourceTree = "<group>"; };
-		95013C891AE1C7750074FB4B /* UserSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionView.h; sourceTree = "<group>"; };
-		95013C8A1AE1C7750074FB4B /* UserSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSelectionView.m; sourceTree = "<group>"; };
+		95013C891AE1C7750074FB4B /* CSUserSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserSelectionViewController.h; sourceTree = "<group>"; };
+		95013C8A1AE1C7750074FB4B /* CSUserSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserSelectionViewController.m; sourceTree = "<group>"; };
 		953E39691AC8CA11003FE833 /* CSPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPictureController.h; sourceTree = "<group>"; };
 		953E396A1AC8CA11003FE833 /* CSPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPictureController.m; sourceTree = "<group>"; };
 		954A459B1A806C4C00854726 /* CSCommentRealmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCommentRealmModel.h; path = Models/CSCommentRealmModel.h; sourceTree = "<group>"; };
@@ -371,8 +374,8 @@
 				3FDCA4901ADEF8B300A7D454 /* CSUserInfoCell.m */,
 				95013C811AE1C1AE0074FB4B /* CSUserCollectionCell.h */,
 				95013C821AE1C1AE0074FB4B /* CSUserCollectionCell.m */,
-				95013C891AE1C7750074FB4B /* UserSelectionView.h */,
-				95013C8A1AE1C7750074FB4B /* UserSelectionView.m */,
+				95013C891AE1C7750074FB4B /* CSUserSelectionViewController.h */,
+				95013C8A1AE1C7750074FB4B /* CSUserSelectionViewController.m */,
 			);
 			name = Users;
 			sourceTree = "<group>";
@@ -737,6 +740,8 @@
 			children = (
 				933AA13B1A71DCF100DCC10A /* CSTaskCreationViewController.h */,
 				933AA13C1A71DCF100DCC10A /* CSTaskCreationViewController.m */,
+				3FF6856C1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.h */,
+				3FF6856D1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.m */,
 			);
 			name = "Task Creation";
 			sourceTree = "<group>";
@@ -1034,7 +1039,8 @@
 				746F6AD41A892613007A83E8 /* EZRecorder.m in Sources */,
 				45190C301A89BD360030CB05 /* SZTextView.m in Sources */,
 				74C541FA1A93E67100FC29AD /* TLCollectionViewController.m in Sources */,
-				95013C8B1AE1C7750074FB4B /* UserSelectionView.m in Sources */,
+				3FF6856E1AE849C900B5A4A2 /* CSTaskMediaCreationViewController.m in Sources */,
+				95013C8B1AE1C7750074FB4B /* CSUserSelectionViewController.m in Sources */,
 				74C541EE1A93E67100FC29AD /* TLIndexPathSectionInfo.m in Sources */,
 				45CE97E81AE14D4E00B90157 /* CSSimpleTaskDetailViewController.m in Sources */,
 				93EBACE01A97D8A0006BAF4A /* SLKTextViewController.m in Sources */,

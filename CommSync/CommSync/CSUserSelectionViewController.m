@@ -6,17 +6,17 @@
 //  Copyright (c) 2015 AppsByDLI. All rights reserved.
 //
 
-#import "UserSelectionView.h"
+#import "CSUserSelectionViewController.h"
 #import "AppDelegate.h"
 #import "CSUserCollectionCell.h"
 #import "CSUserRealmModel.h"
 
-@interface UserSelectionView ()
+@interface CSUserSelectionViewController ()
 @property (strong, nonatomic) AppDelegate *app;
 @property (strong, nonatomic) CSSessionManager* sessionManager;
 @end
 
-@implementation UserSelectionView
+@implementation CSUserSelectionViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -92,5 +92,11 @@
         [self.saveDelegate assignUser:person.uniqueID];
     }
    // [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - Status Bar
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 @end
