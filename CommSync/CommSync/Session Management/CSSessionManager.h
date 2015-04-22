@@ -24,8 +24,8 @@
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
 
 typedef NS_ENUM(NSInteger, CSSessionManagerState) {
-    CSSessionManagerStateTransmittingTasks,
-    CSSessionManagerStateSearching
+    CSSessionManagerStateSearching,
+    CSSessionManagerStateTransmittingTasks
 };
 
 @class CSTaskRealmModel, RLMRealm, CSUserRealmModel;
