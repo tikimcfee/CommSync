@@ -59,6 +59,8 @@
     };
     
     [self.navigationController.navigationBar setupCommSyncStyle];
+    
+    self.navigationItem.title = _sessionManager.myUserModel.displayName;
 }
 
 - (void)showAlertWithHandler:(void (^)(UIAlertAction *))actionHandler {
@@ -123,6 +125,9 @@
 
 - (void)changeUsernameTo:(NSString*)name {
     [_sessionManager changeUserDisplayNameTo:name];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.navigationItem.title = _sessionManager.myUserModel.displayName;
+    });
 }
 
 - (void)promptForNewUsername {
