@@ -13,7 +13,7 @@
 @end
 @implementation CSUserRealmModel
 
-- (instancetype)initWithMessage:(NSData *)peerID withDisplayName:(NSString*) display withID:uniqueID
+- (instancetype)initWithMessage:(NSData *)peerID withDisplayName:(NSString*) display withID:uniqueID lastChanged:(NSDate*)changeTime
 {
     self = [super init];
     
@@ -25,6 +25,7 @@
         self.unsentMessages = 0;
         self.avatar = -1;
         self.uniqueID = uniqueID;
+        self.lastUpdated = changeTime;
     }
     
     return self;
@@ -40,6 +41,7 @@
         self.unreadMessages = [aDecoder decodeIntForKey:@"unreadMessages"];
         self.avatar = [aDecoder decodeIntegerForKey:@"Avatar"];
         self.uniqueID = [aDecoder decodeObjectForKey:@"uniqueID"];
+        self.lastUpdated = [aDecoder decodeObjectForKey:@"lastUpdated"];
     }
     
     return self;
@@ -52,6 +54,7 @@
     [aCoder encodeInteger:self.unreadMessages forKey:@"unreadMessages"];
     [aCoder encodeInteger:self.avatar forKey:@"Avatar"];
     [aCoder encodeObject:self.uniqueID forKey:@"uniqueID"];
+    [aCoder encodeObject:self.lastUpdated forKey:@"lastUpdated"];
 }
 
 -(void)addMessage
@@ -91,4 +94,8 @@
     return [NSString stringWithFormat:@"Avatar %ld", (long)self.avatar];
 }
 
+- (void) updateChangeTime
+{
+    self.lastUpdated = [NSDate date];
+}
 @end
