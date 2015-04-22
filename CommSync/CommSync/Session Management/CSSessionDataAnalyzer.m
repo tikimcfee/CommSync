@@ -36,10 +36,7 @@
 {
     
     id receivedObject = [NSKeyedUnarchiver unarchiveObjectWithData:_dataToAnalyze];
-    
-    
-    
-        
+
         if([receivedObject valueForKey:kCS_USER_UPDATE_AVATAR] )
         {
             //number to change avatar
@@ -152,7 +149,7 @@
     
 }
 
-- (bool) updatePeerHistory:(CSUserRealmModel *) peer
+- (bool) updatePeerHistory:(CSUserRealmModel *)peer
 {
     CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.uniqueID];
     
@@ -179,7 +176,7 @@
     return false;
 }
 
-- (bool) updatePeerAvatar:(NSString*) uniqueID withNumber: (NSNumber*) number
+- (bool) updatePeerAvatar:(NSString*)uniqueID withNumber:(NSNumber*)number
 {
     CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:uniqueID];
     if(peer.avatar == [number integerValue] || [peer.uniqueID isEqualToString:_parentAnalyzer.globalManager.myUniqueID]) return false;
@@ -314,7 +311,7 @@
 
 @interface CSSessionDataAnalyzer ()
 @property (strong, nonatomic) NSOperationQueue* realmWriteQueue;
-@property (strong, nonatomic) NSOperationQueue* dataAnalysisQueue;
+@property (strong, nonatomic, readwrite) NSOperationQueue* dataAnalysisQueue;
 @end
 
 @implementation CSSessionDataAnalyzer

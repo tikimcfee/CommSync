@@ -17,8 +17,9 @@
 @interface CSSessionDataAnalyzer : NSObject <MCSessionDataHandlingDelegate>
 
 // Task queue for new tasks that are waiting for database writes
-@property (nonatomic, strong) NSMutableDictionary* requestPool;
-@property (nonatomic, strong) CSSessionManager* globalManager;
+@property (strong, nonatomic) NSMutableDictionary* requestPool;
+@property (strong, nonatomic, readonly) NSOperationQueue* dataAnalysisQueue;
+@property (strong, nonatomic) CSSessionManager* globalManager;
 
 + (CSSessionDataAnalyzer*) sharedInstance:(CSSessionManager*)manager;
 
@@ -35,8 +36,9 @@
 
 @property (strong, nonatomic) NSData* dataToAnalyze;
 @property (strong, nonatomic) MCPeerID* peer;
-@property (nonatomic, strong) NSMutableDictionary* requestPool;
-@property (nonatomic, strong) NSMutableDictionary* messagePool;
+@property (strong, nonatomic) NSMutableDictionary* requestPool;
+@property (strong, nonatomic) NSMutableDictionary* messagePool;
+
 @property (weak, nonatomic) CSSessionDataAnalyzer* parentAnalyzer;
 
 -(void) removeMessageRequest:(NSString*) message;

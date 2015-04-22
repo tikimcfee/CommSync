@@ -38,6 +38,7 @@
 
 @implementation CSSessionManager
 
+#pragma mark - Lifecycle
 - (CSSessionManager*) initWithID:(NSString*)userID withDisplay:(NSString *)userName
 {
     //
@@ -121,6 +122,24 @@
 {
     NSLog(@"--- WARNING --- USING THE WRONG INITIALIZER");
     return nil;
+}
+
+#pragma mark - Custom Setters
+- (void)setState:(CSSessionManagerState)state {
+    if (_state == state) {
+        return;
+    }
+    
+    if (state == CSSessionManagerStateTransmittingTasks) {
+        // stop all browsing and advertising activity
+        [_serviceBrowser stopBrowsingForPeers];
+        [_serviceAdvertiser stopAdvertisingPeer];
+        
+    } else {
+        // start browsing and advertising
+        [_serviceBrowser startBrowsingForPeers];
+        [_serviceAdvertiser startAdvertisingPeer];
+    }
 }
 
 # pragma mark - Heartbeat
@@ -666,6 +685,9 @@
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
 {
+    // set state to transmitting to stop browsing/advertising
+    self.state = CSSessionManagerStateTransmittingTasks;
+    
     if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
     {
         [_dataHandlingDelegate session:session didStartReceivingResourceWithName:resourceName fromPeer:peerID withProgress:progress];
@@ -674,6 +696,11 @@
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
+    // if no more incoming tasks, set state to searching
+    if (self.dataAnalyzer.dataAnalysisQueue.operationCount == 0) {
+        self.state = CSSessionManagerStateSearching;
+    }
+    
     if(_dataHandlingDelegate && [_dataHandlingDelegate conformsToProtocol:@protocol(MCSessionDataHandlingDelegate)])
     {
         [_dataHandlingDelegate session:session didFinishReceivingResourceWithName:resourceName fromPeer:peerID atURL:localURL withError:error];

@@ -23,6 +23,11 @@
 #define kCSDidFinishReceivingResourceWithName @"kCSDidFinishReceivingResourceWithName"
 #define kCSReceivingProgressNotification @"kCSReceivingProgressNotification"
 
+typedef NS_ENUM(NSInteger, CSSessionManagerState) {
+    CSSessionManagerStateTransmittingTasks,
+    CSSessionManagerStateSearching
+};
+
 @class CSTaskRealmModel, RLMRealm, CSUserRealmModel;
 
 @protocol MCSessionDataHandlingDelegate <NSObject>
@@ -50,6 +55,8 @@
 @property (strong, nonatomic) MCNearbyServiceBrowser* serviceBrowser;
 @property (strong, nonatomic) NSMutableDictionary* currentConnectedPeers;
 @property (strong, nonatomic) NSMutableDictionary* unreadMessages;
+
+@property (assign, nonatomic) CSSessionManagerState state;
 
 // Data queue
 @property (strong, nonatomic) NSOperationQueue* mainTaskSendQueue;
