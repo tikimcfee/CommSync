@@ -11,6 +11,7 @@
 #import "CSUserInfoCell.h"
 #import "UINavigationBar+CommSyncStyle.h"
 #import "UIColor+FlatColors.h"
+#import "IonIcons.h"
 
 @interface CSUserViewController ()
 {
@@ -85,20 +86,20 @@
     }
     
     userName = user.displayName;
-    cell.availableStatus.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:uniqueID])? [UIColor greenColor]: [UIColor redColor];
     
     cell.userLabel.text = userName;
     [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];
     
     if([user getMessageNumber] == 0){
-        [cell.envelopePic setImage:[UIImage imageNamed:@"emptyEnvelope"]];
-        [cell.unreadNumber setHidden:TRUE];
+//        [cell.envelopePic setImage:[UIImage imageNamed:@"emptyEnvelope"]];
+        cell.envelopePic.hidden = YES;
+        cell.unreadNumber.hidden = YES;
     }
     else{
-        [cell.envelopePic setImage:[UIImage imageNamed:@"envelope"]];
-        [cell.unreadNumber setHidden:FALSE];
+        [cell.envelopePic setImage:[IonIcons imageWithIcon:ion_ios_filing size:36.0f color:[UIColor flatWetAsphaltColor]]];
+        cell.unreadNumber.hidden = FALSE;
         cell.unreadNumber.text = ([user getMessageNumber] <= 9)? [NSString stringWithFormat:@"%d", [user getMessageNumber]] : @"9+";
-        cell.unreadNumber.layer.cornerRadius = cell.unreadNumber.frame.size.width / 2;
+        cell.unreadNumber.layer.cornerRadius = 9.5;
         cell.unreadNumber.layer.masksToBounds = YES;
     }
 
