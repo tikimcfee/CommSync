@@ -43,9 +43,9 @@
         {
             //number to change avatar
             NSNumber* test = [receivedObject valueForKey:@"Number"];
-            
+            NSDate *date = [receivedObject valueForKey:@"Time"];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if([self updatePeerAvatar: [receivedObject valueForKey:kCS_USER_UPDATE_AVATAR] withNumber:test])
+                if([self updatePeerAvatar: [receivedObject valueForKey:kCS_USER_UPDATE_AVATAR] withNumber:test atTime: date])
                 {
                     [_parentAnalyzer.globalManager sendDataPacketToPeers:_dataToAnalyze];
                 }
@@ -199,7 +199,7 @@
     }
 }
 
-- (bool) updatePeerHistory:(CSUserRealmModel *)peer
+- (BOOL) updatePeerHistory:(CSUserRealmModel *)peer
 {
     CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:peer.uniqueID];
     
@@ -211,29 +211,33 @@
         [peer removeMessages];
         [_parentAnalyzer.globalManager.peerHistoryRealm addObject:peer];
         [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
-        return true;
+        return YES;
     }
-    
+    //hasnt been changed more rececntly return no
+    if([ownPeer.lastUpdated compare:peer.lastUpdated] == NSOrderedDescending) return NO;
     //if the users avatar is different then change it
-    else if( peer.avatar != ownPeer.avatar)
+    else if( peer.avatar != ownPeer.avatar || ![peer.displayName isEqualToString:(ownPeer.displayName)])
     {
         [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
-         ownPeer.avatar = peer.avatar;
+        if(peer.avatar != ownPeer.avatar) ownPeer.avatar = peer.avatar;
+        if(![peer.displayName isEqualToString:ownPeer.displayName]) ownPeer.displayName = peer.displayName;
+        ownPeer.lastUpdated = peer.lastUpdated;
         [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
-        return true;
+        return YES;
     }
    //otherwise no differences
-    return false;
+    return NO;
 }
 
-- (BOOL) updatePeerAvatar:(NSString*)uniqueID withNumber:(NSNumber*)number
+- (BOOL) updatePeerAvatar:(NSString*)uniqueID withNumber:(NSNumber*)number atTime: (NSDate*) time
 {
     CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:uniqueID];
     if(peer.avatar == [number integerValue] || [peer.uniqueID isEqualToString:_parentAnalyzer.globalManager.myUniqueID]) return NO;
-    
+    if([peer.lastUpdated compare:time] == NSOrderedDescending) return NO;
     
     [_parentAnalyzer.globalManager.peerHistoryRealm beginWriteTransaction];
     peer.avatar = [number integerValue];
+    peer.lastUpdated = time;
     [_parentAnalyzer.globalManager.peerHistoryRealm commitWriteTransaction];
     return YES;
 }

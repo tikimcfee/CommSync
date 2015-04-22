@@ -105,8 +105,8 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         }
         
         RLMRealm* tasksRealm = [RLMRealm defaultRealm];
-        NSNumber* completed = _completionToggleIndex == 1 ? [NSNumber numberWithBool:YES] : [NSNumber numberWithBool:NO];
-        NSPredicate* predicate = (self.user)?[NSPredicate predicateWithFormat:@"assignedID = %@ AND completed == %@",_user, completed]:[NSPredicate predicateWithFormat:@"completed == %@", completed];
+        NSNumber* completed = weakSelf.completionToggleIndex == 1 ? [NSNumber numberWithBool:YES] : [NSNumber numberWithBool:NO];
+        NSPredicate* predicate = (weakSelf.user)?[NSPredicate predicateWithFormat:@"assignedID = %@ AND completed == %@",weakSelf.user, completed]:[NSPredicate predicateWithFormat:@"completed == %@", completed];
         RLMResults* filteredTask = [CSTaskRealmModel objectsInRealm:tasksRealm withPredicate:predicate];
         for (CSTaskRealmModel* task in filteredTask) {
             [tasks addObject:task.concatenatedID];

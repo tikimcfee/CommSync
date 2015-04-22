@@ -771,7 +771,7 @@
 {
     
     NSData *historyData = [NSKeyedArchiver archivedDataWithRootObject:self.myPeerID];
-    CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:_myDisplayName withID:_myUniqueID];
+    CSUserRealmModel *peerToUse = [[CSUserRealmModel alloc] initWithMessage:historyData withDisplayName:_myDisplayName withID:_myUniqueID lastChanged:[NSDate date]];
     
     peerToUse.avatar = -1;
     _myUserModel = peerToUse;
@@ -786,12 +786,14 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         CSUserRealmModel *myself = [CSUserRealmModel objectInRealm:_peerHistoryRealm forPrimaryKey:_myUniqueID];
         [_peerHistoryRealm beginWriteTransaction];
+        [myself updateChangeTime];
         myself.avatar = number;
         self.myUserModel = myself;
         [_peerHistoryRealm commitWriteTransaction];
         
         NSDictionary *dict = @{@"Avatar"  :   _myPeerID.displayName,
                                @"Number"  :   [NSNumber numberWithInteger:number],
+                               @"Time"    :    myself.lastUpdated
                                };
         NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:dict];
         [self sendDataPacketToPeers:requestData];

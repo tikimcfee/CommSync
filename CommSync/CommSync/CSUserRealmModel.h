@@ -18,13 +18,14 @@
 @property  NSInteger avatar;
 @property  NSInteger unreadMessages;
 @property  NSInteger unsentMessages;
+@property  (strong, nonatomic) NSDate* lastUpdated;
 
-- (instancetype)initWithMessage:(NSData *)peerID withDisplayName: (NSString*) display withID: (NSString*)uniqueID;
+- (instancetype)initWithMessage:(NSData *)peerID withDisplayName: (NSString*) display withID: (NSString*)uniqueID lastChanged: (NSDate*) changeTime;
 - (void) addMessage;
 - (void) removeMessages;
 - (int) getMessageNumber;
--(void)addUnsent;
--(void)removeUnsent;
-
--(NSString*) getPicture;
+- (void)addUnsent;
+- (void)removeUnsent;
+- (void) updateChangeTime;
+- (NSString*) getPicture;
 @end
