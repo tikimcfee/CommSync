@@ -52,7 +52,8 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 
 // Transient properties
 @property (strong, nonatomic) NSURL* TRANSIENT_audioDataURL;
-
+@property (strong, nonatomic) NSMutableArray* addedImagesMediaModelIDs;
+@property (strong, nonatomic) NSMutableArray* addedAudioIDs;
 
 // Task information
 @property NSString* taskTitle;
@@ -68,7 +69,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 
 - (NSURL*) temporarilyPersistTaskDataToDisk:(NSData*)thisTasksData;
 
-- (void) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction;
+- (CSTaskMediaRealmModel*) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction;
 - (void) addComment: (CSCommentRealmModel *) newComment;
 - (void) addRevision:(CSTaskRevisionRealmModel*)revision;
 

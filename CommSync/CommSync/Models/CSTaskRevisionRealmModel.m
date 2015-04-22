@@ -52,8 +52,8 @@
     NSMutableDictionary* empty = [NSMutableDictionary new];
     NSData* emptyData = [NSKeyedArchiver archivedDataWithRootObject:empty];
     
-    [defaults setObject:@"BAD_ID" forKey:@"revisionID"];
-    [defaults setObject:[NSDate distantPast] forKey:@"revisionDate"];
+    [defaults setObject:[[NSUUID UUID] UUIDString] forKey:@"revisionID"];
+    [defaults setObject:[NSDate dateWithTimeIntervalSince1970:1] forKey:@"revisionDate"];
     
     
     // Dictionary should be formatted:
@@ -107,28 +107,6 @@
     }
     [newRevisionData setValue:oldValue forKey:@"from"];
     
-    /* The code below is not very useful; a single revision should hold a SINGLE
-     set of property changes, and should not be repeatedly updated. Keeping this here
-     as a reminder of that fact.
-     */
-//    // check if there is currently a revision for the property
-//    NSMutableDictionary* oldDictionary = nil;
-//    if([originalRevisions valueForKey:propertyString]) {
-//        oldDictionary = [originalRevisions valueForKey:propertyString];
-//    }
-//    // if there isn't an old dictionary, construct a to/from with the task
-//    else {
-//        id oldValue = [task valueForProperty:property];
-//        oldDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"from":oldValue}];
-//    }
-//    
-//    // if there is an old revision, take its 'to', set it as a new 'from'
-//    if(oldDictionary && [oldDictionary valueForKey:@"to"]) {
-//        [oldDictionary setValue:[oldDictionary valueForKey:@"to"]
-//                         forKey:@"from"];
-//    }
-    
-    
     // make a new mut.dict. for the property with 'to' == newData
     [newRevisionData setValue:newData forKey:@"to"];
     
@@ -139,24 +117,6 @@
 }
 
 - (void)save:(CSTaskRealmModel*)sourceTask {
-    NSString* U = [NSString stringWithFormat:@"%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+97,
-                   arc4random_uniform(25)+65,
-                   arc4random_uniform(25)+65,
-                   arc4random_uniform(25)+65,
-                   arc4random_uniform(25)+65,
-                   arc4random_uniform(25)+65,
-                   arc4random_uniform(25)+65,
-                   arc4random_uniform(25)+65];
-    
-    _revisionID = [NSString stringWithFormat:@"%@_%ld", U, (unsigned long)sourceTask.revisions.count];
     _revisionDate = [NSDate new];
 }
 

@@ -10,6 +10,7 @@
 
 #define kMediaData @"mediaData"
 #define kMediaType @"mediaType"
+#define kUniqueMedia @"uniqueMediaID"
 
 typedef NS_ENUM(NSInteger, CSTaskMediaType)
 {
@@ -21,6 +22,7 @@ typedef NS_ENUM(NSInteger, CSTaskMediaType)
 
 @property NSData* mediaData;
 @property CSTaskMediaType mediaType;
+@property NSString* uniqueMediaID;
 
 +(CSTaskMediaRealmModel*)mediaModelWithModel:(CSTaskMediaRealmModel*)model;
 

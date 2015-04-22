@@ -65,6 +65,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 @property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
 @property (strong, nonatomic) NSMutableDictionary *unsavedChanges;
 @property (nonatomic, assign) CSTaskPriority newPriority;
+@property (strong, nonatomic) NSString* userSelectedAssignedUser;
 
 // State
 @property (assign, nonatomic) BOOL firstLayoutComplete;
@@ -177,7 +178,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     if (assignedUser) {
         _assigneeImageView.image = [UIImage imageNamed:[assignedUser getPicture]];
     } else {
-        _assigneeImageView.image = [UIImage imageNamed:@"Avatar-1"];
+        _assigneeImageView.image = [UIImage imageNamed:@"Avatar -1"];
     }
     _assigneeImageView.userInteractionEnabled = YES;
     
@@ -379,11 +380,24 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // save revisions
     [self.currentRevisions save:self.sourceTask];
     [self.sourceTask addRevision:self.currentRevisions];
+    // propogate the revision!
+    
+    
+    // apply edits
+    [[RLMRealm defaultRealm] beginWriteTransaction];
+    self.sourceTask.taskTitle = self.taskTitleTextField.text;
+    self.sourceTask.taskDescription = self.objectTextView.text;
+    self.sourceTask.taskPriority = _newPriority;
+    self.sourceTask.assignedID = self.userSelectedAssignedUser;
+    [[RLMRealm defaultRealm] commitWriteTransaction];
     
     // reset changes
     self.unsavedChanges = [NSMutableDictionary new];
     self.currentRevisions = [CSTaskRevisionRealmModel new];
     self.newPriority = CSTaskPriorityUnset;
+    self.sourceTask.addedAudioIDs = [NSMutableArray new];
+    self.sourceTask.addedImagesMediaModelIDs = [NSMutableArray new];
+    self.userSelectedAssignedUser = nil;
 }
 
 - (void)findAndSetTaskChanges {
@@ -391,21 +405,39 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // title changed
     if (![self.sourceTask.taskTitle isEqualToString:self.taskTitleTextField.text]) {
         [self.unsavedChanges setObject:self.taskTitleTextField.text forKey:[NSNumber numberWithInteger:CSTaskProperty_taskTitle]];
-        self.sourceTask.taskTitle = self.taskTitleTextField.text;
+//        self.sourceTask.taskTitle = self.taskTitleTextField.text;
     }
     
     // description changed
     if (![self.sourceTask.taskDescription isEqualToString:self.objectTextView.text]) {
         [self.unsavedChanges setObject:self.objectTextView.text forKey:[NSNumber numberWithInteger:CSTaskProperty_taskDescription]];
-        self.sourceTask.taskDescription = self.objectTextView.text;
+//        self.sourceTask.taskDescription = self.objectTextView.text;
     }
     
     // priority changed
     if (_newPriority != CSTaskPriorityUnset && self.sourceTask.taskPriority != _newPriority) {
         [self.unsavedChanges setObject:[NSNumber numberWithInt:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
-        self.sourceTask.taskPriority = _newPriority;
+//        self.sourceTask.taskPriority = _newPriority;
     }
     
+    // added images
+    if (self.sourceTask.addedImagesMediaModelIDs && self.sourceTask.addedImagesMediaModelIDs.count != 0) {
+        [self.unsavedChanges setObject:self.sourceTask.addedImagesMediaModelIDs forKey:[NSNumber numberWithInteger:CSTaskProperty_taskImages_ADD]];
+    }
+    
+    // changed audio
+    if (self.sourceTask.addedAudioIDs && self.sourceTask.addedAudioIDs.count != 0) {
+        [self.unsavedChanges setObject:self.sourceTask.addedAudioIDs forKey:[NSNumber numberWithInteger:CSTaskProperty_taskAudio_CHANGE]];
+    }
+    
+    if (self.userSelectedAssignedUser) {
+        [self.unsavedChanges setObject:self.userSelectedAssignedUser forKey:[NSNumber numberWithInteger:CSTaskProperty_assignedID]];
+
+    }
+//    [self.unsavedChanges setObject:personID forKey:[NSNumber numberWithInteger:CSTaskProperty_assignedID]];
+//    [[RLMRealm defaultRealm] beginWriteTransaction];
+//    self.sourceTask.assignedID = personID;
+//    [[RLMRealm defaultRealm] commitWriteTransaction];
     [[RLMRealm defaultRealm] commitWriteTransaction];
 }
 
@@ -414,6 +446,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 - (IBAction)reassignTask:(id)sender {
     // TODO
     // Pop assignee vc
+    [self performSegueWithIdentifier:@"userSelectionSegue" sender:self];
 }
 
 
@@ -629,10 +662,15 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
               (unsigned long)[[NSKeyedArchiver archivedDataWithRootObject:thisImage] length]);
         
         CSTaskRealmModel* memory = [CSTaskRealmModel objectForPrimaryKey:UUID];
-        [memory addTaskMediaOfType:CSTaskMediaType_Photo
+        CSTaskMediaRealmModel* newMedia = [memory addTaskMediaOfType:CSTaskMediaType_Photo
                           withData:thisImage
                            toRealm:[RLMRealm defaultRealm]
                       inTransation:YES];
+        
+        if(!self.sourceTask.addedImagesMediaModelIDs) {
+            self.sourceTask.addedImagesMediaModelIDs = [NSMutableArray new];
+        }
+        [self.sourceTask.addedImagesMediaModelIDs addObject:newMedia.uniqueMediaID];
         
         [weakSelf.sourceTask getAllImagesForTaskWithCompletionBlock:^(NSMutableArray* loadedImages) {
             if (weakSelf.taskImages.count == 0) {
@@ -712,6 +750,15 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         self.audioRecorder.fileNameSansExtension = self.sourceTask.concatenatedID;
         self.audioRecorder.showShowSaveAndClose = YES;
         self.audioRecorder.saveDelegate = self;
+    } else if ([segue.identifier isEqualToString:@"userSelectionSegue"]){
+        UserSelectionView* assigneeViewController = segue.destinationViewController;
+        assigneeViewController.saveDelegate = self;
+    }
+}
+
+- (void) assignUser:( NSString* )personID {
+    if (![self.sourceTask.assignedID isEqualToString:personID]) {
+        self.userSelectedAssignedUser = personID;
     }
 }
 
@@ -740,6 +787,11 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         
         _taskAudio = newMedia.mediaData;
         [self.sourceTask.taskMedia addObject: newMedia];
+        if(!self.sourceTask.addedAudioIDs) {
+            self.sourceTask.addedAudioIDs = [NSMutableArray new];
+        }
+        [self.sourceTask.addedAudioIDs addObject:newMedia.uniqueMediaID];
+        
     }
     
     [[RLMRealm defaultRealm] commitWriteTransaction];

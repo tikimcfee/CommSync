@@ -12,8 +12,9 @@
 #import "CSInsetTextField.h"
 #import "CSCustomTapRecognizer.h"
 #import "CSAudioPlotViewController.h"
+#import "UserSelectionView.h"
 
-@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, CSAudioPlotActionDelegate>
+@interface CSSimpleTaskDetailViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, CSAudioPlotActionDelegate, CSAssignUserDelegate>
 
 // main views and containers
 @property (strong, nonatomic) IBOutlet UITableView *tableview;

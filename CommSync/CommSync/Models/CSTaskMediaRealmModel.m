@@ -16,14 +16,16 @@
 {
     NSNumber* type = [NSNumber numberWithInt:-1];
     NSData* emptyData = [NSData data];
+    NSString* UUID = [[NSUUID UUID] UUIDString];
     
-    return @{@"mediaData":emptyData, @"mediaType":type};
+    return @{@"mediaData":emptyData, @"mediaType":type, @"uniqueMediaID":UUID};
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
         self.mediaData = [aDecoder decodeObjectForKey:kMediaData];
         self.mediaType = [((NSNumber*)[aDecoder decodeObjectForKey:kMediaType]) integerValue];
+        self.uniqueMediaID = [aDecoder decodeObjectForKey:kUniqueMedia];
     }
     return self;
 }
@@ -31,16 +33,21 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:_mediaData forKey:kMediaData];
     [aCoder encodeObject:[NSNumber numberWithInteger:_mediaType] forKey:kMediaType];
+    [aCoder encodeObject:self.uniqueMediaID forKey:kUniqueMedia];
 }
 
 +(CSTaskMediaRealmModel*)mediaModelWithModel:(CSTaskMediaRealmModel*)model {
     CSTaskMediaRealmModel* newModel = [CSTaskMediaRealmModel new];
     newModel.mediaType = model.mediaType;
     newModel.mediaData = [NSData dataWithData:model.mediaData];
+    newModel.uniqueMediaID = model.uniqueMediaID;
     
     return newModel;
 }
 
++(NSString *)primaryKey {
+    return @"uniqueMediaID";
+}
 // Specify properties to ignore (Realm won't persist these)
 
 //+ (NSArray *)ignoredProperties

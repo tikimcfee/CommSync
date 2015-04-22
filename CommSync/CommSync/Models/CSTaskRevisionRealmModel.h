@@ -21,8 +21,8 @@ typedef NS_ENUM(NSInteger, CSTaskProperty)
     CSTaskProperty_taskTitle,
     CSTaskProperty_taskDescription,
     CSTaskProperty_taskPriority,
-    CSTaskProperty_taskImages_NSDataArray_JPEG,
-    CSTaskProperty_taskAudio
+    CSTaskProperty_taskImages_ADD,
+    CSTaskProperty_taskAudio_CHANGE
 };
 
 @interface CSTaskRevisionRealmModel : RLMObject <NSCoding>

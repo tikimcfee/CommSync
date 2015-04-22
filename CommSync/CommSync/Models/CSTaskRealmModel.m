@@ -33,7 +33,7 @@
 }
 
 + (NSArray*)ignoredProperties {
-    return @[@"TRANSIENT_audioDataURL"];
+    return @[@"TRANSIENT_audioDataURL", @"addedImagesMediaModelIDs", @"addedAudioIDs"];
 }
 
 + (NSString*)primaryKey {
@@ -110,7 +110,7 @@
 }
 
 #pragma mark - Add media to tasks 
-- (void) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction {
+- (CSTaskMediaRealmModel*) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction {
 
     if(transaction) {
         [realm beginWriteTransaction];
@@ -125,6 +125,8 @@
     if(transaction) {
         [realm commitWriteTransaction];
     }
+    
+    return newMedia;
 }
 
 
@@ -247,14 +249,14 @@
         case CSTaskProperty_tag:
             propertyString = @"tag";
             break;
-        case CSTaskProperty_taskAudio:
-            propertyString = @"taskAudio";
+        case CSTaskProperty_taskAudio_CHANGE:
+            propertyString = @"CSTaskProperty_taskAudio_CHANGE";
             break;
         case CSTaskProperty_taskDescription:
             propertyString = @"taskDescription";
             break;
-        case CSTaskProperty_taskImages_NSDataArray_JPEG:
-            propertyString = @"taskImages_NSDataArray_JPEG";
+        case CSTaskProperty_taskImages_ADD:
+            propertyString = @"CSTaskProperty_taskImages_ADD";
             break;
         case CSTaskProperty_taskPriority:
             propertyString = @"taskPriority";
@@ -289,15 +291,15 @@
         case CSTaskProperty_tag:
             return self.tag;
             break;
-//        case CSTaskProperty_taskAudio:
-//            return self.taskAudio;
-//            break;
+        case CSTaskProperty_taskAudio_CHANGE:
+            return @"ADDED_AUDIO_IDS";
+            break;
         case CSTaskProperty_taskDescription:
             return self.taskDescription;
             break;
-//        case CSTaskProperty_taskImages_NSDataArray_JPEG:
-//            return self.taskImages_NSDataArray_JPEG;
-//            break;
+        case CSTaskProperty_taskImages_ADD:
+            return @"ADDED_IMAGE_IDS";
+            break;
         case CSTaskProperty_taskPriority:
             return [NSNumber numberWithInteger:self.taskPriority];
             break;
