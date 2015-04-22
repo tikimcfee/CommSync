@@ -268,7 +268,7 @@
         [self.pendingTask.taskMedia addObject: newMedia];
     }
     
-    [_sessionManager addTag:self.pendingTask.tag];
+//    [_sessionManager addTag:self.pendingTask.tag];
     
     [_realm beginWriteTransaction];
     [_realm addObject:self.pendingTask];
