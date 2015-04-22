@@ -653,6 +653,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 #pragma mark -- END Image Picker
 - (IBAction)playAudio:(id)sender {
+    [self configureAVAudioSession];
+    
     if (_mode == CSSimpleDetailMode_View && self.taskAudio) {
         NSError* error;
         self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[_sourceTask getTaskAudio]
@@ -662,6 +664,35 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         [self performSegueWithIdentifier:@"CSAudioPlotViewController" sender:nil];
     }
 
+}
+
+- (void) configureAVAudioSession //To play through main iPhone Speakers
+{
+    //get your app's audioSession singleton object
+    AVAudioSession* session = [AVAudioSession sharedInstance];
+    
+    //error handling
+    BOOL success;
+    NSError* error;
+    
+    //set the audioSession category.
+    //Needs to be Record or PlayAndRecord to use audioRouteOverride:
+    
+    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
+                             error:&error];
+    
+    if (!success)  NSLog(@"AVAudioSession error setting category:%@",error);
+    
+    //set the audioSession override
+    success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker
+                                         error:&error];
+    if (!success)  NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+    
+    //activate the audio session
+    success = [session setActive:YES error:&error];
+    if (!success) NSLog(@"AVAudioSession error activating: %@",error);
+    else NSLog(@"audioSession active");
+    
 }
 
 #pragma mark - Segues
