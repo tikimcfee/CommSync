@@ -89,6 +89,8 @@
     
     cell.userLabel.text = userName;
     [cell.avatarIcon setImage:[UIImage imageNamed:user.getPicture]];
+    cell.avatarIcon.layer.cornerRadius = 18.0f;
+    cell.avatarIcon.clipsToBounds = YES;
     
     if([user getMessageNumber] == 0){
 //        [cell.envelopePic setImage:[UIImage imageNamed:@"emptyEnvelope"]];

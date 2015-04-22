@@ -22,7 +22,7 @@
 }
 
 + (RLMRealm*)privateMessageRealm {
-    return [RLMRealm realmWithPath:[CSRealmFactory incomingTaskRealmDirectory]];
+    return [RLMRealm realmWithPath:[CSRealmFactory privateMessageRealmDirectory]];
 }
 
 + (RLMRealm*)taskRealm {
