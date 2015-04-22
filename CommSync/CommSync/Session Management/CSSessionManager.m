@@ -9,7 +9,7 @@
 #import "CSSessionManager.h"
 #import <Realm/Realm.h>
 
-
+#include <libkern/OSAtomic.h>
 #import "CSTaskRealmModel.h"
 #import "AppDelegate.h"
 #import "CSChatMessageRealmModel.h"
@@ -37,6 +37,9 @@
 
 
 @implementation CSSessionManager
+{
+    volatile int32_t _sentResourceCount;
+}
 
 #pragma mark - Lifecycle
 - (CSSessionManager*) initWithID:(NSString*)userID withDisplay:(NSString *)userName
@@ -77,6 +80,8 @@
         _realm = [RLMRealm defaultRealm];
         _realm.autorefresh = YES;
        
+        // set resource count
+        _sentResourceCount = 0;
 
         _chatMessageQueue =  dispatch_queue_create("chatMessageQueue", NULL);
         _privateMessageQueue = dispatch_queue_create("privateMessageQueue", NULL);
@@ -231,6 +236,10 @@
 {
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
+        // increment resource counter
+        OSAtomicIncrement32(&_sentResourceCount);
+        self.state = CSSessionManagerStateTransmittingTasks;
+
         // fixing models?
         CSTaskRealmModel* inMemoryModel = [CSTaskRealmModel taskModelWithModel:newTask];
         NSData* newTaskDataBlob = [NSKeyedArchiver archivedDataWithRootObject:inMemoryModel];
@@ -254,15 +263,20 @@
             [session sendResourceAtURL:URLOfNewTask
                               withName:newTask.concatenatedID
                                 toPeer:thisPeer
-                 withCompletionHandler:
-             ^(NSError *error) {
-                 if(error) {
-                     NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
-                 }
-                 else {
-                     NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", newTask.taskTitle, thisPeer.displayName);
-                 }
-             }];
+                 withCompletionHandler:^(NSError *error) {
+                    OSAtomicDecrement32(&_sentResourceCount);
+                     NSLog(@"Session Manager: Decremented to %d", _sentResourceCount);
+                     if (_sentResourceCount == 0) {
+                         self.state = CSSessionManagerStateSearching;
+                     }
+
+                     if(error) {
+                        NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
+                     }
+                     else {
+                        NSLog(@"Task sending COMPLETE with name: %@ to peer: %@", newTask.taskTitle, thisPeer.displayName);
+                     }
+                 }];
         }
     }
     
@@ -278,6 +292,10 @@
     
     if([_sessionLookupDisplayNamesToSessions allValues].count > 0)
     {
+        // increment resource counter
+        OSAtomicIncrement32(&_sentResourceCount);
+        self.state = CSSessionManagerStateTransmittingTasks;
+        
         CSTaskRealmModel* inMemoryModel = [CSTaskRealmModel taskModelWithModel:task];
         MCSession* sessionToSendOn = [_sessionLookupDisplayNamesToSessions valueForKey:peer.displayName];
         if(!sessionToSendOn) {
@@ -309,15 +327,19 @@
         [sessionToSendOn sendResourceAtURL:URLOfNewTask
                                   withName:inMemoryModel.concatenatedID
                                     toPeer:thisPeer
-                     withCompletionHandler:
-         ^(NSError *error) {
-             if(error) {
-                 NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
-             }
-             else {
-                 NSLog(@"Task sending COMPLETE with name to peer: %@", thisPeer.displayName);
-             }
-         }];
+                     withCompletionHandler:^(NSError *error) {
+                         OSAtomicDecrement32(&_sentResourceCount);
+                         NSLog(@"Session Manager: Decremented to %d", _sentResourceCount);
+                         if (_sentResourceCount == 0) {
+                             self.state = CSSessionManagerStateSearching;
+                         }
+                         if(error) {
+                             NSLog(@"Task sending FAILED with error: %@ to peer: %@", error, thisPeer.displayName);
+                         }
+                         else {
+                             NSLog(@"Task sending COMPLETE with name to peer: %@", thisPeer.displayName);
+                         }
+                     }];
     }
 }
 
