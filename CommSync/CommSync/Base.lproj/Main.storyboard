@@ -46,7 +46,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Change Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bsa-1I-HyU">
-                                                    <rect key="frame" x="20" y="11" width="144" height="21"/>
+                                                    <rect key="frame" x="21" y="11" width="144" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -60,30 +60,43 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Stq-cC-nUg">
-                                                    <rect key="frame" x="160" y="3" width="46" height="36"/>
+                                                    <rect key="frame" x="167" y="4" width="46" height="35"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="46" id="DfY-sl-TqG"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Avatar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5uI-Za-fM5">
-                                                    <rect key="frame" x="16" y="11" width="140" height="21"/>
+                                                    <rect key="frame" x="21" y="11" width="114" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="140" id="xzZ-mQ-NFD"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="xzZ-mQ-NFD"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Stq-cC-nUg" firstAttribute="bottom" secondItem="Nu5-rG-Yue" secondAttribute="bottomMargin" constant="4" id="D52-Yx-WrH"/>
-                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="leading" secondItem="5uI-Za-fM5" secondAttribute="trailing" constant="4" id="c8g-u6-p4Y"/>
+                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="top" secondItem="Nu5-rG-Yue" secondAttribute="topMargin" constant="3" id="NC4-bu-k8J"/>
+                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="leading" secondItem="5uI-Za-fM5" secondAttribute="trailing" constant="32" id="c8g-u6-p4Y"/>
                                                 <constraint firstItem="5uI-Za-fM5" firstAttribute="top" secondItem="Stq-cC-nUg" secondAttribute="top" constant="8" id="cuY-0a-5MD"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="5uI-Za-fM5" secondAttribute="bottom" constant="3" id="gfe-Kp-1Hj"/>
                                                 <constraint firstItem="5uI-Za-fM5" firstAttribute="centerY" secondItem="Nu5-rG-Yue" secondAttribute="centerY" id="q3B-Mg-8cr"/>
-                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="leading" secondItem="Nu5-rG-Yue" secondAttribute="leadingMargin" constant="8" id="xzQ-f5-agd"/>
+                                                <constraint firstItem="5uI-Za-fM5" firstAttribute="leading" secondItem="Nu5-rG-Yue" secondAttribute="leadingMargin" constant="13" id="xzQ-f5-agd"/>
                                                 <constraint firstItem="5uI-Za-fM5" firstAttribute="bottom" secondItem="Stq-cC-nUg" secondAttribute="bottom" constant="-7" id="yNT-9V-iDR"/>
-                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="top" secondItem="Nu5-rG-Yue" secondAttribute="topMargin" constant="-5" id="yOM-AD-zZA"/>
+                                                <constraint firstItem="Stq-cC-nUg" firstAttribute="top" secondItem="Nu5-rG-Yue" secondAttribute="top" constant="4" id="yOM-AD-zZA"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="cuY-0a-5MD"/>
+                                                    <exclude reference="yNT-9V-iDR"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="euH-gz-iih" kind="show" id="IfA-Lq-BvY"/>
@@ -99,7 +112,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Restart Session" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdG-Mg-jyu">
-                                                    <rect key="frame" x="20" y="11" width="121" height="21"/>
+                                                    <rect key="frame" x="21" y="11" width="121" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -240,7 +253,7 @@
         <scene sceneID="9nJ-GG-Wi7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BXf-C0-RVZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="task-list" selectedImage="settings" id="hO2-xv-cyU"/>
+                    <tabBarItem key="tabBarItem" title="" image="task-list" id="hO2-xv-cyU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5N4-9i-Ybb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1523,7 +1536,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="4617" y="473"/>
+            <point key="canvasLocation" x="4657" y="528.5"/>
         </scene>
         <!--Picture Controller-->
         <scene sceneID="vR6-Wl-rl3">
@@ -1831,7 +1844,7 @@
                         <viewControllerLayoutGuide type="bottom" id="bjo-j9-vFC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gE5-eO-iRi">
-                        <rect key="frame" x="0.0" y="64" width="600" height="161"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1840,7 +1853,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Qy-o6-8Jp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3536" y="1119.5"/>
+            <point key="canvasLocation" x="4638" y="905.5"/>
         </scene>
         <!--Audio Plot View Controller-->
         <scene sceneID="XEl-YI-oaj">
@@ -2010,7 +2023,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </objects>
-            <point key="canvasLocation" x="3114" y="1528"/>
+            <point key="canvasLocation" x="3260" y="1718"/>
         </scene>
         <!--Chat-->
         <scene sceneID="Pps-XU-PjO">
@@ -2030,7 +2043,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mx7-kd-pDl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3105" y="2376"/>
+            <point key="canvasLocation" x="3509" y="2633"/>
         </scene>
         <!--Task List View Controller-->
         <scene sceneID="3IN-nb-AvK">
@@ -2142,7 +2155,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YVX-kB-Gmu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3114" y="2060.5"/>
+            <point key="canvasLocation" x="2704" y="2610.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kaG-xQ-hdJ">
@@ -2310,11 +2323,11 @@
         <image name="task-list" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GGy-g5-dRX"/>
+        <segue reference="vtR-27-CVO"/>
         <segue reference="z0v-KZ-ixy"/>
+        <segue reference="GGy-g5-dRX"/>
+        <segue reference="N3Z-PA-sjS"/>
         <segue reference="mex-m0-oqp"/>
-        <segue reference="JaT-61-TFH"/>
-        <segue reference="jmU-v4-ScW"/>
         <segue reference="b5M-pZ-5fR"/>
     </inferredMetricsTieBreakers>
 </document>

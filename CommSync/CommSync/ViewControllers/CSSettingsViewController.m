@@ -122,9 +122,9 @@
 }
 
 - (void)changeUsernameTo:(NSString*)name {
-    
-    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"userDisplayName"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:name forKey:@"userDisplayName"];
+    [defaults synchronize];
 }
 
 - (void)promptForNewUsername {
