@@ -803,12 +803,13 @@
 
 -(void)nukeHistory
 {
+    [self nukeSession];
     _peerHistoryRealm = [CSRealmFactory peerHistoryRealm];
     //add all current connected peers to database
+    RLMResults* allButMe = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"uniqueID != %@", _myUniqueID];
     [_peerHistoryRealm beginWriteTransaction];
-    [_peerHistoryRealm deleteAllObjects];
+    [_peerHistoryRealm deleteObjects:allButMe];
     [_peerHistoryRealm commitWriteTransaction];
-    [self createUserModel];
 }
 
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
