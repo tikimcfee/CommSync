@@ -122,9 +122,7 @@
 }
 
 - (void)changeUsernameTo:(NSString*)name {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:name forKey:@"userDisplayName"];
-    [defaults synchronize];
+    [_sessionManager changeUserDisplayNameTo:name];
 }
 
 - (void)promptForNewUsername {
@@ -137,7 +135,7 @@
    
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
 //        textField.placeholder = NSLocalizedString(@"Username", @"UsernamePlaceholder");
-        textField.placeholder = _app.userDisplayName;
+        textField.placeholder = _sessionManager.myUserModel.displayName;
     }];
     
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"

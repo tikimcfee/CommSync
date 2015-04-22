@@ -11,6 +11,7 @@
 #import "CSTaskRealmModel.h"
 #import "CSIncomingTaskRealmModel.h"
 #import "CSRealmWriteOperation.h"
+#import "CSRealmFactory.h"
 
 // Critical constants for building data transmission strings
 #define kCSDefaultStringEncodingMethod NSUTF16StringEncoding
@@ -24,6 +25,7 @@
 #define kcs_TASK_ARRAY          @"TaskArray"
 #define kcs_PM_ARRAY            @"PMArray"
 #define kcs_USER_ARRAY          @"UserArray"
+#define kCS_DISPLAY_NAME_CHANGE @"displayNameChange"
 
 // Implementation of task information container
 @implementation CSNewTaskResourceInformationContainer
@@ -144,14 +146,40 @@
                     [self propagateTasks:[[CSSessionDataAnalyzer sharedInstance:nil] buildNewTaskNotificationFromTaskID:task]];
             });
         }
-        
+    
+        else if ([receivedObject valueForKey:kCS_DISPLAY_NAME_CHANGE] )
+        {
+            NSString *newName = [receivedObject valueForKey:kCS_DISPLAY_NAME_CHANGE];
+            NSString *userUniqueID = [receivedObject valueForKey:@"uniqueID"];
+            
+            [self updateDisplayNameTo:newName ForUserID:userUniqueID propogate:_dataToAnalyze];
+        }
+    
         else [self propagateTasks:receivedObject];
     
 }
 
+- (void) updateDisplayNameTo:(NSString*)name ForUserID:(NSString*)userID propogate:(NSData*)data {
+    RLMRealm *peerHistoryRealm = [CSRealmFactory peerHistoryRealm];
+    CSUserRealmModel* peer = [CSUserRealmModel objectInRealm:peerHistoryRealm forPrimaryKey:userID];
+    
+    if ([_parentAnalyzer.globalManager.myUniqueID isEqualToString:userID] || [peer.displayName isEqualToString:name]) {
+        return;
+    }
+    
+    [peerHistoryRealm beginWriteTransaction];
+    peer.displayName = name;
+    [peerHistoryRealm commitWriteTransaction];
+    
+    // propogate
+    if (data) {
+        [_parentAnalyzer.globalManager sendDataPacketToPeers:data];
+    }
+}
+
 - (bool) updatePeerHistory:(CSUserRealmModel *)peer
 {
-    CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:_parentAnalyzer.globalManager.peerHistoryRealm forPrimaryKey:peer.uniqueID];
+    CSUserRealmModel* ownPeer = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:peer.uniqueID];
     
     //if we dont have the user add them
     if(!ownPeer)

@@ -449,6 +449,18 @@
     [_realm commitWriteTransaction];
 }
 
+- (void)changeUserDisplayNameTo:(NSString *)name {
+    [self.peerHistoryRealm beginWriteTransaction];
+    self.myUserModel.displayName = name;
+    [self.peerHistoryRealm commitWriteTransaction];
+    
+    NSDictionary *dict = @{
+                           @"uniqueID": self.myUserModel.uniqueID,
+                           @"displayNameChange": name
+                           };
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:dict];
+    [self sendDataPacketToPeers:data];
+}
 
 # pragma mark - MCBrowser Delegate
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
@@ -773,7 +785,7 @@
         [_peerHistoryRealm commitWriteTransaction];
         
         NSDictionary *dict = @{@"Avatar"  :   _myPeerID.displayName,
-                               @"Number"        :   [NSNumber numberWithInteger:number],
+                               @"Number"  :   [NSNumber numberWithInteger:number],
                                };
         NSData* requestData = [NSKeyedArchiver archivedDataWithRootObject:dict];
         [self sendDataPacketToPeers:requestData];

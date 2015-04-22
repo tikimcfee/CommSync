@@ -26,9 +26,10 @@
     
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"];
     if (!uuid) {
-        [[NSUserDefaults standardUserDefaults] setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
+        [defaults synchronize];
+        uuid = [defaults stringForKey:@"uuid"];
     }
     
     // Multipeer initialization
@@ -78,15 +79,15 @@
 #pragma mark - Override Getter 
 - (NSString*)userDisplayName {
     
-    NSString *name = [[NSUserDefaults standardUserDefaults] stringForKey:@"userDisplayName"];
-    
-    if (!name) {
-        name = [[UIDevice currentDevice] name];
+    if (!_userDisplayName) {
+        NSString *name = [[UIDevice currentDevice] name];
         [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"userDisplayName"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        _userDisplayName = name;
     }
     
-    return name;
+    return _userDisplayName;
 }
 
 #pragma mark - Core Data stack

@@ -80,6 +80,7 @@ typedef NS_ENUM(NSInteger, CSSessionManagerState) {
 - (void) nukeRealm;
 - (void) nukeHistory;
 - (void) nukeChatHistory;
+- (void) changeUserDisplayNameTo:(NSString *)name;
 
 - (void)createUserModel;
 - (void)updateAvatar:       (NSInteger)            number;
