@@ -115,6 +115,7 @@
 }
 
 - (void)nukePeerHistory {
+    [_sessionManager nukeSession];
     //removes all former peers from the data base and replaces the peer history list with current list
     [_sessionManager nukeHistory];
 }

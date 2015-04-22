@@ -802,11 +802,13 @@
 -(void)nukeHistory
 {
     _peerHistoryRealm = [CSRealmFactory peerHistoryRealm];
-    //add all current connected peers to database
+    NSLog(@"%lu", (unsigned long)[[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm] count]);
+    RLMResults* allButMe = [CSUserRealmModel objectsInRealm:_peerHistoryRealm where:@"uniqueID != %@", _myUniqueID];
+    
     [_peerHistoryRealm beginWriteTransaction];
-    [_peerHistoryRealm deleteAllObjects];
+    [_peerHistoryRealm deleteObjects:allButMe];
     [_peerHistoryRealm commitWriteTransaction];
-    [self createUserModel];
+    NSLog(@"%lu", (unsigned long)[[CSUserRealmModel allObjectsInRealm:_peerHistoryRealm] count]);
 }
 
 - (void)updateRealmWithChatMessage:(CSChatMessageRealmModel *)message
