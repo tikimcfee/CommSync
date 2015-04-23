@@ -17,8 +17,9 @@
     NSNumber* type = [NSNumber numberWithInt:-1];
     NSData* emptyData = [NSData data];
     NSString* UUID = [[NSUUID UUID] UUIDString];
+    NSNumber* isOld = [NSNumber numberWithBool:NO];
     
-    return @{@"mediaData":emptyData, @"mediaType":type, @"uniqueMediaID":UUID};
+    return @{@"mediaData":emptyData, @"mediaType":type, @"uniqueMediaID":UUID, @"isOld":isOld};
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
@@ -26,6 +27,7 @@
         self.mediaData = [aDecoder decodeObjectForKey:kMediaData];
         self.mediaType = [((NSNumber*)[aDecoder decodeObjectForKey:kMediaType]) integerValue];
         self.uniqueMediaID = [aDecoder decodeObjectForKey:kUniqueMedia];
+        self.isOld = [aDecoder decodeObjectForKey:kIsOld];
     }
     return self;
 }
@@ -34,6 +36,7 @@
     [aCoder encodeObject:_mediaData forKey:kMediaData];
     [aCoder encodeObject:[NSNumber numberWithInteger:_mediaType] forKey:kMediaType];
     [aCoder encodeObject:self.uniqueMediaID forKey:kUniqueMedia];
+    [aCoder encodeBool:self.isOld forKey:kIsOld];
 }
 
 +(CSTaskMediaRealmModel*)mediaModelWithModel:(CSTaskMediaRealmModel*)model {

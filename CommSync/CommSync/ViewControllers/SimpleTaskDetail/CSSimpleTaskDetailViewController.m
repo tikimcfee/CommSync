@@ -16,10 +16,11 @@
 #import "CSPictureController.h"
 #import "CSUserRealmModel.h"
 #import "CSSessionManager.h"
+#import "CSSessionDataAnalyzer.h"
 
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
 #define kChatTableViewCellIdentifier @"ChatViewCell"
-#define kTextBorderColor flatWisteriaColor
+#define kTextBorderColor flatOrangeColor
 
 #define time 0.3
 #define alph 0.75
@@ -54,9 +55,6 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 @property (nonatomic, assign) CSSimpleDetailMode mode;
 @property (nonatomic, strong) NSIndexPath* currentTaskImagePath;
 
-@property (nonatomic, strong) UIImage* taskIncompleteImage;
-@property (nonatomic, strong) UIImage* taskCompleteImage;
-
 @property (nonatomic, strong) UIImage* taskAudioNormal;
 @property (nonatomic, strong) UIImage* taskAudioNaN;
 @property (nonatomic, strong) UIImage* taskAudioEditing;
@@ -64,11 +62,13 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 // Revision management
 @property (strong, nonatomic) CSTaskRevisionRealmModel *currentRevisions;
 @property (strong, nonatomic) NSMutableDictionary *unsavedChanges;
-@property (nonatomic, assign) CSTaskPriority newPriority;
+@property (assign, nonatomic) BOOL taskCompleted;
+@property (assign, nonatomic) CSTaskPriority newPriority;
 @property (strong, nonatomic) NSString* userSelectedAssignedUser;
 
 // State
 @property (assign, nonatomic) BOOL firstLayoutComplete;
+@property (weak, nonatomic) CSUserSelectionViewController* userSelection;
 
 @end
 
@@ -147,6 +147,11 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _midPriorityButton.backgroundColor = [UIColor kTaskMidPriorityColor];
     _highPriorityButton.backgroundColor = [UIColor kTaskHighPriorityColor];
     
+    _checkIconImageView.alpha = 0;
+    _checkIconImageView.userInteractionEnabled = NO;
+    _taskCompleted = self.sourceTask.completed;
+    
+    
     _bottomActionButton.backgroundColor = [[UIColor flatPeterRiverColor] colorWithAlphaComponent:0.8];
     
     UIColor* c;
@@ -161,6 +166,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         c = [UIColor kTaskLowPriorityColor];
         s = @"Low";
     }
+    
     _priorityBarView.backgroundColor = c;
     _priorityTextLabel.textColor = c;
     _priorityTextLabel.text = [NSString stringWithFormat:@"%@ Priority", s];
@@ -168,11 +174,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _dottedPageControl.hidesForSinglePage = YES;
     
     _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor whiteColor]];
-    _taskIncompleteImage = [IonIcons imageWithIcon:ion_ios_checkmark_outline size:64.0f color:c];
-    _taskCompleteImage = [IonIcons imageWithIcon:ion_ios_checkmark size:64.0f color:[UIColor flatEmeraldColor]];
-    _checkIconImageView.image = _taskIncompleteImage;
     _editIconImageView.userInteractionEnabled = YES;
-    _checkIconImageView.userInteractionEnabled = YES;
     
     CSUserRealmModel* assignedUser = [CSUserRealmModel objectForPrimaryKey:self.sourceTask.assignedID];
     if (assignedUser) {
@@ -380,16 +382,20 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     // save revisions
     [self.currentRevisions save:self.sourceTask];
     [self.sourceTask addRevision:self.currentRevisions];
-    // propogate the revision!
-    
     
     // apply edits
     [[RLMRealm defaultRealm] beginWriteTransaction];
     self.sourceTask.taskTitle = self.taskTitleTextField.text;
     self.sourceTask.taskDescription = self.objectTextView.text;
-    self.sourceTask.taskPriority = _newPriority;
+    self.sourceTask.taskPriority = self.newPriority == CSTaskPriorityUnset ? self.sourceTask.taskPriority : self.newPriority;
+    self.sourceTask.completed = self.taskCompleted;
     self.sourceTask.assignedID = self.userSelectedAssignedUser;
     [[RLMRealm defaultRealm] commitWriteTransaction];
+    
+    // send new task *with revisions* to all peers
+    CSTaskRealmModel* inMemory = [CSTaskRealmModel taskModelWithModel:self.sourceTask];
+    [[CSSessionDataAnalyzer sharedInstance:nil] sendTaskRevisionsToAllPeerForTask:inMemory];
+    
     
     // reset changes
     self.unsavedChanges = [NSMutableDictionary new];
@@ -401,23 +407,20 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 - (void)findAndSetTaskChanges {
-    [[RLMRealm defaultRealm] beginWriteTransaction];
+//    [[RLMRealm defaultRealm] beginWriteTransaction];
     // title changed
     if (![self.sourceTask.taskTitle isEqualToString:self.taskTitleTextField.text]) {
         [self.unsavedChanges setObject:self.taskTitleTextField.text forKey:[NSNumber numberWithInteger:CSTaskProperty_taskTitle]];
-//        self.sourceTask.taskTitle = self.taskTitleTextField.text;
     }
     
     // description changed
     if (![self.sourceTask.taskDescription isEqualToString:self.objectTextView.text]) {
         [self.unsavedChanges setObject:self.objectTextView.text forKey:[NSNumber numberWithInteger:CSTaskProperty_taskDescription]];
-//        self.sourceTask.taskDescription = self.objectTextView.text;
     }
     
     // priority changed
     if (_newPriority != CSTaskPriorityUnset && self.sourceTask.taskPriority != _newPriority) {
-        [self.unsavedChanges setObject:[NSNumber numberWithInt:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
-//        self.sourceTask.taskPriority = _newPriority;
+        [self.unsavedChanges setObject:[NSNumber numberWithInteger:_newPriority] forKey:[NSNumber numberWithInteger:CSTaskProperty_taskPriority]];
     }
     
     // added images
@@ -430,47 +433,55 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         [self.unsavedChanges setObject:self.sourceTask.addedAudioIDs forKey:[NSNumber numberWithInteger:CSTaskProperty_taskAudio_CHANGE]];
     }
     
+    // changed assigned user
     if (self.userSelectedAssignedUser) {
         [self.unsavedChanges setObject:self.userSelectedAssignedUser forKey:[NSNumber numberWithInteger:CSTaskProperty_assignedID]];
-
     }
-//    [self.unsavedChanges setObject:personID forKey:[NSNumber numberWithInteger:CSTaskProperty_assignedID]];
-//    [[RLMRealm defaultRealm] beginWriteTransaction];
-//    self.sourceTask.assignedID = personID;
+    
+    // completed task
+    if (self.taskCompleted == YES && self.sourceTask.completed == NO) {
+        [self.unsavedChanges setObject:[NSNumber numberWithBool:YES] forKey:[NSNumber numberWithInteger:CSTaskProperty_completed]];
+    } else if(self.taskCompleted == NO && self.sourceTask.completed == YES){
+        [self.unsavedChanges setObject:[NSNumber numberWithBool:NO] forKey:[NSNumber numberWithInteger:CSTaskProperty_completed]];
+    }
+
 //    [[RLMRealm defaultRealm] commitWriteTransaction];
-    [[RLMRealm defaultRealm] commitWriteTransaction];
 }
 
 #pragma mark -
 #pragma mark Actions and User Controls
 - (IBAction)reassignTask:(id)sender {
-    // TODO
-    // Pop assignee vc
     [self performSegueWithIdentifier:@"userSelectionSegue" sender:self];
 }
 
 
 - (IBAction)completeTask:(id)sender {
-    //
-    BOOL target = _sourceTask.completed ? NO : YES;
-    
-    [[RLMRealm defaultRealm] beginWriteTransaction];
-    _sourceTask.completed = target;
-    [[RLMRealm defaultRealm] commitWriteTransaction];
-    
+    _taskCompleted = !_taskCompleted;
     [self animateImages];
-
 }
 
 - (void)animateImages
 {
-    UIImage *image = _sourceTask.completed ? _taskCompleteImage : _taskIncompleteImage;
+    NSString *name = _taskCompleted ? ion_ios_checkmark : ion_ios_checkmark_outline;
+
+    CSTaskPriority thisPriority = _newPriority == CSTaskPriorityUnset ? _sourceTask.taskPriority : _newPriority;
+    
+    UIColor* c;
+    if (_taskCompleted) {
+        c = [UIColor flatEmeraldColor];
+    } else if (thisPriority == CSTaskPriorityHigh) {
+        c = [UIColor kTaskHighPriorityColor];
+    } else if (thisPriority == CSTaskPriorityMedium) {
+        c = [UIColor kTaskMidPriorityColor];
+    } else {
+        c = [UIColor kTaskLowPriorityColor];
+    }
     
     [UIView transitionWithView:self.checkIconImageView
-                      duration:time // animation duration
+                      duration:time
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^{
-                        self.checkIconImageView.image = image; // change to other image
+                        self.checkIconImageView.image = [IonIcons imageWithIcon:name size:64.0f color:c];
                     } completion:^(BOOL finished) {
                     }];
 }
@@ -498,6 +509,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _taskTitleTextField.userInteractionEnabled = NO;
         _objectTextView.editable = NO;
         _priorityButtonsMainView.userInteractionEnabled = YES;
+        _checkIconImageView.userInteractionEnabled = NO;
         bottomButtonText = @"Add Comment";
         
         [UIView animateWithDuration:time
@@ -507,6 +519,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
                              _taskTitleTextField.backgroundColor = [UIColor clearColor];
                              _objectTextView.backgroundColor = [UIColor clearColor];
                              _priorityButtonsMainView.alpha = 0.0;
+                             _checkIconImageView.alpha = 0.0;
                              _bottomActionButton.backgroundColor = [[UIColor flatPeterRiverColor] colorWithAlphaComponent:0.8];
                          }
                          completion:nil];
@@ -514,6 +527,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _taskTitleTextField.userInteractionEnabled = YES;
         _objectTextView.editable = YES;
         _priorityButtonsMainView.userInteractionEnabled = YES;
+        _checkIconImageView.userInteractionEnabled = YES;
         bottomButtonText = @"Add Photo";
         
         [UIView animateWithDuration:time
@@ -523,6 +537,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
                             _taskTitleTextField.backgroundColor = [UIColor flatCloudsColor];
                             _objectTextView.backgroundColor = [UIColor flatCloudsColor];
                             _priorityButtonsMainView.alpha = 1.0;
+                             _checkIconImageView.alpha = 1.0;
                             _bottomActionButton.backgroundColor = [[UIColor flatCarrotColor] colorWithAlphaComponent:0.8];
                          }
                          completion:nil];
@@ -534,6 +549,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     [self animationForLayer:_taskTitleTextField.layer];
     [self animationForLayer:_objectTextView.layer];
     [self animationForLayer:_audioPlayImageView.layer];
+    [self animationForLayer:_assigneeImageView.layer];
     
     // change button text
     CATransition *textChange = [CATransition animation];
@@ -628,7 +644,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
                      }
                      completion:nil];
     
-    if (self.sourceTask.completed == NO) {
+    if (self.taskCompleted == NO) {
         [UIView transitionWithView:self.checkIconImageView
                           duration:time
                            options:UIViewAnimationOptionTransitionCrossDissolve
@@ -741,6 +757,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     if([segue.identifier isEqualToString: @"commentSegue"]) {
         CSChatViewController *temp = segue.destinationViewController;
         temp.sourceTask = _sourceTask;
+        temp.navigationItem.title = @"Comments";
     } else if ([segue.identifier isEqualToString:@"enlargedPictureController"]) {
         CSPictureController* picture = segue.destinationViewController;
         picture.taskImage = sender;
@@ -751,8 +768,8 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         self.audioRecorder.showShowSaveAndClose = YES;
         self.audioRecorder.saveDelegate = self;
     } else if ([segue.identifier isEqualToString:@"userSelectionSegue"]){
-        CSUserSelectionViewController* assigneeViewController = segue.destinationViewController;
-        assigneeViewController.saveDelegate = self;
+        self.userSelection = segue.destinationViewController;
+        self.userSelection.saveDelegate = self;
     }
 }
 
@@ -760,6 +777,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     if (![self.sourceTask.assignedID isEqualToString:personID]) {
         self.userSelectedAssignedUser = personID;
     }
+    [self.userSelection dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL) saveAudio {
@@ -768,7 +786,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     if(self.sourceTask.TRANSIENT_audioDataURL) {
         CSTaskMediaRealmModel* oldMedia = [_sourceTask getTaskAudioModel];
         if (oldMedia) {
-            [[RLMRealm defaultRealm] deleteObject:oldMedia];
+            oldMedia.isOld = YES;
         }
         
         CSTaskMediaRealmModel* newMedia = [[CSTaskMediaRealmModel alloc] init];

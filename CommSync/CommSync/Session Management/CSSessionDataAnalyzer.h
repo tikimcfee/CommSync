@@ -25,10 +25,13 @@
 
 - (void) analyzeReceivedData:(NSData*)receivedData fromPeer:(MCPeerID*)peer;
 - (void) sendMessageToAllPeersForNewTask:(CSTaskRealmModel*)task;
+- (void) sendTaskRevisionsToAllPeerForTask:(CSTaskRealmModel*)revisedTask;
 
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID;
 - (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
 - (NSDictionary *) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
+- (NSMutableDictionary*) buildNewRevisionRequestFromTaskID:(NSString*)taskID
+                                              andRevisions:(NSArray*)revisions;
 
 @end
 

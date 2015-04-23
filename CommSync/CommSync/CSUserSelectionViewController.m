@@ -82,7 +82,6 @@
     cell.displayLabel.text = user.displayName;
     [cell.avatarImage.layer setCornerRadius:(cell.avatarImage.frame.size.width / 2)];
     cell.avatarImage.layer.masksToBounds = YES;
-    //cell.backgroundColor = ([_sessionManager.currentConnectedPeers valueForKey:userName])? [UIColor greenColor]: [UIColor redColor];
     
     return cell;
 }
@@ -92,7 +91,7 @@
     if(indexPath.row == 0 ) [self.saveDelegate assignUser:nil];
     
     else{
-        CSUserRealmModel* person = [CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm][indexPath.row - 1];
+        CSUserRealmModel* person = [CSUserRealmModel allObjectsInRealm:[CSRealmFactory peerHistoryRealm]][indexPath.row - 1];
         [self.saveDelegate assignUser:person.uniqueID];
     }
     [self dismissViewControllerAnimated:YES completion:nil];

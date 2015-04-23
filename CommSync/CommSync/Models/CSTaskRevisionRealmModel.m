@@ -76,6 +76,16 @@
     return defaults;
 }
 
+- (void)updateTaskModel:(CSTaskRealmModel *)task {
+    NSMutableDictionary* revisions = [NSKeyedUnarchiver unarchiveObjectWithData:_changesDictionary];
+    
+    NSArray* changeKeys = [revisions allKeys];
+    
+    for (NSString* change in changeKeys) {
+        [task updateValueForProperty:change to:[[revisions valueForKey:change] valueForKey:@"to"]];
+    }
+}
+
 - (void)forTask:(CSTaskRealmModel*)task reviseProperty:(CSTaskProperty)property to:(id)newData {
     
     // unarchive the data *that already exists on the current revision*

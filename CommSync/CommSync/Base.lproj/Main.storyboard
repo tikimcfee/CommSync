@@ -837,7 +837,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zjG-BC-Nuh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4859" y="-313"/>
+            <point key="canvasLocation" x="4979" y="-425"/>
         </scene>
         <!--Task Detail View Controller-->
         <scene sceneID="uxs-La-SWB">
@@ -1665,17 +1665,22 @@
                                             <outletCollection property="gestureRecognizers" destination="Mif-Tn-qRi" appends="YES" id="9e8-bP-hMd"/>
                                         </connections>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-7j-q0D" userLabel="audioImage">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-7j-q0D" userLabel="audioImage">
                                         <rect key="frame" x="57" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="33" id="m6a-HH-63X"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <real key="value" value="16.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="t07-O4-NdS" appends="YES" id="vM8-RX-jFt"/>
                                         </connections>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dw6-od-1Op" userLabel="assigneeImage">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dw6-od-1Op" userLabel="assigneeImage">
                                         <rect key="frame" x="14" y="0.0" width="33" height="33"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -2560,12 +2565,12 @@
         <image name="task-list" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NWk-jO-0jw"/>
-        <segue reference="S9C-fy-Cz5"/>
-        <segue reference="vtR-27-CVO"/>
-        <segue reference="JaT-61-TFH"/>
         <segue reference="mex-m0-oqp"/>
-        <segue reference="esm-L7-fWV"/>
+        <segue reference="NWk-jO-0jw"/>
+        <segue reference="JaT-61-TFH"/>
+        <segue reference="vtR-27-CVO"/>
+        <segue reference="xs4-am-sD9"/>
         <segue reference="b5M-pZ-5fR"/>
+        <segue reference="esm-L7-fWV"/>
     </inferredMetricsTieBreakers>
 </document>
