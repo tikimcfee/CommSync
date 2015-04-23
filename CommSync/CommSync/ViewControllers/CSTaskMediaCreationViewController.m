@@ -28,6 +28,7 @@
 
 // VC for audio recording
 @property (weak, nonatomic) CSAudioPlotViewController* audioRecorder;
+@property (strong, nonatomic) IBOutlet UIImageView *micImage;
 
 // Realm
 @property (strong, nonatomic) CSTaskRealmModel* pendingTask;
@@ -46,6 +47,10 @@
     self.navigationItem.rightBarButtonItem = saveButton;
     
     self.taskImages = [NSMutableArray new];
+    
+    self.addImageButton.layer.cornerRadius = 5.0;
+    
+    [self.micImage setImage:[IonIcons imageWithIcon:ion_ios_mic iconColor:[UIColor flatCloudsColor] iconSize:35.0f imageSize:CGSizeMake(50.0, 60.0)]];
     
     [self setupCollectionView];
     

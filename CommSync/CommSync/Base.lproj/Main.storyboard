@@ -795,6 +795,12 @@
                                     <action selector="addImageToTask:" destination="9J1-0D-ZNQ" eventType="touchUpInside" id="8Hc-wn-jwn"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Mef-wl-Vom">
+                                <rect key="frame" x="275" y="520" width="50" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="vHR-si-f7s"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -802,6 +808,7 @@
                             <constraint firstAttribute="trailing" secondItem="KIU-eQ-Jko" secondAttribute="trailing" constant="20" id="2tW-9h-41o"/>
                             <constraint firstAttribute="centerX" secondItem="8AL-7y-GEP" secondAttribute="centerX" id="4KZ-co-2cS"/>
                             <constraint firstAttribute="centerY" secondItem="8AL-7y-GEP" secondAttribute="centerY" constant="0.5" id="9rF-B5-NqK"/>
+                            <constraint firstItem="KIU-eQ-Jko" firstAttribute="centerY" secondItem="Mef-wl-Vom" secondAttribute="centerY" id="AIa-JB-WTg"/>
                             <constraint firstAttribute="trailing" secondItem="8AL-7y-GEP" secondAttribute="trailing" id="EKk-sn-jbO"/>
                             <constraint firstItem="3zh-sT-j8c" firstAttribute="centerX" secondItem="KIU-eQ-Jko" secondAttribute="centerX" id="LYK-of-1vp"/>
                             <constraint firstAttribute="trailing" secondItem="3zh-sT-j8c" secondAttribute="trailing" constant="20" id="Lwj-0e-HR6"/>
@@ -809,6 +816,7 @@
                             <constraint firstItem="KIU-eQ-Jko" firstAttribute="leading" secondItem="6N3-UB-J00" secondAttribute="leading" constant="4" id="Opd-N6-iDd"/>
                             <constraint firstItem="KIU-eQ-Jko" firstAttribute="top" secondItem="3zh-sT-j8c" secondAttribute="bottom" constant="8" id="RSY-SC-XEe"/>
                             <constraint firstAttribute="trailingMargin" secondItem="KIU-eQ-Jko" secondAttribute="trailing" constant="4" id="Xre-Tj-bqH"/>
+                            <constraint firstItem="KIU-eQ-Jko" firstAttribute="centerX" secondItem="Mef-wl-Vom" secondAttribute="centerX" id="ebO-dG-fXB"/>
                             <constraint firstItem="8AL-7y-GEP" firstAttribute="leading" secondItem="6N3-UB-J00" secondAttribute="leading" id="kmf-ri-6aE"/>
                             <constraint firstItem="3zh-sT-j8c" firstAttribute="leading" secondItem="6N3-UB-J00" secondAttribute="leading" constant="20" id="noG-yW-qwv"/>
                             <constraint firstItem="3zh-sT-j8c" firstAttribute="width" secondItem="KIU-eQ-Jko" secondAttribute="width" id="pos-j4-e0j"/>
@@ -816,6 +824,7 @@
                             <constraint firstItem="KIU-eQ-Jko" firstAttribute="leading" secondItem="6N3-UB-J00" secondAttribute="leading" constant="20" id="wYG-St-UPm"/>
                             <constraint firstItem="3zh-sT-j8c" firstAttribute="top" secondItem="8AL-7y-GEP" secondAttribute="bottom" constant="20" id="yw2-B0-bBp"/>
                             <constraint firstItem="8AL-7y-GEP" firstAttribute="width" secondItem="6N3-UB-J00" secondAttribute="width" id="zXh-vA-Egs"/>
+                            <constraint firstItem="KIU-eQ-Jko" firstAttribute="height" secondItem="Mef-wl-Vom" secondAttribute="height" id="zxd-EJ-v2r"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -831,13 +840,14 @@
                     </view>
                     <connections>
                         <outlet property="addImageButton" destination="3zh-sT-j8c" id="n2o-dl-Uqk"/>
+                        <outlet property="micImage" destination="Mef-wl-Vom" id="LjW-6j-has"/>
                         <outlet property="taskImageCollection" destination="8AL-7y-GEP" id="VOx-TE-Uiu"/>
                         <segue destination="e8e-7b-F0Z" kind="presentation" identifier="enlargedPictureController" id="36q-1H-ZYD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zjG-BC-Nuh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4979" y="-425"/>
+            <point key="canvasLocation" x="4424" y="-590"/>
         </scene>
         <!--Task Detail View Controller-->
         <scene sceneID="uxs-La-SWB">
@@ -2089,11 +2099,11 @@
                         <viewControllerLayoutGuide type="bottom" id="hP1-0m-1nj"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="k3d-m3-Efq" customClass="EZAudioPlotGL">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="560" height="60"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIz-Sj-DCN">
-                                <rect key="frame" x="534" y="280" width="40" height="40"/>
+                                <rect key="frame" x="494" y="10" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="CEd-Xz-CYr"/>
                                     <constraint firstAttribute="width" secondItem="tIz-Sj-DCN" secondAttribute="height" multiplier="1:1" id="ZF7-kf-swH"/>
@@ -2106,7 +2116,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gCa-lw-h9L" userLabel="close view">
-                                <rect key="frame" x="26" y="280" width="40" height="40"/>
+                                <rect key="frame" x="26" y="10" width="40" height="40"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="fFx-10-2gu"/>
@@ -2117,7 +2127,7 @@
                                 </connections>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2uj-si-by2" userLabel="save view">
-                                <rect key="frame" x="76" y="280" width="40" height="40"/>
+                                <rect key="frame" x="76" y="10" width="40" height="40"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="3Qt-vU-Zph"/>
@@ -2565,11 +2575,11 @@
         <image name="task-list" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="mex-m0-oqp"/>
+        <segue reference="CGd-uA-kIq"/>
         <segue reference="NWk-jO-0jw"/>
         <segue reference="JaT-61-TFH"/>
-        <segue reference="vtR-27-CVO"/>
         <segue reference="xs4-am-sD9"/>
+        <segue reference="36q-1H-ZYD"/>
         <segue reference="b5M-pZ-5fR"/>
         <segue reference="esm-L7-fWV"/>
     </inferredMetricsTieBreakers>
