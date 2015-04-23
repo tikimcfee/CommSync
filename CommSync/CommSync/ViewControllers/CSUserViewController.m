@@ -99,7 +99,8 @@
     }
     else{
         [cell.envelopePic setImage:[IonIcons imageWithIcon:ion_ios_filing size:36.0f color:[UIColor flatWetAsphaltColor]]];
-        cell.unreadNumber.hidden = FALSE;
+        cell.envelopePic.hidden = NO;
+        cell.unreadNumber.hidden = NO;
         cell.unreadNumber.text = ([user getMessageNumber] <= 9)? [NSString stringWithFormat:@"%d", [user getMessageNumber]] : @"9+";
         cell.unreadNumber.layer.cornerRadius = 9.5;
         cell.unreadNumber.layer.masksToBounds = YES;
@@ -107,6 +108,7 @@
 
     return cell;
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -132,6 +134,8 @@
     if(!_filter) return [_sessionManager.currentConnectedPeers count];
     return [[CSUserRealmModel allObjectsInRealm:_sessionManager.peerHistoryRealm] count] - 1;
 }
+
+#pragma mark - IBActions
 
 - (IBAction)filterByConnectedStatus:(id)sender {
     UISegmentedControl *filterControl = (UISegmentedControl *)sender;

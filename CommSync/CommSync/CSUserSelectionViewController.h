@@ -18,5 +18,7 @@
 @interface CSUserSelectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) id <CSAssignUserDelegate> saveDelegate;
+@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
+- (IBAction)Cancel:(id)sender;
 
 @end
