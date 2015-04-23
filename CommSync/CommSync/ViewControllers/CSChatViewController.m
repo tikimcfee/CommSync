@@ -224,6 +224,8 @@
 
 - (CSChatTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"h:mm a"];
 
     static NSString *cellIdentifier = @"ChatViewCell";
     CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -242,7 +244,7 @@
     
         CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:msg.createdBy];
         cell.createdByLabel.text = person.displayName;
-    
+        cell.createdAtLabel.text = [format stringFromDate:msg.createdAt];
         NSString *image = [person getPicture];
         [cell.avatarImage setImage:[UIImage imageNamed:image]];
         cell.avatarImage.layer.cornerRadius = cell.avatarImage.frame.size.width / 2;
@@ -260,6 +262,7 @@
         CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:comment.UID];
         cell.createdByLabel.text = person.displayName;
         cell.messageLabel.text = comment.text;
+        cell.createdAtLabel.text = [format stringFromDate:comment.time];
         cell.transform = self.tableView.transform;
         
     }
