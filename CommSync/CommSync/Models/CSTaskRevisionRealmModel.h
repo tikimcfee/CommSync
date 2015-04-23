@@ -36,6 +36,8 @@ typedef NS_ENUM(NSInteger, CSTaskProperty)
 - (void)save:(CSTaskRealmModel*)sourceTask;
 +(CSTaskRevisionRealmModel*)revisionModelWithModel:(CSTaskRevisionRealmModel*)model;
 
+- (void)updateTaskModel:(CSTaskRealmModel*)task;
+
 @end
 
 RLM_ARRAY_TYPE(CSTaskRevisionRealmModel)

@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 - (CSTaskMediaRealmModel*) addTaskMediaOfType:(CSTaskMediaType)type withData:(NSData*)data toRealm:(RLMRealm*)realm inTransation:(BOOL)transaction;
 - (void) addComment: (CSCommentRealmModel *) newComment;
 - (void) addRevision:(CSTaskRevisionRealmModel*)revision;
+- (void) updateValueForProperty:(NSString*)propertyString to:(id)new;
 
 + (NSString*)stringForProperty:(CSTaskProperty)property;
 - (id)valueForProperty:(CSTaskProperty)property;

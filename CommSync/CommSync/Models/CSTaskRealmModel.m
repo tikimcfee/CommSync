@@ -196,7 +196,7 @@
 
 - (NSData*) getTaskAudio {
     for (CSTaskMediaRealmModel* media in self.taskMedia) {
-        if(media.mediaType == CSTaskMediaType_Audio) {
+        if(media.mediaType == CSTaskMediaType_Audio && media.isOld == NO) {
             return media.mediaData;
         }
     }
@@ -206,7 +206,7 @@
 
 - (CSTaskMediaRealmModel*) getTaskAudioModel {
     for (CSTaskMediaRealmModel* media in self.taskMedia) {
-        if(media.mediaType == CSTaskMediaType_Audio) {
+        if(media.mediaType == CSTaskMediaType_Audio && media.isOld == NO) {
             return media;
         }
     }
@@ -311,6 +311,22 @@
             break;
         default:
             return nil;
+    }
+}
+
+- (void)updateValueForProperty:(NSString*)propertyString to:(id)new{
+    if ([propertyString isEqualToString:@"assignedID"]) {
+        self.assignedID = new;
+    } else if ([propertyString isEqualToString:@"completed"]) {
+        NSNumber* completedNum = new;
+        self.completed = [completedNum boolValue];
+    } else if ([propertyString isEqualToString:@"taskPriority"]) {
+        NSNumber* priorityNum = new;
+        self.taskPriority = [priorityNum integerValue];
+    } else if ([propertyString isEqualToString:@"taskDescription"]) {
+        self.taskDescription = new;
+    } else if ([propertyString isEqualToString:@"taskTitle"]) {
+        self.taskTitle = new;
     }
 }
 
