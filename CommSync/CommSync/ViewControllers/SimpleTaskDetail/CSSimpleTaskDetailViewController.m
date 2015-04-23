@@ -176,7 +176,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     _editIconImageView.image = [IonIcons imageWithIcon:ion_edit size:33.0f color:[UIColor whiteColor]];
     _editIconImageView.userInteractionEnabled = YES;
     
-    CSUserRealmModel* assignedUser = [CSUserRealmModel objectForPrimaryKey:self.sourceTask.assignedID];
+    CSUserRealmModel* assignedUser = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:self.sourceTask.assignedID];
     if (assignedUser) {
         _assigneeImageView.image = [UIImage imageNamed:[assignedUser getPicture]];
     } else {
@@ -774,9 +774,12 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 - (void) assignUser:( NSString* )personID {
-    if (![self.sourceTask.assignedID isEqualToString:personID]) {
+    if (personID && ![self.sourceTask.assignedID isEqualToString:personID]) {
         self.userSelectedAssignedUser = personID;
+        CSUserRealmModel* assignedUser = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:personID];
+        self.assigneeImageView.image = [UIImage imageNamed:[assignedUser getPicture]];
     }
+    
     [self.userSelection dismissViewControllerAnimated:YES completion:nil];
 }
 
