@@ -233,7 +233,7 @@
             </objects>
             <point key="canvasLocation" x="513" y="2158"/>
         </scene>
-        <!--Assign Task To User-->
+        <!--Choose Avatar-->
         <scene sceneID="Tf1-cM-sx3">
             <objects>
                 <viewController id="euH-gz-iih" customClass="CSAvatarSelectionView" sceneMemberID="viewController">
@@ -294,7 +294,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Assign Task To User" id="spX-2q-C4X">
+                    <navigationItem key="navigationItem" title="Choose Avatar" id="spX-2q-C4X">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="Aqb-Ap-psz"/>
                     </navigationItem>
                     <connections>
@@ -2428,7 +2428,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ggF-Iw-Rff">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Title" id="Dt6-MW-kKb">
+                                    <navigationItem title="Assign User To Task" id="Dt6-MW-kKb">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="VqK-3P-LZk" userLabel="Cancel">
                                             <connections>
                                                 <action selector="Cancel:" destination="iFD-Oi-zVQ" id="f3c-dB-ODi"/>
