@@ -12,4 +12,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *createdByLabel;
 @property (strong, nonatomic) IBOutlet UILabel *messageLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *avatarImage;
+@property (weak, nonatomic) IBOutlet UILabel *createdAtLabel;
 @end

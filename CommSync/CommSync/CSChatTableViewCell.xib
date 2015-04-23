@@ -14,14 +14,14 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pxy-Zz-01Z" id="89H-Vf-SWX">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="CreatedBy" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtW-1W-D2l">
-                        <rect key="frame" x="52" y="12" width="424" height="14"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="749" verticalHuggingPriority="750" text="CreatedBy" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtW-1W-D2l">
+                        <rect key="frame" x="52" y="6" width="303" height="14"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar -1" translatesAutoresizingMaskIntoConstraints="NO" id="QOq-S0-4O0">
-                        <rect key="frame" x="8" y="16" width="36" height="36"/>
+                        <rect key="frame" x="8" y="10" width="36" height="36"/>
                         <color key="backgroundColor" red="0.17254901959999999" green="0.24313725489999999" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="69" id="TuH-1c-Ym8"/>
@@ -40,21 +40,37 @@
                         <color key="textColor" red="0.098039217293262482" green="0.098039217293262482" blue="0.098039217293262482" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="CreatedBy" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zp1-n0-cZR">
+                        <rect key="frame" x="419" y="6" width="57" height="14"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="Sbw-0l-4Wo" secondAttribute="trailing" id="IbE-p5-Qnv"/>
+                    <constraint firstItem="zp1-n0-cZR" firstAttribute="trailing" secondItem="Sbw-0l-4Wo" secondAttribute="trailing" id="WLh-Dd-QFg"/>
+                    <constraint firstItem="zp1-n0-cZR" firstAttribute="bottom" secondItem="HtW-1W-D2l" secondAttribute="bottom" id="cb5-Ny-gKL"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sbw-0l-4Wo" secondAttribute="bottom" constant="4" id="erA-4L-853"/>
                     <constraint firstItem="HtW-1W-D2l" firstAttribute="leading" secondItem="QOq-S0-4O0" secondAttribute="trailing" constant="8" id="gja-Td-dzq"/>
                     <constraint firstItem="QOq-S0-4O0" firstAttribute="leading" secondItem="89H-Vf-SWX" secondAttribute="leadingMargin" id="jB1-QX-dsJ"/>
-                    <constraint firstItem="QOq-S0-4O0" firstAttribute="top" secondItem="89H-Vf-SWX" secondAttribute="topMargin" constant="8" id="lL8-Yt-FL2"/>
-                    <constraint firstItem="HtW-1W-D2l" firstAttribute="top" secondItem="89H-Vf-SWX" secondAttribute="topMargin" constant="4" id="rWU-Ww-4iI"/>
+                    <constraint firstItem="QOq-S0-4O0" firstAttribute="top" secondItem="89H-Vf-SWX" secondAttribute="topMargin" constant="2" id="lL8-Yt-FL2"/>
+                    <constraint firstItem="zp1-n0-cZR" firstAttribute="leading" secondItem="HtW-1W-D2l" secondAttribute="trailing" constant="64" id="ovY-FF-juz"/>
+                    <constraint firstItem="HtW-1W-D2l" firstAttribute="top" secondItem="89H-Vf-SWX" secondAttribute="topMargin" constant="-2" id="rWU-Ww-4iI"/>
                     <constraint firstAttribute="trailingMargin" secondItem="HtW-1W-D2l" secondAttribute="trailing" id="ssB-0U-0e4"/>
-                    <constraint firstItem="Sbw-0l-4Wo" firstAttribute="top" secondItem="HtW-1W-D2l" secondAttribute="bottom" constant="2" id="thG-g3-EPl"/>
+                    <constraint firstItem="Sbw-0l-4Wo" firstAttribute="top" secondItem="HtW-1W-D2l" secondAttribute="bottom" constant="8" id="thG-g3-EPl"/>
+                    <constraint firstItem="zp1-n0-cZR" firstAttribute="top" secondItem="HtW-1W-D2l" secondAttribute="top" id="w2P-UY-fzd"/>
                     <constraint firstItem="Sbw-0l-4Wo" firstAttribute="leading" secondItem="QOq-S0-4O0" secondAttribute="trailing" constant="8" id="wTM-oG-uCt"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="ssB-0U-0e4"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="avatarImage" destination="QOq-S0-4O0" id="3ki-4y-c0i"/>
+                <outlet property="createdAtLabel" destination="zp1-n0-cZR" id="17a-7R-EoI"/>
                 <outlet property="createdByLabel" destination="HtW-1W-D2l" id="Kom-LO-BRK"/>
                 <outlet property="messageLabel" destination="Sbw-0l-4Wo" id="kEI-Ff-hsW"/>
             </connections>
