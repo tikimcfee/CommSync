@@ -386,10 +386,6 @@
         NSLog(@"<!> WARNING : Received revision response with 0 revisions! leaving method.");
         return nil;
     }
-    NSMutableArray* revisionIDs = [NSMutableArray new];
-    for (CSTaskRevisionRealmModel* rev in revisionsToAdd) {
-        [revisionIDs addObject:rev.revisionID];
-    }
     [self fastForwardTask:modelToUpdate WithRevisions:revisionsToAdd];
     
 //    NSLog(@"+++ Adding to revisions %@", [response valueForKey:kCS_REV_MODEL_ARRAY]);
@@ -401,6 +397,11 @@
     }
     
     [taskRealm commitWriteTransaction];
+    
+    NSMutableArray* revisionIDs = [NSMutableArray new];
+    for (CSTaskRevisionRealmModel* rev in revisionsToAdd) {
+        [revisionIDs addObject:rev.revisionID];
+    }
     
     return revisionIDs;
 }
