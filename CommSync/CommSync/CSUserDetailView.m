@@ -74,7 +74,6 @@
     if ([[segue identifier] isEqualToString:@"personalListSegue"])
     {
         CSTaskListViewController *vc = [segue destinationViewController];
-        NSLog(_peer.uniqueID);
         [vc setUser:_peer.uniqueID];
     }
     
