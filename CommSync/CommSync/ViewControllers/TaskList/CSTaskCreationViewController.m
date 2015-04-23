@@ -48,6 +48,7 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *addTaskImageButton;
 @property (strong, nonatomic) IBOutlet UIButton *assignButton;
+@property (strong, nonatomic) IBOutlet UILabel *assignedLabel;
 
 // Image picker
 @property (strong, nonatomic) UIImagePickerController* imagePicker;
@@ -243,7 +244,10 @@
 - (void)assignUser:(NSString *)personID {
     if (personID) {
         self.pendingTask.assignedID = personID;
-        [self.assignButton.titleLabel setText:[CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:personID].displayName];
+//        [self.assignButton.titleLabel setText:[CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:personID].displayName];
+        self.assignedLabel.text = [NSString stringWithFormat:@"Assigned to %@", [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:personID].displayName];
+    } else {
+        self.assignedLabel.text = @"Unassigned";
     }
 
     [self dismissViewControllerAnimated:YES completion:nil];
