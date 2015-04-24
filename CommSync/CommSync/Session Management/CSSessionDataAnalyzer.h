@@ -28,10 +28,17 @@
 - (void) sendTaskRevisionsToAllPeerForTask:(CSTaskRealmModel*)revisedTask;
 
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID;
-- (NSDictionary *) buildTaskRequestFromTaskID:(NSString*)taskID;
-- (NSDictionary *) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
+- (CSTaskRevisionRealmModel*) getRevisionFromQueueOrDatabaseWithID:(NSString*)taskID;
+- (NSDictionary*) buildTaskRequestFromTaskID:(NSString*)taskID;
+- (NSDictionary*) buildNewTaskNotificationFromTaskID:(NSString*)taskID;
+- (NSMutableDictionary*) buildNewRevisionNotificationFromTaskID:(CSTaskRealmModel*)revisedTask;
 - (NSMutableDictionary*) buildNewRevisionRequestFromTaskID:(NSString*)taskID
                                               andRevisions:(NSArray*)revisions;
+- (void) addRevisionToWriteQueue:(CSTaskRevisionRealmModel*)newRevision forTask:(CSTaskRealmModel*)task;
+
+- (void) synchronizedSet:(id)value forKey:(NSString*)key;
+- (id) synchronizedGet:(NSString*)key;
+- (void) synchronizedRemove:(NSString*)key;
 
 @end
 

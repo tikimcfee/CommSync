@@ -15,4 +15,8 @@
 @property CSTaskRealmModel* pendingTask;
 @property CSTaskRealmModel* untouchedPendingTask;
 
+@property NSString* taskID;
+@property CSTaskRevisionRealmModel* pendingRevision;
+@property CSTaskRevisionRealmModel* untouchedPendingRevision;
+
 @end

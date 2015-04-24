@@ -283,7 +283,7 @@
     RLMRealm* taskRealm = [CSRealmFactory taskRealm];
     CSTaskRealmModel* requestedTask = [CSTaskRealmModel objectInRealm:taskRealm forPrimaryKey:taskID];
     for (CSTaskRevisionRealmModel* rev in requestedTask.revisions) {
-        NSLog(@"--- Comparing %@", rev.revisionID);
+//        NSLog(@"--- Comparing %@", rev.revisionID);
         if ([requestedRevisions containsObject:rev.revisionID]) {
             NSLog(@"--- Requested revisions contained the ID.");
             CSTaskRevisionRealmModel* memoryRev = [CSTaskRevisionRealmModel revisionModelWithModel:rev];
@@ -375,7 +375,6 @@
 
 - (NSMutableArray*) handleRevisionAdditionsForNewRevisionResponse:(NSDictionary*)response {
     NSString* taskID = [response valueForKey:kCS_REV_RESPONSE];
-//    NSLog(@"--- Parsing response dictionary: %@", response);
     
     RLMRealm* taskRealm = [CSRealmFactory taskRealm];
     CSTaskRealmModel* modelToUpdate = [CSTaskRealmModel objectInRealm:taskRealm forPrimaryKey:taskID];
@@ -388,8 +387,10 @@
     }
     [self fastForwardTask:modelToUpdate WithRevisions:revisionsToAdd];
     
-//    NSLog(@"+++ Adding to revisions %@", [response valueForKey:kCS_REV_MODEL_ARRAY]);
-    [modelToUpdate.revisions addObjects:[response valueForKey:kCS_REV_MODEL_ARRAY]];
+//    [modelToUpdate.revisions addObjects:[response valueForKey:kCS_REV_MODEL_ARRAY]];
+    for (CSTaskRevisionRealmModel* rev in [response valueForKey:kCS_REV_MODEL_ARRAY]) {
+        [_parentAnalyzer addRevisionToWriteQueue:rev forTask:modelToUpdate];
+    }
     
     NSMutableArray* mediaToAdd = [response valueForKey:kCS_REV_RESPONSE_MEDIA];
     if (mediaToAdd) {
@@ -405,6 +406,10 @@
     NSMutableArray* revisionIDs = [NSMutableArray new];
     for (CSTaskRevisionRealmModel* rev in revisionsToAdd) {
         [revisionIDs addObject:rev.revisionID];
+
+        // the transaction has been comitted, and we are safe to remove the request
+        // from the pool
+        [_parentAnalyzer synchronizedRemove:rev.revisionID];
     }
     
     return revisionIDs;
@@ -414,12 +419,17 @@
 {
     // received a response from a revision request
     if ([taskData valueForKey:kCS_REV_RESPONSE]) {
+        NSLog(@"Got response from %@", _peer.displayName);
         NSMutableArray* revisionIDs = [self handleRevisionAdditionsForNewRevisionResponse:taskData];
         if (!revisionIDs) {
             return;
         }
-        NSMutableDictionary* newPost = [_parentAnalyzer buildNewRevisionRequestFromTaskID:[taskData valueForKey:kCS_REV_RESPONSE] andRevisions:revisionIDs];
-        NSData* responseData = [NSKeyedArchiver archivedDataWithRootObject:newPost];
+        
+        NSMutableDictionary* taskAndRevisions = [NSMutableDictionary new];
+        [taskAndRevisions setObject:[taskData valueForKey:kCS_REV_RESPONSE] forKey:kCS_HEADER_NEW_TASK];
+        [taskAndRevisions setObject:revisionIDs forKey:kCS_REV_ID_ARRAY];
+
+        NSData* responseData = [NSKeyedArchiver archivedDataWithRootObject:taskAndRevisions];
         
         [_parentAnalyzer.globalManager sendSingleDataPacket:responseData toSinglePeer:_peer];
         return;
@@ -427,10 +437,11 @@
     
     // received a request for revisions; service it
     else if ([taskData valueForKey:kCS_REV_REQUEST]) {
+        NSLog(@"Received request from %@", _peer.displayName);
         NSMutableDictionary* responseDictionary = [self buildResponseDictionaryForRevisionRequest:taskData];
-        NSLog(@"--- Final response dictionary: %@", responseDictionary);
+//        NSLog(@"--- Final response dictionary: %@", responseDictionary);
         NSData* responseData = [NSKeyedArchiver archivedDataWithRootObject:responseDictionary];
-        
+        NSLog(@"Send dictionary to to %@", _peer.displayName);
         [_parentAnalyzer.globalManager sendSingleDataPacket:responseData toSinglePeer:_peer];
         return;
      }
@@ -441,12 +452,10 @@
         NSString* newTaskId = [taskData valueForKey:kCS_HEADER_NEW_TASK];
         
         // check to see if already made request from someone
-        @synchronized (_requestPool){
-            if([_requestPool valueForKey:newTaskId])
-            {
-                NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
-                return;
-            }
+        if([_parentAnalyzer synchronizedGet:newTaskId])
+        {
+            NSLog(@"<.> Task ID %@ already requested; no action to be taken.",newTaskId);
+            return;
         }
         
         // check to see if the task already exists
@@ -455,12 +464,23 @@
         {
             // check for existence of revs on dictionary
             if ([taskData valueForKey:kCS_REV_ID_ARRAY]) {
+                NSMutableArray* toRemove = [NSMutableArray new];
                 NSMutableArray* revs = [taskData valueForKey:kCS_REV_ID_ARRAY];
-                for (CSTaskRevisionRealmModel* rev in model.revisions) {
-                    [revs removeObject:rev.revisionID];
+                for (NSString* revID in revs) {
+                    if([_parentAnalyzer synchronizedGet:revID]) {
+                        [toRemove addObject:revID];
+                    }
+                    if ([_parentAnalyzer getRevisionFromQueueOrDatabaseWithID:revID]) {
+                        [toRemove addObject:revID];
+                    }
                 }
+                [revs removeObjectsInArray:toRemove];
                 // if there are revs we need, make a request for them
                 if (revs.count != 0) {
+                    for (NSString* revID in revs) {
+                        [_parentAnalyzer synchronizedSet:_peer forKey:revID];
+                    }
+                    
                     NSMutableDictionary* revisionRequest = [_parentAnalyzer buildNewRevisionRequestFromTaskID:model.concatenatedID
                                                                                                  andRevisions:revs];
                     NSData* revisionRequestData = [NSKeyedArchiver archivedDataWithRootObject:revisionRequest];
@@ -479,9 +499,7 @@
             }
         }
         
-        @synchronized (_requestPool){
-            [_requestPool setValue:_peer forKey:newTaskId];
-        }
+        [_parentAnalyzer synchronizedSet:_peer forKey:newTaskId];
         
         // build the request string
         NSDictionary* requestDictionary = [_parentAnalyzer buildTaskRequestFromTaskID:newTaskId];
@@ -590,9 +608,7 @@ didStartReceivingResourceWithName:(NSString *)resourceName
     
     
     // we have made a request and been served - add it to our pool
-    @synchronized (_requestPool){
-        [_requestPool setValue:peerID forKey:resourceName];
-    }
+    [self synchronizedSet:peerID forKey:resourceName];
     
 //     Use this code if you want to observe the progress of a data transfer from the
 //     data analyzer and then send notifications out as progress changes
@@ -620,9 +636,7 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     // We have finished our request - get rid out of it
     // TODO
     // PERHAPS MAKE A REQUEST QUEUE?
-    @synchronized (_requestPool){
-        [_requestPool removeObjectForKey:resourceName];
-    }
+    [self synchronizedRemove:resourceName];
     
     
     // create the task and set up the write for it
@@ -660,6 +674,17 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     [self.realmWriteQueue addOperation:newWriteOperation];
 }
 
+- (void) addRevisionToWriteQueue:(CSTaskRevisionRealmModel*)newRevision forTask:(CSTaskRealmModel*)task{
+    NSLog(@"Revision received; adding to write queue.");
+    
+    CSRealmWriteOperation* newWriteOperation = [CSRealmWriteOperation new];
+    newWriteOperation.taskID = task.concatenatedID;
+    newWriteOperation.pendingRevision = newRevision;
+    newWriteOperation.untouchedPendingRevision = [CSTaskRevisionRealmModel revisionModelWithModel:newRevision];
+    
+    [self.realmWriteQueue addOperation:newWriteOperation];
+}
+
 - (CSTaskRealmModel*) getModelFromQueueOrDatabaseWithID:(NSString*)taskID
 {
     NSArray* currentWriteQueue = _realmWriteQueue.operations;
@@ -673,6 +698,24 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     RLMResults* results = [CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] withPredicate:pred];
     if (results.count == 1) {
         return [CSTaskRealmModel taskModelWithModel:[results objectAtIndex:0]];
+    }
+    
+    return nil;
+}
+
+- (CSTaskRevisionRealmModel*) getRevisionFromQueueOrDatabaseWithID:(NSString*)taskID
+{
+    NSArray* currentWriteQueue = _realmWriteQueue.operations;
+    for(CSRealmWriteOperation* operation in currentWriteQueue) {
+        if([operation.untouchedPendingRevision.revisionID isEqualToString:taskID]) {
+            return operation.untouchedPendingRevision;
+        }
+    }
+    
+//    NSPredicate *pred = [NSPredicate predicateWithFormat:@"revisionID = %@", taskID];
+    CSTaskRevisionRealmModel* model = [CSTaskRevisionRealmModel objectInRealm:[RLMRealm defaultRealm] forPrimaryKey:taskID];
+    if (model) {
+        return model;
     }
     
     return nil;
@@ -715,6 +758,26 @@ didFinishReceivingResourceWithName:(NSString *)resourceName
     
     [_dataAnalysisQueue addOperation:newOperation];
 }
+
+#pragma mark - Synchronous access
+- (void) synchronizedSet:(id)value forKey:(NSString*)key {
+    @synchronized (_requestPool){
+        [_requestPool setValue:value forKey:key];
+    }
+}
+
+- (id) synchronizedGet:(NSString *)key {
+    @synchronized (_requestPool){
+        return [_requestPool valueForKey:key];
+    }
+}
+
+- (void) synchronizedRemove:(NSString*)key {
+    @synchronized (_requestPool){
+        [_requestPool removeObjectForKey:key];
+    }
+}
+
 
 
 #pragma mark - Dictionary builders

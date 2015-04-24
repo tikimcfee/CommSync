@@ -21,18 +21,26 @@
 - (void) main {
     
     RLMRealm* taskRealm = [RLMRealm defaultRealm];
-    RLMRealm* incomingTaskRealm = [CSRealmFactory incomingTaskRealm];
-
-    [taskRealm beginWriteTransaction];
-    [taskRealm addObject:self.pendingTask];
-    [taskRealm commitWriteTransaction];
-    
-    NSString* string = [NSString stringWithFormat:@"%@_INCOMING", _pendingTask.concatenatedID];
-    CSIncomingTaskRealmModel* toDelete = [CSIncomingTaskRealmModel objectInRealm:incomingTaskRealm
-                                                                   forPrimaryKey:string];
-    [incomingTaskRealm beginWriteTransaction];
-    [incomingTaskRealm deleteObject:toDelete];
-    [incomingTaskRealm commitWriteTransaction];
+   
+    if (!_pendingRevision) {
+        RLMRealm* incomingTaskRealm = [CSRealmFactory incomingTaskRealm];
+        
+        [taskRealm beginWriteTransaction];
+        [taskRealm addObject:self.pendingTask];
+        [taskRealm commitWriteTransaction];
+        
+        NSString* string = [NSString stringWithFormat:@"%@_INCOMING", _pendingTask.concatenatedID];
+        CSIncomingTaskRealmModel* toDelete = [CSIncomingTaskRealmModel objectInRealm:incomingTaskRealm
+                                                                       forPrimaryKey:string];
+        [incomingTaskRealm beginWriteTransaction];
+        [incomingTaskRealm deleteObject:toDelete];
+        [incomingTaskRealm commitWriteTransaction];
+    } else {
+        CSTaskRealmModel* modelToUpdate = [CSTaskRealmModel objectInRealm:taskRealm forPrimaryKey:_taskID];
+        [taskRealm beginWriteTransaction];
+        [modelToUpdate.revisions addObject:_pendingRevision];
+        [taskRealm commitWriteTransaction];
+    }
     
 }
 
