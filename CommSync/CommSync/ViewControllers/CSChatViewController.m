@@ -74,6 +74,14 @@
         }
     }
     
+    else{
+        
+        _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
+        _privateMessageRealm.autorefresh = YES;
+        _pred = [NSPredicate predicateWithFormat:@"recipient = %@", _sourceTask.UUID];
+
+    }
+    
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
@@ -173,10 +181,18 @@
     }
     
     else{
-        //creates comment
-        CSCommentRealmModel *comment = [[CSCommentRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser];
-        //stores comment and reloads screen to show comment
-        [_sourceTask addComment:comment];
+//        //creates comment
+//        CSCommentRealmModel *comment = [[CSCommentRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_currentUser];
+//        //stores comment and reloads screen to show comment
+//        [_sourceTask addComment:comment];
+        CSChatMessageRealmModel *message = [[CSChatMessageRealmModel alloc] initWithMessage:[self.textView.text copy] byUser:_sessionManager.myUniqueID toUser:_sourceTask.UUID];
+        [_privateMessageRealm beginWriteTransaction];
+        [_privateMessageRealm addObject:message];
+        [_privateMessageRealm commitWriteTransaction];
+        NSDictionary *dataToSend = @{@"PrivateMessage"  :   message};
+        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:dataToSend];
+        [self.sessionManager sendDataPacketToPeers:messageData];
+        
     }
     
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
@@ -201,8 +217,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(!_sourceTask){
-        
+    //if(!_sourceTask){
+    
         
         if (!_chatRealm)
         {
@@ -211,15 +227,16 @@
         }
         if(!_privateMessageRealm) _privateMessageRealm = [RLMRealm realmWithPath:[CSChatViewController privateMessageRealmDirectory]];
     
+    if(_sourceTask) return [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count] ;
         if(!_peerID)return [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] count];
         
        
         return [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] count] ;
         
-    }
-    else{
-        return [_sourceTask.comments count];
-    }
+   // }
+   // else{
+     //   return [_sourceTask.comments count];
+    //}
 }
 
 - (CSChatTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -235,7 +252,7 @@
         cell = [[CSChatTableViewCell alloc] init];
     }
     
-    if(!_sourceTask){
+   // if(!_sourceTask){
         
         CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
 
@@ -255,8 +272,8 @@
         else{
             cell.backgroundColor = [UIColor whiteColor];
         }
-    }
-    
+  //  }
+    /*
     else{
         CSCommentRealmModel *comment = [self.sourceTask.comments objectAtIndex: ([_sourceTask.comments count] - (indexPath.row  + 1) )];
         CSUserRealmModel *person = [CSUserRealmModel objectInRealm:_sessionManager.peerHistoryRealm forPrimaryKey:comment.UID];
@@ -265,7 +282,7 @@
         cell.createdAtLabel.text = [format stringFromDate:comment.time];
         cell.transform = self.tableView.transform;
         
-    }
+    } */
     
     return cell;
 }
@@ -336,11 +353,32 @@
             }];
         }
     }
+    else{
+    __weak CSChatViewController *weakSelf = self;
+    _privateMessageRealmNotification = [_privateMessageRealm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+            
+            // Scroll to the bottom so we focus on the latest message
+            NSUInteger numberOfRows = [weakSelf.collectionView numberOfItemsInSection:0];
+            if (numberOfRows) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }
+        });
+    }];
+        }
 }
 
 - (CSChatMessageRealmModel *)chatObjectAtIndex:(NSUInteger)index
 {
     RLMResults *orderedChatMessages;
+    if(_sourceTask)
+    {
+        orderedChatMessages = [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] sortedResultsUsingProperty:@"createdAt" ascending:NO];
+        return [orderedChatMessages objectAtIndex:index];
+    }
     orderedChatMessages = (!_peerID)? [[CSChatMessageRealmModel allObjectsInRealm:_chatRealm] sortedResultsUsingProperty:@"createdAt" ascending:NO] : [[CSChatMessageRealmModel objectsInRealm:_privateMessageRealm withPredicate:_pred] sortedResultsUsingProperty:@"createdAt" ascending:NO];
     return [orderedChatMessages objectAtIndex:index];
 }

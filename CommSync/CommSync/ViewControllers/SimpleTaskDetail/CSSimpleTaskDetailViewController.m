@@ -17,6 +17,7 @@
 #import "CSUserRealmModel.h"
 #import "CSSessionManager.h"
 #import "CSSessionDataAnalyzer.h"
+#import "CSRealmFactory.h"
 
 #define kTaskImageCollectionViewCell @"TaskImageCollectionViewCell"
 #define kChatTableViewCellIdentifier @"ChatViewCell"
@@ -70,6 +71,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 @property (assign, nonatomic) BOOL firstLayoutComplete;
 @property (weak, nonatomic) CSUserSelectionViewController* userSelection;
 
+@property (strong, nonatomic) NSPredicate *pred;
 @end
 
 @implementation CSSimpleTaskDetailViewController
@@ -108,6 +110,9 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     
     self.firstLayoutComplete = NO;
     self.newPriority = CSTaskPriorityUnset;
+    
+    _pred = [NSPredicate predicateWithFormat:@"recipient = %@", _sourceTask.UUID];
+    
 }
 
 - (void) removeTaskImageCollectionView {
@@ -271,44 +276,82 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(self.sourceTask.comments.count == 0) {
-        return 1;
-    } else if(self.sourceTask.comments.count > 4) {
-        return 5;
-    } else {
-        return self.sourceTask.comments.count;
-    }
+//    if(self.sourceTask.comments.count == 0) {
+//        return 1;
+//    } else if(self.sourceTask.comments.count > 4) {
+//        return 5;
+//    } else {
+//        return self.sourceTask.comments.count;
+//    }
+    //int number = [CSChatMessageRealmModel ]
+    
+    if( [[CSChatMessageRealmModel objectsInRealm:[CSRealmFactory privateMessageRealm] withPredicate:_pred] count] > 5) return 5;
+    else  return [[CSChatMessageRealmModel objectsInRealm:[CSRealmFactory privateMessageRealm] withPredicate:_pred] count];
+    
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+//    static NSString *cellIdentifier = @"ChatViewCell";
+//    static NSString *allCommentsIdentifier = @"allCommentsCell";
+//    static NSString *noCommentsIdentifier = @"noCommentsCell";
+//    UITableViewCell* cell;
+//    if (self.sourceTask.comments.count == 0) {
+//        cell = [tableView dequeueReusableCellWithIdentifier:noCommentsIdentifier];
+//    } else if(indexPath.row == 4) {
+//        cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
+//        CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
+//        NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
+//        cellRef.label.text = [NSString stringWithFormat:@"View %lu more comment%@",
+//                              (long)_sourceTask.comments.count - 4,
+//                              plural];
+//    } else {
+//        CSChatTableViewCell *cellRef = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//        cell = cellRef;
+//        RLMResults* comments = [self.sourceTask.comments sortedResultsUsingProperty:@"time" ascending:NO];
+//        CSCommentRealmModel *comment = [comments objectAtIndex:indexPath.row];
+//        
+//        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm]
+//                                                   forPrimaryKey:comment.UID];
+//        NSString* createdBy = user ? user.displayName : @"Unknown";
+//        cellRef.createdByLabel.text = createdBy;
+//        cellRef.messageLabel.text = comment.text;
+//        cellRef.transform = self.tableview.transform;
+//    }
+//    return cell;
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"h:mm a"];
+    
     static NSString *cellIdentifier = @"ChatViewCell";
-    static NSString *allCommentsIdentifier = @"allCommentsCell";
-    static NSString *noCommentsIdentifier = @"noCommentsCell";
-    UITableViewCell* cell;
-    if (self.sourceTask.comments.count == 0) {
-        cell = [tableView dequeueReusableCellWithIdentifier:noCommentsIdentifier];
-    } else if(indexPath.row == 4) {
-        cell = [tableView dequeueReusableCellWithIdentifier:allCommentsIdentifier];
-        CSRestOfCommentsTableViewCell* cellRef = (CSRestOfCommentsTableViewCell*)cell;
-        NSString* plural = _sourceTask.comments.count > 5 ? @"s" : @"";
-        cellRef.label.text = [NSString stringWithFormat:@"View %lu more comment%@",
-                              (long)_sourceTask.comments.count - 4,
-                              plural];
-    } else {
-        CSChatTableViewCell *cellRef = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        cell = cellRef;
-        RLMResults* comments = [self.sourceTask.comments sortedResultsUsingProperty:@"time" ascending:NO];
-        CSCommentRealmModel *comment = [comments objectAtIndex:indexPath.row];
-        
-        CSUserRealmModel* user = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm]
-                                                   forPrimaryKey:comment.UID];
-        NSString* createdBy = user ? user.displayName : @"Unknown";
-        cellRef.createdByLabel.text = createdBy;
-        cellRef.messageLabel.text = comment.text;
-        cellRef.transform = self.tableview.transform;
+    CSChatTableViewCell *cell = (CSChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (!cell)
+    {
+        cell = [[CSChatTableViewCell alloc] init];
     }
+    
+    // if(!_sourceTask){
+    
+    CSChatMessageRealmModel *msg = [self chatObjectAtIndex:indexPath.item];
+    
+    cell.messageLabel.text = msg.messageText;
+    cell.transform = self.tableview.transform;
+    
+    CSUserRealmModel *person = [CSUserRealmModel objectInRealm:[CSRealmFactory peerHistoryRealm] forPrimaryKey:msg.createdBy];
+    cell.createdByLabel.text = person.displayName;
+    cell.createdAtLabel.text = [format stringFromDate:msg.createdAt];
+    NSString *image = [person getPicture];
+    [cell.avatarImage setImage:[UIImage imageNamed:image]];
+    cell.avatarImage.layer.cornerRadius = cell.avatarImage.frame.size.width / 2;
+    
+  
     return cell;
+}
+
+- (CSChatMessageRealmModel *)chatObjectAtIndex:(NSUInteger)index
+{
+    RLMResults *orderedChatMessages = [[CSChatMessageRealmModel objectsInRealm:[CSRealmFactory privateMessageRealm] withPredicate:_pred] sortedResultsUsingProperty:@"createdAt" ascending:NO];
+    return [orderedChatMessages objectAtIndex:index];
 }
 
 #pragma mark - CollectionView DataSource/Delegate
