@@ -1219,7 +1219,7 @@
                                     <outlet property="delegate" destination="ITi-gD-sJd" id="UtQ-Z5-m73"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ghm-1I-Rlw" userLabel="background buttons">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ghm-1I-Rlw" userLabel="background buttons">
                                 <rect key="frame" x="0.0" y="512" width="600" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XP0-yC-EGt">

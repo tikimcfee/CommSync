@@ -386,6 +386,7 @@
         return nil;
     }
     [self fastForwardTask:modelToUpdate WithRevisions:revisionsToAdd];
+    modelToUpdate.isDirty = YES;
     
 //    [modelToUpdate.revisions addObjects:[response valueForKey:kCS_REV_MODEL_ARRAY]];
     for (CSTaskRevisionRealmModel* rev in [response valueForKey:kCS_REV_MODEL_ARRAY]) {
