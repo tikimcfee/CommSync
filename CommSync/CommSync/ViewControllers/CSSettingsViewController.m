@@ -124,6 +124,10 @@
 }
 
 - (void)changeUsernameTo:(NSString*)name {
+    if (!name || name.length == 0) {
+        return;
+    }
+    
     [_sessionManager changeUserDisplayNameTo:name];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.navigationItem.title = _sessionManager.myUserModel.displayName;
