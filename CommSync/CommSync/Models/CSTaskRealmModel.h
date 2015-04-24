@@ -54,6 +54,7 @@ typedef NS_ENUM(NSInteger, CSTaskPriority)
 @property (strong, nonatomic) NSURL* TRANSIENT_audioDataURL;
 @property (strong, nonatomic) NSMutableArray* addedImagesMediaModelIDs;
 @property (strong, nonatomic) NSMutableArray* addedAudioIDs;
+@property (assign, nonatomic) BOOL isDirty;
 
 // Task information
 @property NSString* taskTitle;

@@ -25,8 +25,8 @@
                  @"concatenatedID":@"",
                  @"assignedID":@"",
                  @"tag":@"",
-                 @"completed":@false
-                 
+                 @"completed":@NO,
+                 @"isDirty":@NO
                  };
     
     return defaults;
