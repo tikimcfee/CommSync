@@ -110,8 +110,10 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
         RLMResults* filteredTask = [CSTaskRealmModel objectsInRealm:tasksRealm withPredicate:predicate];
         for (CSTaskRealmModel* task in filteredTask) {
 //            [tasks addObject:task.concatenatedID];
-            NSString* toAdd = [NSString stringWithFormat:@"%@%@",
-                               task.concatenatedID, (task.isDirty == YES ? @".edited":@"")];
+            NSString* toAdd = [NSString stringWithFormat:@"%@%@%@",
+                               task.concatenatedID,
+                               task.isDirty ? @".edited":@"",
+                               task.isDirty ? [[NSUUID UUID] UUIDString] : @""];
             [tasks addObject:toAdd];
         }
         
@@ -248,6 +250,7 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     @synchronized(_indexPathController.dataModel) {
         selected = [_indexPathController.dataModel itemAtIndexPath:indexPath];
     }
+    selected = [[selected componentsSeparatedByString:@".edited"] objectAtIndex:0];
     
     CSIncomingTaskRealmModel* model = [CSIncomingTaskRealmModel objectInRealm:[CSRealmFactory incomingTaskRealm]
                                                                 forPrimaryKey:selected];
@@ -257,7 +260,9 @@ typedef NS_ENUM(NSInteger, CSTaskListMode) {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    CSTaskRealmModel *task = (_user)?[CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] where:@"assignedID = %@",_user][indexPath.row]:[CSTaskRealmModel objectForPrimaryKey:[self.indexPathController.dataModel itemAtIndexPath:indexPath]];
+    
+    CSTaskRealmModel *task = (_user)?[CSTaskRealmModel objectsInRealm:[RLMRealm defaultRealm] where:@"assignedID = %@",_user][indexPath.row]
+    :[CSTaskRealmModel objectForPrimaryKey:selected];
     [self performSegueWithIdentifier:@"showTaskDetail" sender:task];
 
 }
