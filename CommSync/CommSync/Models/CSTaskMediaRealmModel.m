@@ -27,7 +27,7 @@
         self.mediaData = [aDecoder decodeObjectForKey:kMediaData];
         self.mediaType = [((NSNumber*)[aDecoder decodeObjectForKey:kMediaType]) integerValue];
         self.uniqueMediaID = [aDecoder decodeObjectForKey:kUniqueMedia];
-        self.isOld = [aDecoder decodeObjectForKey:kIsOld];
+        self.isOld = [((NSNumber*)[aDecoder decodeObjectForKey:kIsOld]) boolValue];
     }
     return self;
 }

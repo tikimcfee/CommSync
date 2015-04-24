@@ -780,7 +780,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         self.assigneeImageView.image = [UIImage imageNamed:[assignedUser getPicture]];
     }
     
-    [self.userSelection dismissViewControllerAnimated:YES completion:nil];
+//    [self.userSelection dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL) saveAudio {

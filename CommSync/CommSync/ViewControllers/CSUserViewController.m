@@ -82,7 +82,10 @@
     }
     else{
         user = [CSUserRealmModel objectsInRealm:_sessionManager.peerHistoryRealm where:@"uniqueID != %@", _sessionManager.myUniqueID][indexPath.row];
-        uniqueID = user.uniqueID;
+        
+        // TODO
+        // Why is this here?
+//        uniqueID = user.uniqueID;
     }
     
     userName = user.displayName;

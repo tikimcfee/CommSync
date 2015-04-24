@@ -393,7 +393,11 @@
     
     NSMutableArray* mediaToAdd = [response valueForKey:kCS_REV_RESPONSE_MEDIA];
     if (mediaToAdd) {
-        [modelToUpdate.taskMedia addObjects:mediaToAdd];
+        for (CSTaskMediaRealmModel* media in mediaToAdd) {
+            if ([modelToUpdate.taskMedia indexOfObjectWhere:@"uniqueMediaID == %@", media.uniqueMediaID] == NSNotFound) {
+                [modelToUpdate.taskMedia addObject:media];
+            }
+        }
     }
     
     [taskRealm commitWriteTransaction];

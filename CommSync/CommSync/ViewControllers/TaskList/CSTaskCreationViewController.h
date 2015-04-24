@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CSTaskRealmModel.h"
-#import "CSTaskDetailViewController.h"
 #import "CSUserSelectionViewController.h"
 
 @interface CSTaskCreationViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UINavigationControllerDelegate, CSAssignUserDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 
-@property (strong, nonatomic) CSTaskDetailViewController *taskScreen;
 @end

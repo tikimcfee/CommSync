@@ -66,7 +66,8 @@
     {
         cell = [[CSAvatarCell alloc] init];
     }
-    NSString* avatar = [NSString stringWithFormat:@"Avatar %li",indexPath.row + 1];
+    NSNumber* stringName = [NSNumber numberWithLong:indexPath.row + 1];
+    NSString* avatar = [NSString stringWithFormat:@"Avatar %d",[stringName intValue]];
     [cell.avatarImage setImage:[UIImage imageNamed:avatar]];
     
     [cell.layer setCornerRadius:50.0f];

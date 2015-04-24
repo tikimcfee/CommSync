@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, CSSessionManagerState) {
 - (MCSession*)synchronizedPeerRetrievalForDisplayName:(NSString*)displayName;
 
 
--(void) addTag:(NSString*) tag;
+//-(void) addTag:(NSString*) tag;
 -(void) addMessage:(NSString*) peer;
 -(void) removeMessage:(NSString*) peer;
 

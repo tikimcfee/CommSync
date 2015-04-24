@@ -42,7 +42,6 @@
 - (void)performBatchUpdatesOnTableView:(UITableView *)tableView withRowAnimation:(UITableViewRowAnimation)animation completion:(void(^)(BOOL finished))completion;
 - (void)performBatchUpdatesOnCollectionView:(UICollectionView *)collectionView;
 - (void)performBatchUpdatesOnCollectionView:(UICollectionView *)collectionView completion:(void(^)(BOOL finished))completion;
-- (void)setModifiedItems:(NSArray *)modifiedItems;
 
 #pragma mark - Customizing batch update behavior
 

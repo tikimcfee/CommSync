@@ -30,6 +30,7 @@
 
 @interface TLIndexPathUpdates ()
 @property (copy, readwrite, nonatomic) NSArray *modifiedItems;
+@property (readwrite, nonatomic) BOOL hasChanges;
 @end
 
 @implementation TLIndexPathUpdates
@@ -137,11 +138,11 @@
                 }
             }
         }
-    }
-    
-    if (_movedSectionNames.count + _insertedSectionNames.count + _deletedSectionNames.count
-        + _movedItems.count + _insertedItems.count + _deletedItems.count + _modifiedItems.count > 0) {
-        _hasChanges = YES;
+
+        if (_movedSectionNames.count + _insertedSectionNames.count + _deletedSectionNames.count
+            + _movedItems.count + _insertedItems.count + _deletedItems.count + _modifiedItems.count > 0) {
+            _hasChanges = YES;
+        }
     }
     
     return self;
@@ -403,6 +404,7 @@
 - (void)setModifiedItems:(NSArray *)modifiedItems
 {
     _modifiedItems = [modifiedItems copy];
+    self.hasChanges = self.hasChanges || _modifiedItems.count != 0;
 }
 
 @end

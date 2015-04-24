@@ -14,6 +14,8 @@
 
 - (void)viewDidLoad {
     
+    [super viewDidLoad];
+    
     UITabBarItem *tabBarItem1 = [self.tabBar.items objectAtIndex:0];
     tabBarItem1.image = [IonIcons imageWithIcon:ion_ios_home_outline size:30.0f color:[UIColor flatCloudsColor]];
     tabBarItem1.selectedImage = [IonIcons imageWithIcon:ion_ios_home size:30.0f color:[UIColor flatCloudsColor]];
