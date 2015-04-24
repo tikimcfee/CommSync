@@ -27,8 +27,6 @@
 {
     [super viewDidLoad];
     
-    NSLog(@"Loaded user view!");
-    
     self.app= (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.sessionManager = _app.globalSessionManager;
     
