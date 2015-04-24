@@ -432,7 +432,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     self.sourceTask.taskDescription = self.objectTextView.text;
     self.sourceTask.taskPriority = self.newPriority == CSTaskPriorityUnset ? self.sourceTask.taskPriority : self.newPriority;
     self.sourceTask.completed = self.taskCompleted;
-    self.sourceTask.assignedID = self.userSelectedAssignedUser;
+    self.sourceTask.assignedID = !self.userSelectedAssignedUser ?  self.sourceTask.assignedID : self.userSelectedAssignedUser;
     [[RLMRealm defaultRealm] commitWriteTransaction];
     
     // send new task *with revisions* to all peers
