@@ -187,7 +187,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     } else {
         _assigneeImageView.image = [UIImage imageNamed:@"Avatar -1"];
     }
-    _assigneeImageView.userInteractionEnabled = YES;
+    _assigneeImageView.userInteractionEnabled = NO;
     
     
     // Get and set audio images for later reuse in editing modes
@@ -551,8 +551,9 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
     if (_mode == CSSimpleDetailMode_View) {
         _taskTitleTextField.userInteractionEnabled = NO;
         _objectTextView.editable = NO;
-        _priorityButtonsMainView.userInteractionEnabled = YES;
+        _priorityButtonsMainView.userInteractionEnabled = NO;
         _checkIconImageView.userInteractionEnabled = NO;
+        _assigneeImageView.userInteractionEnabled = NO;
         bottomButtonText = @"Add Comment";
         
         [UIView animateWithDuration:time
@@ -571,6 +572,7 @@ typedef NS_ENUM(NSInteger, CSSimpleDetailMode)
         _objectTextView.editable = YES;
         _priorityButtonsMainView.userInteractionEnabled = YES;
         _checkIconImageView.userInteractionEnabled = YES;
+        _assigneeImageView.userInteractionEnabled = YES;
         bottomButtonText = @"Add Photo";
         
         [UIView animateWithDuration:time
